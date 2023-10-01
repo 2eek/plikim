@@ -1,0 +1,20 @@
+body {
+    padding-top: 5rem;
+}
+.starter-template {
+    padding: 3rem 3rem;
+    text-align: center;
+}
+
+.responsive-images{
+    width: 100%;
+    height: auto;
+    max-width: 1000px;
+}
+
+@media screen and(max-width:768px){
+    .responsive-image{
+        max-width: 500px;/* 화면 너비가 768px 이하인 경우 이미지 최대 너비를 500px로 조정 */
+    }
+}
+

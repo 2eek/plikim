@@ -15,6 +15,7 @@
 	<description>kim pli</description>
 	<properties>
 		<java.version>11</java.version>
+		<docker.image.prefix>SpringKimpli</docker.image.prefix>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -42,6 +43,16 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<!--<dependency>
+			<groupId>org.thymeleaf.extras</groupId>
+			<artifactId>thymeleaf-extras-springsecurity6</artifactId>
+			&lt;!&ndash; Temporary explicit version to fix Thymeleaf bug &ndash;&gt;
+			<version>3.1.1.RELEASE</version>
+		</dependency>-->
 	</dependencies>
 
 	<build>
@@ -60,5 +71,6 @@
 			</plugin>
 		</plugins>
 	</build>
+
 
 </project>

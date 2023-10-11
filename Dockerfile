@@ -7,7 +7,7 @@
 
 FROM openjdk:11
 VOLUME /tmp
-#target안에 위치한 kimpli-0.0.1-SNAPSHOT.jar 이걸 이미지화 하겠다
+#target안에 위치한 kimpli-0.0.1-SNAPSHOT.jar 이걸 이미지화 하겠다!!
 ARG JAR_FILE=target/kimpli-0.0.1-SNAPSHOT.jar
 #실제로 빌드된 JAR 파일을 Docker 이미지 안으로 복사
 ADD ${JAR_FILE} app.jar

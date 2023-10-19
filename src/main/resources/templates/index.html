@@ -8,18 +8,19 @@
 
 <main role="main" class="container">
     <div>
-        <button onclick="savaReq()">글작성</button>
+        <button id="wri"  onclick="savaReq()">글작성</button>
     </div>
     <div class="starter-template">
-        <h1>hello 23.10.19 16:50</h1>
+        <h1>hello 23.10.19  22:14</h1>
         <img src="img/500.jpeg" alt="image" class="responsive-images">
     </div>
 </main>
- <script>
-        function saveReq(){
-            location.href = "/board/save";
-        }
-    </script>
+<script>
+ document.getElementById('wri').addEventListener('click',function (){
+       location.href = "/board/save";
+ });
+ </script>
+
 
 <script
         src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

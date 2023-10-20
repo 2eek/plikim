@@ -4,7 +4,10 @@ import com.eek.kimpli.dto.BoardDTO;
 import com.eek.kimpli.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -19,6 +22,14 @@ public class BoardController {
     public String save(@ModelAttribute BoardDTO boardDTO){
         System.out.println("boardDTO ="+ boardDTO);
         boardService.save(boardDTO);
-        return "index";
+        return "/index";
+    }
+    @GetMapping("/list")
+    public String findAll(Model model){
+        // DB에서 전체 게시글 데이터를 가져와서 list.html에 보여준다
+        List<BoardDTO> boardDTOList = boardService.findAll();
+        model.addAttribute("boardList",boardDTOList);
+        return "/board/list";
+
     }
 }

@@ -8,16 +8,20 @@
 
 <main role="main" class="container">
     <div>
-        <button id="wri"  onclick="savaReq()">글작성</button>
+        <button id="wri" onclick="savaReq()">글작성</button>
+        <button id="lis" onclick="readReq()">글조회</button>
     </div>
     <div class="starter-template">
-        <h1>hello 23.10.20  15:21</h1>
+        <h1>hello 23.10.20  16:29</h1>
         <img src="/img/500.jpeg" alt="image" class="responsive-images">
     </div>
 </main>
 <script>
  document.getElementById('wri').addEventListener('click',function (){
        location.href = "/board/save";
+ });
+ document.getElementById('lis').addEventListener('click',function (){
+       location.href = "/board/list";
  });
  </script>
 

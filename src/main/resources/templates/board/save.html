@@ -6,6 +6,8 @@
     <title>Save</title>
 </head>
 <body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('board')">
+</nav>
 <form action="/board/save" method="post" enctype="multipart/form-data">
     writer: <input type="text" name="boardWriter"> <br>
     pass: <input type="text" name="boardPass"> <br>

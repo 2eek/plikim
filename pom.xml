@@ -53,16 +53,12 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>8.0.12</version>
 		</dependency>
+		<!-- Spring Bata JPA -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		<!--<dependency>
-			<groupId>org.thymeleaf.extras</groupId>
-			<artifactId>thymeleaf-extras-springsecurity6</artifactId>
-			&lt;!&ndash; Temporary explicit version to fix Thymeleaf bug &ndash;&gt;
-			<version>3.1.1.RELEASE</version>
-		</dependency>-->
+
 	</dependencies>
 
 	<build>

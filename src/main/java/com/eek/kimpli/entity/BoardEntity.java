@@ -1,7 +1,7 @@
 package com.eek.kimpli.entity;
 //DB 데이블 역할을 하는 클래스 객체를 구성해줌
 
-import com.eek.kimpli.dto.BoardDTO;
+import com.eek.kimpli.board.dto.BoardDTO;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -4,6 +4,8 @@
 server:
   port: 9090
 
+
+
 # 스프링 시큐리티 기본 계정 설정
 spring:
   security:
@@ -37,4 +39,12 @@ spring:
 
   application:
     name: kimpli
+
+#mybatis
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.eek.kimpli.member.dto
+  configuration:
+    jdbc-type-for-null: null
+    map-underscore-to-camel-case: true
 

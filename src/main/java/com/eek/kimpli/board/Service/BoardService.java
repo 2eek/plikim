@@ -1,11 +1,10 @@
-package com.eek.kimpli.service;
+package com.eek.kimpli.board.Service;
 
-import com.eek.kimpli.dto.BoardDTO;
+import com.eek.kimpli.board.dto.BoardDTO;
 import com.eek.kimpli.entity.BoardEntity;
-import com.eek.kimpli.repository.BoardRepository;
+import com.eek.kimpli.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.List;

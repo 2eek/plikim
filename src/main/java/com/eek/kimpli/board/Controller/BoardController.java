@@ -1,7 +1,7 @@
-package com.eek.kimpli.controller;
+package com.eek.kimpli.board.Controller;
 
-import com.eek.kimpli.dto.BoardDTO;
-import com.eek.kimpli.service.BoardService;
+import com.eek.kimpli.board.dto.BoardDTO;
+import com.eek.kimpli.board.Service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

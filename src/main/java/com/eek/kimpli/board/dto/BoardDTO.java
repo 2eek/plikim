@@ -1,4 +1,4 @@
-package com.eek.kimpli.dto;
+package com.eek.kimpli.board.dto;
 
 import com.eek.kimpli.entity.BoardEntity;
 import lombok.*;

@@ -1,0 +1,40 @@
+#logging.level.root = TRACE
+
+# 서버 포트 설정
+server:
+  port: 9090
+
+# 스프링 시큐리티 기본 계정 설정
+spring:
+  security:
+    user:
+      name: user
+      password: 1230
+  #database 연동 설정
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://52.79.76.213/plikim?serverTimezone=Asia/Seoul&useSSL=false&characterEncoding=UTF-8
+    username: user1
+    password: 1234
+  #thymeleaf
+  thymeleaf:
+    cache: false
+
+  #spring data jpa 설정
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    open-in-view: false
+    format-sql: true
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+#    properties:
+#      hibernate:
+#        show-sql: true
+#        format-sql: true
+#        ddl-auto: update
+
+  application:
+    name: kimpli
+

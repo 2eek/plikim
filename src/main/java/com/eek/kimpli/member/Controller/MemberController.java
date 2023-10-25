@@ -22,7 +22,7 @@ public class MemberController {
     //회원가입폼 호춯
     @GetMapping("/memberjoin")
     public String joinForm(){
-        return "/member/memberjoinform";
+        return "member/memberjoinform";
     }
 
     //회원가입 처리.
@@ -32,7 +32,7 @@ public class MemberController {
         if(saveResult > 0){
             return "redirect:/";
         }else {
-            return "redirect:/member/memberjoinform";
+            return "redirect:member/memberjoinform";
         }
     }
 }

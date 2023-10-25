@@ -10,8 +10,20 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor// 의존성 주입받기
 public class MemberRepository {
     private final SqlSessionTemplate sql;//마이바티스에서 제공하는 클래스
+
+    //회원가입
     public int save(MemberDTO memberDTO) {
         System.out.println("memberDTO = "+ memberDTO);
         return sql.insert("Member.save",memberDTO);  //MemberMapper.xml과 연결됨
     }
+
+    //일반로그인
+    public MemberDTO login(MemberDTO memberDTO) {
+
+        return sql.selectOne("Member.login",memberDTO);
+    }
+
+
+
+
 }

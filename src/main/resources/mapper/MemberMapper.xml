@@ -3,27 +3,77 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="Member">
+    <!-- 회원가입 -->
     <insert id="save" parameterType="memberDTO">
-        insert into member_table(id ,memberEmail, memberPassword, memberName, birthdate, memberMobile, gender, authority, sign_up_date )
-        values (#{id},#{memberEmail}, #{memberPassword}, #{memberName},DATE(#{birthdate}), #{memberMobile}, #{gender}, 'A1', NOW())
+        insert into member_table(memberEmail, memberPassword, memberName, birthdate, memberMobile, gender, authority,login_type,sign_up_date )
+        values (#{memberEmail}, #{memberPassword}, #{memberName},DATE(#{birthdate}), #{memberMobile}, #{gender}, 'A1', 'L1',NOW())
     </insert>
+    <!-- 로그인. select 쓸 때는 resultType 필요하다.-->
     <select id="login" parameterType="memberDTO" resultType="memberDTO">
         select * from member_table where memberEmail=#{memberEmail} and memberPassword=#{memberPassword}
     </select>
     <select id="findAll" resultType="memberDTO">
         select * from member_table
     </select>
-    <select id="findById" parameterType="Long" resultType="memberDTO">
-        select * from member_table where id=#{id}
+    <select id="findById" parameterType="String" resultType="memberDTO">
+        select * from member_table where memberEmail=#{memberEmail}
     </select>
-    <delete id="delete" parameterType="Long">
-        delete from member_table where id=#{id}
+    <delete id="delete" parameterType="String">
+        delete from member_table where memberEmail=#{memberEmail}
     </delete>
     <select id="findByMemberEmail" parameterType="String" resultType="memberDTO">
         select * from member_table where memberEmail=#{loginEmail}
     </select>
     <update id="update" parameterType="memberDTO">
-        update member_table set memberAge=#{memberAge}, memberMobile=#{memberMobile}
-        where id=#{id}
+        update member_table set birthdate=#{birthdate}, memberMobile=#{memberMobile}
+        where memberEmail=#{memberEmail}
+    </update>
+
+    <select id="select" parameterType="memberDTO" resultType="memberDTO">
+        select * from member_table where memberEmail=#{memberEmail} and memberPassword=#{memberPassword}
+    </select>
+
+    <!-- 카카오 로그인시 정보 DB저장-->
+    <update id="insertKakaoLogin" parameterType="java.util.HashMap">
+		insert into member_table
+					(memberEmail,
+					memberPassword,
+					memberName,
+					origin_profile_img,
+					AUTHORITY,
+					access_token,
+					refresh_token,
+					 login_type,
+					sign_up_date)
+		values
+					(#{email},
+					 #{password},
+					#{nickname},
+					#{profileImage},
+					'A1',
+					#{access_Token},
+					#{refresh_Token},
+					'L2',
+					NOW())
+	</update>
+
+    <!-- DB에 카카오 정보 유무 확인 -->
+    <select id ="findKakao" parameterType="java.util.HashMap" resultType="MemberDTO">
+        select * from member_table where memberEmail = #{email}
+    </select>
+
+    <!--DB에 없는 카카오로그인 정보를 저장(업데이트)-->
+    <update id="updateKakoLogin" parameterType="java.util.HashMap">
+    UPDATE member_table
+    SET
+        memberPassword = #{password},
+        memberName = #{nickname},
+        memberEmail = #{email},
+        origin_profile_img = #{profileImage},
+        access_token = #{access_Token},
+        refresh_token = #{refresh_Token},
+        sign_up_date = NOW()
+    WHERE
+        memberEmail=#{memberEmail}
     </update>
 </mapper>

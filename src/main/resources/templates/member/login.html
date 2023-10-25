@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common :: head('plikim')">
+<!--<link rel="icon" th:href="@{https://plikim.com/favicon.ico}" type="image/x-icon" />-->
+
+</head>
+<body>
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('home')">
+</nav>
+
+<body>
+    <form action="/member/login" method="post">
+        <input type="text" name="id" placeholder="이메일">
+        <input type="text" name="memberPassword" placeholder="비밀번호">
+        <input type="submit" value="로그인">
+    </form>
+        <div class="sns">
+             <div class="social-icons">
+                <!--  카카오 API를 사용하여 OAuth 2.0 인증을 위한 URL -->
+             <a  th:href="@{https://kauth.kakao.com/oauth/authorize?client_id=1e411be4c9538cd8fc4f1b4c817968b4&redirect_uri=http://localhost:9090/kakaologin&response_type=code}">
+             <img  id="kakao" src="/img/login/카카오로그인.png" height="50" alt="kakao"    ></a>
+              <!-- 네이버 API로그인  -->
+            </div>
+       </div>
+</body>
+
+
+<script
+        src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"
+></script>
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+        crossorigin="anonymous"
+></script>
+
+
+</body>
+</html>

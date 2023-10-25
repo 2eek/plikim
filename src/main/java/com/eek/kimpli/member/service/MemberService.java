@@ -14,4 +14,17 @@ public class MemberService {
     public int save(MemberDTO memberDTO) {
         return memberRepository.save(memberDTO);
     }
+
+    public int KakaoSave(MemberDTO memberDTO) {
+        return memberRepository.save(memberDTO);
+    }
+
+    public boolean login(MemberDTO memberDTO) {
+        MemberDTO loginMember = memberRepository.login(memberDTO);
+        if (loginMember != null){
+            return true;
+        }else {
+            return false;
+        }
+    }
 }

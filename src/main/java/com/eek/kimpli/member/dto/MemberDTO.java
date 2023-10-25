@@ -4,11 +4,17 @@ import lombok.Data;
 
 @Data
 public class MemberDTO {
-    private Long id;
+    private String id;
     private String memberEmail;
     private String memberPassword;
     private String memberName;
-    private int memberAge; //회원가입 할 때 문자를 입력 받으면 400번 에러 뜬다! 자동으로 형변환 안해줌
+    private String birthdate;
     private String memberMobile;
+    private String gender;
+    private String authority;
+    private String access_token;
+    private String refresh_token;
+    private String sign_up_date;
+    private String withdrawal_date;
 
 }

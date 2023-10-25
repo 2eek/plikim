@@ -13,24 +13,26 @@ public class MemberController {
      //생성자 주입방식으로 의존성주입받게됨
     private  final MemberService memberService;
 
-    //단순한 호출 GetMapping을 이용한다. URL에 매핑된 핸들러 필요하다.
+    //가입한 회원 리스트 조회. 단순한 호출 GetMapping을 이용한다. URL에 매핑된 핸들러 필요하다
     @GetMapping("/memberlist")
     public String saveForm(){
-        return "member/memberlist";}
-
-    @GetMapping("/memberjoin")
-    public String joinForm(){
-        return "member/memberjoinform";
+        return "member/memberlist";
     }
 
+    //회원가입폼 호춯
+    @GetMapping("/memberjoin")
+    public String joinForm(){
+        return "/member/memberjoinform";
+    }
 
+    //회원가입 처리.
     @PostMapping("/save")
     public String save(@ModelAttribute MemberDTO memberDTO){
         int saveResult = memberService.save(memberDTO);
         if(saveResult > 0){
-            return "index";
+            return "redirect:/";
         }else {
-            return "member/memberjoinform";
+            return "redirect:/member/memberjoinform";
         }
     }
 }

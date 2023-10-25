@@ -4,8 +4,8 @@
 
 <mapper namespace="Member">
     <insert id="save" parameterType="memberDTO">
-        insert into member_table(memberEmail, memberPassword, memberName, memberAge, memberMobile)
-        values (#{memberEmail}, #{memberPassword}, #{memberName}, #{memberAge}, #{memberMobile})
+        insert into member_table(id ,memberEmail, memberPassword, memberName, birthdate, memberMobile, gender, authority, sign_up_date )
+        values (#{id},#{memberEmail}, #{memberPassword}, #{memberName},DATE(#{birthdate}), #{memberMobile}, #{gender}, 'A1', NOW())
     </insert>
     <select id="login" parameterType="memberDTO" resultType="memberDTO">
         select * from member_table where memberEmail=#{memberEmail} and memberPassword=#{memberPassword}

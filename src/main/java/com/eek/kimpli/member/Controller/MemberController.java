@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequiredArgsConstructor//생성자 주입(Constructor Injection)을 간편하게 만들기 위해 사용
 @RequestMapping("/member")//공통주소
@@ -35,4 +37,23 @@ public class MemberController {
             return "redirect:member/memberjoinform";
         }
     }
+
+    @GetMapping("/loginForm")
+    public String loginFotm(){
+        return "member/login";
+    }
+    @PostMapping("/login")
+    public String login(@ModelAttribute MemberDTO memberDTO, HttpSession session){
+        boolean loginResult = memberService.login(memberDTO);
+        if(loginResult){
+            session.setAttribute("memberEmail", memberDTO.getId());
+            return  "redirect:/";
+        }else {
+            return "member/login";
+
+
+        }
+
+    }
 }
+

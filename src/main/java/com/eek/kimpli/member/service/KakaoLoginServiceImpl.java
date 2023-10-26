@@ -45,6 +45,7 @@ public class KakaoLoginServiceImpl implements KakaoLoginService {
          sb.append("grant_type=authorization_code");
          sb.append("&client_id=1e411be4c9538cd8fc4f1b4c817968b4"); //본인이 발급받은 key
          sb.append("&redirect_uri=https://plikim.com/kakaologin"); // 본인이 설정한 주소
+         //sb.append("&redirect_uri=http://localhost:9090/kakaologin"); // 본인이 설정한 주소
          sb.append("&code=" + authorize_code);
          bw.write(sb.toString());
 
@@ -111,17 +112,10 @@ public class KakaoLoginServiceImpl implements KakaoLoginService {
             result += line;
          }
          // JSON 데이터를 파싱하고 필요한 정보를 추출. JSON데이터 조작하기 위해 jsonNode 객체화
-         System.out.println("response body 회원정보 : " + result);
          ObjectMapper objectMapper = new ObjectMapper();
-         System.out.println("오브젝트매퍼"+objectMapper);
          JsonNode jsonNode = objectMapper.readTree(result);
          JsonNode properties = jsonNode.get("properties");
-         System.out.println("제이슨노드"+jsonNode);
-         System.out.println("프로퍼티즈"+properties);
          JsonNode kakao_account = jsonNode.get("kakao_account");
-         System.out.println("카카오 어카운트"+kakao_account);
-
-
          String nickname = properties.get("nickname").asText();
          String email = kakao_account.get("email").asText();
          //String gender = kakao_account.get("gender").asText();
@@ -129,7 +123,6 @@ public class KakaoLoginServiceImpl implements KakaoLoginService {
          String thumbnailImage = properties.get("thumbnail_image").asText();
          String profileImage = properties.get("profile_image").asText();
          //String birthday = properties.get("birthday").asText();
-
 
          Long id = jsonNode.get("id").asLong();
          userInfo.put("id", id);
@@ -144,7 +137,6 @@ public class KakaoLoginServiceImpl implements KakaoLoginService {
          //userInfo.put("gender", gender);
          //userInfo.put("birthday", birthday);
 		/* userInfo.put("birthday", birthday); */
-
          System.out.println("********");
          System.out.println("###id#### : " + id);
          System.out.println("###프로필### : " + profileImage);
@@ -156,23 +148,13 @@ public class KakaoLoginServiceImpl implements KakaoLoginService {
          e.printStackTrace();
       }
 
-
-      //return userInfo;
-   // catch 아래 코드 추가. 여기에 토큰도 같이 넣자
-System.out.println("파인드카카오"+userInfo);
-         MemberDTO result = kakaoLoginRepository.findKakao(userInfo);
-
+      MemberDTO result = kakaoLoginRepository.findKakao(userInfo);
       if(result==null) {
         kakaoLoginRepository.insertKakaoLogin(userInfo);
         return result;
-        //return kakaoLoginRepository.findKakao(userInfo);
-
    		}else {
    			kakaoLoginRepository.updateKakaoLogin(userInfo);
    			return result;
-
-   		// result가 null이면 DB에 정보가 없다는 것-> 정보를 저장.
-
    		}
       }
    }

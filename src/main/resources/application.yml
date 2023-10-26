@@ -8,10 +8,10 @@ server:
 
 # 스프링 시큐리티 기본 계정 설정
 spring:
-  security:
-    user:
-      name: user
-      password: 1230
+#  security:
+#    user:
+#      name: user
+#      password: 1230
   #database 연동 설정
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

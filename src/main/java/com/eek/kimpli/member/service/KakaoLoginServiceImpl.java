@@ -44,8 +44,8 @@ public class KakaoLoginServiceImpl implements KakaoLoginService {
          StringBuilder sb = new StringBuilder();
          sb.append("grant_type=authorization_code");
          sb.append("&client_id=1e411be4c9538cd8fc4f1b4c817968b4"); //본인이 발급받은 key
-         //sb.append("&redirect_uri=https://plikim.com/kakaologin"); // 본인이 설정한 주소
-         sb.append("&redirect_uri=http://localhost:9090/kakaologin"); // 본인이 설정한 주소
+         sb.append("&redirect_uri=https://plikim.com/kakaologin"); // 본인이 설정한 주소
+         //sb.append("&redirect_uri=http://localhost:9090/kakaologin"); // 본인이 설정한 주소
          sb.append("&code=" + authorize_code);
          bw.write(sb.toString());
 

@@ -29,7 +29,8 @@ public class KakaoLoginRepository {
      }
 
 	 public MemberDTO findKakao(HashMap<String, Object> userInfo){
-         return sql.selectOne("Member.findKakao",userInfo);
+
+        return sql.selectOne("Member.findKakao",userInfo);
      }
 
 //    public MemberDTO  find(HashMap<String, Object> userInfo) {

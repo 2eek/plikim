@@ -37,7 +37,7 @@ public class WebSecurityConfig {
         )
         .formLogin(formLogin ->
             formLogin
-				.loginPage("/member/loginForm")
+				.loginPage("/member/login1")//get방식 action url
 				.permitAll()
         )
         .logout(logout ->

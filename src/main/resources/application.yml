@@ -1,4 +1,17 @@
-#logging.level.root = TRACE
+#logging:
+#  level:
+#    root: TRACE
+
+#logging:
+#  level:
+#    root: INFO
+#  appenders:
+#    - type: console
+#      threshold: INFO
+#      target: System.out
+#      layout:
+#        type: pattern
+#        pattern: "%-5p %c{1}:%L - %m%n"
 
 # 서버 포트 설정
 server:
@@ -47,4 +60,6 @@ mybatis:
   configuration:
     jdbc-type-for-null: null
     map-underscore-to-camel-case: true
+
+
 

@@ -21,21 +21,21 @@
         <input type="text" name="memberPassword" placeholder="비밀번호">
         <button type="submit">로그인</button>
     </form>
-<!--        <div class="sns">-->
-<!--             <div class="social-icons">-->
-<!--                &lt;!&ndash;  카카오 API를 사용하여 OAuth 2.0 인증을 위한 URL &ndash;&gt;-->
-<!--             <a  th:href="@{https://kauth.kakao.com/oauth/authorize?client_id=1e411be4c9538cd8fc4f1b4c817968b4&redirect_uri=https://plikim.com/kakaologin&response_type=code}">-->
-<!--             <img  id="kakao" src="/img/카카오로그인.png" height="50" alt="kakao"정></a>-->
-<!--            </div>-->
-<!--       </div>-->
-         <!--로컬-->
         <div class="sns">
              <div class="social-icons">
                 <!--  카카오 API를 사용하여 OAuth 2.0 인증을 위한 URL -->
-             <a  th:href="@{https://kauth.kakao.com/oauth/authorize?client_id=1e411be4c9538cd8fc4f1b4c817968b4&redirect_uri=http://localhost:9090/kakaologin&response_type=code}">
-             <img  id="kakao" src="/img/카카오로그인.png" height="50" alt="kakao"    ></a>
+             <a  th:href="@{https://kauth.kakao.com/oauth/authorize?client_id=1e411be4c9538cd8fc4f1b4c817968b4&redirect_uri=https://plikim.com/kakaologin&response_type=code}">
+             <img  id="kakao" src="/img/카카오로그인.png" height="50" alt="kakao"정></a>
             </div>
        </div>
+         <!--로컬-->
+<!--        <div class="sns">-->
+<!--             <div class="social-icons">-->
+<!--                &lt;!&ndash;  카카오 API를 사용하여 OAuth 2.0 인증을 위한 URL &ndash;&gt;-->
+<!--             <a  th:href="@{https://kauth.kakao.com/oauth/authorize?client_id=1e411be4c9538cd8fc4f1b4c817968b4&redirect_uri=http://localhost:9090/kakaologin&response_type=code}">-->
+<!--             <img  id="kakao" src="/img/카카오로그인.png" height="50" alt="kakao"    ></a>-->
+<!--            </div>-->
+<!--       </div>-->
 
         <form th:action="@{/logout}" method="post">
             <input type="submit" value="Sign Out"/>

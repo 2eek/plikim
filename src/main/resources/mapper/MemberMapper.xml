@@ -53,7 +53,7 @@
 					'A1',
 					#{access_Token},
 					#{refresh_Token},
-					'L2카카오',
+					'L2',
 					NOW())
 	</update>
 

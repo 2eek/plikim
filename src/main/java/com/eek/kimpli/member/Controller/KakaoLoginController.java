@@ -20,6 +20,7 @@ public class KakaoLoginController {
 //사용자가 로그인을 성공적으로 수행한 후에 리디렉션될 URL
    @GetMapping("/kakaologin")
    public String kakaoLogin(@RequestParam(value = "code", required = false) String code) throws Exception {
+       System.setProperty("file.encoding", "UTF-8");
        System.out.println(code);
        //접근 토큰을 받아옴
       Map<String, String> map = ks.getAccessToken(code);

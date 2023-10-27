@@ -8,6 +8,7 @@ class KimpliApplicationTests {
 
 	@Test
 	void contextLoads() {
+		System.out.println("hello");
 	}
 
 }

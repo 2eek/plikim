@@ -44,22 +44,24 @@ public class MemberController {
     }
 
     //로그인 시 계정 정보가 틀렸다면, url을 시큐리티가 처리해준다. action이 post이지만 시큐리티가 get으로 처리해줌 + 타임리프가 error받아서 화면에 띄워줌
-     @GetMapping("/login1")
-    public String loginForm1(){
-        return "member/login";
-    }
-//    @PostMapping("/login")//시큐리티에서 처리할 예
-//    public String login(@ModelAttribute MemberDTO memberDTO, HttpSession session){
-//        boolean loginResult = memberService.login(memberDTO);
-//        if(loginResult){
-//            session.setAttribute("memberEmail", memberDTO.getId());
-//            return  "redirect:/";
-//        }else {
-//            return "member/login";
-//
-//
-//        }
-//
+//     @GetMapping("/login1")
+//    public String loginForm1(){
+//        return "member/login";
 //    }
+    @PostMapping("/login1")//시큐리티에서 처리할 예
+    public String login(@ModelAttribute MemberDTO memberDTO, HttpSession session){
+        boolean loginResult = memberService.login(memberDTO);
+        if(loginResult == true ){
+            session.setAttribute("memberEmail", memberDTO.getMemberEmail());
+            return  "redirect:/";
+            // return "member/login";
+        }else {
+            return "member/login";
+            //return  "redirect:/";
+
+
+        }
+
+    }
 }
 

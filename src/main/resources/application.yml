@@ -44,11 +44,11 @@ spring:
     hibernate:
       ddl-auto: update
 
-#    properties:
-#      hibernate:
-#        show-sql: true
-#        format-sql: true
-#        ddl-auto: update
+    properties:
+      hibernate:
+        show-sql: true
+        format-sql: true
+        ddl-auto: update
 
   application:
     name: kimpli

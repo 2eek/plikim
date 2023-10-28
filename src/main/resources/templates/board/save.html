@@ -19,7 +19,7 @@
                 </div>
                   <div class="text-right">
                     <button type="button" class="btn btn-primary" onclick="history.back()">되돌아가기</button>
-                    <button id="cancel" type="button" class="btn btn-primary" th:if="${board.id == null}">취소</button>
+                    <button id="cancel" type="reset" class="btn btn-primary" th:if="${board.id == null}">취소</button>
                     <button id="wri" type="submit" class="btn btn-primary" th:if="${board.id == null}">글작성</button>
                   </div>
         </form>
@@ -28,11 +28,11 @@
 </body>
 
 <!--th:if="${board} == null"-->
-<script th:if="${board.id == null}">
-     document.getElementById('cancel').addEventListener('click',function (){
-           location.href = "/board/saveForm";
-     });
-</script>
+<!--<script th:if="${board.id == null}">-->
+<!--     document.getElementById('cancel').addEventListener('click',function (){-->
+<!--           location.href = "/board/saveForm";-->
+<!--     });-->
+<!--</script>-->
  <script th:if="${board.id != null}">
          document.getElementById('title').readOnly=true;
         document.getElementById('content').readOnly=true;
@@ -40,7 +40,7 @@
 
 <!--<script>-->
 <!--    document.addEventListener('DOMContentLoaded', function() {-->
-<!--        var board = {board};/* 이곳에 모델에서 가져온 board 객체를 할당하세요 */;-->
+<!--        var board = {board};-->
 <!--        console.log('board 값:', board);-->
 <!--    });-->
 <!--</script>-->

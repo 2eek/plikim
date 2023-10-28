@@ -6,6 +6,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 //DTO(Data Transfer Object), VO, Bean.., vs Entity
+
 @Getter
 @Setter
 @ToString

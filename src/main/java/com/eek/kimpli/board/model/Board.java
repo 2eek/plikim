@@ -1,6 +1,7 @@
-package com.eek.kimpli.model;
+package com.eek.kimpli.board.model;
 
 import lombok.Data;
+import org.hibernate.annotations.Table;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,7 +10,7 @@ import javax.persistence.Id;
 
 @Entity //DB연동을 위한 모델클레스임을 알려줌
 @Data
-public class Board1 {
+public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

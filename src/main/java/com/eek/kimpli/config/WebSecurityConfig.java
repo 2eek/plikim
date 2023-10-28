@@ -31,7 +31,7 @@ public class WebSecurityConfig {
             authorizeRequests
                 .antMatchers("/").permitAll()
 				//저장소에 Authentication없으면 로그인폼으로 돌림
-                .antMatchers("/board/**").authenticated()
+                //.antMatchers("/board/**").authenticated()
                 .antMatchers("/static/**").permitAll()
                 .anyRequest().permitAll()
         )

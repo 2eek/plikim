@@ -7,7 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@Entity
+@Entity//데이터베이스 연ㄷ동을 위한 모델 클래스
 @Getter
 @Setter
 @Table(name = "board_table")

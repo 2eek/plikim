@@ -28,9 +28,9 @@
             </tr>
           </thead>
           <tbody>
-            <tr th:each="board11 : ${board1s}">
-              <td th:text="${board11.id}">Mark</td>
-              <td th:text="${board11.title}">Otto</td>
+            <tr th:each="boarda : ${boards}">
+              <td th:text="${boarda.id}">번호</td>
+              <td><a th:text="${boarda.title}" th:href="@{/board/saveForm(id=${boarda.id})}"> 제목</a></td>
               <td>홍길동</td>
             </tr>
           </tbody>

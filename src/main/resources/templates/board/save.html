@@ -11,14 +11,17 @@
 </nav>
     <div style="width: 80%; margin: 0 auto;">
         <form th:action="@{/board/save}" th:object ="${board}" method="post" enctype="multipart/form-data">
+                <!-- 글 수정을 위한 id값-->
+                     <input type="hidden" th:field="*{id}">
                 <div class="form-group">
                     <label for="title">제목</label>
                     <input type="text" class="form-control" id="title" th:field="*{title}" placeholder="제목" >
                     <label for="content">내용</label>
                     <textarea class="form-control" id="content" th:field="*{content}" placeholder="내용" rows="7" ></textarea>
                 </div>
-                  <div class="text-right">
+                  <div class="text-right" id="button-container">
                     <button type="button" class="btn btn-primary" onclick="history.back()">되돌아가기</button>
+                    <button id="update" type="button" class="btn btn-primary"th:if="${board.id != null}">수정</button>
                     <button id="cancel" type="reset" class="btn btn-primary" th:if="${board.id == null}">취소</button>
                     <button id="wri" type="submit" class="btn btn-primary" th:if="${board.id == null}">글작성</button>
                   </div>
@@ -27,21 +30,57 @@
 
 </body>
 
-<!--th:if="${board} == null"-->
-<!--<script th:if="${board.id == null}">-->
-<!--     document.getElementById('cancel').addEventListener('click',function (){-->
-<!--           location.href = "/board/saveForm";-->
+
+<!--<script th:if="${board.id != null}">-->
+<!--     document.getElementById('update').addEventListener('click',function (){-->
+<!--            document.getElementById('cancel').style.display = 'inline'; // '취소' 버튼 표시-->
+<!--            document.getElementById('title').readOnly=false;-->
+<!--             document.getElementById('content').readOnly=false;-->
+<!--             document.getElementById('update').textContent = '확인';-->
+<!--             document.getElementById('update').removeEventListener('click', this);-->
+<!--                // '확인' 버튼을 클릭하면 form을 submit-->
+<!--                document.getElementById('update').addEventListener('click', function () {-->
+<!--                document.forms[0].submit(); // forms[0]은 첫 번째 form을 나타냅니다.-->
+<!--                });-->
 <!--     });-->
 <!--</script>-->
+
  <script th:if="${board.id != null}">
          document.getElementById('title').readOnly=true;
         document.getElementById('content').readOnly=true;
 </script>
 
-<!--<script>-->
-<!--    document.addEventListener('DOMContentLoaded', function() {-->
-<!--        var board = {board};-->
-<!--        console.log('board 값:', board);-->
-<!--    });-->
-<!--</script>-->
+<script th:if="${board.id != null}">
+    document.getElementById('title').readOnly = true;
+    document.getElementById('content').readOnly = true;
+
+    document.getElementById('update').addEventListener('click', function () {
+        var cancelButton = document.createElement('button');
+        cancelButton.id = 'cancel';
+        cancelButton.type = 'button';
+        cancelButton.className = 'btn btn-primary';
+        cancelButton.textContent = '취소';
+        cancelButton.style.marginRight = '5px'; // 원하는 간격 크기로 조정
+
+        var buttonContainer = document.getElementById('button-container');
+        buttonContainer.insertBefore(cancelButton, buttonContainer.children[1]); // 2는 "되돌아가기" 버튼 뒤를 가리킵니다.
+
+        document.getElementById('title').readOnly = false;
+        document.getElementById('content').readOnly = false;
+        document.getElementById('update').textContent = '확인';
+        document.getElementById('update').removeEventListener('click', this);
+
+        // '확인' 버튼을 클릭하면 form을 submit
+        document.getElementById('update').addEventListener('click', function () {
+            document.forms[0].submit();
+        });
+
+        // "취소" 버튼 클릭 시 "title"과 "content" 값을 비움
+        document.getElementById('cancel').addEventListener('click', function () {
+            document.getElementById('title').value = '';
+            document.getElementById('content').value = '';
+        });
+    });
+</script>
+</body>
 </html>

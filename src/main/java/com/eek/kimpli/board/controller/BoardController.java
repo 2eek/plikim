@@ -27,8 +27,9 @@ public class BoardController {
     private BoardValidator boardValidator;
 
     @GetMapping("/list")
-    public String list(Model model, @PageableDefault(size = 3)  Pageable pageable) {
-        Page<Board> boards = boardRepository.findAll(pageable);
+    public String list(Model model, @PageableDefault(size = 3)  Pageable pageable,
+                       @RequestParam(required = false,defaultValue = "") String searchText) {
+        Page<Board> boards = boardRepository.findByTitleContainingOrContentContaining(searchText,searchText,pageable);
         int startPage = Math.max(1, boards.getPageable().getPageNumber() - 4);
         int endpage = Math.min(boards.getTotalPages(), boards.getPageable().getPageNumber() + 4);
         model.addAttribute("startPage",startPage);
@@ -36,6 +37,7 @@ public class BoardController {
         model.addAttribute("boards", boards);
         return "board/list";
     }
+
 
 
     //생성자 주입방식으로 의존성주입받게됨

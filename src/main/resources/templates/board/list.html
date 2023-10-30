@@ -13,10 +13,10 @@
   </div>
 </main>
 
-<!--<div class = "container">-->
-<!--    <h2>게시판</h2>-->
-<!--    <div> 총 건수: <span th:text="${#lists.size(board1s)}"></span></div>-->
-<!--</div>-->
+<div class = "container">
+    <div> 총 건수: <span th:text="${boards.totalElements}"></span></div>
+</div>
+
 
     <div style="width: 80%; margin: 0 auto;">
         <table class="table table-striped">
@@ -35,10 +35,25 @@
             </tr>
           </tbody>
         </table>
+
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-center">
+            <li class="page-item " th:classappend="${1 == boards.pageable.pageNumber +1} ? 'disabled'" >
+              <a class="page-link" href="#" th:href = "@{/board/list(page=${boards.pageable.pageNumber -1})}" tabindex="-1" aria-disabled="true" >Previous</a>
+            </li>
+              <li class="page-item" th:classappend="${i == boards.pageable.pageNumber +1} ? 'disabled'" th:each="i : ${#numbers.sequence(startPage,endPage)}">
+                  <a class="page-link" href="#"  th:href = "@{/board/list(page=${i -1 })}" th:text="${i}">1</a>
+              </li>
+            <li class="page-item" th:classappend="${ boards.totalPages == boards.pageable.pageNumber +1} ? 'disabled'" >
+              <a class="page-link" href="#" th:href = "@{/board/list(page=${boards.pageable.pageNumber +1})}">Next</a>
+            </li>
+          </ul>
+        </nav>
         <div class="text-right">
                 <button id="wri" type="button" class="btn btn-primary">글작성</button>
         </div>
     </div>
+
 <script>
      document.getElementById('wri').addEventListener('click',function (){
            location.href = "/board/saveForm";

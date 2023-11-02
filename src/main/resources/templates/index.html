@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="fragments/common :: head('plikim')">
 <!--<link rel="icon" th:href="@{https://plikim.com/favicon.ico}" type="image/x-icon" />-->
 </head>
@@ -15,13 +17,25 @@
 <!--    </div>-->
      <div style="display: flex; justify-content: center; align-items: center;">
     </div>
-<iframe id="online-alarm-kur-iframe" src="https://embed-countdown.onlinealarmkur.com/ko/#2023-10-31T00:00:00@Asia%2FSeoul" width="300" height="40" style="display: block; margin: 0px auto; border: 0px;"></iframe>
+<iframe id="online-alarm-kur-iframe" src="https://embed-countdown.onlinealarmkur.com/ko/#2024-01-01T00:00:00@Asia%2FSeoul" width="300" height="40" style="display: block; margin: 0px auto; border: 0px;"></iframe>
 
     <div class="starter-template">
         <p>&#128052;</p>
+
+<!--        <span sec:authorize="isAuthenticated()">사용자는 인증되었습니다.</span>-->
+<!--    <span sec:authorize="!isAuthenticated()">사용자는 인증되지 않았습니다.</span>-->
         <img src="/img/500.jpeg" alt="image" class="responsive-images">
     </div>
 </main>
+
+<!--<p th:text="'인증된 사용자: ' + ${username}"></p>-->
+<!--    <p th:each="authority : ${authorities}" th:text="'사용자 권한: ' + ${authority}"></p>-->
+
+<!--    <span th:if="${#authentication.principal.user.id} == ${user.getEnabled()}">-->
+<!--        <button id="btn-delete" class="btn btn-danger">삭제</button>-->
+<!--        <button id="btn-update" class="btn btn-warning">수정</button>-->
+<!--    </span>-->
+
 <!--<script>-->
 <!--     document.getElementById('wri').addEventListener('click',function (){-->
 <!--           location.href = "/board/save";-->

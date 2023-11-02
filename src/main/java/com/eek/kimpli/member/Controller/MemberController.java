@@ -15,6 +15,7 @@ public class MemberController {
      //생성자 주입방식으로 의존성주입받게됨
     private  final MemberService memberService;
 
+
     //가입한 회원 리스트 조회. 단순한 호출 GetMapping을 이용한다. URL에 매핑된 핸들러 필요하다
     @GetMapping("/memberlist")
     public String saveForm(){
@@ -63,5 +64,22 @@ public class MemberController {
         }
 
     }
+
+
+      @GetMapping("/logintest")
+    public String logintest(){
+        return "member/logintest";
+    }
+      @GetMapping("/jointest")
+    public String jointest(){
+        return "member/jointest";
+    }
+
+
+
+
+
+
+
 }
 

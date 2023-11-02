@@ -1,8 +1,6 @@
 package com.eek.kimpli.board.model;
 
 import lombok.Data;
-import org.hibernate.annotations.Table;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

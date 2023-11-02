@@ -31,35 +31,39 @@ spring:
     url: jdbc:mysql://52.79.76.213/plikim?serverTimezone=Asia/Seoul&useSSL=false&characterEncoding=UTF-8
     username: user1
     password: 1234
+
+  data:
+    mongodb:
+      host: 52.79.76.213
+      port: 27017
+      database: chatdb
+
   #thymeleaf
   thymeleaf:
     cache: false
 
   #spring data jpa 설정
   jpa:
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-    open-in-view: false
-    format-sql: true
     show-sql: true
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
       ddl-auto: update
-
     properties:
       hibernate:
-        show-sql: true
         format-sql: true
-        ddl-auto: update
 
   application:
     name: kimpli
 
-#mybatis
+#mybatiså
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.eek.kimpli.member.dto
   configuration:
     jdbc-type-for-null: null
     map-underscore-to-camel-case: true
+
+
 
 
 

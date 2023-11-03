@@ -84,7 +84,7 @@ async function addMessage() {
 		msg: msgInput.value
 	};
 
-	fetch("http://localhost:9090/chat", {
+	fetch("https://plikim/chat", {
 		method: "post", //http post 메서드 (새로운 데이터를 write)
 		body: JSON.stringify(chat), // JS -> JSON
 		headers: {

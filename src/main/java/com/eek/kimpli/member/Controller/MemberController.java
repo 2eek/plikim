@@ -66,14 +66,14 @@ public class MemberController {
     }
 
 
-      @GetMapping("/logintest")
-    public String logintest(){
-        return "member/logintest";
-    }
-      @GetMapping("/jointest")
-    public String jointest(){
-        return "member/jointest";
-    }
+//      @GetMapping("/logintest")
+//    public String logintest(){
+//        return "member/logintest";
+//    }
+//      @GetMapping("/jointest")
+//    public String jointest(){
+//        return "member/jointest";
+//    }
 
 
 

@@ -34,7 +34,7 @@ function getSendMsgBox(data) {
 </div>`;
 }
 
-// 회식박스 만들기
+// 회색박스 만들기
 function getReceiveMsgBox(data) {
 
 	let md = data.createdAt.substring(5, 10)
@@ -76,24 +76,53 @@ function initYourMessage(data) {
 }
 
 // AJAX 채팅 메시지를 전송
+// async function addMessage() {
+// 	let msgInput = document.querySelector("#chat-outgoing-msg");
+//
+// 	let chat = {
+// 		sender: username,
+// 		roomNum: roomNum,
+// 		msg: msgInput.value
+// 	};
+// //"http://localhost:9090/chat"    "https://plikim.com/chat"
+// 	fetch("https://plikim.com/chat", {
+// 		method: "post", //http post 메서드 (새로운 데이터를 write)
+// 		body: JSON.stringify(chat), // JS -> JSON
+// 		headers: {
+// 			"Content-Type": "application/json; charset=utf-8"
+// 		}
+// 	});
+//
+// 	msgInput.value = "";
+// }
 async function addMessage() {
-	let msgInput = document.querySelector("#chat-outgoing-msg");
+    let msgInput = document.querySelector("#chat-outgoing-msg");
+    let chat = {
+        sender: username,
+        roomNum: roomNum,
+        msg: msgInput.value
+    };
 
-	let chat = {
-		sender: username,
-		roomNum: roomNum,
-		msg: msgInput.value
-	};
-//"http://localhost:9090/chat"    "https://plikim.com/chat"
-	fetch("https://plikim.com/chat", {
-		method: "post", //http post 메서드 (새로운 데이터를 write)
-		body: JSON.stringify(chat), // JS -> JSON
-		headers: {
-			"Content-Type": "application/json; charset=utf-8"
-		}
-	});
+    try {
+        const response = await fetch("https://plikim.com/chat", {
+            method: "post",
+            body: JSON.stringify(chat),
+            headers: {
+                "Content-Type": "application/json; charset=utf-8"
+            }
+        });
 
-	msgInput.value = "";
+        if (response.ok) {
+            // fetch 요청이 성공하면 추가 작업 수행
+            msgInput.value = "";
+        } else {
+            // 요청이 실패한 경우에 대한 처리
+            console.error("Fetch 요청 실패");
+        }
+    } catch (error) {
+        // 오류 처리
+        console.error("오류 발생: " + error);
+    }
 }
 
 // function getMsg(msg){
@@ -107,7 +136,7 @@ async function addMessage() {
 
 // 버튼 클릭시 메시지 전송
 document.querySelector("#chat-outgoing-button").addEventListener("click", () => {
-	alert('hi');
+	//alert('hi');
 	addMessage();
 });
 

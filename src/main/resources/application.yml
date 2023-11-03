@@ -15,12 +15,24 @@
 
 # 서버 포트 설정
 server:
+  servlet:
+    encoding:
+      charset: utf-8
+      force-response: true
   port: 9090
 
 
 
 # 스프링 시큐리티 기본 계정 설정
 spring:
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+
+
   security:
     user:
       name: user

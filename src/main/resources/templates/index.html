@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--<html xmlns:th="http://www.thymeleaf.org">-->
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" >
+
 <head th:replace="fragments/common :: head('plikim')">
 <!--<link rel="icon" th:href="@{https://plikim.com/favicon.ico}" type="image/x-icon" />-->
     <!--test-->
@@ -23,8 +23,8 @@
     <div class="starter-template">
         <p>&#128052;</p>
 
-<!--        <span sec:authorize="isAuthenticated()">사용자는 인증되었습니다.</span>-->
-<!--    <span sec:authorize="!isAuthenticated()">사용자는 인증되지 않았습니다.</span>-->
+        <span sec:authorize="isAuthenticated()">사용자는 인증되었습니다.</span>
+    <span sec:authorize="!isAuthenticated()">사용자는 인증되지 않았습니다.</span>
         <img src="/img/500.jpeg" alt="image" class="responsive-images">
     </div>
 </main>

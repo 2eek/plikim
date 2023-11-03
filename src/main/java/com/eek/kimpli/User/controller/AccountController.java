@@ -5,6 +5,7 @@ import com.eek.kimpli.User.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -16,6 +17,8 @@ public class AccountController {
 
     @Autowired
     private UserService userService;
+
+
 
        //시큐리티 로그인 테스트
 //    @PostMapping("/login11")

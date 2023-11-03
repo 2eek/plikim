@@ -15,6 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 //@Controller
 public class MyController {
 
+    	    	@GetMapping("/chat")
+			public String chat(){
+				return "/chat/chat";
+			}
+
     @PostMapping("/login1")
     public String checkAuthentication(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

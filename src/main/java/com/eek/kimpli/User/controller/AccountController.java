@@ -35,4 +35,9 @@ public class AccountController {
         System.out.println("회원가입안되나");
             return "/index";
         }
+
+//        	    	@GetMapping("/chat")
+//			public String chat(){
+//				return "/chat/chat";
+//			}
 }

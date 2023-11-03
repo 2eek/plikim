@@ -17,7 +17,7 @@ public class MyController {
 
     	    	@GetMapping("/chat")
 			public String chat(){
-				return "/chat/chat";
+				return "chat/chat";
 			}
 
     @PostMapping("/login1")

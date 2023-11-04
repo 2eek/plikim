@@ -159,6 +159,8 @@ document.querySelector("#username").innerHTML = username;
 //const eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`);
 //const eventSource = new EventSource(`http://localhost:9090/sender/ssar/receiver/cos`);
 const eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`);
+  console.log(test);
+console.log(eventSource);
 eventSource.onmessage = (event) => {
 	console.log(1,event);
 	const data = JSON.parse(event.data);

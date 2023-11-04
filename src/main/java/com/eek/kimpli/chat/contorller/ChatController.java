@@ -13,7 +13,7 @@ import reactor.core.scheduler.Schedulers;
 
 import java.time.LocalDateTime;
 
-
+@CrossOrigin(origins ="https://plikim.com")
 @RequiredArgsConstructor
 @RestController//데이터 리턴 서버
 public class ChatController {

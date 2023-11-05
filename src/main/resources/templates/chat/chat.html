@@ -186,10 +186,9 @@ eventSource.onmessage = (event) => {
 
 // 파란박스 만들기. 보내는 대화박스
 function getSendMsgBox(data) {
-        let a= data.getTimezoneOffset()
 
-	let md = data.createdAt.substring(5, 10) -a/60
-	let tm = data.createdAt.substring(11, 16) -a/60
+	let md = data.createdAt.substring(5, 10)
+	let tm = data.createdAt.substring(11, 16)
 	convertTime = tm + " | " + md
 
 	return `<div class="sent_msg">
@@ -200,10 +199,9 @@ function getSendMsgBox(data) {
 
 // 회색박스 만들기
 function getReceiveMsgBox(data) {
-   let a= data.getTimezoneOffset()
 
-	let md = data.createdAt.substring(5, 10)-a/60
-	let tm = data.createdAt.substring(11, 16)-a/60
+	let md = data.createdAt.substring(5, 10)
+	let tm = data.createdAt.substring(11, 16)
 	convertTime = tm + " | " + md
 
 	return `<div class="received_withd_msg">

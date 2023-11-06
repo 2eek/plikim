@@ -170,11 +170,11 @@ const eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`
 //const eventSource = new EventSource(`http://localhost:9090/sender/ssar/receiver/cos`);
 //const eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`);
 
-console.log(eventSource);
+
 eventSource.onmessage = (event) => {
-	console.log(1,event);
+	//console.log(1,event);
 	const data = JSON.parse(event.data);
-		console.log(2,data);
+		//console.log(2,data);
 	if (data.sender === username) { // 로그인한 유저가 보낸 메시지
 		// 파란박스(오른쪽)
 		initMyMessage(data);
@@ -186,7 +186,7 @@ eventSource.onmessage = (event) => {
 
 // 파란박스 만들기. 보내는 대화박스
 function getSendMsgBox(data) {
-
+//new Date()
 	let md = data.createdAt.substring(5, 10)
 	let tm = data.createdAt.substring(11, 16)
 	convertTime = tm + " | " + md

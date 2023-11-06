@@ -47,11 +47,23 @@ spring:
     username: user1
     password: 1234
 
+#  data:
+#    mongodb:
+#      host: 52.79.76.213
+#      port: 27017
+#      database: chatdb
   data:
     mongodb:
       host: 52.79.76.213
       port: 27017
-      database: chatdb
+      authentication-database: admin
+      username: lee
+      password: 1230
+      authSource: chatdb
+
+
+
+
 
   #thymeleaf
   thymeleaf:

@@ -16,6 +16,8 @@
 # 서버 포트 설정
 server:
   servlet:
+    session:
+      timeout: 1800
     encoding:
       charset: utf-8
       force-response: true
@@ -25,18 +27,19 @@ server:
 
 # 스프링 시큐리티 기본 계정 설정
 spring:
+  cors:
+    allowed-origins: https://plikim.com
   http:
     encoding:
       charset: UTF-8
       enabled: true
       force: true
 
-
-
   security:
     user:
       name: user
       password: 1230
+
   #database 연동 설정
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -44,11 +47,34 @@ spring:
     username: user1
     password: 1234
 
+#  data:
+#    mongodb:
+#      host: 52.79.76.213
+#      port: 27017
+#      database: chatdb
+#  data:
+#    mongodb:
+#      host: 52.79.76.213
+#      port: 27017
+#      authentication-database: admin
+#      username: lee
+#      password: 1230
+#      authSource: chatdb
+
+#  data:
+#    mongodb:
+#      host: 52.79.76.213
+#      port: 27017
+#      username: lee
+#      password: 1230
+#      authentication-database: admin
   data:
     mongodb:
-      host: 52.79.76.213
-      port: 27017
-      database: chatdb
+      uri: mongodb://lee:1230@52.79.76.213:27017/chatdb?authSource=admin
+
+
+
+
 
   #thymeleaf
   thymeleaf:
@@ -66,6 +92,8 @@ spring:
 
   application:
     name: kimpli
+    timezone: Asia/Seoul
+
 
 #mybatiså
 mybatis:
@@ -76,6 +104,10 @@ mybatis:
     map-underscore-to-camel-case: true
 
 
-
+systemLog:
+  destination: file
+  path: /var/log/mongodb/mongod.log
+  logAppend: true
+  timeZoneInfo: Asia/Seoul
 
 

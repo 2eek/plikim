@@ -8,10 +8,10 @@ let username = prompt("아이디를 입력하세요");
 document.querySelector("#username").innerHTML = username;
 
 // SSE 연결하기. 객체 생성. 크로스 오리진 자바스크립트 요청은 서버쪽에서 봉쇄하고 있다. -> 서버에서 처리함
-const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}`);
+//const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}`);
 //const eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`);
 //const eventSource = new EventSource(`http://localhost:9090/sender/ssar/receiver/cos`);
-//const eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`);
+const eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`);
 
 
 eventSource.onmessage = (event) => {
@@ -90,8 +90,8 @@ async function addMessage() {
         msg: msgInput.value
     };
 
-    try {//"https://plikim.com/chat"
-        const response = await fetch("http://localhost:9090/chat", {
+    try {//"http://localhost:9090/chat" "https://plikim.com/chat"
+        const response = await fetch( "https://plikim.com/chat", {
             method: "post",
             body: JSON.stringify(chat),
             headers: {

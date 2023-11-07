@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
-<head th:replace="fragments/common_bk1 :: head(${board.id != null} ? '상세조회' : '글 작성')">
+<head th:replace="fragments/common :: head(${board.id != null} ? '상세조회' : '글 작성')">
 </head>
 <body>
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common_bk1 :: menu('boardList')">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('boardList')">
 </nav>
 <main role="main" class="container">
   <div class="starter-template">

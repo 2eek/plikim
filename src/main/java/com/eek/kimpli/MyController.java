@@ -20,6 +20,11 @@ public class MyController {
 				return "chat/chat";
 			}
 
+//            	@GetMapping("/toto")
+//			public String apple(){
+//				return "chat/apple";
+//			}
+
     @PostMapping("/login1")
     public String checkAuthentication(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

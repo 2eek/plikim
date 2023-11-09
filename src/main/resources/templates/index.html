@@ -22,40 +22,52 @@
 
     <div class="starter-template">
         <p>&#128052;</p>
+        test
 
         <span sec:authorize="isAuthenticated()">사용자는 인증되었습니다.</span>
     <span sec:authorize="!isAuthenticated()">사용자는 인증되지 않았습니다.</span>
-        <img src="/img/500.jpeg" alt="image" class="responsive-images">
+<!--        <img src="/img/500.jpeg" alt="image" class="responsive-images">-->
+    <div class = "container">
+    <div> 총 건수: <span th:text="${boards.totalElements}"></span></div>
+</div>
+
+
+    <div style="width: 80%; margin: 0 auto;">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">번호</th>
+              <th scope="col">제목</th>
+              <th scope="col">작성자</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="boarda : ${boards}">
+              <td th:text="${boarda.id}">번호</td>
+              <td><a th:text="${boarda.title}" th:href="@{/board/saveForm(id=${boarda.id})}"> 제목</a></td>
+              <td>홍길동</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-center">
+            <li class="page-item " th:classappend="${1 == boards.pageable.pageNumber +1} ? 'disabled'" >
+              <a class="page-link" href="#" th:href = "@{/board/list(page=${boards.pageable.pageNumber -1},searchText=${param.searchText})}" tabindex="-1" aria-disabled="true" >Previous</a>
+            </li>
+              <li class="page-item" th:classappend="${i == boards.pageable.pageNumber +1} ? 'disabled'" th:each="i : ${#numbers.sequence(startPage,endPage)}">
+                  <a class="page-link" href="#"  th:href = "@{/board/list(page=${i -1 },searchText=${param.searchText})}" th:text="${i}">1</a>
+              </li>
+            <li class="page-item" th:classappend="${ boards.totalPages == boards.pageable.pageNumber +1} ? 'disabled'" >
+              <a class="page-link" href="#" th:href = "@{/board/list(page=${boards.pageable.pageNumber +1},searchText=${param.searchText})}">Next</a>
+            </li>
+          </ul>
+        </nav>
+    </div>
     </div>
 </main>
 
-<!--<p th:text="'인증된 사용자: ' + ${username}"></p>-->
-<!--    <p th:each="authority : ${authorities}" th:text="'사용자 권한: ' + ${authority}"></p>-->
 
-<!--    <span th:if="${#authentication.principal.user.id} == ${user.getEnabled()}">-->
-<!--        <button id="btn-delete" class="btn btn-danger">삭제</button>-->
-<!--        <button id="btn-update" class="btn btn-warning">수정</button>-->
-<!--    </span>-->
-
-<!--<script>-->
-<!--     document.getElementById('wri').addEventListener('click',function (){-->
-<!--           location.href = "/board/save";-->
-<!--     });-->
-<!--     document.getElementById('lis').addEventListener('click',function (){-->
-<!--           location.href = "/board/list";-->
-<!--     });-->
-<!-- </script>-->
-
-<!--<script-->
-<!--        src="https://code.jquery.com/jquery-3.5.1.slim.min.js"-->
-<!--        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"-->
-<!--        crossorigin="anonymous"-->
-<!--&gt;</script>-->
-<!--<script-->
-<!--        src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"-->
-<!--        integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"-->
-<!--        crossorigin="anonymous"-->
-<!--&gt;</script>-->
 
 
 </body>

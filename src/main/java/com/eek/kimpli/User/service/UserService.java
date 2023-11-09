@@ -20,20 +20,12 @@ public class UserService {
 
     public User save(User user){
        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        System.out.println(user.getPassword());
        user.setPassword(encodedPassword);
        user.setEnabled(true);
-        System.out.println(user.getPassword());
        Role role = new Role();
-        System.out.println(role);
-        System.out.println("되라");
-         System.out.println(role.getUsers());
        role.setId(1L);
-        System.out.println(role.getId());
-        System.out.println(role);
-        System.out.println("test111");
        user.getRoles().add(role);
-        System.out.println("test222");
+
         return userRepository.save(user);
     }
 }

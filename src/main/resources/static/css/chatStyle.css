@@ -12,11 +12,24 @@ body{
 	max-height: calc(100vh);
 
 }
-.profile_name{
-	background-color: #f8f9fa!important;
-	width:100%;
-	padding: 10px;
-	border-bottom: 5px solid #716d6d;
+/*.profile_name{*/
+/*  position: fixed; top: 50px;*/
+/*	background-color: #f8f9fa!important;*/
+/*	width:120%;*/
+/*	padding: 10px;*/
+/*	border-bottom: 5px solid #716d6d;*/
+/*}*/
+
+.profile_name {
+  position: fixed;
+  top: 55px;
+  background-color: #f8f9fa!important;
+  width: 110%;
+  padding: 10px;
+  border-bottom: 5px solid #716d6d;
+  margin-left: -20px; /* 추가 */
+  /*margin-right: -20px; !* 추가 *!*/
+  box-sizing: border-box;
 }
 .user a:hover{
 text-decoration: none;

@@ -73,12 +73,17 @@ spring:
       uri: mongodb://lee:1230@52.79.76.213:27017/chatdb?authSource=admin
 
 
+#thymeleaf
+  devtools:
+    livereload:
+      enabled: true
+    thymeleaf:
+#    개발 과정에서는 캐시 설정을 false로 두어 캐시 기능을 사용하지 않도록 하여, 수정 내용이 바로 반영되도록할 수 있다.
+      cache: false
+    restart:
+      enabled: true
 
 
-
-  #thymeleaf
-  thymeleaf:
-    cache: false
 
   #spring data jpa 설정
   jpa:

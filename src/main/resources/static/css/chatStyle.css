@@ -12,13 +12,6 @@ body{
 	max-height: calc(100vh);
 
 }
-/*.profile_name{*/
-/*  position: fixed; top: 50px;*/
-/*	background-color: #f8f9fa!important;*/
-/*	width:120%;*/
-/*	padding: 10px;*/
-/*	border-bottom: 5px solid #716d6d;*/
-/*}*/
 
 .profile_name {
   position: fixed;
@@ -107,7 +100,7 @@ color: #212529;
   font-size: 17px;
   height: 33px;
   position: absolute;
-  right: 0;
+  right: 10px;
   top: 11px;
   width: 33px;
 }

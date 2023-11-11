@@ -4,16 +4,14 @@ import lombok.Data;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 
 @Entity
 @Data
+//Entity객체의 인스턴스 하나가 테이블에서 하나의 레코드 값을 의미
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)// 자동 증 (IDENTITY사용하면 시퀀스 따로 안만들어도 됨)
     private Long id;
-
     private String username;
     private String password;
     private Boolean enabled;

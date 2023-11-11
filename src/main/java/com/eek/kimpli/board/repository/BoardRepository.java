@@ -5,13 +5,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+
 import java.util.List;
 
-public interface BoardRepository extends JpaRepository<Board, Long > {
-
+// 스프링 데이터 JPA는 JpaRepository를 상속받는 인터페이스에 대해 자동으로 빈(bean)을 생성하고 레포지토리(repository)로 인식한다.
+public interface BoardRepository extends JpaRepository<Board, Long > { // <모델클래스, pk>
+    //제목으로 찾기
     List<Board> findByTitle(String title);
+    //제목이나 내용으로 찾기
+    //SELECT * FROM Board b WHERE b.title = :title OR b.content = :content;2
     List<Board> findByTitleOrContent(String title, String content);
 
-    //검색기능
+    //검색기능 + 페이징 적용
     Page<Board> findByTitleContainingOrContentContaining(String title, String content, Pageable pageable);
 }

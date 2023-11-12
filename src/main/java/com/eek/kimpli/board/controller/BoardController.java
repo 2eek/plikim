@@ -23,14 +23,16 @@ public class BoardController {
     final BoardRepository boardRepository;
     final BoardValidator boardValidator;
 
+    //페이징+검색
     @GetMapping("/list")
     public String list(Model model, @PageableDefault(size = 3)  Pageable pageable,
                        @RequestParam(required = false,defaultValue = "") String searchText) {
         Page<Board> boards = boardRepository.findByTitleContainingOrContentContaining(searchText,searchText,pageable);
-        int startPage = Math.max(1, boards.getPageable().getPageNumber() - 4);
-        int endpage = Math.min(boards.getTotalPages(), boards.getPageable().getPageNumber() + 4);
+        int currentPage = boards.getPageable().getPageNumber() + 1; // 현재 페이지 번호 (0부터 시작)
+        int startPage = Math.max(1, currentPage - 2); // 현재 페이지 주변에 2 페이지씩 보여주기
+        int endPage = Math.min(boards.getTotalPages(), startPage + 4);
         model.addAttribute("startPage",startPage);
-        model.addAttribute("endPage",endpage);
+        model.addAttribute("endPage",endPage);
         model.addAttribute("boards", boards);
         return "board/list";
     }

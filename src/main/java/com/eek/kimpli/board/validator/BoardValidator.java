@@ -1,10 +1,8 @@
 package com.eek.kimpli.board.validator;
 
 import com.eek.kimpli.board.model.Board;
-import org.springframework.boot.autoconfigure.ldap.embedded.EmbeddedLdapProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 import org.thymeleaf.util.StringUtils;
 

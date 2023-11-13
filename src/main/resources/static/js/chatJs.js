@@ -30,7 +30,7 @@ if (Math.random() > 0.5) {
     receiver = username;
 }
 const sortedUsers1 = [username, receiver].sort();//777, 666
-const chatRoomURI1 = `http://localhost:9090/chat/sender/${sortedUsers1[0]}/receiver/${sortedUsers1[1]}`; //666 777
+const chatRoomURI1 = `https://plikim.com/chat/sender/${sortedUsers1[0]}/receiver/${sortedUsers1[1]}`; //666 777
 const eventSource = new EventSource(chatRoomURI1);
 
 eventSource.onmessage = (event) => {
@@ -113,7 +113,7 @@ async function addMessage() {
 
   try {
     const sortedUsers = [username, receiver].sort();
-    const chatRoomURI = `http://localhost:9090/chat/sender/${sortedUsers[0]}/receiver/${sortedUsers[1]}`; //666 777
+    const chatRoomURI = `https://plikim.com/chat/sender/${sortedUsers[0]}/receiver/${sortedUsers[1]}`; //666 777
     const response = await fetch(chatRoomURI, { // chatRoomURI 변수를 사용하도록 수정
         method: "POST", // POST 메소드로 수정
         body: JSON.stringify(chat),

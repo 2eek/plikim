@@ -6,6 +6,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
@@ -20,28 +21,32 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
-                .authorizeRequests()
-                        //누구나 접근 가능
-                        .antMatchers("/", "/account/register", "/css/**", "/api/**" ,"/img/**","/static/**","/member/memberjoin").permitAll()
-                        //로그인이 필요함. 인증 필요!
-                        //.anyRequest().authenticated()
-                .anyRequest().permitAll()
-                        .and()
-                .formLogin()
-                        .loginPage("/member/loginForm")
-                        .permitAll()
-                       .loginProcessingUrl("/login") // 스프링 시큐리티에서 처리하기위한 주소. /login post방식.
-                     .defaultSuccessUrl("/")
-                        .and()
-                .logout()
-                        .permitAll();
+@Override
+protected void configure(HttpSecurity http) throws Exception {
+    http
+        .csrf().disable()
+        .authorizeRequests()
+            // 누구나 접근 가능한 URL 패턴
+            .antMatchers("/", "/account/register", "/css/**", "/api/**", "/img/**", "/static/**", "/member/memberjoin").permitAll()
+            .anyRequest().permitAll() // 다른 요청은 모두 허용
+            .and()
+        .formLogin()
+            .loginPage("/member/loginForm")
+            .permitAll()
+            .loginProcessingUrl("/login") // 스프링 시큐리티에서 처리하기 위한 주소. /login post 방식.
+            .defaultSuccessUrl("/")
+            .and()
+        .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // 세션 생성 정책 설정
+            .invalidSessionUrl("/member/loginForm") // 세션 만료 시 이동할 URL 설정
+            .sessionFixation().migrateSession() // 세션 고정 보호 설정
+            .maximumSessions(1).expiredUrl("/login?maxSessions") // 동시 로그인 세션 수 제한 설정
+        .and()
+        .and()
+        .logout()
+            .permitAll();
+}
 
-
-    }
 @Autowired
 public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
     auth.jdbcAuthentication()

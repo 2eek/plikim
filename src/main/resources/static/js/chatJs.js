@@ -1,8 +1,8 @@
 
   // 로그인 시스템 대신 임시 방편
 // let username = prompt("아이디를 입력하세요");
-var username = document.getElementById('loggedInUserId').value;
-var receiver= document.getElementById('userId').value;
+// var username = document.getElementById('loggedInUserId').value;
+// var receiver= document.getElementById('userId').value;
 
 // var username = document.querySelector("#loggedInUserId").value;//777
 // var receiver = document.querySelector("#userId").value;///666
@@ -12,7 +12,7 @@ var receiver= document.getElementById('userId').value;
 //   let roomNumString = prompt("채팅방 번호를 입력하세요");
 //  roomNum = parseInt(roomNumString);
 
-document.querySelector("#username").innerHTML = username;
+//document.querySelector("#username").innerHTML = username;
 
 // SSE 연결하기. 객체 생성. 크로스 오리진 자바스크립트 요청은 서버쪽에서 봉쇄하고 있다. -> 서버에서 처리함
 //const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}`);
@@ -20,16 +20,12 @@ document.querySelector("#username").innerHTML = username;
 //const eventSource = new EventSource(`http://localhost:9090/sender/${username}/receiver/cos`);
 
 //기존 대화방에 있던 대화내용 가져옴
+var loggedInUserId = document.getElementById('loggedInUserId').value;
+var userId = document.getElementById('userId').value;
+var sender = loggedInUserId;
+var receiver = userId;
 
-
-if (Math.random() > 0.5) {
-    sender = username;
-    receiver = receiver;
-} else {
-    sender = receiver;
-    receiver = username;
-}
-const sortedUsers = [username, receiver].sort();//777, 666
+const sortedUsers = [sender, receiver].sort();//777, 666
 const chatRoomURI = `https://plikim.com/chat/sender/${sortedUsers[0]}/receiver/${sortedUsers[1]}`; //666 777
 const eventSource = new EventSource(chatRoomURI);
 
@@ -37,7 +33,7 @@ eventSource.onmessage = (event) => {
 	//console.log(1,event);
 	const data = JSON.parse(event.data);
 		//console.log(2,data);
-	if (data.sender === username) { // 로그인한 유저가 보낸 메시지
+	if (data.sender === sender) { // 로그인한 유저가 보낸 메시지
 		// 파란박스(오른쪽)
 		initMyMessage(data);
 	} else {
@@ -68,7 +64,7 @@ function getReceiveMsgBox(data) {
 
 	return `<div class="received_withd_msg">
 	<p>${data.msg}</p>
-	<span class="time_date"> ${convertTime} / <b>${data.sender}</b> </span>
+	<span class="time_date"> ${convertTime} / <b>${data.receiver}</b> </span>
 </div>`;
 }
 
@@ -112,14 +108,8 @@ async function addMessage() {
     };
 
   try {
-  if (Math.random() > 0.5) {
-    sender = username;
-    receiver = receiver;
-} else {
-    sender = receiver;
-    receiver = username;
-}
-const sortedUsers = [username, receiver].sort();//777, 666
+
+const sortedUsers = [sender, receiver].sort();//777, 666
 const chatRoomURI = `https://plikim.com/chat/sender/${sortedUsers[0]}/receiver/${sortedUsers[1]}`; //666 777
     const response = await fetch(chatRoomURI, { // chatRoomURI 변수를 사용하도록 수정
         method: "POST", // POST 메소드로 수정

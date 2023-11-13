@@ -25,8 +25,8 @@
 var sender = document.getElementById('loggedInUserId').value;
 var receiver = document.getElementById('userId').value;
 
-const sortedUsers = [sender, receiver].sort();//777, 666
-const chatRoomURI = `https://plikim.com/chat/sender/${sortedUsers[0]}/receiver/${sortedUsers[1]}`; //666 777
+//const sortedUsers = [sender, receiver].sort();//777, 666
+const chatRoomURI = `https://plikim.com/chat/sender/${sender}/receiver/${receiver}`;
 const eventSource = new EventSource(chatRoomURI);
 
 eventSource.onmessage = (event) => {
@@ -109,8 +109,7 @@ async function addMessage() {
 
   try {
 
-const sortedUsers = [sender, receiver].sort();//777, 666
-const chatRoomURI = `https://plikim.com/chat/sender/${sortedUsers[0]}/receiver/${sortedUsers[1]}`; //666 777
+const chatRoomURI = "https://plikim.com/chat/sender/${sender}/receiver/${receiver}"; //666 777
     const response = await fetch(chatRoomURI, { // chatRoomURI 변수를 사용하도록 수정
         method: "POST", // POST 메소드로 수정
         body: JSON.stringify(chat),

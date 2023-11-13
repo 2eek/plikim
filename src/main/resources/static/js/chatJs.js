@@ -1,6 +1,7 @@
 
   // 로그인 시스템 대신 임시 방편
-let username = prompt("아이디를 입력하세요");
+// let username = prompt("아이디를 입력하세요");
+  var username = document.getElementById('loggedInUserId').value;
 //let roomNum = prompt("채팅방 번호를 입력하세요");
   let roomNumString = prompt("채팅방 번호를 입력하세요");
  roomNum = parseInt(roomNumString);
@@ -10,7 +11,7 @@ document.querySelector("#username").innerHTML = username;
 // SSE 연결하기. 객체 생성. 크로스 오리진 자바스크립트 요청은 서버쪽에서 봉쇄하고 있다. -> 서버에서 처리함
 //const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}`);
 //const eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`);
-//const eventSource = new EventSource(`http://localhost:9090/sender/ssar/receiver/cos`);
+//const eventSource = new EventSource(`http://localhost:9090/sender/${username}/receiver/cos`);
 const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}`);
 
 
@@ -53,7 +54,7 @@ function getReceiveMsgBox(data) {
 </div>`;
 }
 
-// 최초 초기화될 때 1번방 3건이 있으면 3건을 다 가져와요
+// 최초 초기화될 때 1번방 3건이 있으면 3건을 다 가져옴
 // addMessage() 함수 호출시 DB에 insert 되고, 그 데이터가 자동으로 흘러들어온다(SSE)
 // 파란박스 초기화하기
 function initMyMessage(data) {
@@ -90,8 +91,8 @@ async function addMessage() {
         msg: msgInput.value
     };
 
-    try {//"http://localhost:9090/chat" "https://plikim.com/chat"
-        const response = await fetch( "http://localhost:9090/chat", {
+    try {//"http://localhost:9090/chat" "https://plikim.com/chat" `http://localhost:9090/sender/${username}/receiver/cos`
+        const response = await fetch( "http://localhost:9090/chat" , {
             method: "post",
             body: JSON.stringify(chat),
             headers: {

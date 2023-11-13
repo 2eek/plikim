@@ -34,6 +34,13 @@ public class ChatController {
 				.subscribeOn(Schedulers.boundedElastic());
 	}
 
+		@PostMapping(value = "/sender/{sender}/receiver/{receiver}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+	public Flux<Chat> getMsg1(@PathVariable String sender, @PathVariable String receiver) {
+		return chatRepository.mFindBySender(sender, receiver)
+				.subscribeOn(Schedulers.boundedElastic());
+	}
+
+
 
 	@PostMapping("/chat")
 	public Mono<Chat> setMsg(@RequestBody Chat chat){

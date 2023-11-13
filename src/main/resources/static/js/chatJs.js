@@ -1,10 +1,16 @@
 
   // 로그인 시스템 대신 임시 방편
 // let username = prompt("아이디를 입력하세요");
-  var username = document.getElementById('loggedInUserId').value;
+var username = document.getElementById('loggedInUserId').value;
+var receiver= document.getElementById('userId').value;
+
+// var username = document.querySelector("#loggedInUserId").value;//777
+// var receiver = document.querySelector("#userId").value;///666
+
+
 //let roomNum = prompt("채팅방 번호를 입력하세요");
-  let roomNumString = prompt("채팅방 번호를 입력하세요");
- roomNum = parseInt(roomNumString);
+//   let roomNumString = prompt("채팅방 번호를 입력하세요");
+//  roomNum = parseInt(roomNumString);
 
 document.querySelector("#username").innerHTML = username;
 
@@ -12,8 +18,20 @@ document.querySelector("#username").innerHTML = username;
 //const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}`);
 //const eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`);
 //const eventSource = new EventSource(`http://localhost:9090/sender/${username}/receiver/cos`);
-const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}`);
 
+//기존 대화방에 있던 대화내용 가져옴
+
+
+if (Math.random() > 0.5) {
+    sender = username;
+    receiver = receiver;
+} else {
+    sender = receiver;
+    receiver = username;
+}
+const sortedUsers1 = [username, receiver].sort();//777, 666
+const chatRoomURI1 = `http://localhost:9090/chat/sender/${sortedUsers1[0]}/receiver/${sortedUsers1[1]}`; //666 777
+const eventSource = new EventSource(chatRoomURI1);
 
 eventSource.onmessage = (event) => {
 	//console.log(1,event);
@@ -84,33 +102,37 @@ function initYourMessage(data) {
 
 
 async function addMessage() {
+	console.log("test")
     let msgInput = document.querySelector("#chat-outgoing-msg");
     let chat = {
         sender: username,
-        roomNum: roomNum,
+        // roomNum: roomNum,
+		receiver: receiver,
         msg: msgInput.value
     };
 
-    try {//"http://localhost:9090/chat" "https://plikim.com/chat" `http://localhost:9090/sender/${username}/receiver/cos`
-        const response = await fetch( "http://localhost:9090/chat" , {
-            method: "post",
-            body: JSON.stringify(chat),
-            headers: {
-                "Content-Type": "application/json; charset=utf-8"
-            }
-        });
-
-        if (response.ok) {
-            // fetch 요청이 성공하면 추가 작업 수행
-            msgInput.value = "";
-        } else {
-            // 요청이 실패한 경우에 대한 처리
-            console.error("Fetch 요청 실패");
+  try {
+    const sortedUsers = [username, receiver].sort();
+    const chatRoomURI = `http://localhost:9090/chat/sender/${sortedUsers[0]}/receiver/${sortedUsers[1]}`; //666 777
+    const response = await fetch(chatRoomURI, { // chatRoomURI 변수를 사용하도록 수정
+        method: "POST", // POST 메소드로 수정
+        body: JSON.stringify(chat),
+        headers: {
+            "Content-Type": "application/json; charset=utf-8"
         }
-    } catch (error) {
-        // 오류 처리
-        console.error("오류 발생: " + error);
+    });
+
+    if (response.ok) {
+        // fetch 요청이 성공하면 추가 작업 수행
+        msgInput.value = "";
+    } else {
+        // 요청이 실패한 경우에 대한 처리
+        console.error("Fetch 요청 실패");
     }
+} catch (error) {
+    // 오류 처리
+    console.error("오류 발생: " + error);
+}
 }
 
 

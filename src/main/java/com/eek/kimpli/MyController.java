@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
@@ -17,13 +18,13 @@ public class MyController {
 //			public String chat(){
 //				return "chat/chat";
 //			}
-    	    	@GetMapping("/chat")
-			public String chat(Model model){
-                      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    // 현재 사용자의 세션 정보
+@GetMapping("/chat")
+public String chat(Model model, @RequestParam(name = "userId") String userId) {
+    model.addAttribute("userId", userId); // userId를 모델에 추가
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     model.addAttribute("userSession", authentication.getPrincipal());
-				return "chat/chat";
-			}
+    return "chat/chat";
+}
 
 //                	@GetMapping("/chat")
 //			public String chat(){

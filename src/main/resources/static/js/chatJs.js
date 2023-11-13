@@ -20,10 +20,10 @@
 //const eventSource = new EventSource(`http://localhost:9090/sender/${username}/receiver/cos`);
 
 //기존 대화방에 있던 대화내용 가져옴
-var loggedInUserId = document.getElementById('loggedInUserId').value;
-var userId = document.getElementById('userId').value;
-var sender = loggedInUserId;
-var receiver = userId;
+// var loggedInUserId = document.getElementById('loggedInUserId').value;
+// var userId = document.getElementById('userId').value;
+var sender = document.getElementById('loggedInUserId').value;
+var receiver = document.getElementById('userId').value;
 
 const sortedUsers = [sender, receiver].sort();//777, 666
 const chatRoomURI = `https://plikim.com/chat/sender/${sortedUsers[0]}/receiver/${sortedUsers[1]}`; //666 777
@@ -64,7 +64,7 @@ function getReceiveMsgBox(data) {
 
 	return `<div class="received_withd_msg">
 	<p>${data.msg}</p>
-	<span class="time_date"> ${convertTime} / <b>${data.receiver}</b> </span>
+	<span class="time_date"> ${convertTime} / <b>${data.sender}</b> </span>
 </div>`;
 }
 
@@ -101,7 +101,7 @@ async function addMessage() {
 	console.log("test")
     let msgInput = document.querySelector("#chat-outgoing-msg");
     let chat = {
-        sender: username,
+        sender: sender,
         // roomNum: roomNum,
 		receiver: receiver,
         msg: msgInput.value

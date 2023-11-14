@@ -95,6 +95,13 @@
 		</dependency>
 
 
+		<!-- 알림기능-->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.12.0</version> <!-- 최신 버전 확인하여 업데이트 가능 -->
+		</dependency>
+
 
 		<!-- https://mvnrepository.com/artifact/org.bgee.log4jdbc-log4j2/log4jdbc-log4j2-jdbc4 -->
 <!--	<dependency>-->

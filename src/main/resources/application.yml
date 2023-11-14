@@ -47,31 +47,24 @@ spring:
     username: user1
     password: 1234
 
-#  data:
-#    mongodb:
-#      host: 52.79.76.213
-#      port: 27017
-#      database: chatdb
-#  data:
-#    mongodb:
-#      host: 52.79.76.213
-#      port: 27017
-#      authentication-database: admin
-#      username: lee
-#      password: 1230
-#      authSource: chatdb
 
-#  data:
-#    mongodb:
-#      host: 52.79.76.213
-#      port: 27017
-#      username: lee
-#      password: 1230
-#      authentication-database: admin
   data:
     mongodb:
       uri: mongodb://lee:1230@52.79.76.213:27017/chatdb?authSource=admin
 
+  #알림기능 소켓
+  websocket:
+    handlers:
+      myHandler: kr.co.commons.socket.EchoHandler
+    servlet:
+      contextPath: /your-websocket-context-path
+
+  messages:
+    stompPath: /your-stomp-endpoint
+
+  jackson:
+    deserialization:
+      ACCEPT_FLOAT_AS_INT: false
 
 #thymeleaf
   devtools:
@@ -114,5 +107,7 @@ systemLog:
   path: /var/log/mongodb/mongod.log
   logAppend: true
   timeZoneInfo: Asia/Seoul
+
+
 
 

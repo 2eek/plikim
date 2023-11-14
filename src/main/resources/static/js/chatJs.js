@@ -13,7 +13,7 @@ document.querySelector("#username").innerHTML = username;
 //const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}`);
 //const eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`);
 //const eventSource = new EventSource(`http://localhost:9090/sender/ssar/receiver/cos`);
-const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}`);
+const eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`);
 
 
 eventSource.onmessage = (event) => {
@@ -95,7 +95,7 @@ async function addMessage() {
 };
 
     try {//"http://localhost:9090/chat" "https://plikim.com/chat" "http://localhost:9090/chat?userId=" + receiver
-        const response = await fetch( "http://localhost:9090/chat", {
+        const response = await fetch( "https://plikim.com/chat", {
             method: "post",
             body: JSON.stringify(chat),
             headers: {

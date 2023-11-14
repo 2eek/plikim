@@ -2,20 +2,32 @@ var sender = document.getElementById('loggedInUserId').value;
 var receiver = document.getElementById('userId').value;
 
 //const sortedUsers = [sender, receiver].sort();//777, 666
+
+
+
 const chatRoomURI = `https://plikim.com/chat/sender/${sender}/receiver/${receiver}`;
+const chatRoomURI1 = `https://plikim.com/chat/sender/${receiver}/receiver/${sender}`;
 const eventSource = new EventSource(chatRoomURI);
+const eventSource1 = new EventSource(chatRoomURI1);
 
 eventSource.onmessage = (event) => {
 	//console.log(1,event);
 	const data = JSON.parse(event.data);
 		//console.log(2,data);
-	if (data.sender === sender) { // 로그인한 유저가 보낸 메시지
+if (data.sender === sender) { // 로그인한 유저가 보낸 메시지
     // 파란박스(오른쪽)
     initMyMessage(data);
-	} else if (data.sender === receiver) { // 상대방이 보낸 메시지
-		// 회색박스(왼쪽)
-		initYourMessage(data);
-	}
+}
+}
+
+eventSource1.onmessage = (event) => {
+	//console.log(1,event);
+	const data = JSON.parse(event.data);
+		//console.log(2,data);
+if (data.receiver === receiver) { // 로그인한 유저가 보낸 메시지
+    // 회색박스(왼쪽)
+    initYourMessage(data);
+}
 }
 
 // 파란박스 만들기. 보내는 대화박스

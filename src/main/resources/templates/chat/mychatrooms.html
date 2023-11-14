@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common :: head('게시판')">
+</head>
+<body>
+<!-- 파라미터로 board -> nav가 활성화 됨 -->
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('boardList')">
+</nav>
+
+<main role="main" class="container">
+    <div class="starter-template">
+        <h1>게시판</h1>
+    </div>
+</main>
+
+<div style="width: 80%; margin: 0 auto;">
+    <!-- Thymeleaf 코드 -->
+    <table>
+        <thead>
+        <tr>
+            <th>방 번호</th>
+            <th>마지막 메시지</th>
+            <th>상대방</th>
+            <th>생성 시간</th>
+            <th>대화로 이동</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- chatList에서 Chat 객체를 꺼내 테이블로 출력 -->
+        <tr th:each="chat : ${chatList}">
+            <!-- 방 번호에서 현재 사용자 이름 제거 -->
+<!--            <td th:text="${#strings.replace(chat.getRoomNum(), userName, '')}"></td>-->
+            <td> 하이 1</td>
+            <td th:text="${chat.getMsg()}"></td>
+            <td th:text="${chat.getReceiver()}"></td>
+            <td th:text="${chat.getCreatedAt()}"></td>
+            <td>하이2</td>
+            <!-- userId로 URL 생성 -->
+<!--            <td><a th:href="@{'/chat?userId=' + ${#strings.replace(chat.getRoomNum(), userName, '')}">대화로 이동</a></td>-->
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="text-right">
+        <button id="wri" type="button" class="btn btn-primary">글작성</button>
+    </div>
+</div>
+
+<script>
+    document.getElementById('wri').addEventListener('click', function () {
+        location.href = "/board/saveForm";
+    });
+</script>
+
+</body>
+</html>

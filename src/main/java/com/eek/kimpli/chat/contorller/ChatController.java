@@ -20,29 +20,19 @@ public class ChatController {
     final ChatRepository chatRepository;
 
 	// 귓속말 할때
-//666 777
 
-	@GetMapping(value = "/chat/sender/{sender}/receiver/{receiver}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+	@GetMapping(value = "/sender/{sender}/receiver/{receiver}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public Flux<Chat> getMsg(@PathVariable String sender, @PathVariable String receiver) {
 		return chatRepository.mFindBySender(sender, receiver)
 				.subscribeOn(Schedulers.boundedElastic());
 	}
 
-//채팅친 사람의 채팅 내용이 db에 저장됨
-		@PostMapping("/chat/sender/{sender}/receiver/{receiver}") //666 777
-	public Mono<Chat> setMsg1(@RequestBody Chat chat){
-		chat.setCreatedAt(LocalDateTime.now());
-		return chatRepository.save(chat); // Object를 리턴하면 자동으로 JSON 변환 (MessageConverter)
+//sender의 채팅 내용이 db에 저장됨
+	@GetMapping(value = "/chat/roomNum/{roomNum}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+	public Flux<Chat> findByRoomNum(@PathVariable String roomNum) {
+		return chatRepository.mFindByRoomNum(roomNum)
+				.subscribeOn(Schedulers.boundedElastic());
 	}
-
-
-//	////기존 대화방에 있던 대화내용 가져옴
-//	@GetMapping(value = "/chat/roomNum/{roomNum}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-//	public Flux<Chat> findByRoomNum(@PathVariable Integer roomNum) {
-//		return chatRepository.mFindByRoomNum(roomNum)
-//				.subscribeOn(Schedulers.boundedElastic());
-//	}
-
 
 
 	@PostMapping("/chat")
@@ -57,7 +47,6 @@ public class ChatController {
 //			}
 
 }
-
 
 
 

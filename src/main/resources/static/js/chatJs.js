@@ -4,7 +4,7 @@ var username = document.getElementById('loggedInUserId').value;
 var receiver = document.getElementById('userId').value;
 
   // let roomNumString = prompt("채팅방 번호를 입력하세요");
-var roomNum = [username, receiver].sort().join(',');
+var roomNum = [username, receiver].sort().join('');
  //roomNum = parseInt(roomNumString);
 
 document.querySelector("#username").innerHTML = username;

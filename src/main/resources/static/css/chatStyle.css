@@ -82,7 +82,7 @@ color: #212529;
 }
 .input_msg_write input {
   background: rgba(0, 0, 0, 0) none repeat scroll 0 0;
-  border: medium none;
+  border: 1px solid #ccc; /* 회색 테두리 추가 */
   color: #4c4c4c;
   font-size: 15px;
   min-height: 48px;
@@ -90,7 +90,8 @@ color: #212529;
   padding: 10px;
 }
 
-.type_msg {border-top: 1px solid #c4c4c4; position: relative;}
+.type_msg { position: relative;}
+/*border-top:  1px solid #c4c4c4;*/
 .msg_send_btn {
   background: #05728f none repeat scroll 0 0;
   border: medium none;

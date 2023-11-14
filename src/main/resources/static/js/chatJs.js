@@ -1,33 +1,32 @@
-var sender = document.getElementById('loggedInUserId').value;
+
+
+var username = document.getElementById('loggedInUserId').value;
 var receiver = document.getElementById('userId').value;
 
-//const sortedUsers = [sender, receiver].sort();//777, 666
+  // let roomNumString = prompt("채팅방 번호를 입력하세요");
+var roomNum = [username, receiver].sort().join('');
+ //roomNum = parseInt(roomNumString);
 
+document.querySelector("#username").innerHTML = username;
 
+// SSE 연결하기. 객체 생성. 크로스 오리진 자바스크립트 요청은 서버쪽에서 봉쇄하고 있다. -> 서버에서 처리함
+//const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}`);
+//const eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`);
+//const eventSource = new EventSource(`http://localhost:9090/sender/ssar/receiver/cos`);
+const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}`);
 
-const chatRoomURI = `https://plikim.com/chat/sender/${sender}/receiver/${receiver}`;
-const chatRoomURI1 = `https://plikim.com/chat/sender/${receiver}/receiver/${sender}`;
-const eventSource = new EventSource(chatRoomURI);
-const eventSource1 = new EventSource(chatRoomURI1);
 
 eventSource.onmessage = (event) => {
 	//console.log(1,event);
 	const data = JSON.parse(event.data);
 		//console.log(2,data);
-if (data.sender === sender) { // 로그인한 유저가 보낸 메시지
-    // 파란박스(오른쪽)
-    initMyMessage(data);
-}
-}
-
-eventSource1.onmessage = (event) => {
-	//console.log(1,event);
-	const data = JSON.parse(event.data);
-		//console.log(2,data);
-if (data.receiver === receiver) { // 로그인한 유저가 보낸 메시지
-    // 회색박스(왼쪽)
-    initYourMessage(data);
-}
+	if (data.sender === username) { // 로그인한 유저가 보낸 메시지
+		// 파란박스(오른쪽)
+		initMyMessage(data);
+	} else {
+		// 회색박스(왼쪽)
+		initYourMessage(data);
+	}
 }
 
 // 파란박스 만들기. 보내는 대화박스
@@ -56,7 +55,7 @@ function getReceiveMsgBox(data) {
 </div>`;
 }
 
-// 최초 초기화될 때 1번방 3건이 있으면 3건을 다 가져옴
+// 최초 초기화될 때 1번방 3건이 있으면 3건을 다 가져와요
 // addMessage() 함수 호출시 DB에 insert 되고, 그 데이터가 자동으로 흘러들어온다(SSE)
 // 파란박스 초기화하기
 function initMyMessage(data) {
@@ -86,37 +85,38 @@ function initYourMessage(data) {
 
 
 async function addMessage() {
-	console.log("test")
     let msgInput = document.querySelector("#chat-outgoing-msg");
-    let chat = {
-        sender: sender,
-        // roomNum: roomNum,
-		receiver: receiver,
-        msg: msgInput.value
-    };
 
-  try {
+	let chat = {
+    sender: username,
+    receiver: receiver,
+    msg: msgInput.value,
+    roomNum: roomNum.toString() // roomNum을 문자열로 변환
+};
 
-const chatRoomURI = "https://plikim.com/chat/sender/${sender}/receiver/${receiver}"; //666 777
-    const response = await fetch(chatRoomURI, { // chatRoomURI 변수를 사용하도록 수정
-        method: "POST", // POST 메소드로 수정
-        body: JSON.stringify(chat),
-        headers: {
-            "Content-Type": "application/json; charset=utf-8"
+    try {//"http://localhost:9090/chat" "https://plikim.com/chat" "http://localhost:9090/chat?userId=" + receiver
+        const response = await fetch( "http://localhost:9090/chat", {
+            method: "post",
+            body: JSON.stringify(chat),
+            headers: {
+                "Content-Type": "application/json; charset=utf-8"
+            }
+
+
+
+        });
+
+        if (response.ok) {
+            // fetch 요청이 성공하면 추가 작업 수행
+            msgInput.value = "";
+        } else {
+            // 요청이 실패한 경우에 대한 처리
+            console.error("Fetch 요청 실패");
         }
-    });
-
-    if (response.ok) {
-        // fetch 요청이 성공하면 추가 작업 수행
-        msgInput.value = "";
-    } else {
-        // 요청이 실패한 경우에 대한 처리
-        console.error("Fetch 요청 실패");
+    } catch (error) {
+        // 오류 처리
+        console.error("오류 발생: " + error);
     }
-} catch (error) {
-    // 오류 처리
-    console.error("오류 발생: " + error);
-}
 }
 
 

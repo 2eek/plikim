@@ -21,12 +21,14 @@ public class ChatController {
 
 	// 귓속말 할때
 //666 777
+
 	@GetMapping(value = "/chat/sender/{sender}/receiver/{receiver}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
 	public Flux<Chat> getMsg(@PathVariable String sender, @PathVariable String receiver) {
 		return chatRepository.mFindBySender(sender, receiver)
 				.subscribeOn(Schedulers.boundedElastic());
 	}
 
+//채팅친 사람의 채팅 내용이 db에 저장됨
 		@PostMapping("/chat/sender/{sender}/receiver/{receiver}") //666 777
 	public Mono<Chat> setMsg1(@RequestBody Chat chat){
 		chat.setCreatedAt(LocalDateTime.now());

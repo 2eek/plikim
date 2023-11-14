@@ -4,6 +4,7 @@ import com.eek.kimpli.chat.model.Chat;
 import com.eek.kimpli.chat.repository.ChatRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -36,17 +37,17 @@ public class ChatController {
 
 
 	@PostMapping("/chat")
-	public Mono<Chat> setMsg(@RequestBody Chat chat){
+	public Mono<Chat> setMsg(@RequestBody Chat chat) {
 		chat.setCreatedAt(LocalDateTime.now());
 		return chatRepository.save(chat); // Object를 리턴하면 자동으로 JSON 변환 (MessageConverter)
 	}
 
-//	    	@GetMapping("/chat")
-//			public String chat(){
-//				return "/chat/chat";
-//			}
+
 
 }
+
+
+
 
 
 

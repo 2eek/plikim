@@ -53,7 +53,7 @@ public class UserController {
         model.addAttribute("startPage",startPage);
         model.addAttribute("endPage",endPage);
         model.addAttribute("user", users);
-         return "index";
+         return "redirect:/";
     }
 
     //회원 디테일
@@ -102,7 +102,7 @@ public String getUserDetail(@RequestParam(required = false) Long id, Model model
             System.out.println("회원가입되나");
         userService.save(user);
         System.out.println("회원가입안되나");
-            return "index";
+            return "redirect:/";
         }
 //
 //           @GetMapping("/")

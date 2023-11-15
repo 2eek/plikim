@@ -94,7 +94,7 @@ async function addMessage() {
     roomNum: roomNum.toString() // roomNum을 문자열로 변환
 };
 
-    try {//"http://localhost:9090/chat" "https://plikim.com/chat" "http://localhost:9090/chat?userId=" + receiver
+    try {//"http://localhost:9090/chat" "https://plikim.com/chat"
         const response = await fetch( "https://plikim.com/chat", {
             method: "post",
             body: JSON.stringify(chat),

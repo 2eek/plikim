@@ -10,10 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import reactor.core.publisher.Flux;
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -28,7 +25,6 @@ public class HomeController {
         System.out.println("세션에 담긴 회원 이름: " + userName);
 
         Flux<Chat> chatRoomFlux = chatRepository.findAll();
-
         List<Chat> chatRoomList = chatRoomFlux.collectList()
                 .block();
 
@@ -38,14 +34,23 @@ public class HomeController {
             chatRoomList = chatRoomList.stream()
                     .filter(chat -> chat.getRoomNum() != null && chat.getRoomNum().contains(userName))
                     .sorted(Comparator.comparing(Chat::getCreatedAt).reversed())
-                    .filter(chat -> uniqueRoomNums.add(removeUserName(chat.getRoomNum(), userName)))
+                    .filter(chat -> uniqueRoomNums.add(chat.getRoomNum()))
                     .collect(Collectors.toList());
         }
 
         model.addAttribute("userSession", userName);
         model.addAttribute("chatList", chatRoomList);
         System.out.println("이름: " + userName);
-        System.out.println(chatRoomList);
+
+        //System.out.println(chatRoomList);
+        List<String> roomNumList = new ArrayList<>();
+        for (Chat chat : chatRoomList) {
+            String roomNum = chat.getRoomNum();
+            System.out.println("roomNum: " + roomNum);
+            roomNumList.add(roomNum);
+        }
+        model.addAttribute("roomNumList", roomNumList);
+
 
         return "chat/mychatrooms";
     }

@@ -53,7 +53,7 @@ public class UserController {
         model.addAttribute("startPage",startPage);
         model.addAttribute("endPage",endPage);
         model.addAttribute("user", users);
-         return "redirect:/";
+         return "index";
     }
 
     //회원 디테일

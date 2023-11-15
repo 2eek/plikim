@@ -34,7 +34,7 @@ protected void configure(HttpSecurity http) throws Exception {
             .loginPage("/member/loginForm")
             .permitAll()
             .loginProcessingUrl("/login") // 스프링 시큐리티에서 처리하기 위한 주소. /login post 방식.
-            .defaultSuccessUrl("/")
+            .defaultSuccessUrl("/index")
             .and()
         .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // 세션 생성 정책 설정

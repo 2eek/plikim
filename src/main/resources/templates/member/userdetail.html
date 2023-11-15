@@ -21,9 +21,7 @@
 </head>
 
 <body>
-  <form method="post" action="/some-action">
-    <input type="hidden" id="loggedInUserId" name="loggedInUserId" th:value="${userSession.username}" />
-  </form>
+  <input type="hidden" id="loggedInUserId" name="loggedInUserId" th:value="${userSession.username}" />
 
   <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('home')">
   </nav>
@@ -44,7 +42,7 @@
           <span class="number">1069 <span class="follow">Followers</span></span>
         </div>
         <div class="d-flex mt-2">
-<button class="btn1 btn-dark" id="user-id-button" th:attr="data-user-id=${user.username}">대화하기</button>
+          <button class="btn1 btn-dark" id="user-id-button" th:attr="data-user-id=${user.username}">대화하기</button>화
         </div>
         <div class="text mt-3">
           <span>Eleanor Pena is a creator of minimalistic x bold graphics and digital artwork.<br><br> Artist/ Creative Director by Day #NFT minting@ with FND night.</span>
@@ -69,7 +67,7 @@
     var userId = userButton.getAttribute('data-user-id');
     userButton.addEventListener('click', function() {
       var sender = document.getElementById('loggedInUserId').value;
-      var url = '/chat?userId=' + userId; // 사용자 ID를 쿼리 매개변수로 추가
+      var url = '/chat?userId=' + userId; // 상대방 사용자 ID를 쿼리 매개변수로 추가
       location.href = url; // /chat로 이동화
     });
   });

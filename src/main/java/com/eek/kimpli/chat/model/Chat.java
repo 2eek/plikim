@@ -17,4 +17,9 @@ public class Chat {
     private String receiver;//받는 사람
     private String roomNum; //방 번호
     private LocalDateTime createdAt;
+    private boolean read; // 읽음 여부 플래그
+
+   public void setRead(boolean read) {
+        this.read = read;
+    }
 }

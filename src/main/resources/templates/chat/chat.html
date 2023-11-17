@@ -21,12 +21,10 @@
 </head>
 
 <body>
- <form method="post" action="/some-action">
+
     <input type="hidden" id="loggedInUserId" name="loggedInUserId" th:value="${userSession.username}" />
-  </form>
-  <form >
-    <input type="hidden" id="userId" name="loggedInUserId" th:value="${userId}" />
-  </form>
+    <input type="hidden" id="userId" name="userId" th:value="${userId}" />
+
 
 
 

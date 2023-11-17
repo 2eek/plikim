@@ -27,7 +27,7 @@ protected void configure(HttpSecurity http) throws Exception {
         .csrf().disable()
         .authorizeRequests()
             // 누구나 접근 가능한 URL 패턴
-            .antMatchers("/", "/account/register", "/css/**", "/api/**", "/img/**", "/static/**", "/member/memberjoin").permitAll()
+            .antMatchers("/", "/account/register", "/wss/**","/css/**", "/api/**", "/img/**", "/static/**", "/member/memberjoin").permitAll()
             .anyRequest().permitAll() // 다른 요청은 모두 허용
             .and()
         .formLogin()

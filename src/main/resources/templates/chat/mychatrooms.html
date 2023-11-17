@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/common :: head('게시판')">
+      <script>
+
+            document.querySelector("#readButton").addEventListener("click", markAsRead);
+       </script>
+
 </head>
 <body>
 <!-- 파라미터로 board -> nav가 활성화 됨 -->
@@ -37,7 +42,7 @@
                 <td>
                     <div class="d-flex mt-2">
                         <!-- 각 행에 대해 해당 행의 roomNum 값을 가져와서 버튼 생성 -->
-<button class="btn1 btn-dark user-id-button" th:attr="data-user-id=${roomNumList[rowStat.index]}">대화하기</button>
+<button class="btn1 btn-dark user-id-button" id="readButton" th:attr="data-user-id=${roomNumList[rowStat.index]}">대화하기</button>
                     </div>
                 </td>
             </tr>

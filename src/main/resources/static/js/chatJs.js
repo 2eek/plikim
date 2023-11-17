@@ -2,7 +2,8 @@
 
 var username = document.getElementById('loggedInUserId').value;
 var receiver = document.getElementById('userId').value;
-
+let notificationBadge = document.getElementById('notificationBadge');
+let unreadCount = 0;
   // let roomNumString = prompt("채팅방 번호를 입력하세요");
 var roomNum = [username, receiver].sort().join('');
  //roomNum = parseInt(roomNumString);
@@ -10,10 +11,8 @@ var roomNum = [username, receiver].sort().join('');
 document.querySelector("#username").innerHTML = username;
 
 // SSE 연결하기. 객체 생성. 크로스 오리진 자바스크립트 요청은 서버쪽에서 봉쇄하고 있다. -> 서버에서 처리함
-//const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}`);
-const eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`);
-//const eventSource = new EventSource(`http://localhost:9090/sender/ssar/receiver/cos`);
-//const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}`);
+//const eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`);
+const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}`);
 
 
 eventSource.onmessage = (event) => {
@@ -27,7 +26,19 @@ eventSource.onmessage = (event) => {
 		// 회색박스(왼쪽)
 		initYourMessage(data);
 	}
+	if (data.sender !== username) { // 상대방이 보낸 메시지만 처리
+        unreadCount++; // 새로운 메시지 도착 시 카운트 증가
+        updateNotificationBadge();
+    }
 }
+function updateNotificationBadge() {
+    notificationBadge.innerText = unreadCount;
+}
+function markAsRead() {
+    unreadCount = 0;
+    updateNotificationBadge();
+}
+
 
 // 파란박스 만들기. 보내는 대화박스
 function getSendMsgBox(data) {
@@ -95,7 +106,7 @@ async function addMessage() {
 };
 
     try {//"http://localhost:9090/chat" "https://plikim.com/chat"
-        const response = await fetch( "https://plikim.com/chat", {
+        const response = await fetch( "http://localhost:9090/chat", {
             method: "post",
             body: JSON.stringify(chat),
             headers: {

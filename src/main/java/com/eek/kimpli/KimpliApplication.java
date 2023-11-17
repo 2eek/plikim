@@ -9,6 +9,7 @@ public class KimpliApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(KimpliApplication.class, args);
+
 	}
 
 }

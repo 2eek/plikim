@@ -2,9 +2,21 @@
 #  level:
 #    root: TRACE
 
-#logging:
-#  level:
-#    root: INFO
+# Logback 설정
+logging:
+  level:
+    root: INFO
+    com.eek.kimpli.online: DEBUG
+
+# Console 출력 설정
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+# 로그 파일 설정
+  file:
+    name: myapplication.log
+    path: /path/to/logs
+
 #  appenders:
 #    - type: console
 #      threshold: INFO

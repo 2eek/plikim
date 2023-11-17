@@ -47,12 +47,15 @@ public class UserController {
     @GetMapping("/")
     public String list(Model model, @PageableDefault(size = 3) Pageable pageable) {
         Page<User> users = userRepository.findAll(pageable);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        model.addAttribute("userSession", authentication.getPrincipal());
         int currentPage = users.getPageable().getPageNumber() + 1; // 현재 페이지 번호 (0부터 시작)
         int startPage = Math.max(1, currentPage - 2); // 현재 페이지 주변에 2 페이지씩 보여주기
         int endPage = Math.min(users.getTotalPages(), startPage + 4);
         model.addAttribute("startPage",startPage);
         model.addAttribute("endPage",endPage);
         model.addAttribute("user", users);
+        		System.out.println("hi");
          return "index";
     }
 

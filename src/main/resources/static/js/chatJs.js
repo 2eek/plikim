@@ -2,7 +2,8 @@
 
 var username = document.getElementById('loggedInUserId').value;
 var receiver = document.getElementById('userId').value;
-
+let notificationBadge = document.getElementById('notificationBadge');
+let unreadCount = 0;
   // let roomNumString = prompt("채팅방 번호를 입력하세요");
 var roomNum = [username, receiver].sort().join('');
  //roomNum = parseInt(roomNumString);
@@ -25,7 +26,19 @@ eventSource.onmessage = (event) => {
 		// 회색박스(왼쪽)
 		initYourMessage(data);
 	}
+	if (data.sender !== username) { // 상대방이 보낸 메시지만 처리
+        unreadCount++; // 새로운 메시지 도착 시 카운트 증가
+        updateNotificationBadge();
+    }
 }
+function updateNotificationBadge() {
+    notificationBadge.innerText = unreadCount;
+}
+function markAsRead() {
+    unreadCount = 0;
+    updateNotificationBadge();
+}
+
 
 // 파란박스 만들기. 보내는 대화박스
 function getSendMsgBox(data) {

@@ -1,76 +1,213 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/common :: head('회원목록')">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원 목록</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
 </head>
 <body>
-<main role="main" class="container">
-  <div class="starter-template">
-    <h1>회원 리스트</h1>
-  </div>
-</main>
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('home')">
-    </nav>
-<!--    <main role="main" class="container">-->
-<!--      <div class="starter-template">-->
-<!--        <h1>회원 리스트</h1>-->
-<!--      </div>-->
-<!--    </main>-->
-    <main role="main" class="container">
 
-        <div style="display: flex; justify-content: center; align-items: center;">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('home')">
+</nav>
+
+<div class="container mt-5">
+    <h1>Online Users</h1>
+    <ul id="online-users" class="list-group"></ul>
+</div>
+<input type="hidden" id="loggedInUserId" name="loggedInUserId" th:if="${#authorization.expression('isAuthenticated()')}" th:value="${userSession.username}" />
+
+<div id="main-content" class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="connect">WebSocket connection:</label>
+                    <button id="connect" class="btn btn-default" type="submit">Connect</button>
+                    <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">Disconnect
+                    </button>
+                </div>
+            </form>
         </div>
-<!--        <iframe id="online-alarm-kur-iframe" src="https://embed-countdown.onlinealarmkur.com/ko/#2024-01-01T00:00:00@Asia%2FSeoul" width="300" height="40" style="display: block; margin: 0px auto; border: 0px;"></iframe>-->
-
-        <div class="starter-template">
-<!--            <p>&#128052;</p>-->
-<!--            <span sec:authorize="isAuthenticated()">사용자는 인증되었습니다.</span>-->
-<!--            <span sec:authorize="!isAuthenticated()">사용자는 인증되지 않았습니다.</span>-->
-    <!--        <img src="/img/500.jpeg" alt="image" class="responsive-images">-->
-            <table class="table table-striped table-hover">
-              <thead>
+        <div class="col-md-6">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="name">What is your name?</label>
+                    <input type="text" id="name" class="form-control" placeholder="Your name here...">
+                </div>
+                <button id="send" class="btn btn-default" type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table id="conversation" class="table table-striped">
+                <thead>
                 <tr>
-                  <th scope="col">사진</th>
-                  <th scope="col">아이디</th>
-                  <th scope="col">자기소개</th>
+                    <th>Greetings</th>
                 </tr>
-              </thead>
-              <tbody>
-                <tr th:each="user : ${user}" th:id="'user-row-' + ${user.id}" class="user-row">
-                        <td>프로필 사진 이미지</td>
-                        <td>
-                            <a th:href="@{/user/userdetail(id=${user.id})}" th:text="${user.username}">사용자 이름</a>
-                        </td>
-                        <td>자기소개</td>
-                    </tr>
-              </tbody>
+                </thead>
+                <tbody id="greetings">
+                </tbody>
             </table>
-
-            <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item" th:classappend="${user.pageable.pageNumber == 0} ? 'disabled'">
-                        <a class="page-link text-dark" th:classappend="${user.pageable.pageNumber == 0} ? 'text-primary' : 'text-dark'" href="#" th:href="@{/(page=${user.pageable.pageNumber - 1},  searchText=${param.searchText})}" tabindex="-1" aria-disabled="true">Previous</a>
-                    </li>
-                    <li th:each="i : ${#numbers.sequence(startPage, endPage)}">
-                        <a th:if="${i <= user.totalPages}" class="page-link" href="#" th:href="@{/(page=${i - 1}, searchText=${param.searchText})}" th:text="${i}" th:classappend="${i == user.pageable.pageNumber + 1} ? 'text-primary' : 'text-dark'"></a>
-                    </li>
-                    <li class="page-item" th:classappend="${user.pageable.pageNumber == user.totalPages - 1} ? 'disabled'">
-                        <a class="page-link text-dark" th:classappend="${user.pageable.pageNumber == user.totalPages - 1} ? 'text-primary' : 'text-dark'" href="#" th:href="@{/(page=${user.pageable.pageNumber + 1}, searchText=${param.searchText})}">Next</a>
-                    </li>
-                </ul>
-            </nav>
         </div>
+    </div>
+</div>
 
-    </main>
-</body>
+<main role="main" class="container">
+    <div style="display: flex; justify-content: center; align-items: center;">
+    </div>
+
+    <div class="starter-template">
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th scope="col">사진</th>
+                <th scope="col">아이디</th>
+                <th scope="col">자기소개</th>
+                <th scope="col">상태</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${user}" th:id="'user-row-' + ${user.id}" class="user-row">
+                <td>프로필 사진 이미지</td>
+                <td>
+                    <a th:href="@{/user/userdetail(id=${user.id})}" th:text="${user.username}">사용자 이름</a>
+                </td>
+                <td>자기소개</td>
+                <td>
+                    <span th:id="'status-' + ${user.username}" style="color: gray;">오프라인</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${user.pageable.pageNumber == 0} ? 'disabled'">
+                    <a class="page-link text-dark" th:classappend="${user.pageable.pageNumber == 0} ? 'text-primary' : 'text-dark'" href="#"
+                       th:href="@{/(page=${user.pageable.pageNumber - 1},  searchText=${param.searchText})}" tabindex="-1"
+                       aria-disabled="true">Previous</a>
+                </li>
+                <li th:each="i : ${#numbers.sequence(startPage, endPage)}">
+                    <a th:if="${i <= user.totalPages}" class="page-link" href="#"
+                       th:href="@{/(page=${i - 1}, searchText=${param.searchText})}" th:text="${i}"
+                       th:classappend="${i == user.pageable.pageNumber + 1} ? 'text-primary' : 'text-dark'"></a>
+                </li>
+                <li class="page-item" th:classappend="${user.pageable.pageNumber == user.totalPages - 1} ? 'disabled'">
+                    <a class="page-link text-dark"
+                       th:classappend="${user.pageable.pageNumber == user.totalPages - 1} ? 'text-primary' : 'text-dark'"
+                       href="#" th:href="@{/(page=${user.pageable.pageNumber + 1}, searchText=${param.searchText})}">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+</main>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+
+<script>
+
+    const stompClient = new StompJs.Client({
+        brokerURL: 'ws://https:plikim.com/gs-guide-websocket'  //'ws://localhost:9090/gs-guide-websocket'
+    });
+
+    stompClient.onConnect = (frame) => {
+        setConnected(true);
+        console.log('Connected: ' + frame);
+        stompClient.subscribe('/topic/greetings', (greeting) => {
+            const status = JSON.parse(greeting.body).content;
+            showGreeting(status);
+            updateStatus(status);
+            console.log(status);
+        });
+    };
+
+
+
+    stompClient.onWebSocketError = (error) => {
+        console.error('Error with websocket', error);
+    };
+
+    stompClient.onStompError = (frame) => {
+        console.error('Broker reported error: ' + frame.headers['message']);
+        console.error('Additional details: ' + frame.body);
+    };
+
+    function setConnected(connected) {
+        $("#connect").prop("disabled", connected);
+        $("#disconnect").prop("disabled", !connected);
+        if (connected) {
+            $("#conversation").show();
+        } else {
+            $("#conversation").hide();
+        }
+        $("#greetings").html("");
+    }
+
+    function connect() {
+        stompClient.activate();
+    }
+
+    function disconnect() {
+        stompClient.deactivate();
+        setConnected(false);
+        console.log("Disconnected");
+    }
+
+    function sendName() {
+        stompClient.publish({
+            destination: "/app/hello",
+            body: JSON.stringify({'name': $("#loggedInUserId").val()})
+        });
+    }
+
+function showGreeting(message) {
+    console.log(message);
+    $("#greetings").append("<tr><td>" + message + "</td></tr>");
+
+    // 여기서 JSON.parse(greeting.body).content 값이 사용자 아이디와 일치하면
+    // 해당하는 span 요소의 내용을 '온라인'으로 변경
+    const dataUsername = message.trim(); // 수신된 메시지의 공백 제거
+    updateStatus(dataUsername, '온라인');
+}
+
+function updateStatus(username, status) {
+    // 사용자 이름(username)을 기반으로 해당하는 span 요소를 찾아 상태를 변경
+    const statusElement = $("#status-" + username);
+    statusElement.text(status).css("color", "green");
+
+    // 사용자의 아이디를 읽어오기 위해 data-username을 사용
+    const dataUsername = statusElement.attr('data-username');
+    console.log('User ID:', dataUsername);
+}
+
+
+    $(function () {
+        $("form").on('submit', (e) => e.preventDefault());
+        $("#connect").click(() => connect());
+        $("#disconnect").click(() => disconnect());
+        $("#send").click(() => sendName());
+    });
+</script>
+
 <script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         var userRows = document.querySelectorAll('[id^="user-row-"]');
-        userRows.forEach(function(row) {
-            row.addEventListener('click', function() {
+        userRows.forEach(function (row) {
+            row.addEventListener('click', function () {
                 var userId = row.id.replace('user-row-', '');
                 window.location.href = '/user/userdetail?id=' + userId;
             });
         });
     });
 </script>
+
+</body>
 </html>

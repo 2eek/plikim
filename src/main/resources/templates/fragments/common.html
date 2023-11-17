@@ -20,7 +20,10 @@
         crossorigin="anonymous"
 ></script>
 
-<!--    알림기능 소켓이용-->
+    <!---->
+
+
+
 
 
 </head>
@@ -49,8 +52,13 @@
                 <li class="nav-item" th:classappend="${menu} == 'join'? 'active'">
                     <a class="nav-link" th:href="@{/member/memberjoin}" sec:authorize="!isAuthenticated()">회원가입</a>
                 </li>
-                   <li class="nav-item" th:classappend="${menu} == 'mypage'? 'active'" sec:authorize="isAuthenticated()">
-                    <a class="nav-link" th:href="@{/mychatrooms}">채팅</a>
+<!--                <li class="nav-item" th:classappend="${menu} == 'mypage'? 'active'" sec:authorize="isAuthenticated()">-->
+<!--                    <a class="nav-link" th:href="@{/mychatrooms}">채팅</a>-->
+<!--                </li>-->
+                <li class="nav-item" th:classappend="${menu} == 'mypage'? 'active'" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/mychatrooms}">
+                        채팅<span id="notificationBadge" class="badge badge-danger">0</span>
+                    </a>
                 </li>
                 <li class="nav-item" th:classappend="${menu} == 'mypage'? 'active'" th:action="@{/mypage}" sec:authorize="isAuthenticated()">
                     <a class="nav-link" href="/member/mypage">마이페이지</a>

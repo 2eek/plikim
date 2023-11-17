@@ -113,8 +113,8 @@
 
 <script>
 
-    const stompClient = new StompJs.Client({ //'wss://plikim.com/gs-guide-websocket'
-    brokerURL: 'wss://www.plikim.com/gs-guide-websocket'
+    const stompClient = new StompJs.Client({ //'wss://plikim.com/gs-guide-websocket''ws://localhost:9090/gs-guide-websocket'
+    brokerURL: 'wss://plikim.com/gs-guide-websocket'
 });
 
     stompClient.onConnect = (frame) => {

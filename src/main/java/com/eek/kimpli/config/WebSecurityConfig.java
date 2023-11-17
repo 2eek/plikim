@@ -27,7 +27,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .csrf().disable()
             .authorizeRequests()
                 .antMatchers("/", "/account/register", "/wss/**", "/css/**", "/api/**", "/img/**", "/static/**", "/member/memberjoin").permitAll()
-                .anyRequest().permitAll()
+                .anyRequest().authenticated() // 다른 모든 요청은 인증을 필요로 함
             .and()
             .formLogin()
                 .loginPage("/member/loginForm")
@@ -43,7 +43,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
             .and()
             .logout()
-                .permitAll();
+                .logoutUrl("/logout") // 로그아웃 URL 설정
+                .permitAll()
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID") // 세션 쿠키 삭제
+                .logoutSuccessUrl("/member/loginForm"); // 로그아웃 성공 후 이동할 페이지
     }
 
     @Autowired

@@ -1,11 +1,15 @@
 package com.eek.kimpli.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
@@ -13,12 +17,21 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private DataSource dataSource;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+
+
+
+    final DataSource dataSource;
+
+    final PasswordEncoder passwordEncoder;
+
+
+  @Bean
+public SessionRegistry sessionRegistry() {
+    return new SessionRegistryImpl();
+}
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -37,8 +50,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                        .loginProcessingUrl("/login") // 스프링 시큐리티에서 처리하기위한 주소. /login post방식.
                      .defaultSuccessUrl("/")
                         .and()
-                .logout()
-                        .permitAll();
+                .sessionManagement()
+                .maximumSessions(1) // 최대 세션 수
+                .sessionRegistry(sessionRegistry())
+                .expiredUrl("/login?expired") // 세션이 만료된 경우 이동할 URL
+                .and()
+            .and()
+            .logout()
+                .permitAll()
+                .logoutSuccessUrl("/member/loginForm")
+                .invalidateHttpSession(true);
+
 
 
     }

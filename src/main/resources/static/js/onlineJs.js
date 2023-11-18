@@ -1,4 +1,3 @@
-
 function showGreeting(message) {
     const dataUsername = message.trim(); // 수신된 메시지의 공백 제거
 
@@ -13,7 +12,13 @@ function showGreeting(message) {
         updateStatus(dataUsername, '온라인');
     }
 }
-//
+
+// 사용자 행 제거 함수
+function removeUserRow(username) {
+    const existingRow = $("#greetings").find("td:contains('" + username + "')").closest("tr");
+    existingRow.remove();
+}
+
 function updateStatus(username, status) {
     // 사용자 이름(username)을 기반으로 해당하는 span 요소를 찾아 상태를 변경
     const statusElement = $("#status-" + username);
@@ -24,8 +29,14 @@ function updateStatus(username, status) {
     console.log('User ID:', dataUsername);
 }
 
+// 예시: 세션 업데이트 함수
+function updateLoginStatus(username, status) {
+    console.log('Logout Event Received:', username);
+    removeUserRow(username); // 로그아웃 시 해당 사용자 행 제거
+}
+
 const stompClient = new StompJs.Client({
-    brokerURL: 'wss://plikim.com/gs-guide-websocket' //'wss://plikim.com/gs-guide-websocket'   'ws://localhost:9090/gs-guide-websocket'
+    brokerURL: 'wss://plikim.com/gs-guide-websocket'
 });
 
 stompClient.onConnect = (frame) => {
@@ -41,6 +52,12 @@ stompClient.onConnect = (frame) => {
         updateStatus(status);
         console.log(status);
     });
+    // WebSocket을 통한 세션 종료 이벤트 수신
+    stompClient.subscribe('/topic/session-disconnect', (username) => {
+        // 세션 종료 이벤트가 발생하면 index 페이지의 로그인 상태를 로그아웃으로 업데이트
+        updateLoginStatus(username, '로그아웃');
+    });
+
 };
 
 stompClient.onWebSocketError = (error) => {
@@ -70,4 +87,3 @@ $(function () {
         sendName();
     }, 10000); // 5000 milliseconds = 5 seconds
 });
-

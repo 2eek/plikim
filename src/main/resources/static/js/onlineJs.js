@@ -59,7 +59,7 @@ stompClient.onConnect = (frame) => {
         const status = JSON.parse(greeting.body).content;
         showGreeting(status);
         updateStatus(status);
-        console.log(status);
+        console.log('로그인한 회원:'+status);
     });
     // WebSocket을 통한 세션 종료 이벤트 수신
     stompClient.subscribe('/topic/session-disconnect', (username) => {

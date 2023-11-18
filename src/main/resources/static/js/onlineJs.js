@@ -56,14 +56,19 @@
 //     }
 //
 function showGreeting(message) {
-    console.log(message);
-$("#greetings").append("<tr><td>" + message + " <span style='color: green;'>●</span></td></tr>");
-
-    // 여기서 JSON.parse(greeting.body).content 값이 사용자 아이디와 일치하면
-    // 해당하는 span 요소의 내용을 '온라인'으로 변경
     const dataUsername = message.trim(); // 수신된 메시지의 공백 제거
-    updateStatus(dataUsername, '온라인');
- }
+
+    // 중복을 방지하기 위해 이미 존재하는 사용자인지 확인
+    if ($("#greetings").find("td:contains('" + dataUsername + "')").length === 0) {
+        // 존재하지 않으면 새로운 행 추가
+        const newRow = $("<tr><td>" + dataUsername + " <span style='color: green;'>●</span></td></tr>");
+        $("#greetings").append(newRow);
+
+        // 여기서 JSON.parse(greeting.body).content 값이 사용자 아이디와 일치하면
+        // 해당하는 span 요소의 내용을 '온라인'으로 변경
+        updateStatus(dataUsername, '온라인');
+    }
+}
 //
 function updateStatus(username, status) {
     // 사용자 이름(username)을 기반으로 해당하는 span 요소를 찾아 상태를 변경
@@ -74,6 +79,13 @@ function updateStatus(username, status) {
     const dataUsername = statusElement.attr('data-username');
     console.log('User ID:', dataUsername);
 }
+
+// function updateStatus(username, status) {
+//     // 사용자 아이디와 일치하는 행을 찾아 상태 업데이트
+//     $("#user-table td:contains('" + username + "')").next().next().next().text(status);
+// }
+
+
 //
 //
 //     $(function () {

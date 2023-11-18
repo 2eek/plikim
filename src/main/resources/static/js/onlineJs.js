@@ -1,60 +1,4 @@
-//
-//
-//     const stompClient = new StompJs.Client({
-//     brokerURL: 'ws://localhost:9090/gs-guide-websocket' //'wss://plikim.com/gs-guide-websocket'
-// });
-//
-//     stompClient.onConnect = (frame) => {
-//         setConnected(true);
-//         console.log('Connected: ' + frame);
-//         stompClient.subscribe('/topic/greetings', (greeting) => {
-//             const status = JSON.parse(greeting.body).content;
-//             showGreeting(status);
-//             updateStatus(status);
-//             console.log(status);
-//         });
-//     };
-//
-//
-//
-//     stompClient.onWebSocketError = (error) => {
-//         console.error('Error with websocket', error);
-//     };
-//
-//     stompClient.onStompError = (frame) => {
-//         console.error('Broker reported error:', frame);
-//         console.error('Broker reported error: ' + frame.headers['message']);
-//         console.error('Additional details: ' + frame.body);
-//     };
-//
-//     function setConnected(connected) {
-//         $("#connect").prop("disabled", connected);
-//         $("#disconnect").prop("disabled", !connected);
-//         if (connected) {
-//             $("#conversation").show();
-//         } else {
-//             $("#conversation").hide();
-//         }
-//         $("#greetings").html("");
-//     }
-//
-//     function connect() {
-//         stompClient.activate();
-//     }
-//
-//     function disconnect() {
-//         stompClient.deactivate();
-//         setConnected(false);
-//         console.log("Disconnected");
-//     }
-//
-//     function sendName() {
-//         stompClient.publish({
-//             destination: "/app/hello",
-//             body: JSON.stringify({'name': $("#loggedInUserId").val()})
-//         });
-//     }
-//
+
 function showGreeting(message) {
     const dataUsername = message.trim(); // 수신된 메시지의 공백 제거
 
@@ -80,20 +24,6 @@ function updateStatus(username, status) {
     console.log('User ID:', dataUsername);
 }
 
-// function updateStatus(username, status) {
-//     // 사용자 아이디와 일치하는 행을 찾아 상태 업데이트
-//     $("#user-table td:contains('" + username + "')").next().next().next().text(status);
-// }
-
-
-//
-//
-//     $(function () {
-//         $("form").on('submit', (e) => e.preventDefault());
-//         $("#connect").click(() => connect());
-//         $("#disconnect").click(() => disconnect());
-//         $("#send").click(() => sendName());
-//     });
 const stompClient = new StompJs.Client({
     brokerURL: 'wss://plikim.com/gs-guide-websocket' //'wss://plikim.com/gs-guide-websocket'   'ws://localhost:9090/gs-guide-websocket'
 });
@@ -136,5 +66,8 @@ function sendName() {
 
 $(function () {
     connect();
+    setInterval(function () {
+        sendName();
+    }, 5000); // 5000 milliseconds = 5 seconds
 });
 

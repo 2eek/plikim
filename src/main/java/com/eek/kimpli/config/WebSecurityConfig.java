@@ -53,7 +53,7 @@ public SessionRegistry sessionRegistry() {
                 .sessionManagement()
                 .maximumSessions(1) // 최대 세션 수
                 .sessionRegistry(sessionRegistry())
-                .expiredUrl("/login?expired") // 세션이 만료된 경우 이동할 URL
+                .expiredUrl("/member/loginForm") // 세션이 만료된 경우 이동할 URL
                 .and()
             .and()
             .logout()

@@ -11,32 +11,22 @@
 
 <head th:replace="fragments/common :: head('게시판')">
 </head>
-<style>
-    .container-fluid {
-        float: right;
-        width: 20%; /* 또는 원하는 값으로 조절 */
-    }
-
-    /*.float-right {*/
-    /*    width: 100%;*/
-    /*}*/
-</style>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('home')">
 </nav>
 
+<main role="main" class="container">
+  <div class="starter-template">
+    <h1>회원리스트</h1>
+  </div>
+</main>
 <!--<div class="container mt-5">-->
 <!--    <h1>Online Users</h1>-->
 <!--    <ul id="online-users" class="list-group"></ul>-->
 <!--</div>-->
-<input type="hidden" id="loggedInUserId" name="loggedInUserId" th:if="${#authorization.expression('isAuthenticated()')}" th:value="${userSession.username}" />
-
-<div class="container-fluid" style="width: 150px;">
-
-<!--        <div class="col-md-8">-->
-<!--            &lt;!&ndash; 좌측 내용 &ndash;&gt;-->
-<!--        </div>-->
-               <div class="col-md-6" style=" justify-content: end;">
+    <input type="hidden" id="loggedInUserId" name="loggedInUserId" th:if="${#authorization.expression('isAuthenticated()')}" th:value="${userSession.username}" />
+        <div class="container-fluid" style="width: 150px; float: right;">
+           <div class="col-md-6" style=" justify-content: end;">
             <!— 우측 사이드바 —>
             <table id="conversation" class="table table-striped" style="width: 150px;">
                     <thead>
@@ -48,60 +38,55 @@
                     </tbody>
                 </table>
             </div>
+        </div>
 
-</div>
 
-
-<main role="main" class="container">
-    <div style="display: flex; justify-content: center; align-items: center;">
-    </div>
-
-    <div class="starter-template">
-        <table class="table table-striped table-hover">
-            <thead>
-            <tr>
-                <th scope="col">사진</th>
-                <th scope="col">아이디</th>
-                <th scope="col">자기소개</th>
-                <th scope="col">상태</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="user : ${user}" th:id="'user-row-' + ${user.id}" class="user-row">
-                <td>프로필 사진 이미지</td>
-                <td>
-                    <a th:href="@{/user/userdetail(id=${user.id})}" th:text="${user.username}">사용자 이름</a>
-                </td>
-                <td>자기소개</td>
-                <td>
-                    <span th:id="'status-' + ${user.username}" style="color: gray;">오프라인</span>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-<!--페이징-->
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-                <li class="page-item" th:classappend="${user.pageable.pageNumber == 0} ? 'disabled'">
-                    <a class="page-link text-dark" th:classappend="${user.pageable.pageNumber == 0} ? 'text-primary' : 'text-dark'" href="#"
-                       th:href="@{/(page=${user.pageable.pageNumber - 1},  searchText=${param.searchText})}" tabindex="-1"
-                       aria-disabled="true">Previous</a>
-                </li>
-                <li th:each="i : ${#numbers.sequence(startPage, endPage)}">
-                    <a th:if="${i <= user.totalPages}" class="page-link" href="#"
-                       th:href="@{/(page=${i - 1}, searchText=${param.searchText})}" th:text="${i}"
-                       th:classappend="${i == user.pageable.pageNumber + 1} ? 'text-primary' : 'text-dark'"></a>
-                </li>
-                <li class="page-item" th:classappend="${user.pageable.pageNumber == user.totalPages - 1} ? 'disabled'">
-                    <a class="page-link text-dark"
-                       th:classappend="${user.pageable.pageNumber == user.totalPages - 1} ? 'text-primary' : 'text-dark'"
-                       href="#" th:href="@{/(page=${user.pageable.pageNumber + 1}, searchText=${param.searchText})}">Next</a>
-                </li>
-            </ul>
-        </nav>
-    </div>
-
-</main>
+    <main role="main" class="container">
+        <div class="starter-template">
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">사진</th>
+                    <th scope="col">아이디</th>
+                    <th scope="col">자기소개</th>
+                    <th scope="col">상태</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${user}" th:id="'user-row-' + ${user.id}" class="user-row">
+                    <td>프로필 사진 이미지</td>
+                    <td>
+                        <a th:href="@{/user/userdetail(id=${user.id})}" th:text="${user.username}">사용자 이름</a>
+                    </td>
+                    <td>자기소개</td>
+                    <td>
+                        <span th:id="'status-' + ${user.username}" style="color: gray;">오프라인</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+    <!--페이징-->
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${user.pageable.pageNumber == 0} ? 'disabled'">
+                        <a class="page-link text-dark" th:classappend="${user.pageable.pageNumber == 0} ? 'text-primary' : 'text-dark'" href="#"
+                           th:href="@{/(page=${user.pageable.pageNumber - 1},  searchText=${param.searchText})}" tabindex="-1"
+                           aria-disabled="true">Previous</a>
+                    </li>
+                    <li th:each="i : ${#numbers.sequence(startPage, endPage)}">
+                        <a th:if="${i <= user.totalPages}" class="page-link" href="#"
+                           th:href="@{/(page=${i - 1}, searchText=${param.searchText})}" th:text="${i}"
+                           th:classappend="${i == user.pageable.pageNumber + 1} ? 'text-primary' : 'text-dark'"></a>
+                    </li>
+                    <li class="page-item" th:classappend="${user.pageable.pageNumber == user.totalPages - 1} ? 'disabled'">
+                        <a class="page-link text-dark"
+                           th:classappend="${user.pageable.pageNumber == user.totalPages - 1} ? 'text-primary' : 'text-dark'"
+                           href="#" th:href="@{/(page=${user.pageable.pageNumber + 1}, searchText=${param.searchText})}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </main>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>

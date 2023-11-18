@@ -15,9 +15,18 @@ function showGreeting(message) {
 
 // 사용자 행 제거 함수
 function removeUserRow(username) {
-    const existingRow = $("#greetings").find("td:contains('" + username + "')").closest("tr");
+    const cleanedUsername = username.trim().toLowerCase();
+    const existingRow = $("#greetings").find("td").filter(function () {
+        return $(this).text().trim().toLowerCase() === cleanedUsername;
+    }).closest("tr");
     existingRow.remove();
 }
+
+// 동적으로 생성된 요소에 대한 이벤트 리스너 등록
+$(document).on('click', '[id^="user-row-"]', function () {
+    var userId = this.id.replace('user-row-', '');
+    window.location.href = '/user/userdetail?id=' + userId;
+});
 
 function updateStatus(username, status) {
     // 사용자 이름(username)을 기반으로 해당하는 span 요소를 찾아 상태를 변경

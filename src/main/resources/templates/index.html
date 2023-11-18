@@ -8,27 +8,40 @@
 <!--          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"-->
 <!--          crossorigin="anonymous">-->
 <!--</head>-->
+
 <head th:replace="fragments/common :: head('게시판')">
 </head>
-<body>
+<style>
+    .container-fluid {
+        float: right;
+        width: 30%;
+    }
 
+    .float-right {
+        width: 100%;
+    }
+
+    .row {
+        justify-content: end;
+    }
+</style>
+<body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('home')">
 </nav>
 
-<div class="container mt-5">
-    <h1>Online Users</h1>
-    <ul id="online-users" class="list-group"></ul>
-</div>
+<!--<div class="container mt-5">-->
+<!--    <h1>Online Users</h1>-->
+<!--    <ul id="online-users" class="list-group"></ul>-->
+<!--</div>-->
 <input type="hidden" id="loggedInUserId" name="loggedInUserId" th:if="${#authorization.expression('isAuthenticated()')}" th:value="${userSession.username}" />
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-8">
-            <!-- 좌측 내용 -->
-        </div>
-        <div class="col-md-4">
-            <!-- 우측 사이드바 -->
-            <div class="float-right">
-                <table id="conversation" class="table table-striped">
+<!--        <div class="col-md-8">-->
+<!--            &lt;!&ndash; 좌측 내용 &ndash;&gt;-->
+<!--        </div>-->
+               <div class="col-md-4">
+            <!— 우측 사이드바 —>
+            <table id="conversation" class="table table-striped">
                     <thead>
                     <tr>
                         <th>로그인 회원</th>

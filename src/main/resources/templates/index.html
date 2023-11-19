@@ -93,17 +93,17 @@
     <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
  <script src="/js/onlineJs.js"></script>
 
-<script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', function () {
-        var userRows = document.querySelectorAll('[id^="user-row-"]');
-        userRows.forEach(function (row) {
-            row.addEventListener('click', function () {
-                var userId = row.id.replace('user-row-', '');
-                window.location.href = '/user/userdetail?id=' + userId;
-            });
-        });
-    });
-</script>
+<!--<script type="text/javascript">-->
+<!--    document.addEventListener('DOMContentLoaded', function () {-->
+<!--        var userRows = document.querySelectorAll('[id^="user-row-"]');-->
+<!--        userRows.forEach(function (row) {-->
+<!--            row.addEventListener('click', function () {-->
+<!--                var userId = row.id.replace('user-row-', '');-->
+<!--                window.location.href = '/user/userdetail?id=' + userId;-->
+<!--            });-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
 
 </body>
 </html>

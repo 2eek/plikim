@@ -69,7 +69,7 @@
                 </td>
                 <td>자기소개</td>
                 <td>
-                    <span th:id="'status-' + ${user.username}" style="color: gray;">오프라인</span>
+                    <span th:if="${#authorization.expression('isAuthenticated()')}" th:id="'status-' + ${user.username}" style="color: gray;">오프라인</span>
                 </td>
             </tr>
             </tbody>

@@ -113,7 +113,7 @@ function sendName() {
 
 $(function () {
     connect();
-    // setInterval(function () {
-    //     sendName();
-    // }, 10000); // 5000 milliseconds = 5 seconds
+    setInterval(function () {
+        sendName();
+    }, 10000); // 5000 milliseconds = 5 seconds
 });

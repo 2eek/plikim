@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
-
 
 @RequiredArgsConstructor
 @Controller
@@ -25,13 +23,6 @@ public class UserController {
 
     final UserService userService;
     final UserRepository userRepository;
-
-//    @GetMapping("/")
-//    public String list(Model model){
-//        List<User> users = userRepository.findAll();
-//        model.addAttribute("user",users);
-//        return "index";
-//    }
 
 
     //마이페이지 조회
@@ -44,28 +35,24 @@ public class UserController {
 }
 
     //페이징+검색
-    @GetMapping("/")
-    public String list(Model model, @PageableDefault(size = 3) Pageable pageable) {
-        Page<User> users = userRepository.findAll(pageable);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        model.addAttribute("userSession", authentication.getPrincipal());
-        int currentPage = users.getPageable().getPageNumber() + 1; // 현재 페이지 번호 (0부터 시작)
-        int startPage = Math.max(1, currentPage - 2); // 현재 페이지 주변에 2 페이지씩 보여주기
-        int endPage = Math.min(users.getTotalPages(), startPage + 4);
-        model.addAttribute("startPage",startPage);
-        model.addAttribute("endPage",endPage);
-        model.addAttribute("user", users);
-        		System.out.println("hi");
-         return "index";
-    }
+@GetMapping("/")
+public String list(Model model, @PageableDefault(size = 3) Pageable pageable) {
+    Page<User> findRandomUsers = userRepository.findRandomUsers(pageable);
 
-    //회원 디테일
-//    @GetMapping("/user/userdetail/{id}")
-//    public String list(Model model, @RequestParam(required = false) Long id) {
-//       User user = userRepository.findById(id).orElse(null);
-//       model.addAttribute("user", user);
-//    return "member/userdetail";
-//    }
+    int currentPage = findRandomUsers.getNumber() + 1;
+    int startPage = Math.max(1, currentPage - 2);
+    int endPage = Math.min(findRandomUsers.getTotalPages(), startPage + 4);
+
+    model.addAttribute("startPage", startPage);
+    model.addAttribute("endPage", endPage);
+    model.addAttribute("user", findRandomUsers);
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    model.addAttribute("userSession", authentication.getPrincipal());
+
+    return "index";
+}
+
+
 @GetMapping("/user/userdetail")
 public String getUserDetail(@RequestParam(required = false) Long id, Model model) {
     // 사용자 정보를 id를 기반으로 데이터베이스에서 가져오는 코드 작성
@@ -82,16 +69,6 @@ public String getUserDetail(@RequestParam(required = false) Long id, Model model
     return "member/userdetail"; // 사용자 정보가 있는 경우 상세 정보 페이지로 이동
 }
 
-
-
-
-       //시큐리티 로그인 테스트
-//    @PostMapping("/login11")
-//        public String login(User user){
-//        userService.save(user);
-//            return "/";
-//        }
-
         //회원가입
         @PostMapping("/member/saveTest")
     public String JoinTest(@ModelAttribute("user") User user, Model model, @PageableDefault(size = 3) Pageable pageable) {
@@ -107,25 +84,4 @@ public String getUserDetail(@RequestParam(required = false) Long id, Model model
         System.out.println("회원가입안되나");
             return "redirect:/";
         }
-//
-//           @GetMapping("/")
-//    public String list(Model model, @PageableDefault(size = 3) Pageable pageable) {
-//        Page<User> users = userRepository.findAll(pageable);
-//        int currentPage = users.getPageable().getPageNumber() + 1; // 현재 페이지 번호 (0부터 시작)
-//        int startPage = Math.max(1, currentPage - 2); // 현재 페이지 주변에 2 페이지씩 보여주기
-//        int endPage = Math.min(users.getTotalPages(), startPage + 4);
-//        model.addAttribute("startPage",startPage);
-//        model.addAttribute("endPage",endPage);
-//        model.addAttribute("user", users);
-//         return "index";
-//    }
-
-
-
-
-
-//        	    	@GetMapping("/chat")
-//			public String chat(){
-//				return "/chat/chat";
-//			}
 }

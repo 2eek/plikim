@@ -60,6 +60,7 @@
                 <th scope="col">자기소개</th>
                 <th scope="col">상태</th>
             </tr>
+
             </thead>
             <tbody>
             <tr th:each="user : ${user}" th:id="'user-row-' + ${user.id}" class="user-row">
@@ -96,7 +97,7 @@
                 <div style="margin-left:100px ">
                 <form class="d-flex" role="search" method="GET" th:classappend="${menu} == 'mypage'? 'active'"
                       th:action="${#authorization.expression('isAuthenticated()') ? '/user/searchbyname' : '/member/loginForm'}">
-                     <input id="userSearchText" name="id" th:value="${param.searchText}" class="form-control me-2" type="text" placeholder="Search"  style="margin-left: 7px;"  aria-label="Search">
+                     <input id="userSearchText" name="id" th:value="${param.searchText}" class="form-control me-2" type="text" placeholder="회원계정"  style="margin-left: 7px;"  aria-label="Search">
                     <button id="userSearchButton" class="btn btn-outline-success"   style="margin-left:3px;" type="submit">Search</button>
                 </form>
                 </div>

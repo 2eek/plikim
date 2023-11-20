@@ -13,4 +13,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "SELECT u FROM User u ORDER BY RAND()")
     Page<User> findRandomUsers(Pageable pageable);
 
+
+     User findByUsername(String username);
 }

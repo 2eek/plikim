@@ -43,7 +43,7 @@
                         <th>로그인 회원</th>
                     </tr>
                     </thead>
-                    <tbody id="greetings">
+                    <tbody th:if="${#authorization.expression('isAuthenticated()')}" id="greetings">
                     </tbody>
                 </table>
             </div>

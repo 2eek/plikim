@@ -22,11 +22,23 @@ function removeUserRow(username) {
     existingRow.remove();
 }
 
-//동적으로 생성된 요소에 대한 이벤트 리스너 등록
-$(document).on('click', '[id^="user-row-"]', function () {
-    var userId = this.id.replace('user-row-', '');
-    window.location.href = '/user/userdetail?id=' + userId;
+//회원의 디테일 정보 조회+ 채팅  동적으로 생성된 요소에 대한 이벤트 리스너 등록
+// 테이블 내의 tr 클릭 이벤트 리스너
+$(document).on('click', 'tr.user-row', function () {
+    // 세션 값 확인
+    var loggedInUserId = $('#loggedInUserId').val();
+    if (!loggedInUserId) {
+        // 세션 값이 없는 경우 로그인 페이지로 리다이렉트
+        window.location.href = '/member/loginForm';
+    } else {
+        // 세션 값이 있는 경우 사용자 상세 페이지로 이동
+        var userId = $(this).attr('id').replace('user-row-', ''); // 유저 아이디 추출
+        window.location.href = '/user/userdetail?id=' + userId;
+    }
 });
+
+
+
 
 function updateStatus(username, status) {
     // 사용자 이름(username)을 기반으로 해당하는 span 요소를 찾아 상태를 변경

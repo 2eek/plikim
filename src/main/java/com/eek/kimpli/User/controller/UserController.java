@@ -33,24 +33,37 @@ public class UserController {
     model.addAttribute("userSession", authentication.getPrincipal());
     return "member/mypage";
 }
+//    //랜덤 회원리스트 페이징
+//@GetMapping("/")
+//public String randomlist(Model model, @PageableDefault(size = 3) Pageable pageable) {
+//    Page<User> findRandomUsers = userRepository.findRandomUsers(pageable);
+//    model.addAttribute("randomUser", findRandomUsers);
+//    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//    model.addAttribute("userSession", authentication.getPrincipal());
+//    return "index";
+//}
 
     //페이징+검색
-@GetMapping("/")
-public String list(Model model, @PageableDefault(size = 3) Pageable pageable) {
-    Page<User> findRandomUsers = userRepository.findRandomUsers(pageable);
+    @GetMapping("/")
+    public String userlist(Model model, @PageableDefault(size = 3) Pageable pageable) {
+            Page<User> findRandomUsers = userRepository.findRandomUsers(pageable);
+        model.addAttribute("randomUser", findRandomUsers);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        model.addAttribute("userSession", authentication.getPrincipal());
+        Page<User> users = userRepository.findAll(pageable);
+        int currentPage = users.getPageable().getPageNumber() + 1; // 현재 페이지 번호 (0부터 시작)
+        int startPage = Math.max(1, currentPage - 2); // 현재 페이지 주변에 2 페이지씩 보여주기
+        int endPage = Math.min(users.getTotalPages(), startPage + 4);
+        model.addAttribute("startPage",startPage);
+        model.addAttribute("endPage",endPage);
+        model.addAttribute("user", users);
+        		System.out.println("hi");
+         return "index";
+    }
 
-    int currentPage = findRandomUsers.getNumber() + 1;
-    int startPage = Math.max(1, currentPage - 2);
-    int endPage = Math.min(findRandomUsers.getTotalPages(), startPage + 4);
 
-    model.addAttribute("startPage", startPage);
-    model.addAttribute("endPage", endPage);
-    model.addAttribute("user", findRandomUsers);
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    model.addAttribute("userSession", authentication.getPrincipal());
 
-    return "index";
-}
+
 
 
 @GetMapping("/user/userdetail")

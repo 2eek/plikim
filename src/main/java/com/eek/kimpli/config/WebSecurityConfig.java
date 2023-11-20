@@ -55,11 +55,11 @@ public SessionRegistry sessionRegistry() {
                 .sessionRegistry(sessionRegistry())
                 .expiredUrl("/member/loginForm") // 세션이 만료된 경우 이동할 URL
                 .and()
-            .and()
-            .logout()
-                .permitAll()
-                .logoutSuccessUrl("/member/loginForm")
-                .invalidateHttpSession(true);
+                .and()
+                .logout()
+                    .permitAll()
+                    .logoutSuccessUrl("/member/loginForm")
+                    .invalidateHttpSession(true);
 
 
 

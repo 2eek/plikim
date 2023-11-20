@@ -75,9 +75,9 @@
             </tbody>
         </table>
 
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-                <li class="page-item" th:classappend="${user.pageable.pageNumber == 0} ? 'disabled'">
+        <nav aria-label="Page navigation example" style="text-align: center;">
+    <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${user.pageable.pageNumber == 0} ? 'disabled'" style="margin-left:350px ">
                     <a class="page-link text-dark" th:classappend="${user.pageable.pageNumber == 0} ? 'text-primary' : 'text-dark'" href="#"
                        th:href="@{/(page=${user.pageable.pageNumber - 1},  searchText=${param.searchText})}" tabindex="-1"
                        aria-disabled="true">Previous</a>
@@ -92,6 +92,14 @@
                        th:classappend="${user.pageable.pageNumber == user.totalPages - 1} ? 'text-primary' : 'text-dark'"
                        href="#" th:href="@{/(page=${user.pageable.pageNumber + 1}, searchText=${param.searchText})}">Next</a>
                 </li>
+                <!--회원 검색-->
+                <div style="margin-left:100px ">
+                <form class="d-flex" role="search" method="GET" th:classappend="${menu} == 'mypage'? 'active'"
+                      th:action="${#authorization.expression('isAuthenticated()') ? '/user/searchbyname' : '/member/loginForm'}">
+                     <input id="userSearchText" name="id" th:value="${param.searchText}" class="form-control me-2" type="text" placeholder="Search"  style="margin-left: 7px;"  aria-label="Search">
+                    <button id="userSearchButton" class="btn btn-outline-success"   style="margin-left:3px;" type="submit">Search</button>
+                </form>
+                </div>
             </ul>
         </nav>
     </div>
@@ -128,6 +136,25 @@
     <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
  <script src="/js/onlineJs.js"></script>
 
+<script>
+    $(document).ready(function() {
+        $('#userSearchButton').click(function(event) {
+            var searchText = $('#userSearchText').val();
+
+            // Check if the search input has a value
+            if (searchText.trim() !== '') {
+                // If there is a value, allow the form action to proceed
+                return true;
+            } else {
+                // If there is no value, prevent the form from submitting
+                event.preventDefault();
+                $('#userSearchText').focus();
+                alert('Please enter a search term.');
+                return false;
+            }
+        });
+    });
+</script>
 
 
 </body>

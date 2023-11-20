@@ -12,6 +12,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)// 자동 증 (IDENTITY사용하면 시퀀스 따로 안만들어도 됨)
     private Long id;
+    //private String userEmail;
     private String username;
     private String password;
     private Boolean enabled;

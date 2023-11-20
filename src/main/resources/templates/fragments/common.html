@@ -68,7 +68,7 @@
 
             <!-- 검색 -->
             <form class="d-flex" role="search" , method="GET" th:classappend="${menu} == 'mypage'? 'active'" th:action="@{/board/list}">
-                <input id="searchText" name="searchText" th:value="${param.searchText}" class="form-control me-2" type="text" placeholder="Search"  style="margin-left: 7px;"  aria-label="Search">
+                <input id="searchText" name="searchText" th:value="${param.searchText}" class="form-control me-2" type="text" placeholder="게시글 검색"  style="margin-left: 7px;"  aria-label="Search">
                 <button class="btn btn-outline-success"   style="margin-left:3px;" type="submit">Search</button>
             </form>
 

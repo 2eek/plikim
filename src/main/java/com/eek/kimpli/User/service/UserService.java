@@ -15,6 +15,9 @@ public class UserService {
     final UserRepository userRepository;
     final PasswordEncoder passwordEncoder;
 
+
+
+    //회원가입
     public User save(User user){
        String encodedPassword = passwordEncoder.encode(user.getPassword());
        user.setPassword(encodedPassword);

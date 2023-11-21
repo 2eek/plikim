@@ -1,6 +1,8 @@
 package com.eek.kimpli.User.model;
 
 import lombok.Data;
+import org.springframework.web.context.annotation.SessionScope;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;

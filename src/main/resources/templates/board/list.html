@@ -16,6 +16,9 @@
 <div class = "container">
     <div> 총 건수: <span th:text="${boards.totalElements}"></span></div>
 </div>
+<!--<div th:text="${#authentication.name}" id="username" hidden></div>-->
+<input type="hidden" id="loggedInUserId" name="loggedInUserId" th:if="${#authorization.expression('isAuthenticated()')}" th:value="${userSession.username}" />
+
 
 
     <div style="width: 80%; margin: 0 auto;">
@@ -49,18 +52,30 @@
                 </li>
             </ul>
        </nav>
-
         <div class="text-right">
-                <button id="wri" type="button" class="btn btn-primary">글작성</button>
+                <button id="wri" type="button"  th:action="${#authorization.expression('isAuthenticated()')}" class="btn btn-primary">글작성</button>
         </div>
     </div>
 
 <script>
-     document.getElementById('wri').addEventListener('click',function (){
-           location.href = "/board/saveForm";
-     });
+
+
+    document.getElementById('wri').addEventListener('click', function () {
+        // Check if the user is authenticated (logged in)
+  var loggedInUserId = $('#loggedInUserId').val();
+
+        if (!loggedInUserId) {
+
+              // If not authenticated, show an alert and navigate to the login page
+            alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+            location.href = "/member/loginForm"; // 로그인 페이지 URL에 맞게 수정하세요
+
+        } else {
+            // If authenticated, navigate to the write form page
+            location.href = "/board/saveForm";
+        }
+    });
+
 </script>
-
-
 </body>
 </html>

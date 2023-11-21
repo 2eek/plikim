@@ -7,6 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,7 +28,7 @@ public class BoardController {
 
     //페이징+검색
     @GetMapping("/list")
-    public String list(Model model, @PageableDefault(size = 3)  Pageable pageable,
+    public String list(Model model, @PageableDefault(size = 5)  Pageable pageable,
                        @RequestParam(required = false,defaultValue = "") String searchText) {
         Page<Board> boards = boardRepository.findByTitleContainingOrContentContaining(searchText,searchText,pageable);
         int currentPage = boards.getPageable().getPageNumber() + 1; // 현재 페이지 번호 (0부터 시작)
@@ -34,35 +37,60 @@ public class BoardController {
         model.addAttribute("startPage",startPage);
         model.addAttribute("endPage",endPage);
         model.addAttribute("boards", boards);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        // 현재 사용자의 세션 정보
+        model.addAttribute("userSession", authentication.getPrincipal());
         return "board/list";
     }
 
+//게시글 상세보기 -> 수정 가능
+@GetMapping("/saveForm")
+public String saveForm(Model model, @RequestParam(required = false) Long id) {
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    String username = auth.getName();
 
 
-    //생성자 주입방식으로 의존성주입받게됨
-   @GetMapping("/saveForm")//입력폼을 보여줌
-    public String saveForm(Model model, @RequestParam(required = false) Long id) {
-    if(id ==null) {
+
+//게시물 작성
+    if (id == null) {
         model.addAttribute("board", new Board());
-         System.out.println("아이디 값 없을 때:"+ model);
-     } else {
-    Board board = boardRepository.findById(id).orElse(null);
-    model.addAttribute("board", board);
-        System.out.println("아이디 값 있을 때:"+board);
+        model.addAttribute("username", username);
+        System.out.println("게시물의 아이디 값 없을 때:" + model);
+    } else {
+         Board board = boardRepository.findById(id).orElse(null);
+         // 조회수 증가
+        board.setViews(board.getViews() + 1);
+
+        // DB에 업데이트
+        boardRepository.save(board);
+       //게시물 상세보기
+        model.addAttribute("board", board);
+        model.addAttribute("username", username);
+        System.out.println("아이디 값 있을 때:" + board);
     }
 
     return "board/save";
 }
 
+
+
     //DB에 저장
     @PostMapping("/save")
     public String save(@Valid Board board, BindingResult bindingResult) {
-        boardValidator.validate(board,bindingResult);
-        if(bindingResult.hasErrors()){
-            return "board/save";
-        }
+        //해당 객체의 필드에 대한 유효성을 검증하고, 검증 결과는 BindingResult 객체에 저장됌
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername();
+        board.setAuthor(username);
+//        boardValidator.validate(board,bindingResult);
+//        if(bindingResult.hasErrors()){
+//            System.out.println("A");
+//            return "board/save";
+//        }
+        //
         boardRepository.save(board);
-            return "redirect:/board/list";
+          System.out.println('B');
+            return "redirect:/";
 }
 
 //    @PostMapping("/save")

@@ -31,11 +31,12 @@
             </tr>
           </thead>
           <tbody>
+            <!--반복문-->
             <tr th:each="boarda : ${boards}">
               <td th:text="${boarda.id}">번호</td>
              <!-- 상세조회 -->
-              <td><a th:text="${boarda.title}" th:href="@{/board/saveForm(id=${boarda.id})}"> 제목</a></td>
-              <td>홍길동</td>
+              <td><a th:text="${boarda.title}" th:href="@{/board/detail(id=${boarda.id})}"> 제목</a></td>
+              <td th:text="${boarda.author}"></td>
             </tr>
           </tbody>
         </table>
@@ -72,7 +73,7 @@
 
         } else {
             // If authenticated, navigate to the write form page
-            location.href = "/board/saveForm";
+            location.href = "/board/writeForm";
         }
     });
 

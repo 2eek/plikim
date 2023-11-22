@@ -9,104 +9,128 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
-import javax.validation.Valid;
 
+import javax.validation.Valid;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/board")
 public class BoardController {
 
-    //DI일어남. 여기에 인스턴스가 들어옴
+    // DI일어남. 여기에 인스턴스가 들어옴
     final BoardRepository boardRepository;
     final BoardValidator boardValidator;
 
-    //페이징+검색
+    // 페이징+검색
     @GetMapping("/list")
-    public String list(Model model, @PageableDefault(size = 5)  Pageable pageable,
-                       @RequestParam(required = false,defaultValue = "") String searchText) {
-        Page<Board> boards = boardRepository.findByTitleContainingOrContentContaining(searchText,searchText,pageable);
+    public String list(Model model, @PageableDefault(size = 5) Pageable pageable,
+                       @RequestParam(required = false, defaultValue = "") String searchText) {
+        Page<Board> boards = boardRepository.findByTitleContainingOrContentContaining(searchText, searchText, pageable);
         int currentPage = boards.getPageable().getPageNumber() + 1; // 현재 페이지 번호 (0부터 시작)
         int startPage = Math.max(1, currentPage - 2); // 현재 페이지 주변에 2 페이지씩 보여주기
         int endPage = Math.min(boards.getTotalPages(), startPage + 4);
-        model.addAttribute("startPage",startPage);
-        model.addAttribute("endPage",endPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
         model.addAttribute("boards", boards);
+        System.out.println("게시물 리스트?"+boards);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         // 현재 사용자의 세션 정보
         model.addAttribute("userSession", authentication.getPrincipal());
         return "board/list";
     }
 
-//게시글 상세보기 -> 수정 가능
-@GetMapping("/saveForm")
-public String saveForm(Model model, @RequestParam(required = false) Long id) {
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    String username = auth.getName();
+    // 글 작성폼
+    @GetMapping("/writeForm")
+    public String writeForm(Model model) {
+        // 로그인한 회원 값 넘기기
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
 
+        // 작성자 이름으로 셋팅된 새로운 Board 객체 생성
+        Board board = new Board();
+        board.setAuthor(username);
+        model.addAttribute("board", board);
 
+        return "board/writeForm";
+    }
 
-//게시물 작성
-    if (id == null) {
-        model.addAttribute("board", new Board());
-        model.addAttribute("username", username);
-        System.out.println("게시물의 아이디 값 없을 때:" + model);
-    } else {
-         Board board = boardRepository.findById(id).orElse(null);
-         // 조회수 증가
+    // 글 저장 메서드
+    @PostMapping("/save")
+    public String save(@Valid Board board, BindingResult bindingResult) {
+        System.out.println("Received data: " + board.toString());
+        try {
+            // 현재 사용자의 세션 정보를 가져와서 작성자로 설정
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String username = auth.getName();
+
+            // 작성자 이름으로 설정된 새로운 Board 객체 생성
+            board.setAuthor(username);
+
+            // 유효성 검사
+            boardValidator.validate(board, bindingResult);
+
+            if (bindingResult.hasErrors()) {
+                System.out.println("Validation errors:");
+                List<ObjectError> errors = bindingResult.getAllErrors();
+                for (ObjectError error : errors) {
+                    System.out.println(error.getDefaultMessage());
+                }
+                return "board/writeForm"; // 오류가 있으면 폼으로 다시 이동
+            }
+
+            // 게시글 조회
+            if (board.getId() != null) {
+                // 키 값인 id가 있으면 update
+                Board existingBoard = boardRepository.findById(board.getId()).orElse(null);
+
+                if (existingBoard != null) {
+                    // 조회수 유지
+                    board.setViews(existingBoard.getViews());
+
+                    // 현재 시간으로 갱신
+                    board.setUpdatedDate(LocalDateTime.now());
+
+                    // 이미 저장된 데이터를 업데이트
+                    boardRepository.save(board);
+                    System.out.println('B');
+                }
+            } else {
+                // 키 값인 id가 없으면 그냥 저장
+                boardRepository.save(board);
+            }
+
+            return "redirect:list";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    // 게시글 상세보기 -> 수정 가능
+    @GetMapping("/detail")
+    public String detail(Model model, @RequestParam(required = false) Long id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+
+        Board board = boardRepository.findById(id).orElse(null);
+        // 조회수 증가
         board.setViews(board.getViews() + 1);
 
         // DB에 업데이트
         boardRepository.save(board);
-       //게시물 상세보기
+        // 게시물 상세보기
         model.addAttribute("board", board);
         model.addAttribute("username", username);
         System.out.println("아이디 값 있을 때:" + board);
+
+        return "board/detail";
     }
-
-    return "board/save";
-}
-
-
-
-    //DB에 저장
-    @PostMapping("/save")
-    public String save(@Valid Board board, BindingResult bindingResult) {
-        //해당 객체의 필드에 대한 유효성을 검증하고, 검증 결과는 BindingResult 객체에 저장됌
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String username = userDetails.getUsername();
-        board.setAuthor(username);
-//        boardValidator.validate(board,bindingResult);
-//        if(bindingResult.hasErrors()){
-//            System.out.println("A");
-//            return "board/save";
-//        }
-        //
-        boardRepository.save(board);
-          System.out.println('B');
-            return "redirect:/";
-}
-
-//    @PostMapping("/save")
-//    public String save(@ModelAttribute BoardDTO boardDTO){
-//        System.out.println("boardDTO ="+ boardDTO);
-//        boardService.save(boardDTO);
-//        return "redirect:/";
-//    }
-
-    //HTTP GET 요청을 처리하며, "/list" 경로로 들어오는 요청을 이 핸들러 메소드로 매핑함
-//    @GetMapping("/list")
-//    public String findAll(Model model){
-//        // DB에서 전체 게시글 데이터를 가져와서 list.html에 보여준다
-//        List<BoardDTO> boardDTOList = boardService.findAll();
-            //모델에 담긴 데이터들을 타임리프에서 사용할 수 있다.
-//        model.addAttribute("boardList",boardDTOList);
-//        return "board/list";
-//    }
 }

@@ -38,7 +38,8 @@
             <td th:text="${boarda.id}">번호</td>
             <td><a th:text="${boarda.title}" th:href="@{/board/detail(id=${boarda.id})}"> 제목</a></td>
             <td th:text="${boarda.author}">작성자</td>
-            <td th:text="${#dates.format(boarda.createdDate, 'yyyy-MM-dd')}">작성일자</td>
+            <td th:text="${#temporals.format(boarda.createdDate, 'yyyy-MM-dd')}">작성일자</td>
+
             <td th:text="${boarda.views}">조회수</td>
             </tr>
           </tbody>

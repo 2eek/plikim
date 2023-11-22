@@ -34,7 +34,7 @@
             <tr th:each="boarda : ${boards}">
               <td th:text="${boarda.id}">번호</td>
              <!-- 상세조회 -->
-              <td><a th:text="${boarda.title}" th:href="@{/board/saveForm(id=${boarda.id})}"> 제목</a></td>
+              <td><a th:text="${boarda.title}" th:href="@{/board/detail(id=${boarda.id})}"> 제목</a></td>
               <td>홍길동</td>
             </tr>
           </tbody>
@@ -72,7 +72,7 @@
 
         } else {
             // If authenticated, navigate to the write form page
-            location.href = "/board/saveForm";
+            location.href = "/board/writeForm";
         }
     });
 

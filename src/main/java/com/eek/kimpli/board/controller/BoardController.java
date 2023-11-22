@@ -2,6 +2,7 @@ package com.eek.kimpli.board.controller;
 
 import com.eek.kimpli.board.model.Board;
 import com.eek.kimpli.board.repository.BoardRepository;
+import com.eek.kimpli.board.service.BoardService;
 import com.eek.kimpli.board.validator.BoardValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,7 +28,7 @@ public class BoardController {
     // DI일어남. 여기에 인스턴스가 들어옴
     final BoardRepository boardRepository;
     final BoardValidator boardValidator;
-
+    final BoardService boardService;
     // 페이징+검색
     @GetMapping("/list")
     public String list(Model model, @PageableDefault(size = 5) Pageable pageable,
@@ -61,58 +62,14 @@ public class BoardController {
         return "board/writeForm";
     }
 
-    // 글 저장 메서드
-    @PostMapping("/save")
+         @PostMapping("/save")
     public String save(@Valid Board board, BindingResult bindingResult) {
         System.out.println("Received data: " + board.toString());
-        try {
-            // 현재 사용자의 세션 정보를 가져와서 작성자로 설정
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            String username = auth.getName();
-
-            // 작성자 이름으로 설정된 새로운 Board 객체 생성
-            board.setAuthor(username);
-
-            // 유효성 검사
-            boardValidator.validate(board, bindingResult);
-
-            if (bindingResult.hasErrors()) {
-                System.out.println("Validation errors:");
-                List<ObjectError> errors = bindingResult.getAllErrors();
-                for (ObjectError error : errors) {
-                    System.out.println(error.getDefaultMessage());
-                }
-                return "board/writeForm"; // 오류가 있으면 폼으로 다시 이동
-            }
-
-            // 게시글 조회
-            if (board.getId() != null) {
-                // 키 값인 id가 있으면 update
-                Board existingBoard = boardRepository.findById(board.getId()).orElse(null);
-
-                if (existingBoard != null) {
-                    // 조회수 유지
-                    board.setViews(existingBoard.getViews());
-
-                    // 현재 시간으로 갱신
-                    board.setUpdatedDate(LocalDateTime.now());
-
-                    // 이미 저장된 데이터를 업데이트
-                    boardRepository.save(board);
-                    System.out.println('B');
-                }
-            } else {
-                // 키 값인 id가 없으면 그냥 저장
-                boardRepository.save(board);
-            }
-
-            return "redirect:list";
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
+        String resultView =  boardService.saveOrUpdateBoard(board, bindingResult);
+        //케이스에 따라 뷰 구분
+        return resultView;
     }
+
 
     // 게시글 상세보기 -> 수정 가능
     @GetMapping("/detail")

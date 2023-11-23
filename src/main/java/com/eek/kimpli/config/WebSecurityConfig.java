@@ -42,16 +42,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/member/loginForm")
                 .permitAll()
                 .loginProcessingUrl("/login")
-//                .successHandler(loginSuccessHandler) // 커스텀 핸들러 등록
-                .and()
-            .sessionManagement()
-                .maximumSessions(1)
-                .sessionRegistry(sessionRegistry())
-                .expiredUrl("/member/loginForm")
-                .and()
                 .and()
             .logout()
-                .logoutSuccessUrl("/")  /* 로그아웃 성공시 이동할 url */
+                .logoutSuccessUrl("/member/loginForm")  /* 로그아웃 성공시 이동할 url */
                 .invalidateHttpSession(true)  /*로그아웃시 세션 제거*/
                 .deleteCookies("JSESSIONID")  /*쿠키 제거*/
                 .clearAuthentication(true)    /*권한정보 제거*/
@@ -59,7 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
             .sessionManagement()
                 .maximumSessions(1) /* session 허용 갯수 */
-                .expiredUrl("member/loginForm") /* session 만료시 이동 페이지*/
+                .expiredUrl("/member/loginForm") /* session 만료시 이동 페이지*/
                 .maxSessionsPreventsLogin(false); /* 동일한 사용자 로그인시 x, false 일 경우 기존 사용자 session 종료*/
     }
 

@@ -36,30 +36,29 @@ public SessionRegistry sessionRegistry() {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .authorizeRequests()
-                        //누구나 접근 가능
-                        .antMatchers("/", "/account/register", "/css/**", "/api/**" ,"/img/**","/static/**","/member/memberjoin").permitAll()
-                        //로그인이 필요함. 인증 필요!
-                        //.anyRequest().authenticated()
-                .anyRequest().permitAll()
-                        .and()
-                .formLogin()
-                        .loginPage("/member/loginForm")
-                        .permitAll()
-                       .loginProcessingUrl("/login") // 스프링 시큐리티에서 처리하기위한 주소. /login post방식.
-                     .defaultSuccessUrl("/")
-                        .and()
-                .sessionManagement()
-                .maximumSessions(1) // 최대 세션 수
-                .sessionRegistry(sessionRegistry())
-                .expiredUrl("/member/loginForm") // 세션이 만료된 경우 이동할 URL
-                .and()
-                .and()
-                .logout()
-                    .permitAll()
-                    .logoutSuccessUrl("/member/loginForm")
-                    .invalidateHttpSession(true);
+               .csrf().disable()
+    .authorizeRequests()
+        .antMatchers("/", "/account/register", "/css/**", "/js/**","/api/**", "/img/**", "/static/**", "/member/memberjoin").permitAll()
+        .anyRequest().authenticated()
+        .and()
+    .formLogin()
+        .loginPage("/member/loginForm")
+        .permitAll()
+        .loginProcessingUrl("/login") // 스프링 시큐리티에서 처리하기 위한 주소. /login post 방식.
+        .defaultSuccessUrl("/")
+        .and()
+    .sessionManagement()
+        .maximumSessions(1)
+        .maxSessionsPreventsLogin(true)
+        .sessionRegistry(sessionRegistry())
+        .expiredUrl("/") // 중복 로그인 시 기존 세션 만료 후 이동할 URL
+        .and()
+    .and()
+    .logout()
+        .invalidateHttpSession(true)
+        .deleteCookies("JSESSIONID")
+        .logoutSuccessUrl("/")
+        .permitAll();
 
 
 

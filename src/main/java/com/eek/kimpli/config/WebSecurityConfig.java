@@ -13,6 +13,7 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 import javax.sql.DataSource;
 
@@ -62,18 +63,18 @@ public SessionRegistry sessionRegistry() {
                 .expiredUrl("/member/loginForm") // 세션이 만료된 경우 이동할 URL
                 .and()
                 .and()
-                .logout()
-                    .permitAll()
-                    .logoutSuccessUrl("/member/loginForm")
-                    .invalidateHttpSession(true);
-
-
-
-
-
+              .logout()
+    .permitAll()
+    .logoutSuccessHandler(logoutSuccessHandler())
+    .invalidateHttpSession(true);
 
 
     }
+
+@Bean
+public LogoutSuccessHandler logoutSuccessHandler() {
+    return new CustomLogoutSuccessHandler();
+}
 
     //로그인 과정에서의 스프링 내부에서 인증수행한다.
 @Autowired

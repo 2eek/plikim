@@ -63,14 +63,17 @@
 
             </thead>
             <tbody>
-            <tr th:each="user : ${user}" th:id="'user-row-' + ${user.id}" class="user-row">
+            <tr th:each="user : ${user}" th:id="'user-row-' + ${user.index}" class="user-row">
                 <td>프로필 사진 이미지</td>
                 <td>
-                    <a th:href="@{/user/userdetail(id=${user.id})}" th:text="${user.id}">사용자 이름</a>
+                    <!-- 링크는 그대로 두되, 클릭 이벤트에 대한 핸들링을 추가 -->
+                    <a th:href="@{/user/userdetail(id=${user.index})}" th:text="${user.userId}" class="user-link">
+                        사용자 이름
+                    </a>
                 </td>
                 <td>자기소개</td>
                 <td>
-                    <span th:if="${#authorization.expression('isAuthenticated()')}" th:id="'status-' + ${user.username}" style="color: gray;">오프라인</span>
+                    <span th:if="${#authorization.expression('isAuthenticated()')}" th:id="'status-' + ${user.userId}" style="color: gray;">오프라인</span>
                 </td>
             </tr>
             </tbody>
@@ -117,17 +120,19 @@
                     <th scope="col">이름</th>
                 </tr>
                 </thead>
+
                 <tbody>
-                <tr th:each="randomUser : ${randomUser}" th:id="'user-row-' + ${randomUser.id}" class="user-row">
+<tr th:each="randomUser : ${randomUser}" th:id="'user-row-' + ${randomUser.index}" class="user-row" th:if="${randomUser != null}">
                     <td>프로필 사진 이미지</td>
-                    <td>
-                        <a th:href="@{/user/userdetail(id=${randomUser.id})}" th:text="${randomUser.id}">사용자 아이디</a>
+                    <td >
+                        <a th:href="@{/user/userdetail(id=${randomUser.index})}" th:text="${randomUser.userId}">사용자 아이디</a>
                     </td>
-                    <td>
-                        <a th:id="${randomUser.username}" th:text="${randomUser.username}">사용자 이름</a>
+                    <td th:text="${randomUser.userName}">
+                        사용자 이름
                     </td>
                 </tr>
                 </tbody>
+
             </table>
         </div>
     </div>

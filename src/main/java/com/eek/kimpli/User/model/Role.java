@@ -12,10 +12,9 @@ import java.util.List;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long index;
     private String name;//권한이름
-    @ManyToMany(mappedBy = "roles")
-//    @JsonIgnore
-
-private List<User> users = new ArrayList<>();
+    @ManyToMany(mappedBy = "roles") //mappedBy는 User클래스에 있는 roles
+//private List<User> users = new ArrayList<>();
+    private List<User> users = new ArrayList<>(); ///nullPointException 방지
 }

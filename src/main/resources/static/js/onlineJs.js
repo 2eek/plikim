@@ -32,12 +32,22 @@ $(document).on('click', 'tr.user-row', function () {
         window.location.href = '/member/loginForm';
     } else {
         // 세션 값이 있는 경우 사용자 상세 페이지로 이동
-        var userId = $(this).attr('id').replace('user-row-', ''); // 유저 아이디 추출
-        window.location.href = '/user/userdetail?id=' + userId;
+        var index = $(this).attr('id').replace('user-row-', ''); // 유저 아이디 추출
+        window.location.href = '/user/userdetail?id=' + index;
     }
 });
 
+ // 사용자 아이디 클릭 시 로그인 페이지로 리다이렉트 (세션 값이 없는 경우)
+    $(document).on('click', 'a.user-link', function (e) {
+        // 세션 값 확인
+        var loggedInUserId = $('#loggedInUserId').val();
 
+        // 세션 값이 없는 경우 로그인 페이지로 리다이렉트
+        if (!loggedInUserId) {
+            e.preventDefault(); // 기본 동작 중단
+            window.location.href = '/member/loginForm';
+        }
+    });
 
 
 function updateStatus(username, status) {

@@ -68,6 +68,10 @@ public SessionRegistry sessionRegistry() {
 
 
 
+
+
+
+
     }
 
     //로그인 과정에서의 스프링 내부에서 인증수행한다.

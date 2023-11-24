@@ -19,7 +19,7 @@ public class MyController {
 //				return "chat/chat";
 //			}
 @GetMapping("/chat")
-public String chat(Model model, @RequestParam(name = "userId") String userIndex) {
+public String chat(Model model, @RequestParam(name = "userId") String userId) {
     model.addAttribute("userId", userId); // userId를 모델에 추가' 대화 상대방.
     //로그인한 계정
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

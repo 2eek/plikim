@@ -13,9 +13,13 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)// 자동 증 (IDENTITY사용하면 시퀀스 따로 안만들어도 됨)
-    private Long id;
-    //private String userEmail;
-    private String username;
+    private Long index;
+
+    private String userId; //회원의 아이디
+    private String email;
+    private String userName;
+    private String birthday;
+    private String phoneNumber;
     private String password;
     private Boolean enabled;
 
@@ -23,10 +27,10 @@ public class User {
     @ManyToMany
     @JoinTable(
             name = "user_role",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private List<Role> roles = new ArrayList<>();
-
+            joinColumns = @JoinColumn(name = "user_index"),
+            inverseJoinColumns = @JoinColumn(name = "role_index"))
+    //private List<Role> roles = new ArrayList<>();
+     private List<Role> roles = new ArrayList<>(); //nullPointException 방지
 
 //    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 //    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)

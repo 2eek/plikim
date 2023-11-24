@@ -52,8 +52,9 @@ public class UserController {
 public String userlist(Model model, @PageableDefault(size = 5) Pageable pageable) {
 
     // 로그인 계정
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+   Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     model.addAttribute("userSession", authentication.getPrincipal());
+    System.out.println("세션에 뭐있나??"+authentication.getPrincipal());
 
     // 페이징된 전체 회원 목록
     Page<User> users = userRepository.findAll(pageable);
@@ -75,8 +76,8 @@ public String userlist(Model model, @PageableDefault(size = 5) Pageable pageable
 
         //페이징+검색
     @GetMapping("user/searchbyname")
-    public String getUserDetailbySearch(@RequestParam(required = false) Long id, Model model) {
-   User userdetail = userRepository.findById(id).orElse(null);
+    public String getUserDetailbySearch(@RequestParam(required = false) Long index, Model model) {
+   User userdetail = userRepository.findById(index).orElse(null);
     if (userdetail == null) {
         // 사용자 정보가 없을 경우 적절한 처리
         return "redirect:/"; // 예를 들어, 오류 페이지로 리다이렉트
@@ -93,21 +94,29 @@ public String userlist(Model model, @PageableDefault(size = 5) Pageable pageable
 @GetMapping("/user/userdetail")
 public String getUserDetail(@RequestParam(required = false) Long id, Model model) {
     // 사용자 정보를 id를 기반으로 데이터베이스에서 가져오는 코드 작성
+    if (id == null) {
+        // id가 null인 경우 적절한 처리
+        return "redirect:/";
+    }
+
     User userdetail = userRepository.findById(id).orElse(null);
+
     if (userdetail == null) {
         // 사용자 정보가 없을 경우 적절한 처리
-        return "redirect:/error"; // 예를 들어, 오류 페이지로 리다이렉트
+        return "redirect:/";
     }
+
     model.addAttribute("user", userdetail);
-    //로그인 회원 세션 활용
+    // 로그인 회원 세션 활용
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     // 현재 사용자의 세션 정보
     model.addAttribute("userSession", authentication.getPrincipal());
     return "member/userdetail"; // 사용자 정보가 있는 경우 상세 정보 페이지로 이동
 }
 
+
         //회원가입
-        @PostMapping("/member/saveTest")
+        @PostMapping("/user/save")
     public String JoinTest(@ModelAttribute("user") User user, Model model, @PageableDefault(size = 3) Pageable pageable) {
         Page<User> users = userRepository.findAll(pageable);
         int currentPage = users.getPageable().getPageNumber() + 1; // 현재 페이지 번호 (0부터 시작)

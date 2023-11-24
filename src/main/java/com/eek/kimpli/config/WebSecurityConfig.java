@@ -26,12 +26,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     final PasswordEncoder passwordEncoder;
    //로그인 시 userId 칼럼명 사용
       // 주입 받은 필터를 빈으로 등록
-    @Bean
-    public CustomUsernamePasswordAuthenticationFilter customUsernamePasswordAuthenticationFilter() throws Exception {
-        CustomUsernamePasswordAuthenticationFilter filter = new CustomUsernamePasswordAuthenticationFilter();
-        filter.setAuthenticationManager(authenticationManagerBean());
-        return filter;
-    }
+//    @Bean
+//    public CustomUsernamePasswordAuthenticationFilter customUsernamePasswordAuthenticationFilter() throws Exception {
+//        CustomUsernamePasswordAuthenticationFilter filter = new CustomUsernamePasswordAuthenticationFilter();
+//        filter.setAuthenticationManager(authenticationManagerBean());
+//        return filter;
+//    }
 
   @Bean
 public SessionRegistry sessionRegistry() {
@@ -41,7 +41,7 @@ public SessionRegistry sessionRegistry() {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-      .addFilterAt(customUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class) // 필터 빈을 호출하여 등록
+//      .addFilterAt(customUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class) // 필터 빈을 호출하여 등록
                 .csrf().disable()
                 .authorizeRequests()
                         //누구나 접근 가능
@@ -65,16 +65,16 @@ public SessionRegistry sessionRegistry() {
                 .and()
               .logout()
     .permitAll()
-    .logoutSuccessHandler(logoutSuccessHandler())
+//    .logoutSuccessHandler(logoutSuccessHandler())
     .invalidateHttpSession(true);
 
 
     }
 
-@Bean
-public LogoutSuccessHandler logoutSuccessHandler() {
-    return new CustomLogoutSuccessHandler();
-}
+//@Bean
+//public LogoutSuccessHandler logoutSuccessHandler() {
+//    return new CustomLogoutSuccessHandler();
+//}
 
     //로그인 과정에서의 스프링 내부에서 인증수행한다.
 @Autowired

@@ -33,7 +33,7 @@ public class BoardController {
     @GetMapping("/list")
     public String list(Model model, @PageableDefault(size = 5) Pageable pageable,
                        @RequestParam(required = false, defaultValue = "") String searchText) {
-        Page<Board> boards = boardRepository.findByTitleContainingOrContentContaining(searchText, searchText, pageable);
+        Page<Board> boards = boardRepository.findByTitleContainingOrContentContainingOrAuthorContaining(searchText, searchText,searchText, pageable);
         int currentPage = boards.getPageable().getPageNumber() + 1; // 현재 페이지 번호 (0부터 시작)
         int startPage = Math.max(1, currentPage - 2); // 현재 페이지 주변에 2 페이지씩 보여주기
         int endPage = Math.min(boards.getTotalPages(), startPage + 4);

@@ -19,10 +19,12 @@ public class MyController {
 //				return "chat/chat";
 //			}
 @GetMapping("/chat")
-public String chat(Model model, @RequestParam(name = "userId") String userId) {
-    model.addAttribute("userId", userId); // userId를 모델에 추가
+public String chat(Model model, @RequestParam(name = "userIndex") String userIndex) {
+    model.addAttribute("userId", userIndex); // userId를 모델에 추가'
+    //로그인한 계정
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     model.addAttribute("userSession", authentication.getPrincipal());
+    System.out.println("채팅 시 로그인한 계정"+authentication.getPrincipal());
     return "chat/chat";
 }
 

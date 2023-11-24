@@ -12,7 +12,6 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-
 import javax.sql.DataSource;
 
 @Configuration
@@ -20,13 +19,8 @@ import javax.sql.DataSource;
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-
-
-
     final DataSource dataSource;
-
     final PasswordEncoder passwordEncoder;
-
 
   @Bean
 public SessionRegistry sessionRegistry() {

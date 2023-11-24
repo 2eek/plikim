@@ -40,7 +40,8 @@ public SessionRegistry sessionRegistry() {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-      .addFilterAt(customUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class) // 필터 빈을 호출하여 등록                .csrf().disable()
+      .addFilterAt(customUsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class) // 필터 빈을 호출하여 등록
+                .csrf().disable()
                 .authorizeRequests()
                         //누구나 접근 가능
                         .antMatchers("/", "/account/register", "/css/**", "/js/**","/api/**" ,"/img/**","/static/**","/member/memberjoin").permitAll()

@@ -12,11 +12,6 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Query(value = "SELECT u FROM User u ORDER BY RAND()")
-    Page<User> findRandomUsers(Pageable pageable);
-
-
-     User findByUsername(String username);
 
       @Query(value = "SELECT * FROM user ORDER BY RAND() LIMIT 3", nativeQuery = true)
       List<User> findRandomUsers();

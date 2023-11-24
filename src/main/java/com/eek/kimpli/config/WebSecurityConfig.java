@@ -53,7 +53,8 @@ public SessionRegistry sessionRegistry() {
                         .loginPage("/member/loginForm") //매핑uri
                         .permitAll()
                        .loginProcessingUrl("/login") // 스프링 시큐리티에서 처리하기위한 주소. /login post방식.
-                     .defaultSuccessUrl("/")
+                        .usernameParameter("userId") // 이 부분을 추가
+                        .defaultSuccessUrl("/")
                         .and()
                 .sessionManagement()
                 .maximumSessions(1) // 최대 세션 수

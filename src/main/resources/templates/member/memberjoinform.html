@@ -15,10 +15,14 @@
         <input type="submit" value="회원가입">
     </form>
 
-
-<form action="/member/saveTest" method="post">
-    <input name="username" placeholder="아이디">
+<!--<form action="/user/save" method="post">-->
+<form th:action="@{/user/save}" method="post">
+    <input name="userId" placeholder="아이디">
     <input name="password" placeholder="비밀번호">
+    <input name="email" placeholder="이메일">
+    <input name="userName" placeholder="이름">
+    <input name="birthday" placeholder="생일">
+    <input name="phoneNumber" placeholder="전화번호">
     <button type="submit">회원가입테스트</button>
 </form>
 </body>

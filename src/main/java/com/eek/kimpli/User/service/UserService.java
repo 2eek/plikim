@@ -23,7 +23,8 @@ public class UserService {
        user.setPassword(encodedPassword);
        user.setEnabled(true);
        Role role = new Role();
-       role.setId(1L);
+      // 권한 이름에  1 주
+       role.setIndex(1L);  //어떤 권한 줄건지 1번이 'ROLE_user'
        user.getRoles().add(role);
 
         return userRepository.save(user);

@@ -67,7 +67,7 @@
     var userIndex = userButton.getAttribute('data-user-id');
     userButton.addEventListener('click', function() {
       var sender = document.getElementById('loggedInUserId').value;
-      var url = '/chat?userId=' + userIndex; // 상대방(디테일 정보의 주체) 사용자 ID를 쿼리 매개변수로 추가
+      var url = '/chat?userIndex=' + userIndex; // 상대방(디테일 정보의 주체) 사용자 ID를 쿼리 매개변수로 추가
       location.href = url; // /chat로 이동
     });
   });

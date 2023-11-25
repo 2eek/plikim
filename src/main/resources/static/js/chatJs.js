@@ -1,5 +1,3 @@
-
-
 var username = document.getElementById('loggedInUserId').value;
 var receiver = document.getElementById('userId').value;
 //채팅 알림
@@ -107,16 +105,14 @@ async function addMessage() {
     msg: msgInput.value,
     roomNum: roomNum.toString() // roomNum을 문자열로 변환
 };
-
+ //const response = await fetch( "http://localhost:9090/chat", {
     try {
 		const response = await fetch( "https://plikim.com/chat", {
-        //const response = await fetch( "http://localhost:9090/chat", {
             method: "post",
             body: JSON.stringify(chat),
             headers: {
                 "Content-Type": "application/json; charset=utf-8"
             }
-
 
 
         });

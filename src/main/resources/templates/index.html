@@ -63,11 +63,11 @@
 
             </thead>
             <tbody>
-            <tr th:each="user : ${user}" th:id="'user-row-' + ${user.index}" class="user-row">
+            <tr th:each="user : ${user}" th:id="'user-row-' + ${user.userId}" class="user-row">
                 <td>프로필 사진 이미지</td>
                 <td>
                     <!-- 링크는 그대로 두되, 클릭 이벤트에 대한 핸들링을 추가 -->
-                    <a th:href="@{/user/userdetail(id=${user.index})}" th:text="${user.userId}" class="user-link">
+                    <a th:href="@{/user/userdetail(id=${user.userId})}" th:text="${user.userId}" class="user-link">
                         사용자 이름
                     </a>
                 </td>
@@ -122,10 +122,10 @@
                 </thead>
 
                 <tbody>
-<tr th:each="randomUser : ${randomUser}" th:id="'user-row-' + ${randomUser.index}" class="user-row" th:if="${randomUser != null}">
+<tr th:each="randomUser : ${randomUser}" th:id="'user-row-' + ${randomUser.userId}" class="user-row" th:if="${randomUser != null}">
                     <td>프로필 사진 이미지</td>
                     <td >
-                        <a th:href="@{/user/userdetail(id=${randomUser.index})}" th:text="${randomUser.userId}">사용자 아이디</a>
+                        <a th:href="@{/user/userdetail(id=${randomUser.userId})}" th:text="${randomUser.userId}">사용자 아이디</a>
                     </td>
                     <td th:text="${randomUser.userName}">
                         사용자 이름

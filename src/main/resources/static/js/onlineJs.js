@@ -125,5 +125,5 @@ $(function () {
     connect();
     setInterval(function () {
         sendName();
-    }, 10000); // 5000 milliseconds = 5 seconds
+    }, 10000); // 10000 milliseconds = 10 seconds
 });

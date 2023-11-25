@@ -16,6 +16,7 @@ const eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`
 //const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}`);
 
 
+//DB에 있는 내용과 대화중 내용을 화면에 뿌려줌
 eventSource.onmessage = (event) => {
 	//console.log(1,event);
 	const data = JSON.parse(event.data);
@@ -97,39 +98,38 @@ function initYourMessage(data) {
 
 
 async function addMessage() {
-    let msgInput = document.querySelector("#chat-outgoing-msg");
+	let msgInput = document.querySelector("#chat-outgoing-msg");
 
 	let chat = {
-    sender: username,
-    receiver: receiver,
-    msg: msgInput.value,
-    roomNum: roomNum.toString() // roomNum을 문자열로 변환
-};
- //const response = await fetch( "http://localhost:9090/chat", {
-    try {
-		const response = await fetch( "https://plikim.com/chat", {
-            method: "post",
-            body: JSON.stringify(chat),
-            headers: {
-                "Content-Type": "application/json; charset=utf-8"
-            }
+		sender: username,
+		receiver: receiver,
+		msg: msgInput.value,
+		roomNum: roomNum.toString() // roomNum을 문자열로 변환
+	};
 
+	try {
+		const response = await fetch("https://plikim.com/chat", {
+			method: "post",
+			body: JSON.stringify(chat),
+			headers: {
+				"Content-Type": "application/json; charset=utf-8"
+			}
+		});
 
-        });
+		const responseData = await response.json(); // 서버 응답을 JSON으로 파싱
 
-        if (response.ok) {
-            // fetch 요청이 성공하면 추가 작업 수행
-            msgInput.value = "";
-        } else {
-            // 요청이 실패한 경우에 대한 처리
-            console.error("Fetch 요청 실패");
-        }
-    } catch (error) {
-        // 오류 처리
-        console.error("오류 발생: " + error);
-    }
+		if (response.ok) {
+			// 성공적인 응답 처리
+			msgInput.value = "";
+		} else {
+			// 요청이 실패한 경우에 대한 처리
+			console.error("Fetch 요청 실패", responseData);
+		}
+	} catch (error) {
+		// 오류 처리
+		console.error("오류 발생: " + error);
+	}
 }
-
 
 
 

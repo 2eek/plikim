@@ -3678,3 +3678,613 @@ Caused by: java.net.SocketException: Network is unreachable
 2023-11-25 17:04:27.733  INFO 16599 --- [restartedMain] com.eek.kimpli.KimpliApplication         : Started KimpliApplication in 1.862 seconds (JVM running for 13861.424)
 2023-11-25 17:04:27.735  INFO 16599 --- [restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation unchanged
 2023-11-25 17:05:27.631  INFO 16599 --- [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2023-11-25 17:35:27.566  INFO 16599 --- [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 2, active threads = 1, queued tasks = 0, completed tasks = 1]
+2023-11-25 18:01:07.218  WARN 16599 --- [HikariPool-5 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=2m2s135ms).
+2023-11-25 18:01:22.550  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f1', description='null'}-52.79.76.213:27017] org.mongodb.driver.cluster               : Exception in monitor thread while connecting to server 52.79.76.213:27017
+
+com.mongodb.MongoSocketReadTimeoutException: Timeout while receiving message
+	at com.mongodb.connection.netty.NettyStream$InboundBufferHandler.exceptionCaught(NettyStream.java:427) ~[mongodb-driver-core-4.6.1.jar:na]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeExceptionCaught(AbstractChannelHandlerContext.java:346) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeExceptionCaught(AbstractChannelHandlerContext.java:325) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.fireExceptionCaught(AbstractChannelHandlerContext.java:317) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at com.mongodb.connection.netty.NettyStream$ReadTimeoutTask.run(NettyStream.java:564) ~[mongodb-driver-core-4.6.1.jar:na]
+	at io.netty.util.concurrent.PromiseTask.runTask(PromiseTask.java:98) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.ScheduledFutureTask.run(ScheduledFutureTask.java:153) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:174) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:167) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:470) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at java.base/java.lang.Thread.run(Thread.java:834) ~[na:na]
+Caused by: io.netty.handler.timeout.ReadTimeoutException: null
+
+2023-11-25 18:01:22.589  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f2', description='null'}-52.79.76.213:27017] org.mongodb.driver.cluster               : Exception in monitor thread while connecting to server 52.79.76.213:27017
+
+com.mongodb.MongoSocketReadTimeoutException: Timeout while receiving message
+	at com.mongodb.connection.netty.NettyStream$InboundBufferHandler.exceptionCaught(NettyStream.java:427) ~[mongodb-driver-core-4.6.1.jar:na]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeExceptionCaught(AbstractChannelHandlerContext.java:346) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeExceptionCaught(AbstractChannelHandlerContext.java:325) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.fireExceptionCaught(AbstractChannelHandlerContext.java:317) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at com.mongodb.connection.netty.NettyStream$ReadTimeoutTask.run(NettyStream.java:564) ~[mongodb-driver-core-4.6.1.jar:na]
+	at io.netty.util.concurrent.PromiseTask.runTask(PromiseTask.java:98) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.ScheduledFutureTask.run(ScheduledFutureTask.java:153) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:174) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:167) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:470) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at java.base/java.lang.Thread.run(Thread.java:834) ~[na:na]
+Caused by: io.netty.handler.timeout.ReadTimeoutException: null
+
+2023-11-25 18:01:22.589  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f1', description='null'}-52.79.76.213:27017] org.mongodb.driver.cluster               : Exception in monitor thread while connecting to server 52.79.76.213:27017
+
+com.mongodb.MongoSocketOpenException: Exception opening socket
+	at com.mongodb.connection.netty.NettyStream$OpenChannelFutureListener.operationComplete(NettyStream.java:520) ~[mongodb-driver-core-4.6.1.jar:na]
+	at com.mongodb.connection.netty.NettyStream$OpenChannelFutureListener.operationComplete(NettyStream.java:488) ~[mongodb-driver-core-4.6.1.jar:na]
+	at io.netty.util.concurrent.DefaultPromise.notifyListener0(DefaultPromise.java:590) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.DefaultPromise.notifyListenersNow(DefaultPromise.java:557) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.DefaultPromise.notifyListeners(DefaultPromise.java:492) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.DefaultPromise.setValue0(DefaultPromise.java:636) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.DefaultPromise.setFailure0(DefaultPromise.java:629) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.DefaultPromise.tryFailure(DefaultPromise.java:118) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.connect(AbstractNioChannel.java:284) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.connect(DefaultChannelPipeline.java:1342) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeConnect(AbstractChannelHandlerContext.java:653) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.connect(AbstractChannelHandlerContext.java:632) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.connect(AbstractChannelHandlerContext.java:616) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.DefaultChannelPipeline.connect(DefaultChannelPipeline.java:978) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannel.connect(AbstractChannel.java:265) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.bootstrap.Bootstrap$3.run(Bootstrap.java:264) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:174) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:167) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:470) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at java.base/java.lang.Thread.run(Thread.java:834) ~[na:na]
+Caused by: io.netty.channel.AbstractChannel$AnnotatedSocketException: Network is unreachable: /52.79.76.213:27017
+Caused by: java.net.SocketException: Network is unreachable
+	at java.base/sun.nio.ch.Net.connect0(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.connect(Net.java:483) ~[na:na]
+	at java.base/sun.nio.ch.Net.connect(Net.java:472) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:694) ~[na:na]
+	at io.netty.util.internal.SocketUtils$3.run(SocketUtils.java:91) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.internal.SocketUtils$3.run(SocketUtils.java:88) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at java.base/java.security.AccessController.doPrivileged(Native Method) ~[na:na]
+	at io.netty.util.internal.SocketUtils.connect(SocketUtils.java:88) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.socket.nio.NioSocketChannel.doConnect(NioSocketChannel.java:322) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.connect(AbstractNioChannel.java:248) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.connect(DefaultChannelPipeline.java:1342) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeConnect(AbstractChannelHandlerContext.java:653) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.connect(AbstractChannelHandlerContext.java:632) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.connect(AbstractChannelHandlerContext.java:616) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.DefaultChannelPipeline.connect(DefaultChannelPipeline.java:978) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannel.connect(AbstractChannel.java:265) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.bootstrap.Bootstrap$3.run(Bootstrap.java:264) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:174) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:167) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:470) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at java.base/java.lang.Thread.run(Thread.java:834) ~[na:na]
+
+2023-11-25 18:01:22.602  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f2', description='null'}-52.79.76.213:27017] org.mongodb.driver.cluster               : Exception in monitor thread while connecting to server 52.79.76.213:27017
+
+com.mongodb.MongoSocketOpenException: Exception opening socket
+	at com.mongodb.connection.netty.NettyStream$OpenChannelFutureListener.operationComplete(NettyStream.java:520) ~[mongodb-driver-core-4.6.1.jar:na]
+	at com.mongodb.connection.netty.NettyStream$OpenChannelFutureListener.operationComplete(NettyStream.java:488) ~[mongodb-driver-core-4.6.1.jar:na]
+	at io.netty.util.concurrent.DefaultPromise.notifyListener0(DefaultPromise.java:590) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.DefaultPromise.notifyListenersNow(DefaultPromise.java:557) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.DefaultPromise.notifyListeners(DefaultPromise.java:492) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.DefaultPromise.setValue0(DefaultPromise.java:636) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.DefaultPromise.setFailure0(DefaultPromise.java:629) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.DefaultPromise.tryFailure(DefaultPromise.java:118) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.connect(AbstractNioChannel.java:284) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.connect(DefaultChannelPipeline.java:1342) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeConnect(AbstractChannelHandlerContext.java:653) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.connect(AbstractChannelHandlerContext.java:632) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.connect(AbstractChannelHandlerContext.java:616) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.DefaultChannelPipeline.connect(DefaultChannelPipeline.java:978) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannel.connect(AbstractChannel.java:265) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.bootstrap.Bootstrap$3.run(Bootstrap.java:264) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:174) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:167) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:470) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at java.base/java.lang.Thread.run(Thread.java:834) ~[na:na]
+Caused by: io.netty.channel.AbstractChannel$AnnotatedSocketException: Network is unreachable: /52.79.76.213:27017
+Caused by: java.net.SocketException: Network is unreachable
+	at java.base/sun.nio.ch.Net.connect0(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.connect(Net.java:483) ~[na:na]
+	at java.base/sun.nio.ch.Net.connect(Net.java:472) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:694) ~[na:na]
+	at io.netty.util.internal.SocketUtils$3.run(SocketUtils.java:91) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.internal.SocketUtils$3.run(SocketUtils.java:88) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at java.base/java.security.AccessController.doPrivileged(Native Method) ~[na:na]
+	at io.netty.util.internal.SocketUtils.connect(SocketUtils.java:88) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.socket.nio.NioSocketChannel.doConnect(NioSocketChannel.java:322) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.connect(AbstractNioChannel.java:248) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.connect(DefaultChannelPipeline.java:1342) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeConnect(AbstractChannelHandlerContext.java:653) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.connect(AbstractChannelHandlerContext.java:632) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.connect(AbstractChannelHandlerContext.java:616) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.DefaultChannelPipeline.connect(DefaultChannelPipeline.java:978) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannel.connect(AbstractChannel.java:265) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.bootstrap.Bootstrap$3.run(Bootstrap.java:264) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:174) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:167) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:470) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at java.base/java.lang.Thread.run(Thread.java:834) ~[na:na]
+
+2023-11-25 18:01:32.791  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f1', description='null'}-52.79.76.213:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:689, serverValue:422}] to 52.79.76.213:27017
+2023-11-25 18:01:32.791  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f2', description='null'}-52.79.76.213:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:690, serverValue:424}] to 52.79.76.213:27017
+2023-11-25 18:01:32.792  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f1', description='null'}-52.79.76.213:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=52.79.76.213:27017, type=STANDALONE, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=9, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=25691541}
+2023-11-25 18:01:32.792  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f2', description='null'}-52.79.76.213:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=52.79.76.213:27017, type=STANDALONE, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=9, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=25584375}
+2023-11-25 18:01:35.584  INFO 16599 --- [cluster-rtt-ClusterId{value='6561aa8b56dd8e055d2675f2', description='null'}-52.79.76.213:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:692, serverValue:425}] to 52.79.76.213:27017
+2023-11-25 18:01:35.584  INFO 16599 --- [cluster-rtt-ClusterId{value='6561aa8b56dd8e055d2675f1', description='null'}-52.79.76.213:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:691, serverValue:426}] to 52.79.76.213:27017
+2023-11-25 18:02:14.729  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f1', description='null'}-52.79.76.213:27017] org.mongodb.driver.cluster               : Exception in monitor thread while connecting to server 52.79.76.213:27017
+
+com.mongodb.MongoSocketReadTimeoutException: Timeout while receiving message
+	at com.mongodb.connection.netty.NettyStream$InboundBufferHandler.exceptionCaught(NettyStream.java:427) ~[mongodb-driver-core-4.6.1.jar:na]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeExceptionCaught(AbstractChannelHandlerContext.java:346) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeExceptionCaught(AbstractChannelHandlerContext.java:325) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.fireExceptionCaught(AbstractChannelHandlerContext.java:317) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at com.mongodb.connection.netty.NettyStream$ReadTimeoutTask.run(NettyStream.java:564) ~[mongodb-driver-core-4.6.1.jar:na]
+	at io.netty.util.concurrent.PromiseTask.runTask(PromiseTask.java:98) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.ScheduledFutureTask.run(ScheduledFutureTask.java:153) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:174) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:167) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:470) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at java.base/java.lang.Thread.run(Thread.java:834) ~[na:na]
+Caused by: io.netty.handler.timeout.ReadTimeoutException: null
+
+2023-11-25 18:02:14.729  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f2', description='null'}-52.79.76.213:27017] org.mongodb.driver.cluster               : Exception in monitor thread while connecting to server 52.79.76.213:27017
+
+com.mongodb.MongoSocketReadTimeoutException: Timeout while receiving message
+	at com.mongodb.connection.netty.NettyStream$InboundBufferHandler.exceptionCaught(NettyStream.java:427) ~[mongodb-driver-core-4.6.1.jar:na]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeExceptionCaught(AbstractChannelHandlerContext.java:346) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeExceptionCaught(AbstractChannelHandlerContext.java:325) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.fireExceptionCaught(AbstractChannelHandlerContext.java:317) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at com.mongodb.connection.netty.NettyStream$ReadTimeoutTask.run(NettyStream.java:564) ~[mongodb-driver-core-4.6.1.jar:na]
+	at io.netty.util.concurrent.PromiseTask.runTask(PromiseTask.java:98) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.ScheduledFutureTask.run(ScheduledFutureTask.java:153) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:174) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:167) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:470) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at java.base/java.lang.Thread.run(Thread.java:834) ~[na:na]
+Caused by: io.netty.handler.timeout.ReadTimeoutException: null
+
+2023-11-25 18:02:14.766  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f1', description='null'}-52.79.76.213:27017] org.mongodb.driver.cluster               : Exception in monitor thread while connecting to server 52.79.76.213:27017
+
+com.mongodb.MongoSocketOpenException: Exception opening socket
+	at com.mongodb.connection.netty.NettyStream$OpenChannelFutureListener.operationComplete(NettyStream.java:520) ~[mongodb-driver-core-4.6.1.jar:na]
+	at com.mongodb.connection.netty.NettyStream$OpenChannelFutureListener.operationComplete(NettyStream.java:488) ~[mongodb-driver-core-4.6.1.jar:na]
+	at io.netty.util.concurrent.DefaultPromise.notifyListener0(DefaultPromise.java:590) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.DefaultPromise.notifyListenersNow(DefaultPromise.java:557) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.DefaultPromise.notifyListeners(DefaultPromise.java:492) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.DefaultPromise.setValue0(DefaultPromise.java:636) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.DefaultPromise.setFailure0(DefaultPromise.java:629) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.DefaultPromise.tryFailure(DefaultPromise.java:118) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.connect(AbstractNioChannel.java:284) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.connect(DefaultChannelPipeline.java:1342) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeConnect(AbstractChannelHandlerContext.java:653) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.connect(AbstractChannelHandlerContext.java:632) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.connect(AbstractChannelHandlerContext.java:616) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.DefaultChannelPipeline.connect(DefaultChannelPipeline.java:978) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannel.connect(AbstractChannel.java:265) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.bootstrap.Bootstrap$3.run(Bootstrap.java:264) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:174) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:167) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:470) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at java.base/java.lang.Thread.run(Thread.java:834) ~[na:na]
+Caused by: io.netty.channel.AbstractChannel$AnnotatedSocketException: Network is unreachable: /52.79.76.213:27017
+Caused by: java.net.SocketException: Network is unreachable
+	at java.base/sun.nio.ch.Net.connect0(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.connect(Net.java:483) ~[na:na]
+	at java.base/sun.nio.ch.Net.connect(Net.java:472) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:694) ~[na:na]
+	at io.netty.util.internal.SocketUtils$3.run(SocketUtils.java:91) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.internal.SocketUtils$3.run(SocketUtils.java:88) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at java.base/java.security.AccessController.doPrivileged(Native Method) ~[na:na]
+	at io.netty.util.internal.SocketUtils.connect(SocketUtils.java:88) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.socket.nio.NioSocketChannel.doConnect(NioSocketChannel.java:322) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.connect(AbstractNioChannel.java:248) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.connect(DefaultChannelPipeline.java:1342) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeConnect(AbstractChannelHandlerContext.java:653) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.connect(AbstractChannelHandlerContext.java:632) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.connect(AbstractChannelHandlerContext.java:616) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.DefaultChannelPipeline.connect(DefaultChannelPipeline.java:978) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannel.connect(AbstractChannel.java:265) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.bootstrap.Bootstrap$3.run(Bootstrap.java:264) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:174) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:167) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:470) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at java.base/java.lang.Thread.run(Thread.java:834) ~[na:na]
+
+2023-11-25 18:02:14.766  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f2', description='null'}-52.79.76.213:27017] org.mongodb.driver.cluster               : Exception in monitor thread while connecting to server 52.79.76.213:27017
+
+com.mongodb.MongoSocketOpenException: Exception opening socket
+	at com.mongodb.connection.netty.NettyStream$OpenChannelFutureListener.operationComplete(NettyStream.java:520) ~[mongodb-driver-core-4.6.1.jar:na]
+	at com.mongodb.connection.netty.NettyStream$OpenChannelFutureListener.operationComplete(NettyStream.java:488) ~[mongodb-driver-core-4.6.1.jar:na]
+	at io.netty.util.concurrent.DefaultPromise.notifyListener0(DefaultPromise.java:590) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.DefaultPromise.notifyListenersNow(DefaultPromise.java:557) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.DefaultPromise.notifyListeners(DefaultPromise.java:492) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.DefaultPromise.setValue0(DefaultPromise.java:636) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.DefaultPromise.setFailure0(DefaultPromise.java:629) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.DefaultPromise.tryFailure(DefaultPromise.java:118) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.connect(AbstractNioChannel.java:284) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.connect(DefaultChannelPipeline.java:1342) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeConnect(AbstractChannelHandlerContext.java:653) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.connect(AbstractChannelHandlerContext.java:632) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.connect(AbstractChannelHandlerContext.java:616) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.DefaultChannelPipeline.connect(DefaultChannelPipeline.java:978) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannel.connect(AbstractChannel.java:265) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.bootstrap.Bootstrap$3.run(Bootstrap.java:264) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:174) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:167) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:470) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at java.base/java.lang.Thread.run(Thread.java:834) ~[na:na]
+Caused by: io.netty.channel.AbstractChannel$AnnotatedSocketException: Network is unreachable: /52.79.76.213:27017
+Caused by: java.net.SocketException: Network is unreachable
+	at java.base/sun.nio.ch.Net.connect0(Native Method) ~[na:na]
+	at java.base/sun.nio.ch.Net.connect(Net.java:483) ~[na:na]
+	at java.base/sun.nio.ch.Net.connect(Net.java:472) ~[na:na]
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:694) ~[na:na]
+	at io.netty.util.internal.SocketUtils$3.run(SocketUtils.java:91) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.internal.SocketUtils$3.run(SocketUtils.java:88) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at java.base/java.security.AccessController.doPrivileged(Native Method) ~[na:na]
+	at io.netty.util.internal.SocketUtils.connect(SocketUtils.java:88) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.socket.nio.NioSocketChannel.doConnect(NioSocketChannel.java:322) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.connect(AbstractNioChannel.java:248) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.connect(DefaultChannelPipeline.java:1342) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeConnect(AbstractChannelHandlerContext.java:653) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.connect(AbstractChannelHandlerContext.java:632) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.connect(AbstractChannelHandlerContext.java:616) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.DefaultChannelPipeline.connect(DefaultChannelPipeline.java:978) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannel.connect(AbstractChannel.java:265) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.bootstrap.Bootstrap$3.run(Bootstrap.java:264) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:174) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:167) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:470) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at java.base/java.lang.Thread.run(Thread.java:834) ~[na:na]
+
+2023-11-25 18:37:20.396  WARN 16599 --- [HikariPool-5 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=34m31s255ms).
+2023-11-25 18:38:36.180  WARN 16599 --- [HikariPool-5 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=45s770ms).
+2023-11-25 18:43:13.567  WARN 16599 --- [HikariPool-5 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=1m42s680ms).
+2023-11-25 18:43:13.967  INFO 16599 --- [MessageBroker-2] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 3, active threads = 1, queued tasks = 0, completed tasks = 2]
+2023-11-25 18:44:50.807  WARN 16599 --- [HikariPool-5 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=1m7s229ms).
+2023-11-25 18:46:52.178  WARN 16599 --- [HikariPool-5 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=2m1s371ms).
+2023-11-25 18:48:36.691  WARN 16599 --- [HikariPool-5 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=1m14s503ms).
+2023-11-25 18:50:58.890  WARN 16599 --- [HikariPool-5 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=1m52s188ms).
+2023-11-25 18:52:12.121  WARN 16599 --- [HikariPool-5 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=1m13s230ms).
+2023-11-25 18:53:52.207  WARN 16599 --- [HikariPool-5 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=1m10s75ms).
+2023-11-25 18:55:48.430  WARN 16599 --- [HikariPool-5 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=1m56s224ms).
+2023-11-25 18:59:25.669  WARN 16599 --- [HikariPool-5 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=1m13s148ms).
+2023-11-25 19:00:46.167  WARN 16599 --- [HikariPool-5 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=50s486ms).
+2023-11-25 19:02:52.869  WARN 16599 --- [HikariPool-5 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=2m6s702ms).
+2023-11-25 19:06:12.643  WARN 16599 --- [HikariPool-5 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=1m38s329ms).
+2023-11-25 19:12:29.697  WARN 16599 --- [HikariPool-5 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=1m37s474ms).
+2023-11-25 19:14:17.917  WARN 16599 --- [HikariPool-5 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=1m18s209ms).
+2023-11-25 19:15:48.035  WARN 16599 --- [HikariPool-5 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=1m107ms).
+2023-11-25 19:17:03.571  WARN 16599 --- [HikariPool-5 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=1m15s536ms).
+2023-11-25 19:20:39.003  WARN 16599 --- [HikariPool-5 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=1m22s160ms).
+2023-11-25 19:22:19.453  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f1', description='null'}-52.79.76.213:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:1331, serverValue:429}] to 52.79.76.213:27017
+2023-11-25 19:22:19.454  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f2', description='null'}-52.79.76.213:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:1332, serverValue:430}] to 52.79.76.213:27017
+2023-11-25 19:22:19.455  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f1', description='null'}-52.79.76.213:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=52.79.76.213:27017, type=STANDALONE, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=9, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=28475625}
+2023-11-25 19:22:19.455  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f2', description='null'}-52.79.76.213:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=52.79.76.213:27017, type=STANDALONE, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=9, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=28655541}
+2023-11-25 19:22:22.128  INFO 16599 --- [cluster-rtt-ClusterId{value='6561aa8b56dd8e055d2675f2', description='null'}-52.79.76.213:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:1333, serverValue:432}] to 52.79.76.213:27017
+2023-11-25 19:22:22.128  INFO 16599 --- [cluster-rtt-ClusterId{value='6561aa8b56dd8e055d2675f1', description='null'}-52.79.76.213:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:1334, serverValue:433}] to 52.79.76.213:27017
+2023-11-25 19:22:29.467  WARN 16599 --- [HikariPool-5 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=1m20s453ms).
+2023-11-25 19:24:30.199  WARN 16599 --- [HikariPool-5 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=52s343ms).
+2023-11-25 19:27:33.321  WARN 16599 --- [HikariPool-5 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=1m50s114ms).
+2023-11-25 19:28:34.013  WARN 16599 --- [HikariPool-5 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=1m692ms).
+2023-11-25 19:28:40.428  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f1', description='null'}-52.79.76.213:27017] org.mongodb.driver.cluster               : Exception in monitor thread while connecting to server 52.79.76.213:27017
+
+com.mongodb.MongoSocketReadTimeoutException: Timeout while receiving message
+	at com.mongodb.connection.netty.NettyStream$InboundBufferHandler.exceptionCaught(NettyStream.java:427) ~[mongodb-driver-core-4.6.1.jar:na]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeExceptionCaught(AbstractChannelHandlerContext.java:346) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeExceptionCaught(AbstractChannelHandlerContext.java:325) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.fireExceptionCaught(AbstractChannelHandlerContext.java:317) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at com.mongodb.connection.netty.NettyStream$ReadTimeoutTask.run(NettyStream.java:564) ~[mongodb-driver-core-4.6.1.jar:na]
+	at io.netty.util.concurrent.PromiseTask.runTask(PromiseTask.java:98) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.ScheduledFutureTask.run(ScheduledFutureTask.java:153) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:174) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:167) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:470) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at java.base/java.lang.Thread.run(Thread.java:834) ~[na:na]
+Caused by: io.netty.handler.timeout.ReadTimeoutException: null
+
+2023-11-25 19:28:40.428  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f2', description='null'}-52.79.76.213:27017] org.mongodb.driver.cluster               : Exception in monitor thread while connecting to server 52.79.76.213:27017
+
+com.mongodb.MongoSocketReadTimeoutException: Timeout while receiving message
+	at com.mongodb.connection.netty.NettyStream$InboundBufferHandler.exceptionCaught(NettyStream.java:427) ~[mongodb-driver-core-4.6.1.jar:na]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeExceptionCaught(AbstractChannelHandlerContext.java:346) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeExceptionCaught(AbstractChannelHandlerContext.java:325) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.fireExceptionCaught(AbstractChannelHandlerContext.java:317) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at com.mongodb.connection.netty.NettyStream$ReadTimeoutTask.run(NettyStream.java:564) ~[mongodb-driver-core-4.6.1.jar:na]
+	at io.netty.util.concurrent.PromiseTask.runTask(PromiseTask.java:98) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.ScheduledFutureTask.run(ScheduledFutureTask.java:153) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:174) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:167) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:470) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at java.base/java.lang.Thread.run(Thread.java:834) ~[na:na]
+Caused by: io.netty.handler.timeout.ReadTimeoutException: null
+
+2023-11-25 19:28:40.485  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f2', description='null'}-52.79.76.213:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:1335, serverValue:437}] to 52.79.76.213:27017
+2023-11-25 19:28:40.485  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f1', description='null'}-52.79.76.213:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:1336, serverValue:436}] to 52.79.76.213:27017
+2023-11-25 19:28:40.486  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f2', description='null'}-52.79.76.213:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=52.79.76.213:27017, type=STANDALONE, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=9, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=26758542}
+2023-11-25 19:28:40.486  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f1', description='null'}-52.79.76.213:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=52.79.76.213:27017, type=STANDALONE, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=9, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=25947334}
+2023-11-25 19:31:03.852  WARN 16599 --- [HikariPool-5 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=1m59s841ms).
+2023-11-25 19:32:05.455  WARN 16599 --- [HikariPool-5 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=1m1s603ms).
+2023-11-25 19:33:58.682  WARN 16599 --- [HikariPool-5 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=1m23s219ms).
+2023-11-25 19:34:03.972  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f1', description='null'}-52.79.76.213:27017] org.mongodb.driver.cluster               : Exception in monitor thread while connecting to server 52.79.76.213:27017
+
+com.mongodb.MongoSocketReadTimeoutException: Timeout while receiving message
+	at com.mongodb.connection.netty.NettyStream$InboundBufferHandler.exceptionCaught(NettyStream.java:427) ~[mongodb-driver-core-4.6.1.jar:na]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeExceptionCaught(AbstractChannelHandlerContext.java:346) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeExceptionCaught(AbstractChannelHandlerContext.java:325) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.fireExceptionCaught(AbstractChannelHandlerContext.java:317) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at com.mongodb.connection.netty.NettyStream$ReadTimeoutTask.run(NettyStream.java:564) ~[mongodb-driver-core-4.6.1.jar:na]
+	at io.netty.util.concurrent.PromiseTask.runTask(PromiseTask.java:98) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.ScheduledFutureTask.run(ScheduledFutureTask.java:153) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:174) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:167) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:470) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at java.base/java.lang.Thread.run(Thread.java:834) ~[na:na]
+Caused by: io.netty.handler.timeout.ReadTimeoutException: null
+
+2023-11-25 19:34:03.973  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f2', description='null'}-52.79.76.213:27017] org.mongodb.driver.cluster               : Exception in monitor thread while connecting to server 52.79.76.213:27017
+
+com.mongodb.MongoSocketReadTimeoutException: Timeout while receiving message
+	at com.mongodb.connection.netty.NettyStream$InboundBufferHandler.exceptionCaught(NettyStream.java:427) ~[mongodb-driver-core-4.6.1.jar:na]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeExceptionCaught(AbstractChannelHandlerContext.java:346) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeExceptionCaught(AbstractChannelHandlerContext.java:325) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.fireExceptionCaught(AbstractChannelHandlerContext.java:317) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at com.mongodb.connection.netty.NettyStream$ReadTimeoutTask.run(NettyStream.java:564) ~[mongodb-driver-core-4.6.1.jar:na]
+	at io.netty.util.concurrent.PromiseTask.runTask(PromiseTask.java:98) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.ScheduledFutureTask.run(ScheduledFutureTask.java:153) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:174) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:167) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:470) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at java.base/java.lang.Thread.run(Thread.java:834) ~[na:na]
+Caused by: io.netty.handler.timeout.ReadTimeoutException: null
+
+2023-11-25 19:34:04.324  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f2', description='null'}-52.79.76.213:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:1337, serverValue:442}] to 52.79.76.213:27017
+2023-11-25 19:34:04.325  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f2', description='null'}-52.79.76.213:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=52.79.76.213:27017, type=STANDALONE, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=9, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=39711750}
+2023-11-25 19:34:04.335  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f1', description='null'}-52.79.76.213:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:1338, serverValue:443}] to 52.79.76.213:27017
+2023-11-25 19:34:04.337  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f1', description='null'}-52.79.76.213:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=52.79.76.213:27017, type=STANDALONE, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=9, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=49059375}
+2023-11-25 19:35:51.722  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f1', description='null'}-52.79.76.213:27017] org.mongodb.driver.cluster               : Exception in monitor thread while connecting to server 52.79.76.213:27017
+
+com.mongodb.MongoSocketReadTimeoutException: Timeout while receiving message
+	at com.mongodb.connection.netty.NettyStream$InboundBufferHandler.exceptionCaught(NettyStream.java:427) ~[mongodb-driver-core-4.6.1.jar:na]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeExceptionCaught(AbstractChannelHandlerContext.java:346) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeExceptionCaught(AbstractChannelHandlerContext.java:325) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.fireExceptionCaught(AbstractChannelHandlerContext.java:317) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at com.mongodb.connection.netty.NettyStream$ReadTimeoutTask.run(NettyStream.java:564) ~[mongodb-driver-core-4.6.1.jar:na]
+	at io.netty.util.concurrent.PromiseTask.runTask(PromiseTask.java:98) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.ScheduledFutureTask.run(ScheduledFutureTask.java:153) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:174) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:167) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:470) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at java.base/java.lang.Thread.run(Thread.java:834) ~[na:na]
+Caused by: io.netty.handler.timeout.ReadTimeoutException: null
+
+2023-11-25 19:35:51.723  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f2', description='null'}-52.79.76.213:27017] org.mongodb.driver.cluster               : Exception in monitor thread while connecting to server 52.79.76.213:27017
+
+com.mongodb.MongoSocketReadTimeoutException: Timeout while receiving message
+	at com.mongodb.connection.netty.NettyStream$InboundBufferHandler.exceptionCaught(NettyStream.java:427) ~[mongodb-driver-core-4.6.1.jar:na]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeExceptionCaught(AbstractChannelHandlerContext.java:346) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeExceptionCaught(AbstractChannelHandlerContext.java:325) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.fireExceptionCaught(AbstractChannelHandlerContext.java:317) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at com.mongodb.connection.netty.NettyStream$ReadTimeoutTask.run(NettyStream.java:564) ~[mongodb-driver-core-4.6.1.jar:na]
+	at io.netty.util.concurrent.PromiseTask.runTask(PromiseTask.java:98) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.ScheduledFutureTask.run(ScheduledFutureTask.java:153) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.runTask(AbstractEventExecutor.java:174) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:167) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:470) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:569) ~[netty-transport-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.97.Final.jar:4.1.97.Final]
+	at java.base/java.lang.Thread.run(Thread.java:834) ~[na:na]
+Caused by: io.netty.handler.timeout.ReadTimeoutException: null
+
+2023-11-25 19:35:51.783  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f1', description='null'}-52.79.76.213:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:1339, serverValue:446}] to 52.79.76.213:27017
+2023-11-25 19:35:51.783  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f2', description='null'}-52.79.76.213:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:1340, serverValue:445}] to 52.79.76.213:27017
+2023-11-25 19:35:51.783  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f1', description='null'}-52.79.76.213:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=52.79.76.213:27017, type=STANDALONE, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=9, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=22198042}
+2023-11-25 19:35:51.783  INFO 16599 --- [cluster-ClusterId{value='6561aa8b56dd8e055d2675f2', description='null'}-52.79.76.213:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=52.79.76.213:27017, type=STANDALONE, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=9, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=22425833}
+2023-11-25 19:36:06.021  WARN 16599 --- [HikariPool-5 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=1m37s327ms).
+2023-11-25 19:37:05.895  INFO 16599 --- [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 0 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(0)-CONNECTED(0)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], outboundChannel[pool size = 0, active threads = 0, queued tasks = 0, completed tasks = 0], sockJsScheduler[pool size = 4, active threads = 1, queued tasks = 0, completed tasks = 3]
+2023-11-25 19:41:42.022  WARN 16599 --- [HikariPool-5 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Thread starvation or clock leap detected (housekeeper delta=4m35s871ms).
+2023-11-25 19:57:00.920  INFO 38970 --- [restartedMain] com.eek.kimpli.KimpliApplication         : Starting KimpliApplication using Java 11.0.13 on 2eek-MacBookmAir.local with PID 38970 (/Users/2eek/plikim/target/classes started by 2eek in /Users/2eek/plikim)
+2023-11-25 19:57:00.927  INFO 38970 --- [restartedMain] com.eek.kimpli.KimpliApplication         : No active profile set, falling back to 1 default profile: "default"
+2023-11-25 19:57:00.995  INFO 38970 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2023-11-25 19:57:00.995  INFO 38970 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2023-11-25 19:57:01.971  INFO 38970 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2023-11-25 19:57:01.972  INFO 38970 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-11-25 19:57:02.025  INFO 38970 --- [restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data JPA - Could not safely identify store assignment for repository candidate interface com.eek.kimpli.chat.repository.ChatRepository; If you want this repository to be a JPA repository, consider annotating your entities with one of these annotations: javax.persistence.Entity, javax.persistence.MappedSuperclass (preferred), or consider extending one of the following types with your repository: org.springframework.data.jpa.repository.JpaRepository
+2023-11-25 19:57:02.044  INFO 38970 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 67 ms. Found 2 JPA repository interfaces.
+2023-11-25 19:57:02.095  INFO 38970 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2023-11-25 19:57:02.096  INFO 38970 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Reactive MongoDB repositories in DEFAULT mode.
+2023-11-25 19:57:02.105  INFO 38970 --- [restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Reactive MongoDB - Could not safely identify store assignment for repository candidate interface com.eek.kimpli.User.repository.UserRepository; If you want this repository to be a Reactive MongoDB repository, consider annotating your entities with one of these annotations: org.springframework.data.mongodb.core.mapping.Document (preferred), or consider extending one of the following types with your repository: org.springframework.data.mongodb.repository.ReactiveMongoRepository
+2023-11-25 19:57:02.106  INFO 38970 --- [restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Reactive MongoDB - Could not safely identify store assignment for repository candidate interface com.eek.kimpli.board.repository.BoardRepository; If you want this repository to be a Reactive MongoDB repository, consider annotating your entities with one of these annotations: org.springframework.data.mongodb.core.mapping.Document (preferred), or consider extending one of the following types with your repository: org.springframework.data.mongodb.repository.ReactiveMongoRepository
+2023-11-25 19:57:02.114  INFO 38970 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 17 ms. Found 1 Reactive MongoDB repository interfaces.
+2023-11-25 19:57:02.124  INFO 38970 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2023-11-25 19:57:02.124  INFO 38970 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+2023-11-25 19:57:02.132  INFO 38970 --- [restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data MongoDB - Could not safely identify store assignment for repository candidate interface com.eek.kimpli.User.repository.UserRepository; If you want this repository to be a MongoDB repository, consider annotating your entities with one of these annotations: org.springframework.data.mongodb.core.mapping.Document (preferred), or consider extending one of the following types with your repository: org.springframework.data.mongodb.repository.MongoRepository
+2023-11-25 19:57:02.133  INFO 38970 --- [restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data MongoDB - Could not safely identify store assignment for repository candidate interface com.eek.kimpli.board.repository.BoardRepository; If you want this repository to be a MongoDB repository, consider annotating your entities with one of these annotations: org.springframework.data.mongodb.core.mapping.Document (preferred), or consider extending one of the following types with your repository: org.springframework.data.mongodb.repository.MongoRepository
+2023-11-25 19:57:02.135  INFO 38970 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 10 ms. Found 0 MongoDB repository interfaces.
+2023-11-25 19:57:02.266  WARN 38970 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.eek.kimpli]' package. Please check your configuration.
+2023-11-25 19:57:02.825  INFO 38970 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9090 (http)
+2023-11-25 19:57:02.832  INFO 38970 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-11-25 19:57:02.835  INFO 38970 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.80]
+2023-11-25 19:57:02.898  INFO 38970 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-11-25 19:57:02.899  INFO 38970 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1903 ms
+2023-11-25 19:57:03.027  INFO 38970 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-11-25 19:57:03.053  INFO 38970 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.5.Final
+2023-11-25 19:57:03.161  INFO 38970 --- [restartedMain] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-11-25 19:57:03.210  INFO 38970 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-11-25 19:57:03.750  INFO 38970 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-11-25 19:57:03.762  INFO 38970 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2023-11-25 19:57:05.162  INFO 38970 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-11-25 19:57:05.172  INFO 38970 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-11-25 19:57:06.135  INFO 38970 --- [restartedMain] org.mongodb.driver.client                : MongoClient with metadata {"driver": {"name": "mongo-java-driver|reactive-streams|spring-boot", "version": "4.6.1"}, "os": {"type": "Darwin", "name": "Mac OS X", "architecture": "x86_64", "version": "11.2"}, "platform": "Java/Oracle Corporation/11.0.13+10-LTS-370"} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=null, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=MongoCredential{mechanism=null, userName='lee', source='admin', password=<hidden>, mechanismProperties=<hidden>}, streamFactoryFactory=NettyStreamFactoryFactory{eventLoopGroup=io.netty.channel.nio.NioEventLoopGroup@1908877f, socketChannelClass=class io.netty.channel.socket.nio.NioSocketChannel, allocator=PooledByteBufAllocator(directByDefault: true), sslContext=null}, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.Jep395RecordCodecProvider@12fe5362]}, clusterSettings={hosts=[52.79.76.213:27017], srvServiceName=mongodb, mode=SINGLE, requiredClusterType=UNKNOWN, requiredReplicaSetName='null', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='30000 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, sendBufferSize=0}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, sendBufferSize=0}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=false, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=JAVA_LEGACY, serverApi=null, autoEncryptionSettings=null, contextProvider=null}
+2023-11-25 19:57:06.157  INFO 38970 --- [restartedMain] org.mongodb.driver.client                : MongoClient with metadata {"driver": {"name": "mongo-java-driver|sync|spring-boot", "version": "4.6.1"}, "os": {"type": "Darwin", "name": "Mac OS X", "architecture": "x86_64", "version": "11.2"}, "platform": "Java/Oracle Corporation/11.0.13+10-LTS-370"} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=null, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=MongoCredential{mechanism=null, userName='lee', source='admin', password=<hidden>, mechanismProperties=<hidden>}, streamFactoryFactory=NettyStreamFactoryFactory{eventLoopGroup=io.netty.channel.nio.NioEventLoopGroup@442a7a8c, socketChannelClass=class io.netty.channel.socket.nio.NioSocketChannel, allocator=PooledByteBufAllocator(directByDefault: true), sslContext=null}, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.Jep395RecordCodecProvider@12fe5362]}, clusterSettings={hosts=[52.79.76.213:27017], srvServiceName=mongodb, mode=SINGLE, requiredClusterType=UNKNOWN, requiredReplicaSetName='null', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='30000 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, sendBufferSize=0}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, sendBufferSize=0}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=false, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=JAVA_LEGACY, serverApi=null, autoEncryptionSettings=null, contextProvider=null}
+2023-11-25 19:57:06.350  WARN 38970 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : Unable to start LiveReload server
+2023-11-25 19:57:06.470  WARN 38970 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-11-25 19:57:06.834  INFO 38970 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@25af8a37, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1a40370e, org.springframework.security.web.context.SecurityContextPersistenceFilter@6e403ac4, org.springframework.security.web.header.HeaderWriterFilter@a9a587a, org.springframework.security.web.authentication.logout.LogoutFilter@74e3228c, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@5b149fd9, org.springframework.security.web.session.ConcurrentSessionFilter@315cb03d, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@16194792, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@456abaec, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5a71aab9, org.springframework.security.web.session.SessionManagementFilter@7d25a715, org.springframework.security.web.access.ExceptionTranslationFilter@52431f2e, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@6c93855b]
+2023-11-25 19:57:07.068  INFO 38970 --- [cluster-ClusterId{value='6561d3020e74be232b7996a8', description='null'}-52.79.76.213:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:4, serverValue:450}] to 52.79.76.213:27017
+2023-11-25 19:57:07.068  INFO 38970 --- [cluster-ClusterId{value='6561d3020e74be232b7996a7', description='null'}-52.79.76.213:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:1, serverValue:449}] to 52.79.76.213:27017
+2023-11-25 19:57:07.068  INFO 38970 --- [cluster-rtt-ClusterId{value='6561d3020e74be232b7996a7', description='null'}-52.79.76.213:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:2, serverValue:448}] to 52.79.76.213:27017
+2023-11-25 19:57:07.074  INFO 38970 --- [cluster-rtt-ClusterId{value='6561d3020e74be232b7996a8', description='null'}-52.79.76.213:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:3, serverValue:451}] to 52.79.76.213:27017
+2023-11-25 19:57:07.076  INFO 38970 --- [cluster-ClusterId{value='6561d3020e74be232b7996a8', description='null'}-52.79.76.213:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=52.79.76.213:27017, type=STANDALONE, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=9, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=127936209}
+2023-11-25 19:57:07.076  INFO 38970 --- [cluster-ClusterId{value='6561d3020e74be232b7996a7', description='null'}-52.79.76.213:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=52.79.76.213:27017, type=STANDALONE, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=9, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=127716375}
+2023-11-25 19:57:07.098  INFO 38970 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2023-11-25 19:57:07.394  WARN 38970 --- [restartedMain] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'; nested exception is org.springframework.boot.web.server.PortInUseException: Port 9090 is already in use
+2023-11-25 19:57:09.529  INFO 38970 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-11-25 19:57:09.538  INFO 38970 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-11-25 19:57:09.549  INFO 38970 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-11-25 19:57:09.555  INFO 38970 --- [restartedMain] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2023-11-25 19:57:09.569  INFO 38970 --- [restartedMain] ConditionEvaluationReportLoggingListener : 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+2023-11-25 19:57:09.583 ERROR 38970 --- [restartedMain] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 9090 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 9090 or configure this application to listen on another port.
+
+2023-11-25 20:03:24.168  INFO 39427 --- [restartedMain] com.eek.kimpli.KimpliApplication         : Starting KimpliApplication using Java 11.0.13 on 2eek-MacBookmAir.local with PID 39427 (/Users/2eek/plikim/target/classes started by 2eek in /Users/2eek/plikim)
+2023-11-25 20:03:24.171  INFO 39427 --- [restartedMain] com.eek.kimpli.KimpliApplication         : No active profile set, falling back to 1 default profile: "default"
+2023-11-25 20:03:24.237  INFO 39427 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2023-11-25 20:03:24.237  INFO 39427 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2023-11-25 20:03:25.191  INFO 39427 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2023-11-25 20:03:25.192  INFO 39427 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-11-25 20:03:25.246  INFO 39427 --- [restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data JPA - Could not safely identify store assignment for repository candidate interface com.eek.kimpli.chat.repository.ChatRepository; If you want this repository to be a JPA repository, consider annotating your entities with one of these annotations: javax.persistence.Entity, javax.persistence.MappedSuperclass (preferred), or consider extending one of the following types with your repository: org.springframework.data.jpa.repository.JpaRepository
+2023-11-25 20:03:25.266  INFO 39427 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 69 ms. Found 2 JPA repository interfaces.
+2023-11-25 20:03:25.314  INFO 39427 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2023-11-25 20:03:25.314  INFO 39427 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Reactive MongoDB repositories in DEFAULT mode.
+2023-11-25 20:03:25.328  INFO 39427 --- [restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Reactive MongoDB - Could not safely identify store assignment for repository candidate interface com.eek.kimpli.User.repository.UserRepository; If you want this repository to be a Reactive MongoDB repository, consider annotating your entities with one of these annotations: org.springframework.data.mongodb.core.mapping.Document (preferred), or consider extending one of the following types with your repository: org.springframework.data.mongodb.repository.ReactiveMongoRepository
+2023-11-25 20:03:25.329  INFO 39427 --- [restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data Reactive MongoDB - Could not safely identify store assignment for repository candidate interface com.eek.kimpli.board.repository.BoardRepository; If you want this repository to be a Reactive MongoDB repository, consider annotating your entities with one of these annotations: org.springframework.data.mongodb.core.mapping.Document (preferred), or consider extending one of the following types with your repository: org.springframework.data.mongodb.repository.ReactiveMongoRepository
+2023-11-25 20:03:25.337  INFO 39427 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 22 ms. Found 1 Reactive MongoDB repository interfaces.
+2023-11-25 20:03:25.342  INFO 39427 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2023-11-25 20:03:25.343  INFO 39427 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+2023-11-25 20:03:25.346  INFO 39427 --- [restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data MongoDB - Could not safely identify store assignment for repository candidate interface com.eek.kimpli.User.repository.UserRepository; If you want this repository to be a MongoDB repository, consider annotating your entities with one of these annotations: org.springframework.data.mongodb.core.mapping.Document (preferred), or consider extending one of the following types with your repository: org.springframework.data.mongodb.repository.MongoRepository
+2023-11-25 20:03:25.347  INFO 39427 --- [restartedMain] .RepositoryConfigurationExtensionSupport : Spring Data MongoDB - Could not safely identify store assignment for repository candidate interface com.eek.kimpli.board.repository.BoardRepository; If you want this repository to be a MongoDB repository, consider annotating your entities with one of these annotations: org.springframework.data.mongodb.core.mapping.Document (preferred), or consider extending one of the following types with your repository: org.springframework.data.mongodb.repository.MongoRepository
+2023-11-25 20:03:25.349  INFO 39427 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 6 ms. Found 0 MongoDB repository interfaces.
+2023-11-25 20:03:25.490  WARN 39427 --- [restartedMain] o.m.s.mapper.ClassPathMapperScanner      : No MyBatis mapper was found in '[com.eek.kimpli]' package. Please check your configuration.
+2023-11-25 20:03:26.037  INFO 39427 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9090 (http)
+2023-11-25 20:03:26.044  INFO 39427 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-11-25 20:03:26.047  INFO 39427 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.80]
+2023-11-25 20:03:26.106  INFO 39427 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-11-25 20:03:26.107  INFO 39427 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1869 ms
+2023-11-25 20:03:26.228  INFO 39427 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-11-25 20:03:26.255  INFO 39427 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.5.Final
+2023-11-25 20:03:26.367  INFO 39427 --- [restartedMain] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-11-25 20:03:26.421  INFO 39427 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-11-25 20:03:26.729  INFO 39427 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-11-25 20:03:26.746  INFO 39427 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+2023-11-25 20:03:27.777  INFO 39427 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-11-25 20:03:27.791  INFO 39427 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-11-25 20:03:28.488  INFO 39427 --- [restartedMain] org.mongodb.driver.client                : MongoClient with metadata {"driver": {"name": "mongo-java-driver|reactive-streams|spring-boot", "version": "4.6.1"}, "os": {"type": "Darwin", "name": "Mac OS X", "architecture": "x86_64", "version": "11.2"}, "platform": "Java/Oracle Corporation/11.0.13+10-LTS-370"} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=null, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=MongoCredential{mechanism=null, userName='lee', source='admin', password=<hidden>, mechanismProperties=<hidden>}, streamFactoryFactory=NettyStreamFactoryFactory{eventLoopGroup=io.netty.channel.nio.NioEventLoopGroup@72f236c, socketChannelClass=class io.netty.channel.socket.nio.NioSocketChannel, allocator=PooledByteBufAllocator(directByDefault: true), sslContext=null}, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.Jep395RecordCodecProvider@7ac5eea9]}, clusterSettings={hosts=[52.79.76.213:27017], srvServiceName=mongodb, mode=SINGLE, requiredClusterType=UNKNOWN, requiredReplicaSetName='null', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='30000 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, sendBufferSize=0}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, sendBufferSize=0}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=false, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=JAVA_LEGACY, serverApi=null, autoEncryptionSettings=null, contextProvider=null}
+2023-11-25 20:03:28.504  INFO 39427 --- [restartedMain] org.mongodb.driver.client                : MongoClient with metadata {"driver": {"name": "mongo-java-driver|sync|spring-boot", "version": "4.6.1"}, "os": {"type": "Darwin", "name": "Mac OS X", "architecture": "x86_64", "version": "11.2"}, "platform": "Java/Oracle Corporation/11.0.13+10-LTS-370"} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=null, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=MongoCredential{mechanism=null, userName='lee', source='admin', password=<hidden>, mechanismProperties=<hidden>}, streamFactoryFactory=NettyStreamFactoryFactory{eventLoopGroup=io.netty.channel.nio.NioEventLoopGroup@eac7d7c, socketChannelClass=class io.netty.channel.socket.nio.NioSocketChannel, allocator=PooledByteBufAllocator(directByDefault: true), sslContext=null}, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.Jep395RecordCodecProvider@7ac5eea9]}, clusterSettings={hosts=[52.79.76.213:27017], srvServiceName=mongodb, mode=SINGLE, requiredClusterType=UNKNOWN, requiredReplicaSetName='null', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='30000 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, sendBufferSize=0}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, sendBufferSize=0}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=false, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=JAVA_LEGACY, serverApi=null, autoEncryptionSettings=null, contextProvider=null}
+2023-11-25 20:03:28.677  INFO 39427 --- [cluster-ClusterId{value='6561d4807f7bde788beff804', description='null'}-52.79.76.213:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:3, serverValue:454}] to 52.79.76.213:27017
+2023-11-25 20:03:28.678  INFO 39427 --- [cluster-rtt-ClusterId{value='6561d4807f7bde788beff804', description='null'}-52.79.76.213:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:4, serverValue:453}] to 52.79.76.213:27017
+2023-11-25 20:03:28.677  INFO 39427 --- [cluster-ClusterId{value='6561d4807f7bde788beff803', description='null'}-52.79.76.213:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:1, serverValue:452}] to 52.79.76.213:27017
+2023-11-25 20:03:28.678  INFO 39427 --- [cluster-rtt-ClusterId{value='6561d4807f7bde788beff803', description='null'}-52.79.76.213:27017] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:2, serverValue:455}] to 52.79.76.213:27017
+2023-11-25 20:03:28.683  INFO 39427 --- [cluster-ClusterId{value='6561d4807f7bde788beff804', description='null'}-52.79.76.213:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=52.79.76.213:27017, type=STANDALONE, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=9, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=110248375}
+2023-11-25 20:03:28.683  INFO 39427 --- [cluster-ClusterId{value='6561d4807f7bde788beff803', description='null'}-52.79.76.213:27017] org.mongodb.driver.cluster               : Monitor thread successfully connected to server with description ServerDescription{address=52.79.76.213:27017, type=STANDALONE, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=9, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=110137792}
+2023-11-25 20:03:28.728  INFO 39427 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2023-11-25 20:03:28.830  WARN 39427 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2023-11-25 20:03:29.141  INFO 39427 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@3321e720, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@211c820a, org.springframework.security.web.context.SecurityContextPersistenceFilter@660b7c2a, org.springframework.security.web.header.HeaderWriterFilter@4e7c4ca6, org.springframework.security.web.authentication.logout.LogoutFilter@52ce7d86, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@352ee137, org.springframework.security.web.session.ConcurrentSessionFilter@3e93a9e2, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@700b2d11, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4545eef4, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@5b0dff73, org.springframework.security.web.session.SessionManagementFilter@5b9ed1ac, org.springframework.security.web.access.ExceptionTranslationFilter@578e5ea9, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@7bbb836f]
+2023-11-25 20:03:29.291  INFO 39427 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2023-11-25 20:03:29.580  INFO 39427 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9090 (http) with context path ''
+2023-11-25 20:03:29.582  INFO 39427 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Starting...
+2023-11-25 20:03:29.583  INFO 39427 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=true, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7ddd78a6]]
+2023-11-25 20:03:29.583  INFO 39427 --- [restartedMain] o.s.m.s.b.SimpleBrokerMessageHandler     : Started.
+2023-11-25 20:03:29.598  INFO 39427 --- [restartedMain] com.eek.kimpli.KimpliApplication         : Started KimpliApplication in 6.03 seconds (JVM running for 7.092)
+2023-11-25 20:03:40.021  INFO 39427 --- [http-nio-9090-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-11-25 20:03:40.021  INFO 39427 --- [http-nio-9090-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-11-25 20:03:40.023  INFO 39427 --- [http-nio-9090-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2023-11-25 20:04:29.183  INFO 39427 --- [MessageBroker-1] o.s.w.s.c.WebSocketMessageBrokerStats    : WebSocketSession[0 current WS(0)-HttpStream(0)-HttpPoll(0), 1 total, 0 closed abnormally (0 connect failure, 0 send limit, 0 transport error)], stompSubProtocol[processed CONNECT(1)-CONNECTED(1)-DISCONNECT(0)], stompBrokerRelay[null], inboundChannel[pool size = 12, active threads = 0, queued tasks = 0, completed tasks = 12], outboundChannel[pool size = 2, active threads = 0, queued tasks = 0, completed tasks = 2], sockJsScheduler[pool size = 1, active threads = 1, queued tasks = 0, completed tasks = 0]
+2023-11-25 20:12:27.396  WARN 39427 --- [http-nio-9090-exec-4] o.s.w.s.m.m.a.ReactiveTypeHandler        : 
+!!!
+Streaming through a reactive type requires an Executor to write to the response.
+Please, configure a TaskExecutor in the MVC config under "async support".
+The SimpleAsyncTaskExecutor currently in use is not suitable under load.
+-------------------------------
+Controller:	com.eek.kimpli.chat.contorller.ChatController
+Method:		findByRoomNum
+Returning:	reactor.core.publisher.Flux<com.eek.kimpli.chat.model.Chat>
+!!!
+2023-11-25 20:12:27.660  INFO 39427 --- [nioEventLoopGroup-2-3] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:5, serverValue:456}] to 52.79.76.213:27017
+2023-11-25 20:16:19.541  INFO 39427 --- [nioEventLoopGroup-2-4] org.mongodb.driver.connection            : Opened connection [connectionId{localValue:6, serverValue:457}] to 52.79.76.213:27017
+2023-11-25 20:23:33.230  INFO 39427 --- [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopping...
+2023-11-25 20:23:33.231  INFO 39427 --- [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : BrokerAvailabilityEvent[available=false, SimpleBrokerMessageHandler [org.springframework.messaging.simp.broker.DefaultSubscriptionRegistry@7ddd78a6]]
+2023-11-25 20:23:33.232  INFO 39427 --- [SpringApplicationShutdownHook] o.s.m.s.b.SimpleBrokerMessageHandler     : Stopped.

@@ -92,6 +92,7 @@ public class ChatController {
 	public Flux<Chat> findByRoomNum(@PathVariable String roomNum) {
 		return chatRepository.mFindByRoomNum(roomNum)
 				.subscribeOn(Schedulers.boundedElastic());
+
 	}
 
 

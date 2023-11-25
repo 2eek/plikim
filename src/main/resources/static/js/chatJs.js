@@ -2,13 +2,16 @@
 
 var username = document.getElementById('loggedInUserId').value;
 var receiver = document.getElementById('userId').value;
+//채팅 알림
 let notificationBadge = document.getElementById('notificationBadge');
 let unreadCount = 0;
-  // let roomNumString = prompt("채팅방 번호를 입력하세요");
+
+//채팅방이름 만들기
 var roomNum = [username, receiver].sort().join('');
  //roomNum = parseInt(roomNumString);
 
-document.querySelector("#username").innerHTML = username;
+//상대방 아이디 표시
+document.querySelector("#username").innerHTML = receiver;
 
 // SSE 연결하기. 객체 생성. 크로스 오리진 자바스크립트 요청은 서버쪽에서 봉쇄하고 있다. -> 서버에서 처리함
 const eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`);

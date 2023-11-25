@@ -68,7 +68,7 @@ function updateLoginStatus(username, status) {
 
 const stompClient = new StompJs.Client({
     brokerURL: 'wss://plikim.com/gs-guide-websocket'
-    //brokerURL: 'ws://localhost:9090/gs-guide-websocket'
+   // brokerURL: 'ws://localhost:9090/gs-guide-websocket'
 });
 
 stompClient.onConnect = (frame) => {

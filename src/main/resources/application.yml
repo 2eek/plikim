@@ -55,7 +55,7 @@ spring:
   #database 연동 설정
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://52.79.76.213/plikim?serverTimezone=Asia/Seoul&useSSL=false&characterEncoding=UTF-8
+    url: jdbc:mysql://52.79.76.213/plikim?serverTimezone=Asia/Seoul&useSSL=false&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
     username: user1
     password: 1234
 

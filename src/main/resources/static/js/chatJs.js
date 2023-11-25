@@ -11,19 +11,9 @@ var roomNum = [username, receiver].sort().join('');
 document.querySelector("#username").innerHTML = receiver;
 
 // SSE 연결하기. 객체 생성. 크로스 오리진 자바스크립트 요청은 서버쪽에서 봉쇄하고 있다. -> 서버에서 처리함
-let eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`);
+const eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`);
+//const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}`);
 
-// 에러 처리를 위한 이벤트 핸들러 추가
-eventSource.onerror = function(event) {
-  console.error("SSE Connection Error", event);
-  // 적절한 조치를 취하거나 연결을 다시 시도할 수 있음
-  eventSource.close(); // 연결을 닫고
-  // 연결을 다시 시도하거나 새로운 EventSource를 생성하여 연결을 맺을 수 있음
-  eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`);
-};
-
-
-//DB에 있는 내용과 대화중 내용을 화면에 뿌려줌
 eventSource.onmessage = (event) => {
 	//console.log(1,event);
 	const data = JSON.parse(event.data);
@@ -47,6 +37,7 @@ function markAsRead() {
     unreadCount = 0;
     updateNotificationBadge();
 }
+
 
 
 // 파란박스 만들기. 보내는 대화박스
@@ -116,6 +107,7 @@ async function addMessage() {
 
 	try {
 		const response = await fetch("https://plikim.com/chat", {
+			//const response = await fetch( "http://localhost:9090/chat", {
 			method: "post",
 			body: JSON.stringify(chat),
 			headers: {
@@ -123,19 +115,18 @@ async function addMessage() {
 			}
 		});
 
-		const responseData = await response.json(); // 서버 응답을 JSON으로 파싱
 
-		if (response.ok) {
-			// 성공적인 응답 처리
-			msgInput.value = "";
-		} else {
-			// 요청이 실패한 경우에 대한 처리
-			console.error("Fetch 요청 실패", responseData);
-		}
-	} catch (error) {
-		// 오류 처리
-		console.error("오류 발생: " + error);
-	}
+        if (response.ok) {
+            // fetch 요청이 성공하면 추가 작업 수행
+            msgInput.value = "";
+        } else {
+            // 요청이 실패한 경우에 대한 처리
+            console.error("Fetch 요청 실패");
+        }
+    } catch (error) {
+        // 오류 처리
+        console.error("오류 발생: " + error);
+    }
 }
 
 

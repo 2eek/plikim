@@ -80,12 +80,12 @@ public class ChatController {
     final ChatRepository chatRepository;
 
 	// 귓속말 할때
-
-	@GetMapping(value = "/sender/{sender}/receiver/{receiver}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-	public Flux<Chat> getMsg(@PathVariable String sender, @PathVariable String receiver) {
-		return chatRepository.mFindBySender(sender, receiver)
-				.subscribeOn(Schedulers.boundedElastic());
-	}
+//
+//	@GetMapping(value = "/sender/{sender}/receiver/{receiver}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+//	public Flux<Chat> getMsg(@PathVariable String sender, @PathVariable String receiver) {
+//		return chatRepository.mFindBySender(sender, receiver)
+//				.subscribeOn(Schedulers.boundedElastic());
+//	}
 
 //sender의 채팅 내용이 db에 저장됨
 	@GetMapping(value = "/chat/roomNum/{roomNum}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)

@@ -37,15 +37,6 @@ public class UserController {
     model.addAttribute("userSession", authentication.getPrincipal());
     return "member/mypage";
 }
-//    //랜덤 회원리스트 페이징
-//@GetMapping("/")
-//public String randomlist(Model model, @PageableDefault(size = 3) Pageable pageable) {
-//    Page<User> findRandomUsers = userRepository.findRandomUsers(pageable);
-//    model.addAttribute("randomUser", findRandomUsers);
-//    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//    model.addAttribute("userSession", authentication.getPrincipal());
-//    return "index";
-//}
 
     //페이징+검색
 @GetMapping("/")
@@ -74,21 +65,21 @@ public String userlist(Model model, @PageableDefault(size = 5) Pageable pageable
 
 
 
-//        //페이징+검색
-//    @GetMapping("user/searchbyname")
-//    public String getUserDetailbySearch(@RequestParam(required = false) Long index, Model model) {
-//   User userdetail = userRepository.findById(index).orElse(null);
-//    if (userdetail == null) {
-//        // 사용자 정보가 없을 경우 적절한 처리
-//        return "redirect:/"; // 예를 들어, 오류 페이지로 리다이렉트
-//    }
-//    model.addAttribute("user", userdetail);
-//    //로그인 회원 세션 활용
-//    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//    // 현재 사용자의 세션 정보
-//    model.addAttribute("userSession", authentication.getPrincipal());
-//    return "member/userdetail"; // 사용자 정보가 있는 경우 상세 정보 페이지로 이동
-//}
+@GetMapping("/user/userdetail")
+public String getUserDetail(@RequestParam(required = false) String id, Model model) {
+    // 사용자 정보를 id를 기반으로 데이터베이스에서 가져오는 코드 작성
+    User userdetail = userRepository.findByUserId(id);
+    if (userdetail == null) {
+        // 사용자 정보가 없을 경우 적절한 처리
+        return "redirect:/error"; // 예를 들어, 오류 페이지로 리다이렉트
+    }
+    model.addAttribute("user", userdetail);
+    //로그인 회원 세션 활용
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    // 현재 사용자의 세션 정보
+    model.addAttribute("userSession", authentication.getPrincipal());
+    return "member/userdetail"; // 사용자 정보가 있는 경우 상세 정보 페이지로 이동
+}
 
 
 @GetMapping("user/searchbyname")

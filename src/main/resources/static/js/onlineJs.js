@@ -32,8 +32,8 @@ $(document).on('click', 'tr.user-row', function () {
         window.location.href = '/member/loginForm';
     } else {
         // 세션 값이 있는 경우 사용자 상세 페이지로 이동
-        var index = $(this).attr('id').replace('user-row-', ''); // 유저 아이디 추출
-        window.location.href = '/user/userdetail?id=' + index;
+        var id = $(this).attr('id').replace('user-row-', ''); // 유저 아이디 추출
+        window.location.href = '/user/userdetail?id=' + id;
     }
 });
 

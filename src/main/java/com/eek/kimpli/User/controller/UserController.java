@@ -5,7 +5,9 @@ import com.eek.kimpli.User.repository.UserRepository;
 import com.eek.kimpli.User.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
@@ -44,7 +48,8 @@ public String userlist(Model model, @PageableDefault(size = 5) Pageable pageable
    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     model.addAttribute("userSession", authentication.getPrincipal());
     System.out.println("세션에 뭐있나??"+authentication.getPrincipal());
-
+// 정렬 조건: "createdDate" 필드를 기준으로 내림차순 정렬
+    pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("createdDate").descending());
     // 페이징된 전체 회원 목록
     Page<User> users = userRepository.findAll(pageable);
     int currentPage = users.getPageable().getPageNumber() + 1;
@@ -115,7 +120,7 @@ public String getUserDetailbySearch(@RequestParam(required = false) String userI
         model.addAttribute("startPage",startPage);
         model.addAttribute("endPage",endPage);
         model.addAttribute("user", users);
-            System.out.println("회원가입되나");
+        System.out.println("회원가입되나");
         userService.save(user);
         System.out.println("회원가입안되나");
             return "redirect:/";

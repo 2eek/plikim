@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
@@ -118,7 +120,7 @@ public String getUserDetailbySearch(@RequestParam(required = false) String userI
         model.addAttribute("startPage",startPage);
         model.addAttribute("endPage",endPage);
         model.addAttribute("user", users);
-            System.out.println("회원가입되나");
+        System.out.println("회원가입되나");
         userService.save(user);
         System.out.println("회원가입안되나");
             return "redirect:/";

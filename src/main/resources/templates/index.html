@@ -34,37 +34,41 @@
 </main>
 <input type="hidden" id="loggedInUserId" name="loggedInUserId" th:if="${#authorization.expression('isAuthenticated()')}" th:value="${userSession.username}" />
 
-<!--        <div class="container-fluid" style="width: 150px; float: right;">-->
-<!--           <div class="col-md-6" style=" justify-content: end;">-->
-<!--            <!— 우측 사이드바 —>-->
-<!--            <table id="conversation" class="table table-striped" style="width: 150px;">-->
-<!--                    <thead>-->
-<!--                    <tr>-->
-<!--                        <th>로그인 회원</th>-->
-<!--                    </tr>-->
-<!--                    </thead>-->
-<!--                    <tbody th:if="${#authorization.expression('isAuthenticated()')}" id="greetings">-->
-<!--                    </tbody>-->
-<!--                </table>-->
-<!--            </div>-->
-<!--        </div>-->
-<div class="container-fluid" style="width: 150px; float: right;">
-    <div class="col-md-6" style=" justify-content: end;">
-        <!-- 우측 사이드바 -->
-        <table id="conversation" class="table table-striped" style="width: 150px;">
-            <thead>
-                <tr>
-                    <th>로그인 회원</th>
-                </tr>
-            </thead>
-            <tbody th:if="${#authorization.expression('isAuthenticated()')}" id="greetings">
-                <tr>
-                    <td th:text="${#authentication.name}"></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
+        <div class="container-fluid" style="width: 150px; float: right;">
+           <div class="col-md-6" style=" justify-content: end;">
+            <!— 우측 사이드바 —>
+            <table id="conversation" class="table table-striped" style="width: 150px;">
+                    <thead>
+                    <tr>
+                        <th>로그인 회원</th>
+                    </tr>
+                    </thead>
+                    <tbody th:if="${#authorization.expression('isAuthenticated()')}" id="greetings">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+
+
+<!--<div class="container-fluid" style="width: 150px; float: right;">-->
+<!--    <div class="col-md-6" style=" justify-content: end;">-->
+<!--        &lt;!&ndash; 우측 사이드바 &ndash;&gt;-->
+<!--        <table id="conversation" class="table table-striped" style="width: 150px;">-->
+<!--            <thead>-->
+<!--                <tr>-->
+<!--                    <th>로그인 회원</th>-->
+<!--                </tr>-->
+<!--            </thead>-->
+<!--            <tbody th:if="${#authorization.expression('isAuthenticated()')}" id="greetings">-->
+<!--                <tr th:each="user : ${onlineUsers}">-->
+<!--                    <td th:text="${user}"></td>-->
+<!--                </tr>-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--    </div>-->
+<!--</div>-->
 
 
 <main role="main" class="container">

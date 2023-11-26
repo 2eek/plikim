@@ -1,9 +1,12 @@
 package com.eek.kimpli.User.model;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.context.annotation.SessionScope;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,10 +21,20 @@ public class User {
     private String userId; //회원의 아이디
     private String email;
     private String userName;
-    private String birthday;
     private String phoneNumber;
     private String password;
     private Boolean enabled;
+@Column(columnDefinition = "DATE")
+@DateTimeFormat(pattern = "yyyy-MM-dd")
+private LocalDate birthday;
+
+    @Column(columnDefinition = "DATETIME")
+    private LocalDateTime createdDate;
+
+    @Column(columnDefinition = "DATETIME")
+    private LocalDateTime deletedDate;
+    private String loginType;
+    private String accessToken;
 
     //@JsonIgnore
     @ManyToMany

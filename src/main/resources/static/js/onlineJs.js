@@ -127,30 +127,3 @@ $(function () {
         sendName();
     }, 10000); // 10000 milliseconds = 10 seconds
 });
-
-
-
-//
-//
-// var stompClient = null;
-//
-// function connect() {
-//     var socket = new SockJS('/gs-guide-websocket');
-//     stompClient = Stomp.over(socket);
-//
-//     stompClient.connect({}, function (frame) {
-//         console.log('Connected: ' + frame);
-//         stompClient.subscribe('/topic/online-users', function (message) {
-//             var onlineUsers = JSON.parse(message.body);
-//             updateOnlineUsers(onlineUsers);
-//         });
-//     });
-// }
-//
-// function updateOnlineUsers(onlineUsers) {
-//     // 실제로는 여기에서 화면 업데이트를 수행해야 합니다.
-//     // 예를 들어, Vue.js 또는 React를 사용한다면 해당 프레임워크의 상태 관리 기능을 활용할 수 있습니다.
-//     console.log('Online Users:', onlineUsers);
-// }
-//
-// connect();

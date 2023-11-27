@@ -16,7 +16,6 @@
 <div class = "container">
     <div> 총 건수: <span th:text="${boards.totalElements}"></span></div>
 </div>
-<!--<div th:text="${#authentication.name}" id="username" hidden></div>-->
 <input type="hidden" id="loggedInUserId" name="loggedInUserId" th:if="${#authorization.expression('isAuthenticated()')}" th:value="${userSession.username}" />
 
 

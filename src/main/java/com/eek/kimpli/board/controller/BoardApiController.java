@@ -3,9 +3,14 @@ package com.eek.kimpli.board.controller;
 import com.eek.kimpli.board.model.Board;
 import com.eek.kimpli.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.StringUtils;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,6 +21,29 @@ class BoardApiController {
   final BoardRepository repository;
 
   //전체 조회. 게시글 제목과 내용. 검색 방법 :  /api/boards?title=제목
+
+//로그인 확인 컨트롤러
+  @GetMapping("/check-login")
+    public ResponseEntity<Map<String, Object>> checkLogin(Authentication authentication) {
+        // ResponseEntity 객체를 생성하여 응답할 데이터를 담음
+        Map<String, Object> response = new HashMap<>();
+
+        // 사용자가 인증되어 있는지 확인
+        if (authentication != null && authentication.isAuthenticated()) {
+            // 사용자가 인증되어 있으면 로그인 상태를 true로 설정하고 사용자 이름을 추가
+            response.put("isLoggedIn", true);
+            response.put("username", authentication.getName());
+        } else {
+            // 사용자가 인증되어 있지 않으면 로그인 상태를 false로 설정
+            response.put("isLoggedIn", false);
+        }
+
+        // ResponseEntity 객체에 응답 데이터와 HTTP 상태 코드를 설정하여 반환
+        return ResponseEntity.ok(response);
+    }
+
+
+
   @GetMapping("/boards")
   List<Board> all(@RequestParam(required = false, defaultValue = "")String title,
                   @RequestParam(required = false, defaultValue = "")String content) {

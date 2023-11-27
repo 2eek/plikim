@@ -126,6 +126,8 @@ async function addMessage() {
     } catch (error) {
         // 오류 처리
         console.error("오류 발생: " + error);
+		//새로고침
+		 location.reload();
     }
 }
 

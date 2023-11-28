@@ -5,32 +5,43 @@
 
 </head>
 <style>
-table {
-        width: 150%;
-        border-collapse: collapse;
-        margin-bottom: 20px;
-    }
+#pagination button {
+    display: inline-block;
+    margin-right: 5px;
+}
 
-    th, td {
-        text-align: center;
-        padding: 10px;
-        text-align: left;
-        border: 1px solid #ddd;
-    }
+#pagination {
+    white-space: nowrap;
+    text-align: center;
+}
 
-    th {
-        background-color: #f5f5f5;
-    }
+/* 기존 스타일 유지 */
+.table {
+    width: 150%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
 
-    .form-container {
-        width: 80%;
-        margin: 0 auto;
-    }
+th, td {
+    text-align: center;
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
 
-    #button-container {
-        text-align: right;
-        margin-top: 20px; /* 조절 가능한 여백 */
-    }
+th {
+    background-color: #f5f5f5;
+}
+
+.form-container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+#button-container {
+    text-align: right;
+    margin-top: 20px;
+}
 </style>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('boardList')">
@@ -91,14 +102,75 @@ table {
 </div>
     <hr style="width: 80%;">
   <div id="commentList"></div>
+<div id="pagination"></div>
+<!--<div id="pagination" style="text-align: center; margin-top: 20px;" th:if="${commentsPage != null and commentsPage.totalPages > 1}">-->
+<!--    <ul class="pagination">-->
+<!--        <li th:each="${i : #numbers.sequence(0, commentsPage.totalPages - 1)}" th:class="${i} == ${commentsPage.number} ? 'page-item active' : 'page-item'">-->
+<!--<a th:href="@{'/comment/list/' + ${boardId} + '?page=' + ${i} + '&size=' + ${size}}" class="page-link" th:text="${i + 1}"></a>-->
+<!--        </li>-->
+<!--    </ul>-->
+<!--</div>-->
+<div>test</div>
 <div style="width: 80%; margin: 0 auto; text-align: right;">
     <textarea id="commentContents" th:placeholder="내용" style="width: 70%; height: 100px; margin-bottom: 5px; display: inline-block;"></textarea>
     <button class="btn btn-primary" id="comment-write-btn" onclick="commentWrite()" style="margin-bottom: 5px;">댓글작성</button>
 </div>
 
 
+
+
+
 <script th:if="${board.id != null}">
-    const commentWrite = () => {
+
+//화면에 댓글 보여주기
+  const loadComments = (page = 0, size = 10) => {
+        const boardId = document.getElementById("boardId").value;
+
+        // 수정된 부분: page가 undefined일 경우 0으로 설정
+         if (page === undefined) {
+        page = 0;
+    }
+    if (size === undefined) {
+        size = 10;
+    }
+
+        $.ajax({
+            type: "get",
+            url: `/comment/list/${boardId}?page=${page}&size=${size}`,
+            success: function (commentsPage) {
+                // 댓글 목록을 받아와서 HTML에 추가
+                const commentListElement = document.getElementById("commentList");
+                commentListElement.innerHTML = ""; // 기존 내용 지우기
+
+                commentsPage.content.forEach(function (comment) {
+                    const commentElement = document.createElement("div");
+                    commentElement.innerHTML = `
+                        <div style="width: 80%; margin: 0 auto;">
+                            <div style="float: left; width: 20%;">${comment.commentWriter}</div>
+                            <div style="float: left; width: 40%; margin-left: 5%;">${comment.commentContents}</div>
+                            <div style="float: right; width: 20%;">${comment.commentCreatedTime}</div>
+                            <div style="clear: both;"></div>
+                            <hr style="width: 100%;">
+                        </div>
+                    `;
+                    commentListElement.appendChild(commentElement);
+                });
+
+                //console.log("버튼만드냐?1")
+                console.log('확인', JSON.stringify(commentsPage));
+                createPaginationButtons(commentsPage);
+                //console.log("버튼만드냐?2")
+        },
+        error: function (xhr, status, error) {
+            console.log("댓글 목록 불러오기 실패", status, error);
+        }
+    });
+};
+loadComments();
+
+
+//댓글 작성
+ const commentWrite = () => {
         // 서버에 현재 사용자가 로그인되어 있는지 확인
         $.ajax({
             type: "get",
@@ -112,7 +184,7 @@ table {
                     $.ajax({
                         type: "post",
                         url: "/comment/save",
-                        data: {
+                        data: { //보내는 데이터  키(모델 필드값) 밸류(변수값)
                             commentContents: contents,
                             boardId: boardId
                         },
@@ -143,41 +215,75 @@ table {
     }
 
 
+// document.addEventListener("DOMContentLoaded", function () {
+//     const paginationElement = document.getElementById("pagination");
+// });
 
-// 페이지 로딩 시 댓글 목록을 가져와서 표시하는 함수
-const loadComments = () => {
-    const boardId = document.getElementById("boardId").value;
+ // 페이징 버튼 생성
+const createPaginationButtons = (commentsPage) => {
+    console.log("createPaginationButtons 함수 호출 확인"); // 로그 추가
+    // document.addEventListener('DOMContentLoaded', function() {
+    // DOMContentLoaded 이벤트 리스너 제거
+   const paginationElement = document.getElementById("pagination");
+console.log('paginationElement:', paginationElement);
+console.log('commentsPage:', JSON.stringify(commentsPage));
 
-    $.ajax({
-        type: "get",
-        url: "/comment/list/" + boardId,
-        success: function (comments) {
-            // 댓글 목록을 받아와서 HTML에 추가
-            const commentListElement = document.getElementById("commentList");
-            commentListElement.innerHTML = ""; // 기존 내용 지우기
+if (!paginationElement) {
+    console.error("paginationElement가 존재하지 않습니다.");
+    return;
+}
 
-            comments.forEach(function (comment) {
-                const commentElement = document.createElement("div");
-commentElement.innerHTML = `
-    <div style="width: 80%; margin: 0 auto;">
-    <div style="float: left; width: 20%;">${comment.commentWriter}</div>
-    <div style="float: left; width: 40%; margin-left: 5%;">${comment.commentContents}</div>
-    <div style="float: right; width: 20%;">${comment.commentCreatedTime}</div>
-    <div style="clear: both;"></div> <!-- Clear the float to prevent layout issues -->
-    <hr style="width: 100%;">
-`;
 
-                commentListElement.appendChild(commentElement);
-            });
-        },
-        error: function (xhr, status, error) {
-            console.log("댓글 목록 불러오기 실패", status, error);
+    // 기존 버튼 제거
+    paginationElement.innerHTML = "";
+
+    // 이전 버튼
+    const prevButton = document.createElement("button");
+    prevButton.innerText = "이전";
+prevButton.classList.add("btn", "btn-primary", "page-link"); // 추가
+    prevButton.addEventListener("click", () => {
+        if (!commentsPage.first) {
+            loadComments(commentsPage.number - 1, commentsPage.size);
         }
     });
+    paginationElement.appendChild(prevButton);
+
+    // 페이지 번호 버튼
+    for (var i = 0; i < commentsPage.totalPages; i++) {
+        const pageButton = document.createElement("button");
+        pageButton.innerText = i + 1;
+    pageButton.classList.add("btn", "btn-primary", "page-link"); // 추가
+        pageButton.addEventListener("click", (function (pageIndex) {
+            return function () {
+                loadComments(pageIndex, commentsPage.size);
+            };
+        })(i));
+        paginationElement.appendChild(pageButton);
+    }
+
+    // 다음 버튼
+    const nextButton = document.createElement("button");
+    nextButton.innerText = "다음";
+nextButton.classList.add("btn", "btn-primary", "page-link"); // 추가
+    nextButton.addEventListener("click", () => {
+        if (!commentsPage.last) {
+            loadComments(commentsPage.number + 1, commentsPage.size);
+        }
+    });
+    paginationElement.appendChild(nextButton);
+    // });
 };
 
-// 댓글 목록을 페이지 로딩 시에도 한 번 불러와서 표시
-loadComments();
+
+document.addEventListener("DOMContentLoaded", function () {
+    console.log("화면안녕")
+    // 페이지 로드 시 초기 페이지를 0으로 지정하여 댓글 목록을 가져옴
+     const initialCommentsPage = { number: 0, size: 10 }; // 예시로 초기화
+    createPaginationButtons(initialCommentsPage);
+    loadComments();
+});
+
+
 
 
 

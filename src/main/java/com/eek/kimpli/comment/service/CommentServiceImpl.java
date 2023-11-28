@@ -3,11 +3,9 @@ package com.eek.kimpli.comment.service;
 import com.eek.kimpli.comment.model.Comment;
 import com.eek.kimpli.comment.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,23 +19,33 @@ public class CommentServiceImpl implements CommentService {
     public CommentServiceImpl(CommentRepository commentRepository) {
         this.commentRepository = commentRepository;
     }
-    //댓글 저장
+
     @Override
     public String saveOrUpdateComment(Comment comment) {
-            comment.setCommentCreatedTime(LocalDateTime.now());
-             commentRepository.save(comment);
-        // 예: commentRepository.save(comment);
-        // 성공 또는 실패 여부에 따라 적절한 문자열 반환
-        return "success"; // 또는 실패시 메시지를 반환
+        comment.setCommentCreatedTime(LocalDateTime.now());
+        commentRepository.save(comment);
+        return "success";
     }
 
-@Override
-public List<Comment> getCommentsByBoardId(Long boardId) {
-    List<Comment> comments = commentRepository.findByBoardId(boardId);
-    // 로깅 추가
-    System.out.println("Comments for Board ID " + boardId + ": " + comments);
-    return comments;
-}
+    @Override
+    public List<Comment> getCommentsByBoardId(Long boardId) {
+        return commentRepository.findByBoardId(boardId);
+    }
 
-}
+//    @Override
+//    public Page<Comment> getCommentsByBoardId(Long boardId, Pageable pageable) {
+//        return commentRepository.findByBoardId(boardId, pageable);
+//    }
 
+    @Override
+    public Page<Comment> getCommentsByBoardId(Long boardId, Pageable pageable) {
+    Page<Comment> commentsPage = commentRepository.findByBoardId(boardId, pageable);
+
+    if (commentsPage == null) {
+        // commentsPage가 null이면 빈 페이지 객체를 생성하여 반환
+        return Page.empty();
+    }
+
+    return commentsPage;
+}
+}

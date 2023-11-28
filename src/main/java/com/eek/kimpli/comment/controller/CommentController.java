@@ -3,6 +3,9 @@ package com.eek.kimpli.comment.controller;
 import com.eek.kimpli.comment.model.Comment;
 import com.eek.kimpli.comment.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -50,11 +53,35 @@ public class CommentController {
     }
 
        //댓글 화면에 뿌리기
-    @GetMapping("/list/{boardId}")
-    @ResponseBody
-    public List<Comment> getCommentsByBoardId(@PathVariable Long boardId) {
-        // 게시글 ID에 해당하는 댓글 목록을 가져오는 서비스 메서드 호출
-        return commentService.getCommentsByBoardId(boardId);
+//    @GetMapping("/list/{boardId}")
+//    @ResponseBody
+//    public List<Comment> getCommentsByBoardId(@PathVariable Long boardId) {
+//        // 게시글 ID에 해당하는 댓글 목록을 가져오는 서비스 메서드 호출
+//        return commentService.getCommentsByBoardId(boardId);
+//    }
+
+
+    // 댓글 화면에 뿌리기 (페이징 처리)
+ @GetMapping("/list/{boardId}")
+    public ResponseEntity<Page<Comment>> getCommentsByBoardId(
+            @PathVariable Long boardId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Comment> commentsPage = commentService.getCommentsByBoardId(boardId, pageable);
+System.out.println("Current Page: " + commentsPage.getNumber());
+    System.out.println("Total Pages: " + commentsPage.getTotalPages());
+    System.out.println("Total Elements: " + commentsPage.getTotalElements());
+    System.out.println("Is First Page: " + commentsPage.isFirst());
+    System.out.println("Is Last Page: " + commentsPage.isLast());
+    System.out.println("Has Previous Page: " + commentsPage.hasPrevious());
+    System.out.println("Has Next Page: " + commentsPage.hasNext());
+        if (commentsPage == null || commentsPage.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<>(commentsPage, HttpStatus.OK);
     }
 
 

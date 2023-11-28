@@ -1,339 +1,327 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+
 <head th:replace="fragments/common :: head(${board.id != null} ? '상세조회' : '글 작성')">
-        <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+        integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
 </head>
+
 <style>
-#pagination button {
-    display: inline-block;
-    margin-right: 5px;
-}
+    #pagination button {
+        display: inline-block;
+        margin-right: 5px;
+    }
 
-#pagination {
-    white-space: nowrap;
-    text-align: center;
-}
+    #pagination {
+        white-space: nowrap;
+        text-align: center;
+    }
 
-/* 기존 스타일 유지 */
-.table {
-    width: 150%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-}
+    /* 기존 스타일 유지 */
+    .table {
+        width: 150%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
 
-th, td {
-    text-align: center;
-    padding: 10px;
-    text-align: left;
-    border: 1px solid #ddd;
-}
+    th,
+    td {
+        text-align: center;
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
 
-th {
-    background-color: #f5f5f5;
-}
+    th {
+        background-color: #f5f5f5;
+    }
 
-.form-container {
-    width: 80%;
-    margin: 0 auto;
-}
+    .form-container {
+        width: 80%;
+        margin: 0 auto;
+    }
 
-#button-container {
-    text-align: right;
-    margin-top: 20px;
-}
+    #button-container {
+        text-align: right;
+        margin-top: 20px;
+    }
 </style>
+
 <body>
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('boardList')">
-</nav>
-<main role="main" class="container">
-  <div class="starter-template">
-    <h1>게시글</h1>
-  </div>
-</main>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top"
+        th:replace="fragments/common :: menu('boardList')"></nav>
 
-<div style="width: 80%; margin: 0 auto;">
-    <form th:action="@{/board/save}" th:object="${board}" method="post" enctype="multipart/form-data">
-        <input type="hidden" id="boardId" th:field="*{id}">
+    <main role="main" class="container">
+        <div class="starter-template">
+            <h1>게시글</h1>
+        </div>
+    </main>
 
-                <table  style="width: 100%; border:1px">
-                   <input type="text" th:field="*{author}" hidden />
+    <div style="width: 80%; margin: 0 auto;">
+        <form th:action="@{/board/save}" th:object="${board}" method="post" enctype="multipart/form-data">
+            <input type="hidden" id="boardId" th:field="*{id}">
+
+            <table style="width: 100%; border:1px">
+                <input type="text" th:field="*{author}" hidden />
 
                 <tr>
                     <th style="width: 100px;">작성자</th>
-                                     <td style="width: 150px;" th:text="*{author}"  th:field="*{author}"></td>
+                    <td style="width: 150px;" th:text="*{author}" th:field="*{author}"></td>
                     <th style="width: 100px;">작성일자</th>
                     <td style="width: 150px;" th:text="${#temporals.format(board.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
                     <th style="width: 100px;">조회수</th>
                     <td style="width: 70px;" th:field="*{views}" th:value="${board.views}" th:text="*{views}"></td>
                 </tr>
-            <tr>
-                <th style="width: 100px">제목</th>
-                <td colspan="6">
-                <div class="form-group">
-
-                <input type="text" class="form-control" th:classappend="${#fields.hasErrors('title')} ? 'is-invalid'" id="title" th:field="*{title}" placeholder="제목">
-
-                <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">
-                    제목 에러 메세지
-                </div>
-            </div>
-                </td>
-            </tr>
-            <tr>
-                <th style="width: 100px">내용</th>
-                <td colspan="25">
-
-                <textarea class="form-control" th:classappend="${#fields.hasErrors('content')} ? 'is-invalid'" id="content" th:field="*{content}" placeholder="내용" rows="15"></textarea>
-                <div class="invalid-feedback" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">
-                    내용 에러 메세지
-                </div>
-                </td>
-            </tr>
-        </table>
-
-        <div class="text-right" id="button-container">
-            <button type="button" class="btn btn-primary" onclick="history.back()">되돌아가기</button>
-            <button id="update" type="button" class="btn btn-primary" th:if="${board.author eq username}">수정</button>
-            <button id="cancel" type="reset" class="btn btn-primary" th:if="${board.id == null}">취소</button>
-<!--            <button id="wri" type="submit" class="btn btn-primary" th:if="${board.id == null}">글작성</button>-->
-        </div>
-    </form>
-</div>
-    <hr style="width: 80%;">
-  <div id="commentList"></div>
-<div id="pagination"></div>
-<!--<div id="pagination" style="text-align: center; margin-top: 20px;" th:if="${commentsPage != null and commentsPage.totalPages > 1}">-->
-<!--    <ul class="pagination">-->
-<!--        <li th:each="${i : #numbers.sequence(0, commentsPage.totalPages - 1)}" th:class="${i} == ${commentsPage.number} ? 'page-item active' : 'page-item'">-->
-<!--<a th:href="@{'/comment/list/' + ${boardId} + '?page=' + ${i} + '&size=' + ${size}}" class="page-link" th:text="${i + 1}"></a>-->
-<!--        </li>-->
-<!--    </ul>-->
-<!--</div>-->
-<div>test</div>
-<div style="width: 80%; margin: 0 auto; text-align: right;">
-    <textarea id="commentContents" th:placeholder="내용" style="width: 70%; height: 100px; margin-bottom: 5px; display: inline-block;"></textarea>
-    <button class="btn btn-primary" id="comment-write-btn" onclick="commentWrite()" style="margin-bottom: 5px;">댓글작성</button>
-</div>
-
-
-
-
-
-<script th:if="${board.id != null}">
-
-//화면에 댓글 보여주기
-  const loadComments = (page = 0, size = 10) => {
-        const boardId = document.getElementById("boardId").value;
-
-        // 수정된 부분: page가 undefined일 경우 0으로 설정
-         if (page === undefined) {
-        page = 0;
-    }
-    if (size === undefined) {
-        size = 10;
-    }
-
-        $.ajax({
-            type: "get",
-            url: `/comment/list/${boardId}?page=${page}&size=${size}`,
-            success: function (commentsPage) {
-                // 댓글 목록을 받아와서 HTML에 추가
-                const commentListElement = document.getElementById("commentList");
-                commentListElement.innerHTML = ""; // 기존 내용 지우기
-
-                commentsPage.content.forEach(function (comment) {
-                    const commentElement = document.createElement("div");
-                    commentElement.innerHTML = `
-                        <div style="width: 80%; margin: 0 auto;">
-                            <div style="float: left; width: 20%;">${comment.commentWriter}</div>
-                            <div style="float: left; width: 40%; margin-left: 5%;">${comment.commentContents}</div>
-                            <div style="float: right; width: 20%;">${comment.commentCreatedTime}</div>
-                            <div style="clear: both;"></div>
-                            <hr style="width: 100%;">
+                <tr>
+                    <th style="width: 100px">제목</th>
+                    <td colspan="6">
+                        <div class="form-group">
+                            <input type="text" class="form-control" th:classappend="${#fields.hasErrors('title')} ? 'is-invalid'" id="title" th:field="*{title}" placeholder="제목">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">
+                                제목 에러 메세지
+                            </div>
                         </div>
-                    `;
-                    commentListElement.appendChild(commentElement);
-                });
+                    </td>
+                </tr>
+                <tr>
+                    <th style="width: 100px">내용</th>
+                    <td colspan="25">
+                        <textarea class="form-control" th:classappend="${#fields.hasErrors('content')} ? 'is-invalid'" id="content" th:field="*{content}" placeholder="내용" rows="15"></textarea>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">
+                            내용 에러 메세지
+                        </div>
+                    </td>
+                </tr>
+            </table>
 
-                //console.log("버튼만드냐?1")
-                console.log('확인', JSON.stringify(commentsPage));
-                createPaginationButtons(commentsPage);
-                //console.log("버튼만드냐?2")
-        },
-        error: function (xhr, status, error) {
-            console.log("댓글 목록 불러오기 실패", status, error);
-        }
-    });
-};
-loadComments();
+            <div class="text-right" id="button-container">
+                <button type="button" class="btn btn-primary" onclick="history.back()">되돌아가기</button>
+                <button id="update" type="button" class="btn btn-primary" th:if="${board.author eq username}">수정</button>
+                <button id="cancel" type="reset" class="btn btn-primary" th:if="${board.id == null}">취소</button>
+            </div>
+        </form>
+    </div>
+    <hr style="width: 80%;">
 
+    <div id="commentList"></div>
+    <div id="pagination"></div>
+    <div>test</div>
+    <div style="width: 80%; margin: 0 auto; text-align: right;">
+        <textarea id="commentContents" th:placeholder="내용" style="width: 70%; height: 100px; margin-bottom: 5px; display: inline-block;"></textarea>
+        <button class="btn btn-primary" id="comment-write-btn" onclick="commentWrite()" style="margin-bottom: 5px;">댓글작성</button>
+    </div>
 
-//댓글 작성
- const commentWrite = () => {
-        // 서버에 현재 사용자가 로그인되어 있는지 확인
-        $.ajax({
-            type: "get",
-            url: "/api/check-login",
-            success: function (response) {
-                if (response.isLoggedIn) {
-                    // 로그인된 경우, 댓글 작성 로직 수행
-                    const contents = document.getElementById("commentContents").value;
-                    const boardId = document.getElementById("boardId").value;
+    <script th:if="${board.id != null}">
+        // 댓글 목록을 불러오는 함수
+        const loadComments = (page = 0, size = 10) => {
+            // 게시글 ID를 가져옴
+            const boardId = document.getElementById("boardId").value;
 
-                    $.ajax({
-                        type: "post",
-                        url: "/comment/save",
-                        data: { //보내는 데이터  키(모델 필드값) 밸류(변수값)
-                            commentContents: contents,
-                            boardId: boardId
-                        },
-                        success: function (response) {
-                            if (response === "success") {
-                                console.log("댓글 작성 성공");
-                                document.getElementById("commentContents").value = "";
-                                loadComments();
-                            } else {
-                                console.log("댓글 작성 실패");
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            console.log("에러 발생", status, error);
-                        }
-                    });
-                } else {
-                    // 로그인되지 않은 경우, 로그인 요청 또는 알림창 표시
-                    alert("로그인이 필요합니다.");
-                    // 또는 로그인 페이지로 리다이렉트 등의 동작 수행
-                    // window.location.href = "/login";
-                }
-            },
-            error: function (xhr, status, error) {
-                console.log("에러 발생", status, error);
+            // 페이지와 사이즈가 정의되지 않은 경우 기본값으로 설정
+            if (page === undefined) {
+                page = 0;
             }
-        });
-    }
+            if (size === undefined) {
+                size = 10;
+            }
 
+            // 서버에 댓글 목록 요청
+            $.ajax({
+                type: "get",
+                url: `/comment/list/${boardId}?page=${page}&size=${size}`,
+                success: function (commentsPage) {
+                    // 댓글 목록을 화면에 표시
+                    const commentListElement = document.getElementById("commentList");
+                    commentListElement.innerHTML = "";
 
-// document.addEventListener("DOMContentLoaded", function () {
-//     const paginationElement = document.getElementById("pagination");
-// });
+                    commentsPage.content.forEach(function (comment) {
+                        const commentElement = document.createElement("div");
+                        commentElement.innerHTML = `
+                            <div style="width: 80%; margin: 0 auto;">
+                                <div style="float: left; width: 20%;">${comment.commentWriter}</div>
+                                <div style="float: left; width: 40%; margin-left: 5%;">${comment.commentContents}</div>
+                                <div style="float: right; width: 20%;">${comment.commentCreatedTime}</div>
+                                <div style="clear: both;"></div>
+                                <hr style="width: 100%;">
+                            </div>
+                        `;
+                        commentListElement.appendChild(commentElement);
+                    });
 
- // 페이징 버튼 생성
-const createPaginationButtons = (commentsPage) => {
-    console.log("createPaginationButtons 함수 호출 확인"); // 로그 추가
-    // document.addEventListener('DOMContentLoaded', function() {
-    // DOMContentLoaded 이벤트 리스너 제거
-   const paginationElement = document.getElementById("pagination");
-console.log('paginationElement:', paginationElement);
-console.log('commentsPage:', JSON.stringify(commentsPage));
+                    // 댓글 목록 하단에 페이징 버튼 생성
+                    createPaginationButtons(commentsPage);
+                },
+                error: function (xhr, status, error) {
+                    console.log("댓글 목록 불러오기 실패", status, error);
+                }
+            });
+        };
 
-if (!paginationElement) {
-    console.error("paginationElement가 존재하지 않습니다.");
-    return;
-}
+        // 페이징 버튼을 생성하는 함수
+        const createPaginationButtons = (commentsPage) => {
+            const paginationElement = document.getElementById("pagination");
 
+            // 페이징 컨테이너 초기화
+            if (!paginationElement) {
+                console.error("paginationElement가 존재하지 않습니다.");
+                return;
+            }
+            paginationElement.innerHTML = "";
 
-    // 기존 버튼 제거
-    paginationElement.innerHTML = "";
+            // 페이징 컨테이너 및 버튼 생성
+            const paginationContainer = document.createElement("ul");
+            paginationContainer.classList.add("pagination", "justify-content-center");
 
-    // 이전 버튼
-    const prevButton = document.createElement("button");
-    prevButton.innerText = "이전";
-prevButton.classList.add("btn", "btn-primary", "page-link"); // 추가
-    prevButton.addEventListener("click", () => {
-        if (!commentsPage.first) {
-            loadComments(commentsPage.number - 1, commentsPage.size);
-        }
-    });
-    paginationElement.appendChild(prevButton);
+            // 이전 버튼
+            const prevButton = createPaginationButton("이전", !commentsPage.first, commentsPage.number - 1, commentsPage);
+            paginationContainer.appendChild(prevButton);
 
-    // 페이지 번호 버튼
-    for (var i = 0; i < commentsPage.totalPages; i++) {
-        const pageButton = document.createElement("button");
-        pageButton.innerText = i + 1;
-    pageButton.classList.add("btn", "btn-primary", "page-link"); // 추가
-        pageButton.addEventListener("click", (function (pageIndex) {
-            return function () {
-                loadComments(pageIndex, commentsPage.size);
-            };
-        })(i));
-        paginationElement.appendChild(pageButton);
-    }
+            // 페이지 번호 버튼 생성
+            for (var i = 0; i < commentsPage.totalPages; i++) {
+                const pageButton = createPaginationButton(i + 1, i != commentsPage.number, i, commentsPage);
+                paginationContainer.appendChild(pageButton);
+            }
 
-    // 다음 버튼
-    const nextButton = document.createElement("button");
-    nextButton.innerText = "다음";
-nextButton.classList.add("btn", "btn-primary", "page-link"); // 추가
-    nextButton.addEventListener("click", () => {
-        if (!commentsPage.last) {
-            loadComments(commentsPage.number + 1, commentsPage.size);
-        }
-    });
-    paginationElement.appendChild(nextButton);
-    // });
-};
+            // 다음 버튼
+            const nextButton = createPaginationButton("다음", !commentsPage.last, commentsPage.number + 1, commentsPage);
+            paginationContainer.appendChild(nextButton);
 
+            // 페이징 컨테이너를 실제 페이지에 추가
+            paginationElement.appendChild(paginationContainer);
+        };
 
+        // 페이지 번호 버튼을 생성하는 함수
+        const createPaginationButton = (text, enabled, pageIndex, commentsPage) => {
+            const button = document.createElement("li");
+            button.classList.add("page-item");
+
+            // 비활성화된 경우 'disabled' 클래스 추가
+            if (!enabled) {
+                button.classList.add("disabled");
+            }
+
+            const link = document.createElement("a");
+            link.classList.add("page-link", "text-dark");
+
+            // 비활성화된 경우 'text-primary' 클래스 추가
+            if (!enabled) {
+                link.classList.add("text-primary");
+            }
+
+            link.innerText = text;
+
+            // 페이지 번호 버튼에 클릭 이벤트 추가
+            link.addEventListener("click", () => {
+                if (enabled) {
+                    // 클릭된 경우 해당 페이지의 댓글 목록을 다시 불러옴
+                    loadComments(pageIndex, commentsPage.size);
+                }
+            });
+
+            // 현재 페이지와 일치하는 경우 파란색 스타일 적용
+            if (pageIndex === commentsPage.number) {
+                link.style.color = "blue"; // 또는 다른 파란색 스타일을 적용할 수 있습니다.
+                link.classList.remove("text-dark");
+            }
+
+            button.appendChild(link);
+            return button;
+        };
+
+        // 댓글 작성 함수
+        const commentWrite = () => {
+            // 사용자 로그인 상태 확인
+            $.ajax({
+                type: "get",
+                url: "/api/check-login",
+                success: function (response) {
+                    if (response.isLoggedIn) {
+                        // 로그인된 경우, 댓글 작성 로직 수행
+                        const contents = document.getElementById("commentContents").value;
+                        const boardId = document.getElementById("boardId").value;
+
+                        // 서버에 댓글 저장 요청
+                        $.ajax({
+                            type: "post",
+                            url: "/comment/save",
+                            data: {
+                                commentContents: contents,
+                                boardId: boardId
+                            },
+                            success: function (response) {
+                                if (response === "success") {
+                                    console.log("댓글 작성 성공");
+                                    document.getElementById("commentContents").value = "";
+                                    // 작성된 댓글 목록을 다시 불러옴
+                                    loadComments();
+                                } else {
+                                    console.log("댓글 작성 실패");
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.log("에러 발생", status, error);
+                            }
+                        });
+                    } else {
+                        // 로그인되지 않은 경우, 알림창 표시
+                        alert("로그인이 필요합니다.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("에러 발생", status, error);
+                }
+            });
+        };
+
+<!-- 페이지 로딩 완료 후 초기 댓글 목록 및 페이징 버튼 생성 -->
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("화면안녕")
-    // 페이지 로드 시 초기 페이지를 0으로 지정하여 댓글 목록을 가져옴
-     const initialCommentsPage = { number: 0, size: 10 }; // 예시로 초기화
+    const initialCommentsPage = { number: 0, size: 10 };
     createPaginationButtons(initialCommentsPage);
     loadComments();
 });
 
+<!-- 버튼 생성 -->
+document.getElementById('title').readOnly = true;
+document.getElementById('content').readOnly = true;
 
+<!-- 수정 버튼 클릭시 -->
+document.getElementById('update').addEventListener('click', function () {
+    document.getElementById('title').readOnly = false;
+    document.getElementById('content').readOnly = false;
 
+    // 상단 h1 태그 변경
+    document.querySelector('.starter-template h1').textContent = '글 수정';
 
+    // 버튼 이름 변경
+    document.getElementById('update').textContent = '확인';
 
+    // reset 타입 'cancel'버튼 생성
+    MakeCancel();
+    console.log('test');
 
-    <!--버튼생성-->
-    document.getElementById('title').readOnly = true;
-    document.getElementById('content').readOnly = true;
+    var updateButton = document.getElementById('update');
+    updateButton.setAttribute('id', 'send-off');
 
-    //수정 버튼 클릭시
-    document.getElementById('update').addEventListener('click', function () {
-        document.getElementById('title').readOnly = false;
-        document.getElementById('content').readOnly = false;
-        //상단 h1 태그 바뀜
-        document.querySelector('.starter-template h1').textContent = '글 수정';
+    console.log('확인 버튼으로 변경');
 
-        //버튼 이름이 확인으로 바뀜
-        document.getElementById('update').textContent = '확인';
-
-        // reset타입 'cancel'버튼 생성
-        MakeCancel();
-        console.log('test');
-
-        var updateButton = document.getElementById('update');
-        updateButton.setAttribute('id', 'send-off');
-
-        console.log('확인버튼으로 바꿈');
-        //'확인' 버튼 클릭하면 업데이트 시행
-
-         document.getElementById('send-off').addEventListener('click', function () {
-            updateButton.type = 'submit';
-        });
+    // '확인' 버튼 클릭하면 업데이트 시행
+    document.getElementById('send-off').addEventListener('click', function () {
+        updateButton.type = 'submit';
     });
+});
 
-    //취소 버튼 생성, 위치 지정
-    function MakeCancel() {
-        var cancelButton = document.createElement('button');
-        cancelButton.id = 'cancel';
-        cancelButton.type = 'reset';
-        cancelButton.className = 'btn btn-primary';
-        cancelButton.textContent = '취소';
-        cancelButton.style.marginRight = '5px';
+<!-- 취소 버튼 생성, 위치 지정 -->
+function MakeCancel() {
+    var cancelButton = document.createElement('button');
+    cancelButton.id = 'cancel';
+    cancelButton.type = 'reset';
+    cancelButton.className = 'btn btn-primary';
+    cancelButton.textContent = '취소';
+    cancelButton.style.marginRight = '5px';
 
-        var buttonContainer = document.getElementById('button-container');
-        buttonContainer.insertBefore(cancelButton, buttonContainer.children[1]);
-    }
+    var buttonContainer = document.getElementById('button-container');
+    buttonContainer.insertBefore(cancelButton, buttonContainer.children[1]);
+}
 </script>
-
-
-
-
-
 </body>
 </html>

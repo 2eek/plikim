@@ -6,8 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.sql.Date;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,4 +18,5 @@ public class Comment {
     private String commentContents;
     private Long boardId; //게시글 번호
     private LocalDateTime commentCreatedTime; //댓글 생성 시간
+    private byte deleted;
 }

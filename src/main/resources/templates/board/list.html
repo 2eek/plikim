@@ -34,14 +34,15 @@
           </thead>
           <tbody>
             <!--반복문-->
-            <tr th:each="boarda : ${boards}">
-            <td th:text="${boarda.id}">번호</td>
-            <td><a th:text="${boarda.title}" th:href="@{/board/detail(id=${boarda.id})}"> 제목</a></td>
-            <td th:text="${boarda.author}">작성자</td>
-            <td th:text="${#temporals.format(boarda.createdDate, 'yyyy-MM-dd')}">작성일자</td>
 
-            <td th:text="${boarda.views}">조회수</td>
+            <tr th:each="boarda : ${boards}" onclick="navigateToDetail(this)" style="cursor: pointer;">
+                <td th:text="${boarda.id}">번호</td>
+                    <td><a th:text="${boarda.title}" th:href="@{/board/detail(id=${boarda.id})}"> 제목</a></td>
+                    <td th:text="${boarda.author}">작성자</td>
+                    <td th:text="${#temporals.format(boarda.createdDate, 'yyyy-MM-dd')}">작성일자</td>
+                <td th:text="${boarda.views}">조회수</td>
             </tr>
+
           </tbody>
         </table>
        <nav aria-label="Page navigation example">
@@ -63,7 +64,12 @@
     </div>
 
 <script>
-
+        //제목 클릭하면 링크로 이동
+function navigateToDetail(element) {
+    // 첫 번째 자식 <td>의 내용을 가져와서 boardId로 사용
+    var boardId = element.children[0].textContent;
+    window.location.href = '/board/detail?id=' + boardId;
+}
 
     document.getElementById('wri').addEventListener('click', function () {
         // Check if the user is authenticated (logged in)

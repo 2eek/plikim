@@ -18,6 +18,9 @@
     .user-table th, .user-table td {
         font-size: 12px;
     }
+    .user-row {
+    cursor: pointer;
+}
 </style>
 
 
@@ -122,7 +125,7 @@
                 </thead>
 
                 <tbody>
-<tr th:each="randomUser : ${randomUser}" th:id="'user-row-' + ${randomUser.userId}" class="user-row" th:if="${randomUser != null}">
+<tr th:each="randomUser : ${randomUser}" th:id="'user-row-' + ${randomUser.userId}" class="user-row" th:if="${randomUser != null}" >
                     <td>프로필 사진 이미지</td>
                     <td >
                         <a th:href="@{/user/userdetail(id=${randomUser.userId})}" th:text="${randomUser.userId}">사용자 아이디</a>

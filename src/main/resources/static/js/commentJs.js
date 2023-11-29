@@ -206,7 +206,7 @@ function attachCommentEventListeners() {
                 closeReplyForm();
                 return;
             } else {
-                // 일치하지 않는 경우 열려있는 대댓글 창을 닫기
+                // 일치하지 않는 경우 열려있는 대댓글 창을 닫기 1
                 closeReplyForm();
             }
         }

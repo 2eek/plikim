@@ -22,12 +22,14 @@
                     commentListElement.innerHTML = "";
 
                     commentsPage.content.forEach(function (comment) {
-                        const commentElement = document.createElement("div");
+                          const commentElement = document.createElement("div");
+                        commentElement.className = "comment"; // 클래스 추가
                         commentElement.innerHTML = `
                             <div style="width: 80%; margin: 0 auto;">
                                 <div style="float: left; width: 20%;">${comment.commentWriter}</div>
                                 <div style="float: left; width: 40%; margin-left: 5%;">${comment.commentContents}</div>
                                 <div style="float: right; width: 20%;">${comment.commentCreatedTime}</div>
+                                  <div class="commentId" style="display: none;">${comment.id}</div>
                                 <div style="clear: both;"></div>
                                 <hr style="width: 100%;">
                             </div>
@@ -173,3 +175,213 @@ document.addEventListener("DOMContentLoaded", function () {
     createPaginationButtons(initialCommentsPage);
     loadComments();
 });
+
+
+// 전역 변수 초기화
+let openReplyForm = null;
+
+
+function attachCommentEventListeners() {
+
+    // 댓글 클릭 시 대댓글 목록 가져오기
+    $(document).on('click', '.comment', function () {
+        // 새로운 코드: commentId 값을 가져오기
+
+    const commentId = $(this).find(".commentId").text();
+
+        // 대댓글을 추가할 부모 컨테이너를 찾거나 생성합니다.
+        var replyCommentsContainer = $(this).find('.reply-comments');
+        if (replyCommentsContainer.length === 0) {
+            // 대댓글을 추가할 부모 컨테이너가 없으면 생성합니다.
+            replyCommentsContainer = $('<div class="reply-comments"></div>');
+            $(this).append(replyCommentsContainer);
+        }
+
+
+   // 대댓글 입력 폼이 열려있는 경우
+        if (openReplyForm) {
+            // 클릭된 댓글이 현재 열려 있는 대댓글 창의 대상 댓글과 일치하는지 확인
+            if (openReplyForm.commentId === commentId) {
+                // 일치하는 경우 대댓글 창을 닫기
+                closeReplyForm();
+                return;
+            } else {
+                // 일치하지 않는 경우 열려있는 대댓글 창을 닫기
+                closeReplyForm();
+            }
+        }
+  // 대댓글 입력 폼 생성
+        var replyForm = $('<div>').html(`
+            <textarea id="replyCommentContents-${commentId}" style="width: 70%; height: 100px; margin-bottom: 5px; display: inline-block;"></textarea>
+            <button class="btn btn-primary" onclick="replyCommentWrite(${commentId})" style="margin-bottom: 5px;">대댓글작성</button>
+        `);
+
+        // 대댓글 입력 폼을 대댓글 컨테이너에 추가
+        replyCommentsContainer.append(replyForm);
+
+        // 대댓글 입력 폼이 추가되었음을 표시
+        $(this).data('reply-form', true);
+
+        // 현재 열린 대댓글 입력 폼 정보를 전역 변수에 저장
+        openReplyForm = {
+            commentId: commentId,
+            replyForm: replyForm
+        };
+    });
+        // 대댓글 목록을 이미 가져왔는지 확인
+        if (!$(this).data('comments-loaded')) {
+            // Ajax를 사용하여 서버에서 대댓글 목록 가져오기
+            $.ajax({
+                type: 'GET',
+                url: '/getReplyComments?commentId=' + commentId,
+                success: function (replyComments) {
+                    // 서버로부터 받은 대댓글 목록을 표시
+                    replyCommentsContainer.html('');
+
+                    replyComments.forEach(function (replyComment) {
+                        var replyCommentDiv = $('<div>').text(replyComment.replyCommentContents);
+                        replyCommentsContainer.append(replyCommentDiv);
+                    });
+
+                    // 대댓글 목록을 가져왔음을 표시
+                    $(this).data('comments-loaded', true);
+                },
+                error: function (error) {
+                    console.log('대댓글 목록 가져오기 실패', error);
+                }
+            });
+        }
+}
+
+
+// 대댓글 입력 폼 닫기 함수
+function closeReplyForm() {
+    // 열린 대댓글 입력 폼이 있다면 삭제
+    if (openReplyForm) {
+        openReplyForm.replyForm.remove();
+
+        // 전역 변수 초기화
+        openReplyForm = null;
+    }
+}
+// 페이지 로딩 완료 후 초기 댓글 목록 및 페이징 버튼 생성
+document.addEventListener("DOMContentLoaded", function () {
+    const initialCommentsPage = { number: 0, size: 10 };
+    createPaginationButtons(initialCommentsPage);
+    loadComments();
+
+    // 초기 댓글이 로드된 후에 이벤트 리스너를 추가
+    attachCommentEventListeners();
+});
+
+
+
+// 대댓글 작성 함수
+function replyCommentWrite(parentCommentId) {
+    // 대댓글 내용 가져오기
+    var replyContents = document.getElementById('replyCommentContents-' + parentCommentId).value;
+
+    // 대댓글 작성자명 (임시로 고정)
+    var replyWriter = "Alice";
+
+    // 대댓글 객체 생성
+    var replyComment = {
+        replyCommentWriter: replyWriter,
+        replyCommentContents: replyContents,
+        boardId: 1,  // 게시글 ID (임시로 설정)
+        parentComment: parentCommentId,
+        commentCreatedTime: null,  // 서버에서 생성 시간 처리
+        deleted: 0
+    };
+
+    // Ajax를 사용하여 서버로 데이터 전송
+    $.ajax({
+        type: 'POST',
+        url: '/replySave?parentCommentId=' + parentCommentId,
+        contentType: 'application/json',
+        data: JSON.stringify(replyComment),
+        success: function (response) {
+            // 성공적으로 데이터를 서버로 전송한 경우
+            console.log(response);
+
+            // 필요한 추가 작업 수행 (예: 화면 갱신, 메시지 표시 등)
+
+            // 성공 후 대댓글 목록 다시 불러오기
+            loadReplyComments(parentCommentId);
+        },
+        error: function (error) {
+            // 전송 실패 시 처리
+            console.log(error);
+        }
+    });
+}
+
+// 대댓글 목록을 불러오는 함수
+function loadReplyComments(parentCommentId) {
+    // 서버에 대댓글 목록 요청
+    $.ajax({
+        type: "get",
+        url: `/getReplyComments/${parentCommentId}`,
+        success: function (replyComments) {
+            // 대댓글 목록을 화면에 표시
+            const replyCommentsContainer = document.getElementById(`reply-comments-${parentCommentId}`);
+            replyCommentsContainer.innerHTML = "";
+
+            replyComments.forEach(function (replyComment) {
+                const replyCommentElement = document.createElement("div");
+                replyCommentElement.innerHTML = `
+                    <div style="width: 80%; margin: 0 auto;">
+                        <div style="float: left; width: 20%;">${replyComment.replyCommentWriter}</div>
+                        <div style="float: left; width: 40%; margin-left: 5%;">${replyComment.replyCommentContents}</div>
+                        <div style="float: right; width: 20%;">${replyComment.commentCreatedTime}</div>
+                        <div style="clear: both;"></div>
+                        <hr style="width: 100%;">
+                    </div>
+                `;
+                replyCommentsContainer.appendChild(replyCommentElement);
+            });
+        },
+        error: function (xhr, status, error) {
+            console.log("대댓글 목록 불러오기 실패", status, error);
+        }
+    });
+}
+
+  function replyCommentWrite() {
+    // 대댓글 내용 가져오기
+    var replyContents = document.getElementById('replyCommentContents').value;
+
+    // 대댓글 작성자명 (임시로 고정)
+    var replyWriter = "Alice";
+
+    // 부모 댓글의 ID 가져오기 (임시로 설정, 실제로는 댓글 클릭 시 해당 댓글의 ID를 가져와야 함)
+    var parentCommentId = 1;
+
+    // 대댓글 객체 생성
+    var replyComment = {
+        replyCommentWriter: replyWriter,
+        replyCommentContents: replyContents,
+        boardId: 1,  // 게시글 ID (임시로 설정)
+        parentComment: parentCommentId,
+        commentCreatedTime: null,  // 서버에서 생성 시간 처리
+        deleted: 0
+    };
+
+    // Ajax를 사용하여 서버로 데이터 전송
+    $.ajax({
+        type: 'POST',
+        url: '/replySave?parentCommentId=' + parentCommentId,
+        contentType: 'application/json',
+        data: JSON.stringify(replyComment),
+        success: function (response) {
+            // 성공적으로 데이터를 서버로 전송한 경우
+            console.log(response);
+
+            // 필요한 추가 작업 수행 (예: 화면 갱신, 메시지 표시 등)
+        },
+        error: function (error) {
+            // 전송 실패 시 처리
+            console.log(error);
+        }
+    });
+}

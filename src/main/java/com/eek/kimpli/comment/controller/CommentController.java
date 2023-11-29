@@ -2,6 +2,7 @@ package com.eek.kimpli.comment.controller;
 
 import com.eek.kimpli.comment.model.Comment;
 import com.eek.kimpli.comment.service.CommentService;
+import com.eek.kimpli.replycoment.model.ReplyComment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 @RestController
 @Controller
@@ -83,7 +85,19 @@ System.out.println("Current Page: " + commentsPage.getNumber());
 
         return new ResponseEntity<>(commentsPage, HttpStatus.OK);
     }
+//대댓글Ajax저장
+@PostMapping("/replySave")
+public ResponseEntity<String> saveCommentAndReply(@RequestParam Long parentCommentId) {
+    ReplyComment replyComment = new ReplyComment();
+    replyComment.setReplyCommentWriter("Alice");
+    replyComment.setReplyCommentContents("Replying to the comment.");
+    replyComment.setBoardId(1L);
+    replyComment.setCommentCreatedTime(LocalDateTime.now());
+    replyComment.setDeleted((byte) 0);
+    commentService.saveOrUpdateReplyComment(replyComment, parentCommentId);
 
+    return ResponseEntity.ok("Comment and reply saved successfully.");
+}
 
 
 }

@@ -19,4 +19,6 @@ public interface CommentService {
 
     // 댓글 ID를 이용하여 대댓글 조회
     List<ReplyComment> findByParentComment(Long commentId);
+
+
 }

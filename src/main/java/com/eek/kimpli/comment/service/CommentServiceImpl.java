@@ -2,7 +2,7 @@ package com.eek.kimpli.comment.service;
 
 import com.eek.kimpli.comment.model.Comment;
 import com.eek.kimpli.comment.repository.CommentRepository;
-import com.eek.kimpli.replycoment.model.ReplyComment;
+import com.eek.kimpli.replycomment.model.ReplyComment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -58,4 +58,10 @@ public class CommentServiceImpl implements CommentService {
         System.out.println( "레파지토리test"+commentRepository.findReplyCommentsById(commentId));
         return commentRepository.findReplyCommentsById(commentId);
     }
+
+        @Override
+    public Comment getCommentWithReplies(Long commentId) {
+        return commentRepository.findById(commentId).orElse(null);
+    }
+
 }

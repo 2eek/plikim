@@ -1,5 +1,6 @@
 package com.eek.kimpli.controller;
 
+import com.eek.kimpli.EncryptionUtils.EncryptionUtils;
 import com.eek.kimpli.chat.model.Chat;
 import com.eek.kimpli.chat.repository.ChatRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,12 +26,19 @@ public class HomeController {
         System.out.println("세션에 담긴 회원 이름: " + userName);
 
         Flux<Chat> chatRoomFlux = chatRepository.findAll();
-        List<Chat> chatRoomList = chatRoomFlux.collectList()
-                .block();
+        List<Chat> chatRoomList = chatRoomFlux.collectList().block();
 
         if (chatRoomList != null) {
             Set<String> uniqueRoomNums = new HashSet<>();
 
+            // 채팅 메시지 복호화
+            chatRoomList.forEach(chat -> {
+                String encryptedMessage = chat.getMsg();
+                String decryptedMessage = EncryptionUtils.decrypt(encryptedMessage);
+                chat.setMsg(decryptedMessage);
+            });
+
+            // 중복된 userName을 제거한 roomNum 반환
             chatRoomList = chatRoomList.stream()
                     .filter(chat -> chat.getRoomNum() != null && chat.getRoomNum().contains(userName))
                     .sorted(Comparator.comparing(Chat::getCreatedAt).reversed())
@@ -50,7 +58,6 @@ public class HomeController {
             roomNumList.add(roomNum);
         }
         model.addAttribute("roomNumList", roomNumList);
-
 
         return "chat/mychatrooms";
     }

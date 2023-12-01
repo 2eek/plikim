@@ -1,6 +1,7 @@
 
 package com.eek.kimpli.chat.contorller;
 
+import com.eek.kimpli.EncryptionUtils.EncryptionUtils;
 import com.eek.kimpli.chat.model.Chat;
 import com.eek.kimpli.chat.repository.ChatRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,20 +29,30 @@ public class ChatController {
 				.subscribeOn(Schedulers.boundedElastic());
 	}
 
+//sender의 채팅 내용이 화면에 출력됨
+@GetMapping(value = "/chat/roomNum/{roomNum}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+public Flux<Chat> findByRoomNum(@PathVariable String roomNum) {
+    return chatRepository.mFindByRoomNum(roomNum)
+            .map(chat -> {
+                // 메시지 복호화
+                String decryptedMessage = EncryptionUtils.decrypt(chat.getMsg());
+                chat.setMsg(decryptedMessage);
+                return chat;
+            })
+            .subscribeOn(Schedulers.boundedElastic());
+}
+
 //sender의 채팅 내용이 db에 저장됨
-	@GetMapping(value = "/chat/roomNum/{roomNum}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-	public Flux<Chat> findByRoomNum(@PathVariable String roomNum) {
-		return chatRepository.mFindByRoomNum(roomNum)
-				.subscribeOn(Schedulers.boundedElastic());
+@PostMapping("/chat")
+public Mono<Chat> setMsg(@RequestBody Chat chat) {
+    chat.setCreatedAt(LocalDateTime.now());
 
-	}
+    // 메시지 암호화
+    String encryptedMessage = EncryptionUtils.encrypt(chat.getMsg());
+    chat.setMsg(encryptedMessage);
 
-
-	@PostMapping("/chat")
-	public Mono<Chat> setMsg(@RequestBody Chat chat) {
-		chat.setCreatedAt(LocalDateTime.now());
-		return chatRepository.save(chat); // Object를 리턴하면 자동으로 JSON 변환 (MessageConverter)
-	}
+    return chatRepository.save(chat);
+}
 
 
 

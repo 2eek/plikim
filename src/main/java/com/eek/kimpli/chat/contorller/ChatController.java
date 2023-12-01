@@ -46,6 +46,7 @@ public Flux<Chat> findByRoomNum(@PathVariable String roomNum) {
 @PostMapping("/chat")
 public Mono<Chat> setMsg(@RequestBody Chat chat) {
     chat.setCreatedAt(LocalDateTime.now());
+    System.out.println("암호화테스트"+chat);
 
     // 메시지 암호화
     String encryptedMessage = EncryptionUtils.encrypt(chat.getMsg());

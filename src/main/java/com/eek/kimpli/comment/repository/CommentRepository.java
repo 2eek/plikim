@@ -1,8 +1,7 @@
 package com.eek.kimpli.comment.repository;
 
-import com.eek.kimpli.board.model.Board;
 import com.eek.kimpli.comment.model.Comment;
-import com.eek.kimpli.replycoment.model.ReplyComment;
+import com.eek.kimpli.replycomment.model.ReplyComment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

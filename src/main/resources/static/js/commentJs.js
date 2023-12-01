@@ -201,44 +201,27 @@ let openReplyForm = null;
 
 //7)대댓글 이벤트리스너
 function attachCommentEventListeners() {
-  // 답글 버튼 클릭 시 대댓글 목록 가져오기
+  $(document).off('click', '.open-reply-form-button').on('click', '.open-reply-form-button', function () {
+    console.log('hello');
 
-$(document).off('click', '.open-reply-form-button').on('click', '.open-reply-form-button', function () {
-      console.log('hello');
+    // 새로운 코드: 형제요소의 commentId 값을 가져오기
+    const commentId = $(this).siblings(".commentId").text();
+    console.log('아이디테스트'+commentId)
 
-      // 새로운 코드: 형제요소의 commentId 값을 가져오기
-     const commentId = $(this).siblings(".commentId").text();
-        console.log('아이디테스트'+commentId)
-      // 대댓글을 추가할 부모 컨테이너를 찾거나 생성합니다.
-      var replyCommentsContainer = $(this).closest('.comment').find('.reply-comments');
-      if (replyCommentsContainer.length === 0) {
-          // 대댓글을 추가할 부모 컨테이너가 없으면 생성합니다.
-          replyCommentsContainer = $('<div class="reply-comments"></div>');
-          $(this).closest('.comment').append(replyCommentsContainer);
-      }
+    // 대댓글을 추가할 부모 컨테이너를 찾거나 생성합니다.
+    var replyCommentsContainer = $(this).closest('.comment').find('.reply-comments');
+    if (replyCommentsContainer.length === 0) {
+      // 대댓글을 추가할 부모 컨테이너가 없으면 생성합니다.
+      replyCommentsContainer = $('<div class="reply-comments"></div>');
+      $(this).closest('.comment').append(replyCommentsContainer);
 
-      // 대댓글 입력 폼이 열려있는 경우
-      if (openReplyForm) {
-          // 클릭된 댓글이 현재 열려 있는 대댓글 창의 대상 댓글과 일치하는지 확인
-          if (openReplyForm.commentId === commentId) {
-              // 일치하는 경우 대댓글 창을 닫기
-              closeReplyForm();
-              return;
-          } else {
-              // 일치하지 않는 경우 열려있는 대댓글 창을 닫기
-              closeReplyForm();
-
-          }
-      }
-
-
-
-      // 대댓글 입력 폼 생성
+      // 대댓글이 없는 경우에도 대댓글 입력 폼을 생성합니다.
+      // 이 부분을 추가하였습니다.
       var replyForm = $('<div>').html(`
-          <textarea id="replyCommentContents-${commentId}" style="width: 70%; height: 100px; margin-bottom: 5px; display: inline-block;"></textarea>
-          <button class="btn btn-primary" onclick="replyCommentWrite(${commentId})" style="margin-bottom: 5px;">대댓글작성</button>
-          <hr style="width: 100%;">      
-       `);
+        <textarea id="replyCommentContents-${commentId}" style="width: 70%; height: 100px; margin-bottom: 5px; display: inline-block;"></textarea>
+        <button class="btn btn-primary" onclick="replyCommentWrite(${commentId})" style="margin-bottom: 5px;">대댓글작성</button>
+        <hr style="width: 100%;">      
+      `);
 
       // 대댓글 입력 폼을 대댓글 컨테이너에 추가
       replyCommentsContainer.append(replyForm);
@@ -248,18 +231,15 @@ $(document).off('click', '.open-reply-form-button').on('click', '.open-reply-for
 
       // 현재 열린 대댓글 입력 폼 정보를 전역 변수에 저장
       openReplyForm = {
-          commentId: commentId,
-          replyForm: replyForm
+        commentId: commentId,
+        replyForm: replyForm
       };
+    }
 
-      // 대댓글 작성 버튼에 클릭 이벤트 추가
-        replyForm.find('.btn-primary').on('click', function () {
-            // 대댓글 작성 함수 호출
-            replyCommentWrite();
-        });
+    // 답글목록 가져오기
+    loadReplyComments(commentId);
   });
 }
-
 
 
 
@@ -290,9 +270,15 @@ function closeReplyForm(commentId) {
 
 
 //9) 대댓글 작성 함수
+
+
+
 function replyCommentWrite(commentId) {
+    console.log('콘솔아이디테스트있냐'+commentId)
+
     // 대댓글 내용 가져오기
     var replyContents = document.getElementById('replyCommentContents-' + commentId).value;
+
 
     // 대댓글 작성자명 (임시로 고정)
     // var replyWriter = "Alice";
@@ -329,40 +315,55 @@ $.ajax({
     }
 });
 }
+    // 스크립트 코드 작성
 
 
 
 //10) 대댓글 목록을 불러오는 함수
 function loadReplyComments(commentId) {
     // 서버에 대댓글 목록 요청
- $.ajax({
-    type: "get",
-    url: `/comment/getReplyComments/${commentId}`,  // 수정된 부분
-    success: function (replyComments) {
-        // 대댓글 목록을 화면에 표시
-        const replyCommentsContainer = document.getElementById(`reply-comments-${commentId}`);
-        replyCommentsContainer.innerHTML = "";
+    fetch(`/comment/getReplyComments/${commentId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`대댓글 목록 불러오기 실패: ${response.status}`);
+            }
+            return response.json(); // JSON 데이터로 변환
+        })
+        .then(commentWithReplies => {
+            const replyComments = commentWithReplies.childComments;
 
-        replyComments.forEach(function (replyComment) {
-            const replyCommentElement = document.createElement("div");
-            replyCommentElement.innerHTML = `
-                <div style="width: 80%; margin: 0 auto;">
-                    <div style="float: left; width: 20%;">${replyComment.replyCommentWriter}</div>
-                    <div style="float: left; width: 40%; margin-left: 5%;">${replyComment.replyCommentContents}</div>
-                    <div style="float: right; width: 20%;">${replyComment.commentCreatedTime}</div>
-                    <div style="clear: both;"></div>
-                    <hr style="width: 100%;">
-                </div>
-            `;
-            replyCommentsContainer.appendChild(replyCommentElement);
+            // 대댓글 목록을 화면에 표시
+// const replyCommentsContainer = document.querySelector(`.reply-comments-${commentId}`);
+const replyCommentsContainer = document.querySelector('.reply-comments');
+
+            if (!replyCommentsContainer) {
+                console.error(`대댓글 컨테이너를 찾을 수 없습니다: .reply-comments-${commentId}`);
+                return;
+            }
+
+            replyCommentsContainer.innerHTML = "";
+
+            replyComments.forEach(replyComment => {
+                const replyCommentElement = document.createElement("div");
+                replyCommentElement.innerHTML = `
+                    <div class="reply-comments" style="width: 80%; margin: 0 auto;">
+                        <div style="float: left; width: 20%;">${replyComment.replyCommentWriter || ''}</div>
+                        <div style="float: left; width: 40%; margin-left: 5%;">${replyComment.replyCommentContents}</div>
+                        <div style="float: right; width: 20%;">${replyComment.replyCommentCreatedTime}</div>
+                        <div style="clear: both;"></div>
+                        <hr style="width: 100%;">
+                    </div>
+                `;
+                replyCommentsContainer.appendChild(replyCommentElement);
+            });
+        })
+        .catch(error => {
+            console.error("대댓글 목록 불러오기 실패", error);
         });
-    },
-    error: function (xhr, status, error) {
-        console.log("대댓글 목록 불러오기 실패", status, error);
-    }
-});
-
 }
+
+
+
 
 
 

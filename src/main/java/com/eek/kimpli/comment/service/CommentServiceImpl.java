@@ -2,7 +2,7 @@ package com.eek.kimpli.comment.service;
 
 import com.eek.kimpli.comment.model.Comment;
 import com.eek.kimpli.comment.repository.CommentRepository;
-import com.eek.kimpli.replycoment.model.ReplyComment;
+import com.eek.kimpli.replycomment.model.ReplyComment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,7 +43,7 @@ public class CommentServiceImpl implements CommentService {
 
         // 댓글과 대댓글 설정
         parentCommentOb.getChildComments().add(replyComment);
-        replyComment.setParentComment(parentCommentOb.getId());
+        replyComment.setCommentId(parentCommentOb.getId());
 
         // 댓글과 대댓글 저장
         commentRepository.save(parentCommentOb);
@@ -54,6 +54,14 @@ public class CommentServiceImpl implements CommentService {
     // 댓글 ID를 이용하여 대댓글 조회
     @Override
     public List<ReplyComment> findByParentComment(Long commentId) {
+        commentRepository.findReplyCommentsById(commentId);
+        System.out.println( "레파지토리test"+commentRepository.findReplyCommentsById(commentId));
         return commentRepository.findReplyCommentsById(commentId);
     }
+
+        @Override
+    public Comment getCommentWithReplies(Long commentId) {
+        return commentRepository.findById(commentId).orElse(null);
+    }
+
 }

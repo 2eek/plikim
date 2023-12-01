@@ -1,8 +1,10 @@
 package com.eek.kimpli.comment.controller;
 
+import com.eek.kimpli.comment.converter.CommentConverter;
 import com.eek.kimpli.comment.model.Comment;
 import com.eek.kimpli.comment.service.CommentService;
-import com.eek.kimpli.replycoment.model.ReplyComment;
+import com.eek.kimpli.replycomment.dto.ReplyCommentDTO;
+import com.eek.kimpli.replycomment.model.ReplyComment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,14 +14,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
-@Controller
 @RequestMapping("/comment")
 public class CommentController {
 
@@ -30,16 +32,20 @@ public class CommentController {
         this.commentService = commentService;
     }
 
+       @Autowired
+    private CommentConverter commentConverter;
 
 
 
     //댓글 ajax 저장
+    //save 메서드는 HTML 폼을 통해 데이터를 받아옴
     @PostMapping("/save")
     @ResponseBody
     public String save(@Valid Comment comment) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
             String userId = userDetails.getUsername(); // 또는 다른 방식으로 userId를 가져와야 할 수 있습니다.
             System.out.println(userId);
             // 이제 userId를 이용하여 저장 로직을 수행합니다.
@@ -85,19 +91,56 @@ System.out.println("Current Page: " + commentsPage.getNumber());
 
         return new ResponseEntity<>(commentsPage, HttpStatus.OK);
     }
-//대댓글Ajax저장
-@PostMapping("/replySave")
-public ResponseEntity<String> saveCommentAndReply(@RequestParam Long parentCommentId) {
-    ReplyComment replyComment = new ReplyComment();
-    replyComment.setReplyCommentWriter("Alice");
-    replyComment.setReplyCommentContents("Replying to the comment.");
-    replyComment.setBoardId(1L);
-    replyComment.setCommentCreatedTime(LocalDateTime.now());
-    replyComment.setDeleted((byte) 0);
-    commentService.saveOrUpdateReplyComment(replyComment, parentCommentId);
 
-    return ResponseEntity.ok("Comment and reply saved successfully.");
+//대댓글Ajax저장
+//JSON 데이터를 처리합니다. @RequestBody 어노테이션을 통해 HTTP 요청 본문에 있는 JSON 데이터를 ReplyComment 객체로 변환합니다. 또한, URL 쿼리 매개변수인 commentId를 받아옴
+@PostMapping("/replySave")
+public ResponseEntity<String> saveReplyComment(
+        @RequestBody ReplyComment replyComment,
+    @RequestParam Long commentId
+) {
+    System.out.println("여기오나??");
+
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (authentication != null && authentication.isAuthenticated()) {
+        replyComment.setReplyCommentCreatedTime(LocalDateTime.now());
+        replyComment.setDeleted((byte) 0);
+
+        commentService.saveOrUpdateReplyComment(replyComment, commentId);
+
+        return ResponseEntity.ok("댓글과 답글이 성공적으로 저장되었습니다.");
+    } else {
+        // 로그인되지 않은 경우에 대한 처리
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+    }
 }
 
+////대댓글 조회
+//@GetMapping("/getReplyComments/{commentId}")
+//@ResponseBody
+//public ResponseEntity<List<ReplyComment>> getReplyComments(@PathVariable Long commentId) {
+//    System.out.println("test 부모 아이디" + commentId);
+//    System.out.println(1);
+//        System.out.println("!!!"+commentService.findByParentComment(commentId));
+//    commentService.findByParentComment(commentId);
+//    System.out.println("???"+commentService.findByParentComment(commentId));
+//    System.out.println("test");
+//    List<ReplyComment> replyComments = commentService.findByParentComment(commentId);
+//    System.out.println(replyComments);
+//    System.out.println(2);
+//    return ResponseEntity.ok(replyComments);
+//}
+@GetMapping("/getReplyComments/{commentId}")
+
+    public ResponseEntity<Comment> getCommentWithReplies(@PathVariable Long commentId) {
+        Comment commentWithReplies = commentService.getCommentWithReplies(commentId);
+
+        if (commentWithReplies != null) {
+            return new ResponseEntity<>(commentWithReplies, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
 }

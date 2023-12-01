@@ -1,7 +1,6 @@
 package com.eek.kimpli.comment.model;
 
-import com.eek.kimpli.replycoment.model.ReplyComment;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.eek.kimpli.replycomment.model.ReplyComment;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -20,7 +19,9 @@ public class Comment {
     private LocalDateTime commentCreatedTime; //댓글 생성 시간
     private byte deleted;
 
-   @OneToMany(mappedBy = "commentId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<ReplyComment> childComments; // 대댓글 목록
+    //여기서 mappedBy = "commentId"는 ReplyComment 엔터티에서 Comment 엔터티를 참조하는 필드가 commentId임을 나타냅니다.
+    // childComments: 부모 댓글에 속한 대댓글들을 리스트로 저장하는 용도 mappedBy = "commentId"
+//관계의 주인이 되는 엔터티(ReplyComment)의 필드(commentId)를 지정
+@OneToMany(mappedBy = "commentId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+private List<ReplyComment> childComments;
 }

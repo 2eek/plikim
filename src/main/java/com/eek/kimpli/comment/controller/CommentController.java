@@ -1,8 +1,10 @@
 package com.eek.kimpli.comment.controller;
 
+import com.eek.kimpli.comment.converter.CommentConverter;
 import com.eek.kimpli.comment.model.Comment;
 import com.eek.kimpli.comment.service.CommentService;
-import com.eek.kimpli.replycoment.model.ReplyComment;
+import com.eek.kimpli.replycomment.dto.ReplyCommentDTO;
+import com.eek.kimpli.replycomment.model.ReplyComment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,15 +14,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.HTML;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
-@Controller
 @RequestMapping("/comment")
 public class CommentController {
 
@@ -31,6 +32,8 @@ public class CommentController {
         this.commentService = commentService;
     }
 
+       @Autowired
+    private CommentConverter commentConverter;
 
 
 
@@ -88,6 +91,7 @@ System.out.println("Current Page: " + commentsPage.getNumber());
 
         return new ResponseEntity<>(commentsPage, HttpStatus.OK);
     }
+
 //대댓글Ajax저장
 //JSON 데이터를 처리합니다. @RequestBody 어노테이션을 통해 HTTP 요청 본문에 있는 JSON 데이터를 ReplyComment 객체로 변환합니다. 또한, URL 쿼리 매개변수인 commentId를 받아옴
 @PostMapping("/replySave")
@@ -112,20 +116,31 @@ public ResponseEntity<String> saveReplyComment(
     }
 }
 
-//대댓글 조회
+////대댓글 조회
+//@GetMapping("/getReplyComments/{commentId}")
+//@ResponseBody
+//public ResponseEntity<List<ReplyComment>> getReplyComments(@PathVariable Long commentId) {
+//    System.out.println("test 부모 아이디" + commentId);
+//    System.out.println(1);
+//        System.out.println("!!!"+commentService.findByParentComment(commentId));
+//    commentService.findByParentComment(commentId);
+//    System.out.println("???"+commentService.findByParentComment(commentId));
+//    System.out.println("test");
+//    List<ReplyComment> replyComments = commentService.findByParentComment(commentId);
+//    System.out.println(replyComments);
+//    System.out.println(2);
+//    return ResponseEntity.ok(replyComments);
+//}
 @GetMapping("/getReplyComments/{commentId}")
-@ResponseBody
-public ResponseEntity<List<ReplyComment>> getReplyComments(@PathVariable Long commentId) {
-    System.out.println("test 부모 아이디" + commentId);
-    System.out.println(1);
-        System.out.println("!!!"+commentService.findByParentComment(commentId));
-    commentService.findByParentComment(commentId);
-    System.out.println("???"+commentService.findByParentComment(commentId));
-    System.out.println("test");
-    List<ReplyComment> replyComments = commentService.findByParentComment(commentId);
-    System.out.println(replyComments);
-    System.out.println(2);
-    return ResponseEntity.ok(replyComments);
-}
+
+    public ResponseEntity<Comment> getCommentWithReplies(@PathVariable Long commentId) {
+        Comment commentWithReplies = commentService.getCommentWithReplies(commentId);
+
+        if (commentWithReplies != null) {
+            return new ResponseEntity<>(commentWithReplies, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
 }

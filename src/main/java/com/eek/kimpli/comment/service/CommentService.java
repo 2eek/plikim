@@ -1,7 +1,7 @@
 package com.eek.kimpli.comment.service;
 
 import com.eek.kimpli.comment.model.Comment;
-import com.eek.kimpli.replycoment.model.ReplyComment;
+import com.eek.kimpli.replycomment.model.ReplyComment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -20,5 +20,8 @@ public interface CommentService {
     // 댓글 ID를 이용하여 대댓글 조회
     List<ReplyComment> findByParentComment(Long commentId);
 
+
+    // 댓글과 대댓글을 함께 가져오는 메서드
+    Comment getCommentWithReplies(Long commentId);
 
 }

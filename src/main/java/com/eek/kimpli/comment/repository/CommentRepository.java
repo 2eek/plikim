@@ -1,11 +1,13 @@
 package com.eek.kimpli.comment.repository;
 
-import com.eek.kimpli.board.model.Board;
 import com.eek.kimpli.comment.model.Comment;
-import com.eek.kimpli.replycoment.model.ReplyComment;
+import com.eek.kimpli.replycomment.model.ReplyComment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,6 +20,13 @@ public interface CommentRepository extends JpaRepository<Comment, Long > {
     Page<Comment> findByBoardId(Long boardId, Pageable pageable);
 
     List<ReplyComment> findReplyCommentsById(Long Id);
+
+    //댓글 soft delete
+    @Modifying
+    @Query("UPDATE Comment c SET c.deleted = 1 WHERE c.id = :commentId")
+    void softDeleteComment(@Param("commentId") Long commentId);
+
+
 
 
 }

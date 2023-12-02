@@ -1,8 +1,8 @@
 package com.eek.kimpli.controller;
 
-import com.eek.kimpli.EncryptionUtils.EncryptionUtils;
 import com.eek.kimpli.chat.model.Chat;
 import com.eek.kimpli.chat.repository.ChatRepository;
+import com.eek.kimpli.EncryptionUtils.AesUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,18 +31,20 @@ public class HomeController {
         if (chatRoomList != null) {
             Set<String> uniqueRoomNums = new HashSet<>();
 
-            // 채팅 메시지 복호화
-            chatRoomList.forEach(chat -> {
-                String encryptedMessage = chat.getMsg();
-                String decryptedMessage = EncryptionUtils.decrypt(encryptedMessage);
-                chat.setMsg(decryptedMessage);
-            });
-
-            // 중복된 userName을 제거한 roomNum 반환
             chatRoomList = chatRoomList.stream()
                     .filter(chat -> chat.getRoomNum() != null && chat.getRoomNum().contains(userName))
                     .sorted(Comparator.comparing(Chat::getCreatedAt).reversed())
                     .filter(chat -> uniqueRoomNums.add(chat.getRoomNum()))
+                    .map(chat -> {
+                        try {
+                            // 메시지 복호화
+                            String decryptedMessage = AesUtil.aesCBCDecode(chat.getMsg());
+                            chat.setMsg(decryptedMessage);
+                        } catch (Exception e) {
+                            e.printStackTrace(); // 복호화 실패 시 예외 처리
+                        }
+                        return chat;
+                    })
                     .collect(Collectors.toList());
         }
 
@@ -50,7 +52,6 @@ public class HomeController {
         model.addAttribute("chatList", chatRoomList);
         System.out.println("이름: " + userName);
 
-        //System.out.println(chatRoomList);
         List<String> roomNumList = new ArrayList<>();
         for (Chat chat : chatRoomList) {
             String roomNum = chat.getRoomNum();

@@ -123,3 +123,8 @@ systemLog:
 
 
 
+#채팅내용 암호화 복호화
+
+#encryption:
+#  secretKey: your-secret-key
+#  iv: your-initialization-vector

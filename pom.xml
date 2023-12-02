@@ -124,6 +124,13 @@
 			<artifactId>spring-boot-starter-logging</artifactId>
 		</dependency>
 
+<!--		채팅 암호화 복호화-->
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.15</version> <!-- 최신 버전으로 업데이트 -->
+		</dependency>
+
 	</dependencies>
 
 	<build>

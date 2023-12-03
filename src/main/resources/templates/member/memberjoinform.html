@@ -1,29 +1,457 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/common :: head('회원가입')">
+<!DOCTYPE>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" >
+<head th:replace="fragments/common :: head('plikim')">
 </head>
 <body>
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('join')">
-</nav>
-    <form action="/member/save" method="post">
-        <input type="email" name="memberEmail" placeholder="이메일" id="memberEmail" onblur="emailCheck()">
-        <input type="text" name="memberPassword" placeholder="비밀번호">
-        <input type="text" name="memberName" placeholder="이름">
-        <input type="date" name="birthdate" placeholder="생년월일">
-        <input type="text" name="memberMobile" placeholder="전화번호">
-        <input type="text" name="gender" placeholder="성별">
-        <input type="submit" value="회원가입">
-    </form>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('home')">
+    </nav>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<!--<link rel="stylesheet"-->
+<!--	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">-->
 
-<!--<form action="/user/save" method="post">-->
-<form th:action="@{/user/save}" method="post">
-    <input name="userId" placeholder="아이디">
-    <input type="password" name="password" placeholder="비밀번호">
-    <input type="email" name="email" placeholder="이메일">
-    <input name="userName" placeholder="이름">
-    <input type="date" name="birthday" placeholder="생일">
-    <input name="phoneNumber" placeholder="전화번호">
-    <button type="submit">회원가입테스트</button>
-</form>
+</head>
+
+<style>
+<!--
+아이디 중복체크-->.id_ok {
+	color: #008000;
+	display: none;
+}
+
+.id_already {
+	color: #6A82FB;
+	display: none;
+}
+
+.h5 {
+	color: red;
+}
+
+h5 {
+	color: red;
+}
+</style>
+
+<body>
+	<script src="https://kit.fontawesome.com/d58c3728d1.js"
+		crossorigin="anonymous"></script>
+
+	<div class="wrap">
+		<div
+			class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
+			<div class="d-flex align-items-center justify-content-center w-100">
+				<div class="row justify-content-center w-100">
+					<div class="col-md-8 col-lg-6 col-xxl-8">
+						<div class="card mb-0">
+							<div class="card-body">
+								<a href="index.html"
+									class="text-nowrap logo-img text-center d-block py-3 w-100">
+								</a>
+
+								<div>
+									<h3 class="text-center">회원가입</h3>
+								</div>
+								<form name="insertForm" action="/member/memberInsert" method="post">
+									<h5>*는 필수입력 사항입니다.</h5>
+
+									<div class="mb-3">
+										<label for="" class="form-label"
+											style="float: left; display: inline;"><span class=h5>*</span>아이디</label>
+
+										<input type="text" name="memberId" placeholder="아이디"
+											class="form-control" id="id" aria-describedby="textHelp"
+											required>
+									</div>
+									<div>
+										<font id="spaceId" size="2"></font> <font id="checkId"
+											size="2"></font>
+									</div>
+									<div class="mb-3">
+										<div class="main">
+											<label for="" class="form-label"><span class=h5>*</span>비밀번호</label>
+											<i class="fa-solid fa-eye-slash fa-xs"></i> <input
+												type="password" name="password" placeholder="비밀번호"
+												class="form-control" id="pw1" required> <font
+												id="pw" size="2"></font>
+										</div>
+									</div>
+
+									<div class="mb-3">
+										<div class="main">
+											<label for="" class="form-label"><span class=h5>*</span>비밀번호
+												확인</label> <i class="fa-solid fa-eye-slash fa-xs"></i> <input
+												type="password" name="" placeholder="비밀번호 확인"
+												class="form-control" id="pw2" required>
+										</div>
+									</div>
+									<font id="checkPw" size="2"></font> <br>
+
+									<label><span class=h5>*</span>국적</label>
+
+									<div class="mb-3">
+										<select class="" id="nationality" name="nationality"
+											aria-label="Default select example" required>
+											<option value="">국가선택</option>
+											<option value="대한민국">대한민국</option>
+											<option value="일본">일본</option>
+											<option value="중국">중국</option>
+											<option value="미국">미국</option>
+											<option value="캐나다">캐나다</option>
+											<option value="필리핀">필리핀</option>
+
+										</select> <br /> <br />
+
+									</div>
+
+
+
+									<div class="mb-3">
+										<label for="example" class="form-label"><span class=h5>*</span>이메일</label>
+										<input type="email" name="email" placeholder="이메일"
+											class="form-control" id="email" required>
+									</div>
+
+									<div class="mb-3">
+										<label for="" class="form-label"><span class=h5>*</span>이름</label>
+										<input type="text" name="memberName" placeholder="이름"
+											class="form-control" id="name" required>
+									</div>
+
+
+
+
+									<div class="mb-3">
+										<label for="" class="form-label"><span class=h5>*</span>전화번호
+											&nbsp; </label>
+
+										<input type="text" class="form-control" name="to"
+											id="phonenumber" placeholder="전화번호를 입력하세요" style="width: 50%; " required>
+											<button type="button" id="approveButton" class="btn btn-default" style="">코드 발송</button>
+									</div>
+
+									<div id="codeCheck" class="mb-3" style="display: none">
+										<input type="text" class="form-control" name="smsCode"
+											id="smsCode" placeholder="코드 입력하세요" required>
+										<button type="button" id="code" name="codeConfirmBtn"
+											class="btn btn-default" onclick="confirmCode()" value="">코드
+											확인</button>
+
+									</div>
+									<br> <input type="hidden" id="numValue" value="">
+
+									<div class="mb-3">
+										<label for="" class="form-label">생년월일</label> <input
+											type="date" name="birthDate" placeholder="생일"
+											class="form-control" id="birthday" required>
+									</div>
+
+									<div>
+										<label for="" class="form-label"><span class=h5>*</span>성별</label> <br /> <input
+											type="radio" id="male" name="gender" value="G1">남 <input
+											type="radio" id="female" name="gender" value="G2">여
+									</div>
+									<br> <input onclick="joinform_check()" type="submit"
+										value="회원가입"
+										class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!--  sms코드 전송 -->
+	<script th:inline="javascript">
+		$(document).ready(function() {
+		      // 승인 버튼. 클릭(이벤트)발생시  ajaxApprove메서드 실행 설정(핸들러)
+		      $('#approveButton').on('click',function(){
+		    	  ajaxApprove();
+		    	    sendCode();
+		      });
+
+
+		   function ajaxApprove(){
+
+
+		      // memberId 정의
+		 	let receiverId = document.getElementById("phonenumber").value;
+
+		     $.ajax({
+		         url : "/sms/send",
+		         type : 'post',
+		         data: { to : receiverId },
+		      })
+		      .done( data => {
+
+		         console.log("통신은 성공");
+		         if(data != null && data.num != null){
+		            alert(`${receiverId} 문자발송했습니다`);
+
+		            $("#numValue").val(data.num);
+
+
+		         } else {
+		            alert(`문자 발송 안됐습니다.`);
+		         }
+		      })
+		      .fail( reject => console.log(reject));
+		   };
+
+
+		   function sendCode(){
+			    $("#codeCheck").css("display","block");
+			    }
+
+		});
+
+		   function confirmCode(){
+			   var number1 = $("#smsCode").val();
+			   var number2 = $("#numValue").val();
+
+		        if (number1 == number2) { // 저장된 SMS 코드를 사용
+		            alert("인증되었습니다.");
+		        } else {
+		            alert("번호가 다릅니다.");
+		        }
+		    }
+
+	</script>
+
+
+
+
+	<!--  아이디 확인 -->
+	<script>
+$('#id').on('input', function(){
+
+	 var id = $("#id").val();
+
+	 if(id === '' )  {
+		 $("#spaceId").html("");
+		 return false;
+	 }
+
+	 if(id.search(/\s/) != -1){
+ 		$("#spaceId").html("아이디는 공백 없이 입력해주세요.");
+		$("#spaceId").attr('color','red');
+		$("#id").focus();
+	 	return false;
+	 }
+
+
+	 $.ajax({
+			/* url : "IdCheckService", */
+			url : "/idCheck",
+			type : "post",
+			data :  {memberId :id},
+			dataType : 'json',
+			success : function(result){
+				if(result == 0){
+					$("#spaceId").html('사용할 수 있는 아이디입니다.');
+					$("#spaceId").attr('color','green');
+
+				} else{
+
+					$("#spaceId").html('사용할 수 없는 아이디입니다.');
+					$("#spaceId").attr('color','red');
+				}
+			},
+			error : function(){
+				alert("서버요청실패");
+			}
+		})
+
+	});
+
+</script>
+
+
+
+	<!--  비밀번호 확인 -->
+	<script>
+
+	<!--  비밀번호 유효성 검사 -->
+
+
+	$('#pw1').on('input', function(){
+
+		 var pw = $("#pw1").val();
+		 var num = pw.search(/[0-9]/g);
+		 var eng = pw.search(/[a-z]/ig);
+		 var spe = pw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
+
+		 if(pw.length < 8 || pw.length > 20){
+
+		  //alert("8자리 ~ 20자리 이내로 입력해주세요.");
+		 	 $("#pw").html("8자리 ~ 20자리 이내로 입력해주세요.");
+			$("#pw").attr('color','red');
+		  return false;
+		 }else if(pw.search(/\s/) != -1){
+		  //alert("비밀번호는 공백 없이 입력해주세요.");
+		 	 $("#pw").html("비밀번호는 공백 없이 입력해주세요.");
+				$("#pw").attr('color','red');
+		  return false;
+		 }else if(num < 0 || eng < 0 || spe < 0 ){
+		  //alert("영문,숫자, 특수문자를 혼합하여 입력해주세요.");
+			 $("#pw").html("영문,숫자, 특수문자를 혼합하여 입력해주세요.");
+			$("#pw").attr('color','red');
+		  return false;
+		 }else {
+			 $("#pw").html("조건을 충족합니다.");
+			$("#pw").attr('color','green');
+		    return true;
+		 }
+
+		});
+
+
+
+
+	$('#pw2').on('input', function(){
+	        var number1 = $("#pw1").val();
+	        var number2 = $("#pw2").val();
+
+	        if(number1 == number2){
+				$("#checkPw").html('번호가 같습니다.');
+				$("#checkPw").attr('color','green');
+	        }else{
+	        	$("#checkPw").html('번호가 다릅니다.');
+				$("#checkPw").attr('color','red');
+	        }
+	    }
+
+	);
+
+
+
+	</script>
+
+	<!--  비밀번호 on/off  -->
+	<script>
+	$(document).ready(function(){
+	    $('.main i').on('click',function(){
+	        $('input').toggleClass('active');
+
+	        if($('input').hasClass('active')){
+	            $(this).attr('class',"fa-solid fa-eye fa-xs")
+	            .next('input').attr('type',"text");
+	        }else{
+	            $(this).attr('class',"fa-solid fa-eye-slash fa-xs")
+	            .next('input').attr('type','password');
+	        }
+	    });
+	});
+
+	</script>
+
+
+
+
+
+
+	<!--   주소 다음api -->
+	<script type="text/javascript"
+		src="https://code.jquery.com/jquery-1.10.2.min.js" /></script>
+	<script
+		src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script>
+function openZipSearch() {
+    new daum.Postcode({
+    	oncomplete: function(data) {
+		var address = '';
+		if (data.userSelectedType === 'R') {
+			address = data.roadAddress;
+		} else {
+			address = data.jibunAddress;
+		}
+
+		$("#zipCode").val(data.zonecode);
+		$("#address").val(address);
+		$("#addressDetail").val("");
+		$("#addressDetail").focus();
+        }
+    }).open();
+}
+</script>
+
+
+
+
+	<!-- 회원가입 유효성 체크 -->
+	<script>
+
+//joinform_check 함수로 유효성 검사
+function joinform_check() {
+  //변수에 담아주기
+  var uid = document.getElementById("id");
+  var pwd = document.getElementById("pw1");
+  var repwd = document.getElementById("pw2");
+  var uname = document.getElementById("name");
+  var female = document.getElementById("female");
+   var male = document.getElementById("male");
+  var mobile = document.getElementById("phonenumber");
+  var email_id = document.getElementById("email");
+  var smsCode = document.getElementById("smsCode");
+
+  //var agree = document.getElementById("agree");
+
+  if (uid.value == "") { //해당 입력값이 없을 경우 같은말: if(!uid.value)
+    alert("아이디를 입력하세요.");
+    uid.focus(); //focus(): 커서가 깜빡이는 현상, blur(): 커서가 사라지는 현상
+    return false; //return: 반환하다 return false:  아무것도 반환하지 말아라 아래 코드부터 아무것도 진행하지 말것
+  };
+  if (pwd.value == "") {
+	    alert("비밀번호를 입력하세요.");
+	    pwd.focus();
+	    return false;
+	  };
+  if (smsCode.value == "") { //해당 입력값이 없을 경우 같은말: if(!uid.value)
+	    alert("휴대폰 인증 코드를 입력하세요.");
+	    smsCode.focus(); //focus(): 커서가 깜빡이는 현상, blur(): 커서가 사라지는 현상
+	    return false; //return: 반환하다 return false:  아무것도 반환하지 말아라 아래 코드부터 아무것도 진행하지 말것
+	  };
+
+
+
+  if (uname.value == "") {
+    alert("이름을 입력하세요.");
+    uname.focus();
+    return false;
+  };
+
+  if (!female.checked && !male.checked) { //둘다 미체크시
+    alert("성별을 선택해 주세요.");
+    male.focus();
+    return false;
+  }
+
+  var reg = /^[0-9]+/g; //숫자만 입력하는 정규식
+
+  if (!reg.test(mobile.value)) {
+    alert("전화번호는 숫자만 입력할 수 있습니다.");
+    mobile.focus();
+    return false;
+  }
+
+  if (email_id.value == "") {
+    alert("이메일 주소를 입력하세요.");
+    email_id.focus();
+    return false;
+  }
+
+
+  //입력 값 전송
+  document.insertForm.submit(); //유효성 검사의 포인트
+}
+
+
+
+  </script>
+
 </body>
 </html>

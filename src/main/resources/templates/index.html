@@ -71,7 +71,7 @@
                 <td>
                     <!-- 링크는 그대로 두되, 클릭 이벤트에 대한 핸들링을 추가 -->
                     <a th:href="@{/user/userdetail(id=${user.userId})}" th:text="${user.userId}" class="user-link">
-                        사용자 이름
+                        아이디
                     </a>
                 </td>
                 <td>자기소개</td>
@@ -101,7 +101,7 @@
                 </li>
                 <!--회원 검색-->
                 <div style="margin-left:100px ">
-                <form class="d-flex" role="search" method="GET" th:classappend="${menu} == 'mypage'? 'active'"
+                <form class="d-flex" role="search" method="GET" th:classappend="${menu} == 'mypage'? 'active' "
                       th:action="${#authorization.expression('isAuthenticated()') ? '/user/searchbyname' : '/member/loginForm'}">
                      <input id="userSearchText" name="userId" th:value="${param.searchText}" class="form-control me-2" type="text" placeholder="회원정보 조회"  style="margin-left: 7px;"  aria-label="Search">
                     <button id="userSearchButton" class="btn btn-outline-success"   style="margin-left:3px;" type="submit">Search</button>
@@ -125,10 +125,11 @@
                 </thead>
 
                 <tbody>
+<!--                      <tr th:each="user : ${user}" th:id="'user-row-' + ${user.userId}" class="user-row">-->
 <tr th:each="randomUser : ${randomUser}" th:id="'user-row-' + ${randomUser.userId}" class="user-row" th:if="${randomUser != null}" >
                     <td>프로필 사진 이미지</td>
                     <td >
-                        <a th:href="@{/user/userdetail(id=${randomUser.userId})}" th:text="${randomUser.userId}">사용자 아이디</a>
+                        <a th:href="@{/user/userdetail(id=${randomUser.userId})}" th:text="${randomUser.userId}" class="user-link">사용자 아이디</a>
                     </td>
                     <td th:text="${randomUser.userName}">
                         사용자 이름

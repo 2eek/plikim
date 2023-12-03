@@ -117,7 +117,7 @@ public String getUserDetailbySearch(@RequestParam(required = false) String userI
 
         //회원가입
         @PostMapping("/user/save")
-    public String JoinTest(@ModelAttribute("user") User user, Model model, @PageableDefault(size = 3) Pageable pageable) {
+    public String Join(@ModelAttribute("user") User user, Model model, @PageableDefault(size = 3) Pageable pageable) {
         Page<User> users = userRepository.findAll(pageable);
         int currentPage = users.getPageable().getPageNumber() + 1; // 현재 페이지 번호 (0부터 시작)
         int startPage = Math.max(1, currentPage - 2); // 현재 페이지 주변에 2 페이지씩 보여주기

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head th:replace="fragments/common:: head('로그인')">
+<!--<link rel="icon" th:href="@{https://plikim.com/favicon.ico}" type="image/x-icon" />-->
+
+</head>
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('login')">
+</nav>
+
+<body>
+        <div th:if="${param.error}">
+            Invalid username and password.
+        </div>
+        <div th:if="${param.logout}">
+            You have been logged out.
+        </div>
+    <form th:action="@{/member/login1}" method="post"><!--CSRF토큰 같이 보내기 위해-->
+        <input type="text" name="memberEmail" placeholder="이메일">
+        <input type="text" name="memberPassword" placeholder="비밀번호">
+        <button type="submit">로그인</button>
+    </form>
+        <div class="sns">
+             <div class="social-icons">
+                <!--  카카오 API를 사용하여 OAuth 2.0 인증을 위한 URL -->
+             <a  th:href="@{https://kauth.kakao.com/oauth/authorize?client_id=1e411be4c9538cd8fc4f1b4c817968b4&redirect_uri=https://plikim.com/kakaologin&response_type=code}">
+             <img  id="kakao" src="/img/카카오로그인.png" height="50" alt="kakao"></a>
+            </div>
+       </div>
+         <!--로컬-->
+<!--        <div class="sns">-->
+<!--             <div class="social-icons">-->
+<!--                &lt;!&ndash;  카카오 API를 사용하여 OAuth 2.0 인증을 위한 URL &ndash;&gt;-->
+<!--             <a  th:href="@{https://kauth.kakao.com/oauth/authorize?client_id=1e411be4c9538cd8fc4f1b4c817968b4&redirect_uri=http://localhost:9090/kakaologin&response_type=code}">-->
+<!--             <img  id="kakao" src="/img/카카오로그인.png" height="50" alt="kakao"    ></a>-->
+<!--            </div>-->
+<!--       </div>-->
+
+        <!--시큐리티 테스트 user테이블 -->
+        <form th:action="@{/login}" method="post">
+            <input name="userId" placeholder=" 아이디">
+            <input type="password" name="password" placeholder=" 비밀번호">
+            <button>테스트 로그인</button>
+        </form>
+
+
+
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Sign Out"/>
+        </form>
+</body>
+
+
+</html>

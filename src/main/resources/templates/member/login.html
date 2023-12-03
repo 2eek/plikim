@@ -7,47 +7,265 @@
 
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('login')">
 </nav>
+ <style>
+
+
+/** {*/
+
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*    font-family: sans-serif;*/
+/*}*/
+body {
+    background-image: url('/img/space.jpg');
+    /*background-color: #777777;*/
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh; /* 추가된 부분 */
+}
+
+/*.form-wrap h2 {*/
+/*    font-size: 1.5em; !* 원하는 크기로 조절 *!*/
+/*    margin-bottom: 10px; !* 아래로의 여백 조절 *!*/
+/*}*/
+
+/* 기존의 .wrap 스타일에 아래 속성 추가 */
+.wrap {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 85vh;
+    width: 100%;
+    background-position: center;
+    background-size: cover;
+    position: absolute;
+    margin-top: 20px; /* 위로의 여백 조절 */
+}
+
+
+.form-wrap {
+    width: 380px;
+    height: 330px;
+    position: relative;
+    background: #fff;
+    padding: 5px;
+    /*overflow: hidden;*/
+     border-radius: 30px;
+    /*margin-padding: 50px;*/
+}
+
+
+#loginButton{ border-radius: 5px;
+margin:5px;
+margin-left: 5px;
+}
+#btn {
+ /*    top: +5;
+    bottom: +1; */
+    left: 0;
+/*     margin-bottom : -5px; */
+    position: absolute;
+    width: 150px;
+    height: 100%;
+    background:  #1fa3d7;
+    border-radius: 30px;
+    transition: .5s;
+}
+.social-icons {
+
+    text-align: center;
+}
+.social-icons img {
+padding:5px;
+ width: 280px;
+    cursor: pointer;
+}
+.input-group {
+    /*top: 150px;*/
+    position: absolute;
+    width: 280px;
+    transition: .5s;
+    /*padding-bottom: 30px;*/
+}
+.input-field {
+    width: 100%;
+    padding: 10px 0;
+    margin: 5px 0;
+    border: none;
+    border-bottom: 1px solid #999;
+    outline: none;
+    background: transparent;
+}
+.submit {
+    width: 97%;
+    height: 40px;
+    cursor: pointer;
+    display: block;
+    margin: auto;
+    background: #1fa3d7;
+    border: 0;
+    outline: none;
+    border-radius: 10%;
+}
+
+
+
+
+.checkbox {
+    margin: 30px 10px 30px 0;
+}
+span {
+    color: #777;
+    font-size: 12px;
+    bottom: 68px;
+    /* position: absolute; */
+}
+#member {
+    left: 50px;
+}
+
+
+
+#center{
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin: 10px 0;
+}
+
+#center a {
+	font-size: 14px;
+}
+
+.join{
+   display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+</style>
 
 <body>
         <div th:if="${param.error}">
-            Invalid username and password.
+      아이디 비번 다시 입력하세요.
         </div>
         <div th:if="${param.logout}">
-            You have been logged out.
+            로그아웃 상태입니다.
         </div>
-    <form th:action="@{/member/login1}" method="post"><!--CSRF토큰 같이 보내기 위해-->
-        <input type="text" name="memberEmail" placeholder="이메일">
-        <input type="text" name="memberPassword" placeholder="비밀번호">
-        <button type="submit">로그인</button>
-    </form>
-        <div class="sns">
-             <div class="social-icons">
-                <!--  카카오 API를 사용하여 OAuth 2.0 인증을 위한 URL -->
-             <a  th:href="@{https://kauth.kakao.com/oauth/authorize?client_id=1e411be4c9538cd8fc4f1b4c817968b4&redirect_uri=https://plikim.com/kakaologin&response_type=code}">
-             <img  id="kakao" src="/img/카카오로그인.png" height="50" alt="kakao"></a>
+<!--    <form th:action="@{/member/login1}" method="post">&lt;!&ndash;CSRF토큰 같이 보내기 위해&ndash;&gt;-->
+<!--        <input type="text" name="memberEmail" placeholder="이메일">-->
+<!--        <input type="text" name="memberPassword" placeholder="비밀번호">-->
+<!--        <button type="submit">로그인</button>-->
+<!--    </form>-->
+
+
+<!--        <form th:action="@{/login}" method="post">-->
+<!--            <input name="userId" placeholder=" 아이디">-->
+<!--            <input type="password" name="password" placeholder=" 비밀번호">-->
+<!--            <button>테스트 로그인</button>-->
+<!--        </form>-->
+
+
+
+<!--        <form th:action="@{/logout}" method="post">-->
+<!--            <input type="submit" value="Sign Out"/>-->
+<!--        </form>-->
+
+
+
+        <div class="wrap" >
+            <div class="form-wrap">
+                <div class="join" >
+                    <h4 style="font-style: oblique;">plikim</h4>
+                </div>
+
+                <!-- 일반 로그인 -->
+                <form id="member" th:action="@{/login}" method="post" class="input-group">
+
+                    <input type="text" class="input-field" name="userId" placeholder="아이디"  id="id" ><!-- required -->
+                    <input type="password"  class="input-field"name="password" placeholder="비밀번호" id="pw" ><!-- required  -->
+                    <span id="checkId" style="font-size: 2px;"></span>
+                    <span></span>
+
+             <div id="center">
+	             <div class="find">
+	                <a th:href="@{/findAccount}"class="">아이디 찾기</a>
+	                <span>&nbsp;|&nbsp;</span>
+           			<a th:href="@{/findPassword}"class="property-sub">비밀번호 찾기</a>
+           			<span>&nbsp;|&nbsp;</span>
+           			<a th:href="@{/member/memberInsert}" class="property-sub">회원가입</a>
+	          	 </div>
+          	 </div>
+
+                <br/>
+                    <button type="submit" id='loginButton' class="submit"><b>일반 로그인</b></button>
+                         <!--  SNS로그인 -->
+                   <div class="sns">
+                             <div class="sns">
+                                 <div class="social-icons">
+                                    <!--  카카오 API를 사용하여 OAuth 2.0 인증을 위한 URL -->
+<!--                                 <a  th:href="@{https://kauth.kakao.com/oauth/authorize?client_id=1e411be4c9538cd8fc4f1b4c817968b4&redirect_uri=https://plikim.com/kakaologin&response_type=code}">-->
+                                             <a  th:href="@{https://kauth.kakao.com/oauth/authorize?client_id=1e411be4c9538cd8fc4f1b4c817968b4&redirect_uri=http://localhost:9090/kakaologin&response_type=code}">
+
+                                 <img  id="kakao" src="/img/카카오로그인.png" height="50" alt="kakao"></a>
+                                </div>
+                             </div>
+                   </div>
+               </form>
+
             </div>
-       </div>
-         <!--로컬-->
-<!--        <div class="sns">-->
-<!--             <div class="social-icons">-->
-<!--                &lt;!&ndash;  카카오 API를 사용하여 OAuth 2.0 인증을 위한 URL &ndash;&gt;-->
-<!--             <a  th:href="@{https://kauth.kakao.com/oauth/authorize?client_id=1e411be4c9538cd8fc4f1b4c817968b4&redirect_uri=http://localhost:9090/kakaologin&response_type=code}">-->
-<!--             <img  id="kakao" src="/img/카카오로그인.png" height="50" alt="kakao"    ></a>-->
-<!--            </div>-->
-<!--       </div>-->
-
-        <!--시큐리티 테스트 user테이블 -->
-        <form th:action="@{/login}" method="post">
-            <input name="userId" placeholder=" 아이디">
-            <input type="password" name="password" placeholder=" 비밀번호">
-            <button>테스트 로그인</button>
-        </form>
+        </div>
 
 
 
-        <form th:action="@{/logout}" method="post">
-            <input type="submit" value="Sign Out"/>
-        </form>
+        <!-- 로그인시 아이디 비밀번호 DB에 있는지 확인 -->
+<!--        <script>-->
+
+<!--      //이벤트 핸들링 등록. HTML 요소가 모두 로딩된 이후에 이루어져야 하므로.-->
+<!--        $(document).ready(function(){-->
+<!--           $('#member').on('submit', loginAccountcheck);-->
+<!--        });-->
+
+
+<!--        function loginAccountcheck(event){-->
+<!--        event.preventDefault();-->
+<!--        let userId = $('#id').val(); // input_id에 입력되는 값-->
+<!--      let userPassword = $('#pw').val();-->
+<!--      $.ajax({-->
+<!--         /* url : "IdCheckService", */-->
+<!--         url : "/loginAccountCheck",-->
+<!--         type : "post",-->
+<!--         data :  {memberId :userId , password:userPassword},-->
+<!--         dataType : 'json',-->
+
+<!--         success : function(result){-->
+<!--            if(result == 0){-->
+
+<!--               $("#checkId").html('아이디 또는 비밀번호가 틀렸습니다.');-->
+<!--               $("#checkId").attr('color','red');//멈춰야함-->
+
+
+<!--            } else{-->
+<!--               //event.unbind();-->
+<!--               //$("#checkId").html('사용할 수 있는 아이디입니다.');-->
+<!--               //$("#checkId").attr('color','green');-->
+<!--               $('#member')[0].submit();-->
+<!--               //$('#guide')[0].submit();-->
+<!--            }-->
+<!--         },-->
+<!--         error : function(){-->
+
+<!--            alert("서버요청실패");-->
+<!--         }-->
+<!--      });-->
+<!--      //$('#member').submit();-->
+
+<!--   }-->
+
+
+<!-- </script>-->
 </body>
 
 

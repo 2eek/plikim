@@ -1,132 +1,132 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<!--<!DOCTYPE html>-->
+<!--<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">-->
 
-<head th:replace="fragments/common :: head(${board.id != null} ? '상세조회' : '글 작성')">
-    <script src="https://code.jquery.com/jquery-3.6.3.min.js"
-        integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+<!--<head th:replace="fragments/common :: head(${board.id != null} ? '상세조회' : '글 작성')">-->
+<!--    <script src="https://code.jquery.com/jquery-3.6.3.min.js"-->
+<!--        integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>-->
 
-</head>
+<!--</head>-->
 
 
-<body>
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top"
-        th:replace="fragments/common :: menu('boardList')"></nav>
+<!--<body>-->
+<!--    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top"-->
+<!--        th:replace="fragments/common :: menu('boardList')"></nav>-->
 
-    <main role="main" class="container">
-        <div class="starter-template">
-            <h1>게시글</h1>
-        </div>
-    </main>
+<!--    <main role="main" class="container">-->
+<!--        <div class="starter-template">-->
+<!--            <h1>게시글</h1>-->
+<!--        </div>-->
+<!--    </main>-->
 
-    <div style="width: 80%; margin: 0 auto;">
-        <form th:action="@{/board/save}" th:object="${board}" method="post" enctype="multipart/form-data">
-            <input type="hidden" id="boardId" th:field="*{id}">
+<!--    <div style="width: 80%; margin: 0 auto;">-->
+<!--        <form th:action="@{/board/save}" th:object="${board}" method="post" enctype="multipart/form-data">-->
+<!--            <input type="hidden" id="boardId" th:field="*{id}">-->
 
-            <table style="width: 100%; border:1px">
-                <input type="text" th:field="*{author}" hidden />
+<!--            <table style="width: 100%; border:1px">-->
+<!--                <input type="text" th:field="*{author}" hidden />-->
 
-                <tr>
-                    <th style="width: 100px;">작성자</th>
-                    <td style="width: 150px;" th:text="*{author}" th:field="*{author}"></td>
-                    <th style="width: 100px;">작성일자</th>
-                    <td style="width: 150px;" th:text="${#temporals.format(board.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
-                    <th style="width: 100px;">조회수</th>
-                    <td style="width: 70px;" th:field="*{views}" th:value="${board.views}" th:text="*{views}"></td>
-                </tr>
-                <tr>
-                    <th style="width: 100px">제목</th>
-                    <td colspan="6">
-                        <div class="form-group">
-                            <input type="text" class="form-control" th:classappend="${#fields.hasErrors('title')} ? 'is-invalid'" id="title" th:field="*{title}" placeholder="제목">
-                            <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">
-                                제목 에러 메세지
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th style="width: 100px">내용</th>
-                    <td colspan="25">
-                        <textarea class="form-control" th:classappend="${#fields.hasErrors('content')} ? 'is-invalid'" id="content" th:field="*{content}" placeholder="내용" rows="15"></textarea>
-                        <div class="invalid-feedback" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">
-                            내용 에러 메세지
-                        </div>
-                    </td>
-                </tr>
-            </table>
+<!--                <tr>-->
+<!--                    <th style="width: 100px;">작성자</th>-->
+<!--                    <td style="width: 150px;" th:text="*{author}" th:field="*{author}"></td>-->
+<!--                    <th style="width: 100px;">작성일자</th>-->
+<!--                    <td style="width: 150px;" th:text="${#temporals.format(board.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></td>-->
+<!--                    <th style="width: 100px;">조회수</th>-->
+<!--                    <td style="width: 70px;" th:field="*{views}" th:value="${board.views}" th:text="*{views}"></td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <th style="width: 100px">제목</th>-->
+<!--                    <td colspan="6">-->
+<!--                        <div class="form-group">-->
+<!--                            <input type="text" class="form-control" th:classappend="${#fields.hasErrors('title')} ? 'is-invalid'" id="title" th:field="*{title}" placeholder="제목">-->
+<!--                            <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">-->
+<!--                                제목 에러 메세지-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <th style="width: 100px">내용</th>-->
+<!--                    <td colspan="25">-->
+<!--                        <textarea class="form-control" th:classappend="${#fields.hasErrors('content')} ? 'is-invalid'" id="content" th:field="*{content}" placeholder="내용" rows="15"></textarea>-->
+<!--                        <div class="invalid-feedback" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">-->
+<!--                            내용 에러 메세지-->
+<!--                        </div>-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--            </table>-->
 
-            <div class="text-right" id="button-container">
-                <button type="button" class="btn btn-primary" onclick="history.back()">되돌아가기</button>
-                <button id="update" type="button" class="btn btn-primary" th:if="${board.author eq username}">수정</button>
-                <button id="cancel" type="reset" class="btn btn-primary" th:if="${board.id == null}">취소</button>
-            </div>
-        </form>
-    </div>
-    <hr style="width: 80%;">
-<!--댓글 리스트 -->
-    <div id="commentList"></div>
-    <!--페이징 버튼 -->
-    <div id="pagination"></div>
-<!--    대댓글 리스트 출력-->
-            <div class="reply-comments"></div>
+<!--            <div class="text-right" id="button-container">-->
+<!--                <button type="button" class="btn btn-primary" onclick="history.back()">되돌아가기</button>-->
+<!--                <button id="update" type="button" class="btn btn-primary" th:if="${board.author eq username}">수정</button>-->
+<!--                <button id="cancel" type="reset" class="btn btn-primary" th:if="${board.id == null}">취소</button>-->
+<!--            </div>-->
+<!--        </form>-->
+<!--    </div>-->
+<!--    <hr style="width: 80%;">-->
+<!--&lt;!&ndash;댓글 리스트 &ndash;&gt;-->
+<!--    <div id="commentList"></div>-->
+<!--    &lt;!&ndash;페이징 버튼 &ndash;&gt;-->
+<!--    <div id="pagination"></div>-->
+<!--&lt;!&ndash;    대댓글 리스트 출력&ndash;&gt;-->
+<!--            <div class="reply-comments"></div>-->
 
-    <!-- 대댓글 작성 폼 -->
-<!--<div id="reply-comment-form" style="width: 80%; margin: 0 auto; text-align: right; display: none;">-->
-<!--    <textarea id="replyCommentContents" th:placeholder="대댓글 내용" style="width: 70%; height: 100px; margin-bottom: 5px; display: inline-block;"></textarea>-->
-<!--    <button class="btn btn-primary" id="reply-comment-write-btn" onclick="replyCommentWrite()" style="margin-bottom: 5px;">대댓글작성</button>-->
-<!--</div>-->
+<!--    &lt;!&ndash; 대댓글 작성 폼 &ndash;&gt;-->
+<!--&lt;!&ndash;<div id="reply-comment-form" style="width: 80%; margin: 0 auto; text-align: right; display: none;">&ndash;&gt;-->
+<!--&lt;!&ndash;    <textarea id="replyCommentContents" th:placeholder="대댓글 내용" style="width: 70%; height: 100px; margin-bottom: 5px; display: inline-block;"></textarea>&ndash;&gt;-->
+<!--&lt;!&ndash;    <button class="btn btn-primary" id="reply-comment-write-btn" onclick="replyCommentWrite()" style="margin-bottom: 5px;">대댓글작성</button>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
 
-    <div style="width: 80%; margin: 0 auto; text-align: right;">
-        <textarea id="commentContents" th:placeholder="내용" style="width: 70%; height: 100px; margin-bottom: 5px; display: inline-block;"></textarea>
-        <button class="btn btn-primary" id="comment-write-btn" onclick="commentWrite()" style="margin-bottom: 5px;">댓글작성</button>
-    </div>
-<script src="/js/commentJs.js"></script>
-<link rel="stylesheet" type="text/css" href="/css/commentStyle.css" />
+<!--    <div style="width: 80%; margin: 0 auto; text-align: right;">-->
+<!--        <textarea id="commentContents" th:placeholder="내용" style="width: 70%; height: 100px; margin-bottom: 5px; display: inline-block;"></textarea>-->
+<!--        <button class="btn btn-primary" id="comment-write-btn" onclick="commentWrite()" style="margin-bottom: 5px;">댓글작성</button>-->
+<!--    </div>-->
+<!--<script src="/js/commentJs.js"></script>-->
+<!--<link rel="stylesheet" type="text/css" href="/css/commentStyle.css" />-->
 
-    <script  th:if="${board.id != null}">
+<!--    <script  th:if="${board.id != null}">-->
 
-<!-- 버튼 -->
-document.getElementById('title').readOnly = true;
-document.getElementById('content').readOnly = true;
+<!--&lt;!&ndash; 버튼 &ndash;&gt;-->
+<!--document.getElementById('title').readOnly = true;-->
+<!--document.getElementById('content').readOnly = true;-->
 
-<!-- 수정 버튼 클릭시 -->
-document.getElementById('update').addEventListener('click', function () {
-    document.getElementById('title').readOnly = false;
-    document.getElementById('content').readOnly = false;
+<!--&lt;!&ndash; 수정 버튼 클릭시 &ndash;&gt;-->
+<!--document.getElementById('update').addEventListener('click', function () {-->
+<!--    document.getElementById('title').readOnly = false;-->
+<!--    document.getElementById('content').readOnly = false;-->
 
-    // 상단 h1 태그 변경
-    document.querySelector('.starter-template h1').textContent = '글 수정';
+<!--    // 상단 h1 태그 변경-->
+<!--    document.querySelector('.starter-template h1').textContent = '글 수정';-->
 
-    // 버튼 이름 변경
-    document.getElementById('update').textContent = '확인';
+<!--    // 버튼 이름 변경-->
+<!--    document.getElementById('update').textContent = '확인';-->
 
-    // reset 타입 'cancel'버튼 생성
-    MakeCancel();
-    console.log('test');
+<!--    // reset 타입 'cancel'버튼 생성-->
+<!--    MakeCancel();-->
+<!--    console.log('test');-->
 
-    var updateButton = document.getElementById('update');
-    updateButton.setAttribute('id', 'send-off');
+<!--    var updateButton = document.getElementById('update');-->
+<!--    updateButton.setAttribute('id', 'send-off');-->
 
-    console.log('확인 버튼으로 변경');
+<!--    console.log('확인 버튼으로 변경');-->
 
-    // '확인' 버튼 클릭하면 업데이트 시행
-    document.getElementById('send-off').addEventListener('click', function () {
-        updateButton.type = 'submit';
-    });
-});
+<!--    // '확인' 버튼 클릭하면 업데이트 시행-->
+<!--    document.getElementById('send-off').addEventListener('click', function () {-->
+<!--        updateButton.type = 'submit';-->
+<!--    });-->
+<!--});-->
 
-<!-- 취소 버튼 생성, 위치 지정 -->
-function MakeCancel() {
-    var cancelButton = document.createElement('button');
-    cancelButton.id = 'cancel';
-    cancelButton.type = 'reset';
-    cancelButton.className = 'btn btn-primary';
-    cancelButton.textContent = '취소';
-    cancelButton.style.marginRight = '5px';
+<!--&lt;!&ndash; 취소 버튼 생성, 위치 지정 &ndash;&gt;-->
+<!--function MakeCancel() {-->
+<!--    var cancelButton = document.createElement('button');-->
+<!--    cancelButton.id = 'cancel';-->
+<!--    cancelButton.type = 'reset';-->
+<!--    cancelButton.className = 'btn btn-primary';-->
+<!--    cancelButton.textContent = '취소';-->
+<!--    cancelButton.style.marginRight = '5px';-->
 
-    var buttonContainer = document.getElementById('button-container');
-    buttonContainer.insertBefore(cancelButton, buttonContainer.children[1]);
-}
-</script>
-</body>
-</html>
+<!--    var buttonContainer = document.getElementById('button-container');-->
+<!--    buttonContainer.insertBefore(cancelButton, buttonContainer.children[1]);-->
+<!--}-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->

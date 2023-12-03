@@ -11,8 +11,8 @@ var roomNum = [username, receiver].sort().join('');
 document.querySelector("#username").innerHTML = receiver;
 
 // SSE 연결하기. 객체 생성. 크로스 오리진 자바스크립트 요청은 서버쪽에서 봉쇄하고 있다. -> 서버에서 처리함
-   const eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`);
-//const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}`);
+//   const eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`);
+const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}`);
 
 eventSource.onmessage = (event) => {
 	//console.log(1,event);
@@ -106,8 +106,8 @@ async function addMessage() {
 	};
 
 	try {
-		const response = await fetch("https://plikim.com/chat", {
-			//const response = await fetch( "http://localhost:9090/chat", {
+		//const response = await fetch("https://plikim.com/chat", {
+			const response = await fetch( "http://localhost:9090/chat", {
 			method: "post",
 			body: JSON.stringify(chat),
 			headers: {

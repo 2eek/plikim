@@ -1,6 +1,6 @@
 package com.eek.kimpli.comment.controller;
 
-import com.eek.kimpli.comment.converter.CommentConverter;
+//import com.eek.kimpli.comment.converter.CommentConverter;
 import com.eek.kimpli.comment.model.Comment;
 import com.eek.kimpli.comment.service.CommentService;
 import com.eek.kimpli.replycomment.dto.ReplyCommentDTO;
@@ -32,8 +32,8 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-       @Autowired
-    private CommentConverter commentConverter;
+//       @Autowired
+//    private CommentConverter commentConverter;
 
 
 

@@ -1,8 +1,7 @@
-package com.eek.kimpli.User.model;
+package com.eek.kimpli.user.model;
 
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.context.annotation.SessionScope;
 
 import javax.persistence.*;
 import java.time.LocalDate;

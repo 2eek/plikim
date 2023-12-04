@@ -1,4 +1,4 @@
-package com.eek.kimpli.User.model;
+package com.eek.kimpli.user.model;
 
 
 import lombok.Data;

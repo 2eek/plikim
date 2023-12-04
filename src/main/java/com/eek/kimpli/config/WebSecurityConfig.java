@@ -49,6 +49,7 @@ public SessionRegistry sessionRegistry() {
                         .usernameParameter("userId") // 이 부분을 추가
                         .defaultSuccessUrl("/")
                         .and()
+
                 .sessionManagement()
                 .maximumSessions(1) // 최대 세션 수
                 .sessionRegistry(sessionRegistry())

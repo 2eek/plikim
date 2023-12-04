@@ -4,6 +4,7 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 import com.eek.kimpli.member.dto.MemberDTO;
 import com.eek.kimpli.member.service.KakaoLoginServiceImpl;
+import com.eek.kimpli.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +29,9 @@ public class KakaoLoginController {
       String access_Token = map.get("access_token");
       String refresh_Token = map.get("refresh_token");
        //다시 서비스에 있는 메서드 실행함 그리고 DB에 정보 없으면 insert .xml실행
-            MemberDTO memberDTO = ks.getUserInfo(access_Token, refresh_Token);
+       System.out.println("aaaaaaaaaaaa");
+            User user = ks.getUserInfo(access_Token, refresh_Token);
+               System.out.println("bbbbbbbbbb");
  //getUserInfo 메서드 호출해서 시행함.
       return "redirect:/";
        }

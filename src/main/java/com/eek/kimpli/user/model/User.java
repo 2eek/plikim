@@ -34,6 +34,8 @@ private LocalDate birthday;
     private LocalDateTime deletedDate;
     private String loginType;
     private String accessToken;
+    private String refreshToken;
+    private String originProfileImg;
 
     //@JsonIgnore
     @ManyToMany

@@ -1,6 +1,6 @@
-package com.eek.kimpli.User.repository;
+package com.eek.kimpli.user.repository;
 
-import com.eek.kimpli.User.model.User;
+import com.eek.kimpli.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

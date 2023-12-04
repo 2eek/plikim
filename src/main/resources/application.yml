@@ -13,9 +13,9 @@ logging:
     console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
 
 # 로그 파일 설정
-  file:
-    name: myapplication.log
-    path: /path/to/logs
+#  file:
+#    name: myapplication.log
+#    path: /path/to/logs
 
 #  appenders:
 #    - type: console

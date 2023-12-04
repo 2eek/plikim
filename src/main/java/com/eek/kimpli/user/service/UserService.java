@@ -1,9 +1,9 @@
-package com.eek.kimpli.User.service;
+package com.eek.kimpli.user.service;
 
 
-import com.eek.kimpli.User.model.Role;
-import com.eek.kimpli.User.model.User;
-import com.eek.kimpli.User.repository.UserRepository;
+import com.eek.kimpli.user.model.Role;
+import com.eek.kimpli.user.model.User;
+import com.eek.kimpli.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

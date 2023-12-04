@@ -1,27 +1,21 @@
-package com.eek.kimpli.User.controller;
+package com.eek.kimpli.user.controller;
 
-import com.eek.kimpli.User.model.User;
-import com.eek.kimpli.User.repository.UserRepository;
-import com.eek.kimpli.User.service.UserService;
+import com.eek.kimpli.user.model.User;
+import com.eek.kimpli.user.repository.UserRepository;
+import com.eek.kimpli.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 @RequiredArgsConstructor

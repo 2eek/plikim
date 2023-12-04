@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.eek.kimpli.user.model.User">
+
+    <!-- 카카오 로그인시 정보 DB저장 -->
+    <update id="insertKakaoLogin" parameterType="java.util.HashMap">
+        insert into user
+        (memberEmail, memberPassword, memberName, origin_profile_img, AUTHORITY, access_token, refresh_token, login_type, sign_up_date )
+        values
+        (#{email}, #{password}, #{nickname}, #{profileImage}, 'A1', #{access_Token}, #{refresh_Token}, 'L2', NOW())
+    </update>
+
+    <!-- DB에 카카오 정보 유무 확인 -->
+    <select id="findKakao" parameterType="java.util.HashMap" resultType="com.eek.kimpli.user.model.User">
+        select * from user where memberEmail = #{email}
+    </select>
+
+    <!-- DB에 없는 카카오로그인 정보를 저장(업데이트) -->
+    <update id="updateKakoLogin" parameterType="java.util.HashMap">
+        UPDATE user
+        SET
+        memberPassword = #{password},
+        memberName = #{nickname},
+        memberEmail = #{email},
+        origin_profile_img = #{profileImage},
+        access_token = #{access_Token},
+        refresh_token = #{refresh_Token},
+        sign_up_date = NOW()
+        WHERE
+        memberEmail=#{email}
+    </update>
+
+</mapper>

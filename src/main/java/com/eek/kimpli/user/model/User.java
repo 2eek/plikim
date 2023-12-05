@@ -1,6 +1,8 @@
 package com.eek.kimpli.user.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Component;
 
@@ -40,6 +42,8 @@ private LocalDate birthday;
     private String originProfileImg;
 
     //@JsonIgnore
+    @JsonIgnore
+    @ToString.Exclude //무한루프 방지 .상호참조
     @ManyToMany
     @JoinTable(
             name = "user_role",

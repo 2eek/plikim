@@ -128,3 +128,26 @@ systemLog:
 #encryption:
 #  secretKey: your-secret-key
 #  iv: your-initialization-vector
+
+
+#sms
+naver-cloud-sms:
+  accessKey: QQvyoO7KirHLA7ueEZwH
+  secretKey: 4SkxwdgTWqS7kRgin9UEvsUaGURsBr4kO220Tjog
+  serviceId: ncp:sms:kr:313039527592:yedam_last_project
+  senderPhone: 01047357934
+
+#email
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: leekleek9494@gmail.com
+    password: cndvvjdoqeqwyvfb
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 5000
+          starttls:
+            enable: true

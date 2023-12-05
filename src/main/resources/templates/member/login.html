@@ -233,52 +233,53 @@ span {
 
 
 
-        <!-- 로그인시 아이디 비밀번호 DB에 있는지 확인 -->
-<!--        <script>-->
+<!--         로그인시 아이디 비밀번호 DB에 있는지 확인 -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
 
-<!--      //이벤트 핸들링 등록. HTML 요소가 모두 로딩된 이후에 이루어져야 하므로.-->
-<!--        $(document).ready(function(){-->
-<!--           $('#member').on('submit', loginAccountcheck);-->
-<!--        });-->
-
-
-<!--        function loginAccountcheck(event){-->
-<!--        event.preventDefault();-->
-<!--        let userId = $('#id').val(); // input_id에 입력되는 값-->
-<!--      let userPassword = $('#pw').val();-->
-<!--      $.ajax({-->
-<!--         /* url : "IdCheckService", */-->
-<!--         url : "/loginAccountCheck",-->
-<!--         type : "post",-->
-<!--         data :  {memberId :userId , password:userPassword},-->
-<!--         dataType : 'json',-->
-
-<!--         success : function(result){-->
-<!--            if(result == 0){-->
-
-<!--               $("#checkId").html('아이디 또는 비밀번호가 틀렸습니다.');-->
-<!--               $("#checkId").attr('color','red');//멈춰야함-->
+      //이벤트 핸들링 등록. HTML 요소가 모두 로딩된 이후에 이루어져야 하므로.
+        $(document).ready(function(){
+           $('#member').on('submit', loginAccountcheck);
+        });
 
 
-<!--            } else{-->
-<!--               //event.unbind();-->
-<!--               //$("#checkId").html('사용할 수 있는 아이디입니다.');-->
-<!--               //$("#checkId").attr('color','green');-->
-<!--               $('#member')[0].submit();-->
-<!--               //$('#guide')[0].submit();-->
-<!--            }-->
-<!--         },-->
-<!--         error : function(){-->
+        function loginAccountcheck(event){
+        event.preventDefault();
+        let userId = $('#id').val(); // input_id에 입력되는 값
+      let userPassword = $('#pw').val();
+      $.ajax({
+         /* url : "IdCheckService", */
+         url : "/loginAccountCheck",
+         type : "post",
+         data :  {memberId :userId , password:userPassword},
+         dataType : 'json',
 
-<!--            alert("서버요청실패");-->
-<!--         }-->
-<!--      });-->
-<!--      //$('#member').submit();-->
+         success : function(result){
+            if(result == 0){
 
-<!--   }-->
+               $("#checkId").html('아이디 또는 비밀번호가 틀렸습니다.');
+               $("#checkId").attr('color','red');//멈춰야함
 
 
-<!-- </script>-->
+            } else{
+               //event.unbind();
+               //$("#checkId").html('사용할 수 있는 아이디입니다.');
+               //$("#checkId").attr('color','green');
+               $('#member')[0].submit();
+               //$('#guide')[0].submit();
+            }
+         },
+         error : function(){
+
+            alert("서버요청실패");
+         }
+      });
+      //$('#member').submit();
+
+   }
+
+
+ </script>
 </body>
 
 

@@ -126,4 +126,15 @@ public String getUserDetailbySearch(@RequestParam(required = false) String userI
         System.out.println("회원가입안되나");
             return "redirect:/";
         }
+
+      //입력한 전화번호로 계정 ID 찾기
+		@ResponseBody
+		@PostMapping("/phoneNumberCheck")
+		public User phoneNumberCheck(String phoneNumber) {
+
+			return userService.findByPhoneNumber(phoneNumber);
+		}
+
+
+
 }

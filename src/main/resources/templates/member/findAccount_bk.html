@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="@{layouts/default_layout}" layout:fragment="content">
+
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+<head>
+<meta charset="UTF-8">
+<title>아이디 찾기/ 비밀번호 찾기</title>
+<!--    <link rel="stylesheet" href="style.css"> -->
+<style>
+* {
+	margin: 0; ,
+	padding: 0;
+	font-family: sans-serif;
+}
+
+.wrap {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	width: 100%;
+	background-image: url(/img/space4.jpeg);
+	background-position: center;
+	background-size: cover;
+	/*position: relate;*/
+}
+
+.form-wrap {
+	width: 380px;
+	height: 480px;
+	position: relative;
+	/*    margin: 6% auto; */
+	/*  margin-top: 6%; */
+	background: #fff;
+	/* padding: 5px; */
+	overflow: hidden;
+	 border-radius: 30px;
+}
+
+.button-wrap {
+	width: 300px;
+	margin: 35px auto;
+	position: relative;
+	box-shadow: 0 0 600px 9px #fcae8f;
+	border-radius: 30px;
+}
+
+.togglebtn {
+	padding: 5px 10px;
+	margin-left: 8px;
+	/*  margin-right : 10px; */
+	cursor: pointer;
+	background: transparent;
+	border: 0;
+	outline: none;
+	position: relative;
+}
+
+#btn {
+
+    left: 0;
+
+    position: absolute;
+    width: 150px;
+    height: 100%;
+    background:  #1fa3d7;
+    border-radius: 30px;
+    transition: .5s;
+}
+
+.social-icons {
+	text-align: center;
+}
+
+.social-icons img {
+	padding: 5px;
+	width: 300px;
+	cursor: pointer;
+}
+
+.input-group {
+	top: 150px;
+	position: absolute;
+	width: 280px;
+	transition: .5s;
+}
+
+.input-field {
+	width: 100%;
+	padding: 10px 0;
+	/* margin: 5px 0; */
+	border: none;
+	border-bottom: solid #999;
+	outline: none;
+	background: transparent;
+}
+
+.submit {
+	width: 100%;
+	padding: 5px 5px;
+	cursor: pointer;
+	display: block;
+	margin: auto;
+	background: #1fa3d7;
+	border: 0;
+	outline: none;
+	/*     border-radius: 30px; */
+}
+
+.checkbox {
+	margin: 30px 10px 30px 0;
+}
+
+span {
+	color: #777;
+	font-size: 12px;
+	bottom: 68px;
+	/* position: absolute; */
+}
+
+#member {
+	left: 50px;
+}
+
+#updatePasword {
+	left: 450px;
+}
+
+#find {
+	text-align: center;
+}
+
+#find a.property-sub {
+	display: inline-block;
+}
+</style>
+
+<style type="text/css" >
+
+.wrap-loading {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+     background: rgba(0,0,0,0.2);
+    filter: progid:DXImageTransform.Microsoft.Gradient(startColorstr='#20000000', endColorstr='#20000000');
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wrap-loading div {
+    z-index: 10000; /* 로딩 이미지가 입력 요소 위에 나타나도록 설정 */
+}
+
+    .display-none{ /*감추기*/
+
+        display:none;
+
+    }
+
+
+
+</style>
+
+
+
+
+</head>
+<body>
+
+
+
+
+	<div class="wrap">
+		<div class="form-wrap">
+			<div class="button-wrap">
+				<div id="btn"></div>
+				<button type="button" class="togglebtn" onclick="member()">&nbsp;&nbsp;아이디
+					찾기&nbsp;&nbsp;</button>
+				<button type="button" class="togglebtn" onclick="updatePasword()">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;비밀번호
+					찾기</button>
+			</div>
+
+			<!-- 아이디 찾기 -->
+			<form id="member"  class="input-group">
+				<div>
+					<h3>아이디 찾기</h3>
+					<p style="font-size: 95%;">"계정에 등록된 휴대폰 번호를 인증하시면 사용중인 계정 아이디를
+						알려드려요."</p>
+				</div>
+				<font id="checkId" size="2"></font>
+				<!-- required  -->
+				<font id="" size="2"></font>
+				<div class="mb-3">
+					<br> <label for="" class="form-label"
+						style="float: left; margin-bottom: 0;">전화번호 &nbsp; </label> <br>
+					<input type="text" class="form-control" name="phonenumber" id="Number"
+						placeholder="전화번호를 입력하세요"
+						style="width: 60%; , float: left; margin-right: 5px;" required>
+
+					<button style="float: left; margin-left:5px;" type="button"
+						id="approveButton" class="btn btn-default">인증 요청</button>
+
+				</div>
+				<div id="codeCheck" class="mb-3" style="display: none">
+					<input type="text" class="form-control" name="smsCode" id="smsCode"
+						placeholder="코드 입력하세요"
+						style="width: 60%; , float: left; margin-right: 5px;" required>
+
+					<button style="float: left; margin-left:5px;" type="button"
+						id="code" name="codeConfirmBtn" class="btn btn-default"
+						onclick="confirmCode()" value="">인증</button>
+						 <input type="hidden" id="numValue" value="">
+					<br> <br>
+				</div>
+			</form>
+
+			<!--  비밀번호 찾기 -->
+			<form id="updatePasword" action="/updatePaswordForm" method="post" class="input-group">
+				<div class="wrap-loading display-none">
+    				<div><img src="/img/mailsending.gif" /></div>
+				</div>
+				<div>
+					<h3>비밀번호 찾기</h3>
+					<p style="font-size: 95%;">"계정에 등록된 이메일 인증을 해주세요. "</p>
+				</div>
+
+				<!-- required  -->
+				<font id="checkId1" size="2"></font>
+
+				<div id="mail_input" name="mail_input">
+					<!--서버로 보낼 데이터 (input에 넣은 이메일을 서버로 보냄)  -->
+					<input  type="text" name="email" id="mail" value=""
+						placeholder="이메일 입력" style="width: 60%; , float: left; margin-right: 5px;"  class="form-control">
+					<button type="button" id="sendBtn" name="sendBtn"
+						onclick="sendNumber()" class="btn btn-default">인증요청</button>
+				</div>
+
+				<br>
+				<div id="mail_number" name="mail_number" style="display: none">
+					<input type="text" name="number" style="width: 60%; , float: left; margin-right: 5px;"class="form-control"  placeholder="인증번호 입력">
+					<button type="button" name="confirmBtn" id="confirmBtn"
+						onclick="confirmNumber()" class="btn btn-default"> 인증</button>
+				</div>
+				<br> <input type="text" id="Confirm" name="Confirm"
+					style="display: none" value="">
+
+			</form>
+
+		</div>
+	</div>
+
+
+
+	<script>
+
+	//슬라이드
+
+		var x = document.getElementById("member");
+		var y = document.getElementById("updatePasword");
+		var z = document.getElementById("btn");
+		function member() {
+			x.style.left = "50px";
+			y.style.left = "450px";
+			z.style.left = "0";
+		}
+
+		function updatePasword() {
+			x.style.left = "-400px";
+			y.style.left = "50px";
+			z.style.left = "150px";
+		}
+	</script>
+
+	<!-- 로그인시 아이디 비밀번호 DB에 있는지 확인 -->
+	<script>
+		//이벤트 핸들링 등록. HTML 요소가 모두 로딩된 이후에 이루어져야 하므로.
+		$(document).ready(function() {
+			//updatePasword();
+			//$('#member').on('submit', loginAccountcheck);
+			//$('#guide').on('submit', loginAccountcheck1);
+			findAccountId();
+			//UpdatePasswordForm();
+		});
+	</script>
+
+
+	<!--sms 코드 전송-->
+	   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script th:inline="javascript">
+
+		$(document).ready(function() {
+		      // 승인 버튼. 클릭(이벤트)발생시  ajaxApprove메서드 실행 설정(핸들러)
+		      $('#approveButton').on('click',function(){
+		    	  ajaxApprove();
+
+		      });
+		});
+
+		   function ajaxApprove(){
+
+			 	console.log("왜안돼")
+			 	let phonenumber = document.getElementById("Number").value;
+			 	console.log("폰넘버 있나:"+phonenumber);
+
+	       	 	if(phonenumber ==""){
+
+	       		 	alert("휴대폰 번호를 입력하세요.");
+	       		 $("#Number").focus();
+	       		    	return false;
+	       	 }
+	      	  sendCode();
+			  console.log("sms 버튼 눌렀다.");
+
+		      // memberId 정의
+
+
+		     $.ajax({
+		         url : "/sms/send",
+		         type : 'post',
+		         data: {
+					 //변수명: 변수값
+		        	 to : phonenumber
+		        	 },
+		      })
+		      .done( data => {
+		         console.log("data :", data);
+		         console.log("통신은 성공");
+		         if(data != null && data.num != null){
+		            alert(`${phonenumber } 문자발송했습니다`);
+
+		            $("#numValue").val(data.num);
+		         } else {
+		            alert(`문자 발송 안됐습니다.`);
+		         }
+		      })
+		      .fail( reject => console.log(reject));
+		   };
+
+
+
+		   //코드 보내고 활성화 시킴
+		   function sendCode(){
+			    $("#codeCheck").css("display","block");
+			    }
+
+			function confirmCode(){
+			   var number1 = $("#smsCode").val();
+			   var number2 = $("#numValue").val();
+			  	console.log(number1)
+		           console.log(number2)
+
+		        if (number1 == number2) { // 저장된 SMS 코드를 사용
+		            alert("인증되었습니다.")
+		            //console.log(NumberCheck);
+		        	findAccountId();
+
+
+		        } else {
+		            alert("번호가 다릅니다.");
+		        }
+		    }
+
+
+		//아작스로 인증된 휴대전화 번호에 맞는 아이디 띄우기
+	        function findAccountId(){
+	        //preventDefault();
+	        let phoneNumberCheck = document.getElementById("Number").value; // input_id에 입력되는 값
+	        console.log(phoneNumberCheck);
+
+	      $.ajax({
+	         /* url : "IdCheckService", */
+	         url : "/phoneNumberCheck",
+	         type : "post",
+	         data :  {phoneNumber :phoneNumberCheck},
+	         dataType : 'json',
+
+	         success : function(result){
+	        	 console.log(result);
+	            if(result == 0){
+					console.log("없으면")
+
+	               $("#checkId").html('없는 전화번호 입니다.');
+	               $("#checkId").attr('color','red');//멈춰야함
+
+
+	            } else{
+					console.log("있으면")
+	               //event.unbind();
+	               $("#checkId").html('회원님의 아이디는<h3 style="display: inline;">'+result.userId+'</h3>입니다.');
+	               $("#checkId").attr('color','green');
+	               //$('#guide')[0].submit();
+	            }
+	         },
+	         error : function(){
+	            //alert("서버요청실패");
+	         }
+	      });
+	      //$('#member').submit();
+		}
+
+
+
+
+
+	      // 이메일 코드 인증
+	            function sendNumber(){
+	                var email = document.getElementById("mail");
+	            	 if(email.value == ""){
+	            		 alert("이메일을 입력하세요.");
+	            		    email.focus();
+	            		    return false;
+
+	            	 }
+	                $("#mail_number").css("display","block");
+	                $('.wrap-loading').removeClass('display-none');
+	                $.ajax({
+	                    url:"/mail",
+	                    type:"post",
+	                    //받아오는 데이터 형식
+	                    dataType:"json",
+	                    data:{"mail" : $("#mail").val()},
+	                    success: function(data){
+
+	                        alert("인증번호 발송했습니다.");
+	                        $('.wrap-loading').addClass('display-none');
+	                        $("#Confirm").attr("value",data);
+	                    }
+	                });
+	            }
+
+	            function confirmNumber(){
+	                var number1 = $("#number").val();
+	                var number2 = $("#Confirm").val();
+
+	                if(number1 == number2){
+	                    alert("인증되었습니다.");
+	                    var updateForm  = document .getElementById( "updatePasword" );
+	                    updateForm.submit();
+	                }else{
+	                    alert("번호가 다릅니다.");
+	                }
+	            }
+
+
+
+	</script>
+
+
+
+</body>
+</html>
+

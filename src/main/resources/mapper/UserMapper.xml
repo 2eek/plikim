@@ -48,4 +48,11 @@
         email=#{email}
     </update>
 
+<!--    &lt;!&ndash; 입력한 휴대폰 번호로 해당 ID 찾기 &ndash;&gt;-->
+<!--    <select id= "checkIdByPhoneNumber" resultType="User">-->
+<!--    select member_id from user where phone_number = #{phoneNumber}-->
+<!--    </select>-->
+
+
+
 </mapper>

@@ -46,7 +46,7 @@ public String userlist(Model model, @PageableDefault(size = 5) Pageable pageable
     // 로그인 계정
    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     model.addAttribute("userSession", authentication.getPrincipal());
-    System.out.println("세션에 뭐있나??"+authentication.getPrincipal());
+    System.out.println("프린시펄 일반로그인"+authentication.getPrincipal());
 // 정렬 조건: "createdDate" 필드를 기준으로 내림차순 정렬
     pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("createdDate").descending());
     // 페이징된 전체 회원 목록
@@ -73,13 +73,15 @@ public String getUserDetail(@RequestParam(required = false) String id, Model mod
     User userdetail = userRepository.findByUserId(id);
     if (userdetail == null) {
         // 사용자 정보가 없을 경우 적절한 처리
-        return "redirect:/error"; // 예를 들어, 오류 페이지로 리다이렉트
+        return "redirect:/"; // 예를 들어, 오류 페이지로 리다이렉트
     }
     model.addAttribute("user", userdetail);
     //로그인 회원 세션 활용
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     // 현재 사용자의 세션 정보
     model.addAttribute("userSession", authentication.getPrincipal());
+//    System.out.println("유저디테일"+userdetail);
+    System.out.println("프린시펄 "+authentication.getPrincipal());
     return "member/userdetail"; // 사용자 정보가 있는 경우 상세 정보 페이지로 이동
 }
 

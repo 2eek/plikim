@@ -2,34 +2,50 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.eek.kimpli.user.model.User">
+<mapper namespace="User">
 
     <!-- 카카오 로그인시 정보 DB저장 -->
+<!--    <update id="insertKakaoLogin" parameterType="java.util.HashMap">-->
+<!--        insert into user-->
+<!--        (user_id,email, password, user_name, origin_profile_img, access_token, refresh_token, login_type, created_date,enabled )-->
+<!--        values-->
+<!--        (#{id},#{email}, #{password}, #{nickname}, #{profileImage},  #{access_Token}, #{refresh_Token}, 'L2', NOW(),1)-->
+<!--    </update>-->
     <update id="insertKakaoLogin" parameterType="java.util.HashMap">
-        insert into user
-        (memberEmail, memberPassword, memberName, origin_profile_img, AUTHORITY, access_token, refresh_token, login_type, sign_up_date )
-        values
-        (#{email}, #{password}, #{nickname}, #{profileImage}, 'A1', #{access_Token}, #{refresh_Token}, 'L2', NOW())
-    </update>
+    <!-- 사용자 정보 저장 -->
+    insert into user
+    (user_id, email, password, user_name, origin_profile_img, access_token, refresh_token, login_type, created_date)
+    values
+    (#{username}, #{email}, #{password}, #{nickname}, #{profileImage}, #{access_Token}, #{refresh_Token}, 'L2', NOW())
+</update>
+
+<!-- 사용자에게 역할 할당 (가입자는 기본적으로 'ROLE_USER' 역할을 가지게 됨) -->
+<update id="assignUserRole" parameterType="java.util.HashMap">
+    insert into user_role (user_index, role_index)
+    select u.index, r.index
+    from user u
+    join role r on r.name = 'ROLE_USER'
+    where u.user_id = #{id}
+</update>
 
     <!-- DB에 카카오 정보 유무 확인 -->
     <select id="findKakao" parameterType="java.util.HashMap" resultType="com.eek.kimpli.user.model.User">
-        select * from user where memberEmail = #{email}
+        select * from user where email = #{email}
     </select>
 
-    <!-- DB에 없는 카카오로그인 정보를 저장(업데이트) -->
+    <!-- 다르면  카카오로그인 정보를 저장(업데이트) -->
     <update id="updateKakoLogin" parameterType="java.util.HashMap">
         UPDATE user
         SET
-        memberPassword = #{password},
-        memberName = #{nickname},
-        memberEmail = #{email},
+        password = #{password},
+        user_name = #{nickname},
+        email = #{email},
         origin_profile_img = #{profileImage},
         access_token = #{access_Token},
         refresh_token = #{refresh_Token},
-        sign_up_date = NOW()
+        created_date = NOW()
         WHERE
-        memberEmail=#{email}
+        email=#{email}
     </update>
 
 </mapper>

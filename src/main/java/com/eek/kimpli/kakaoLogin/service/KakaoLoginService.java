@@ -1,4 +1,4 @@
-package com.eek.kimpli.member.service;
+package com.eek.kimpli.kakaoLogin.service;
 
 import com.eek.kimpli.user.model.User;
 

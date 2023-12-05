@@ -1,12 +1,9 @@
-package com.eek.kimpli.member.Controller;
+package com.eek.kimpli.kakaoLogin.Controller;
 
-import com.eek.kimpli.member.dto.MemberDTO;
 //import com.eek.kimpli.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpSession;
 
 @Controller
 @RequiredArgsConstructor//생성자 주입(Constructor Injection)을 간편하게 만들기 위해 사용

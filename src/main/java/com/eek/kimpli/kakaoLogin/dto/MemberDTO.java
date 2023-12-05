@@ -1,4 +1,4 @@
-package com.eek.kimpli.member.dto;
+package com.eek.kimpli.kakaoLogin.dto;
 
 import lombok.Data;
 

@@ -2,6 +2,7 @@ package com.eek.kimpli.user.model;
 
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Entity
 @Data
+@Component
 //Entity객체의 인스턴스 하나가 테이블에서 하나의 레코드 값을 의미
 public class User {
     @Id

@@ -1,4 +1,4 @@
-package com.eek.kimpli.member.service;
+package com.eek.kimpli.kakaoLogin.service;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -9,11 +9,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import com.eek.kimpli.member.dto.MemberDTO;
-import com.eek.kimpli.member.repository.KakaoLoginRepository;
+
+import com.eek.kimpli.kakaoLogin.config.KakaoAuthentication;
+import com.eek.kimpli.kakaoLogin.repository.KakaoLoginRepository;
 //import com.eek.kimpli.member.repository.MemberRepository;
 import com.eek.kimpli.user.model.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,6 +27,7 @@ public class KakaoLoginServiceImpl implements KakaoLoginService {
 
 //    private final MemberRepository memberRepository;
     private final KakaoLoginRepository kakaoLoginRepository;
+    private final User user;
 
 	//로그인 성공하면 authorize_code 받아옴
    public Map<String, String>  getAccessToken (String authorize_code) {
@@ -45,8 +48,8 @@ public class KakaoLoginServiceImpl implements KakaoLoginService {
          StringBuilder sb = new StringBuilder();
          sb.append("grant_type=authorization_code");
          sb.append("&client_id=1e411be4c9538cd8fc4f1b4c817968b4"); //본인이 발급받은 key
-         //sb.append("&redirect_uri=https://plikim.com/kakaologin"); // 본인이 설정한 주소
-         sb.append("&redirect_uri=http://localhost:9090/kakaologin"); // 본인이 설정한 주소
+         sb.append("&redirect_uri=https://plikim.com/kakaologin"); // 본인이 설정한 주소
+//         sb.append("&redirect_uri=http://localhost:9090/kakaologin"); // 본인이 설정한 주소 -> 이쪽으로 간다
          sb.append("&code=" + authorize_code);
          bw.write(sb.toString());
 
@@ -97,6 +100,8 @@ public class KakaoLoginServiceImpl implements KakaoLoginService {
 
 
    public User getUserInfo(String access_Token, String refresh_Token) {
+       // 사용자 정보를 바탕으로 KakaoAuthentication 객체 생성
+
       HashMap<String, Object>userInfo = new HashMap<String, Object>();
       String reqURL = "https://kapi.kakao.com/v2/user/me";
       try {
@@ -123,38 +128,43 @@ public class KakaoLoginServiceImpl implements KakaoLoginService {
          //String birthday = kakao_account.get("birthday").asText();
          String thumbnailImage = properties.get("thumbnail_image").asText();
          String profileImage = properties.get("profile_image").asText();
-         //String birthday = properties.get("birthday").asText();
 
-         Long id = jsonNode.get("id").asLong();
-         userInfo.put("id", id);
-         userInfo.put("nickname", nickname);
+         userInfo.put("nikname", nickname);
          System.out.println("@@@@@@닉네임@@@@@"+nickname);
          userInfo.put("email", email);
+
          userInfo.put("thumbnailImage", thumbnailImage);
          userInfo.put("profileImage", profileImage);
          userInfo.put("profileImage", profileImage);
          userInfo.put("access_Token", access_Token);
          userInfo.put("refresh_Token", refresh_Token);
          userInfo.put("refresh_Token", profileImage);
-         //userInfo.put("gender", gender);
-         //userInfo.put("birthday", birthday);
-		/* userInfo.put("birthday", birthday); */
-         System.out.println("********");
-         System.out.println("###id#### : " + id);
-         System.out.println("###프로필### : " + profileImage);
-         System.out.println("###엑세스토큰### : " + access_Token);
-         System.out.println("###리프레쉬토큰### : " + refresh_Token);
-         userInfo.put("id", id);
+
+//         userInfo.put("id", id);
+          userInfo.put("username", email.substring(0, email.indexOf('@')));
+
 
       } catch (IOException e) {
          e.printStackTrace();
       }
 
+//        user.setEnabled(true); //enabled 칼럼 1
+//       Role role = new Role();
+//      // 권한 이름에  1 주기
+//       role.setIndex(1L);  //어떤 권한 줄건지 1번이 'ROLE_user'
+//       user.getRoles().add(role);
       User result = kakaoLoginRepository.findKakao(userInfo);
+    KakaoAuthentication kakaoAuthentication = new KakaoAuthentication(userInfo);
+
+        // SecurityContextHolder에 Authentication 객체 저장
+        SecurityContextHolder.getContext().setAuthentication(kakaoAuthentication);
+
       if(result==null) {
+         //없으면 인서트
         kakaoLoginRepository.insertKakaoLogin(userInfo);
         return result;
    		}else {
+         //다르면 업데이트
    			kakaoLoginRepository.updateKakaoLogin(userInfo);
    			return result;
    		}

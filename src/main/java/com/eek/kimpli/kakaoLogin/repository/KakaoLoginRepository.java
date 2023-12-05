@@ -1,7 +1,6 @@
-package com.eek.kimpli.member.repository;
+package com.eek.kimpli.kakaoLogin.repository;
 
 
-import com.eek.kimpli.member.dto.MemberDTO;
 import com.eek.kimpli.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -23,6 +22,6 @@ public class KakaoLoginRepository {
     }
 
     public User findKakao(HashMap<String, Object> userInfo) {
-        return sql.selectOne("User.findKakao", userInfo);
-    }
+    return sql.selectOne("User.findKakao", userInfo);
+}
 }

@@ -66,5 +66,13 @@ public class UserService {
         return userRepository.updatePasswordByEmail(user.getEmail(), user.getPassword());
     }
 
+
+  //회원가입시 아이디 중복체크
+
+     public User checkId(String userId) {
+   User result = userRepository.findByUserId(userId);
+         System.out.println("유저유저유저"+result);
+    return result;
+}
 }
 

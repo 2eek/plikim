@@ -52,11 +52,6 @@ public class SmsController {
 		return smsMap;
 	}
 
-		//휴대폰 번호로 아이디 찾기
-		@GetMapping("/findAccount")
-		public String fintId() {
-			return"member/findAccount";
-		}
 
 
 

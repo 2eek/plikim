@@ -31,9 +31,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "SELECT * FROM user WHERE memberEmail = :email AND login_type = 'L2'", nativeQuery = true)
     HashMap<String, Object> findKakaoByEmail(String email);
 
+
+    //비밀번호 변경
     @Modifying
     @Transactional
     @Query("UPDATE User u SET u.password = :newPassword WHERE u.email = :email")
     int updatePasswordByEmail(@Param("email") String email, @Param("newPassword") String newPassword);
+
+
 
 }

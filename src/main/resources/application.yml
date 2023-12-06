@@ -137,17 +137,21 @@ naver-cloud-sms:
   serviceId: ncp:sms:kr:313039527592:yedam_last_project
   senderPhone: 01047357934
 
-#email
 
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: leekleek9494@gmail.com
-    password: cndvvjdoqeqwyvfb
-    properties:
-      mail:
-        smtp:
-          auth: true
-          timeout: 5000
-          starttls:
-            enable: true
+
+
+
+
+# 메일
+mail:
+  host: smtp.gmail.com
+  port: 587
+  username: leekleek9494@gmail.com
+  password: zbpm tnps vcgn hdfu
+  properties:
+    mail:
+      smtp:
+        auth: true
+        starttls:
+          enable: true
+        timeout: 5000

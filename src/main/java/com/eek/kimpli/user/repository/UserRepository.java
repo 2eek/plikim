@@ -2,8 +2,11 @@ package com.eek.kimpli.user.repository;
 
 import com.eek.kimpli.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,4 +30,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // 카카오 로그인 정보 확인
     @Query(value = "SELECT * FROM user WHERE memberEmail = :email AND login_type = 'L2'", nativeQuery = true)
     HashMap<String, Object> findKakaoByEmail(String email);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE User u SET u.password = :newPassword WHERE u.email = :email")
+    int updatePasswordByEmail(@Param("email") String email, @Param("newPassword") String newPassword);
+
 }

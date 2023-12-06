@@ -135,6 +135,36 @@ public String getUserDetailbySearch(@RequestParam(required = false) String userI
 			return userService.findByPhoneNumber(phoneNumber);
 		}
 
+        		//휴대폰 번호로 아이디 찾기
+		@GetMapping("/findAccount")
+		public String fintId() {
+			return"member/findAccount";
+		}
+
+        //이메일로 인증 받기
+			@GetMapping("/findPassword")
+		public String findPassword() {
+			return"member/findPassword";
+		}
+
+        		//비밀번호 찾기. 이메일 인증 후  비밀번호 업데이트 폼 호출
+		@PostMapping("/updatePaswordForm")
+		public String updatePassword(User user,Model model) {
+			//memberService.insertMemberInfo(memberVO);
+		System.out.println(user);
+		model.addAttribute("email", user.getEmail());
+		System.out.println(user.getEmail());
+			return "member/updatePassword";
+		}
+
+		//비밀번호 찾기.변경할 비밀번호로 업데이트 시행하기
+		@PostMapping("/EditPassword")
+		public String EditPassword(User user){
+			System.out.println(user);
+			userService.editPassword(user);
+			/* return "member/login"; */
+			return "redirect:/";
+		}
 
 
 }

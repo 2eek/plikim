@@ -57,5 +57,14 @@ public class UserService {
         return user;
     }
 
+
+	 //비밀번호 찾기 중 비밀번호 수정하기
+    	 public int editPassword(User user) {
+        // 새로 변경된 비밀번호 암호화
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        // 비밀번호 업데이트 메서드 호출
+        return userRepository.updatePasswordByEmail(user.getEmail(), user.getPassword());
+    }
+
 }
 

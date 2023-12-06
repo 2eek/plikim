@@ -1,4 +1,4 @@
-package com.eek.kimpli.kakaoLogin.Controller;
+package com.eek.kimpli.kakaoLogin.controller;
 
 //import com.eek.kimpli.member.service.MemberService;
 import lombok.RequiredArgsConstructor;

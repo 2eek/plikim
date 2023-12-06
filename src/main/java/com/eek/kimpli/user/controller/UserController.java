@@ -166,5 +166,23 @@ public String getUserDetailbySearch(@RequestParam(required = false) String userI
 			return "redirect:/";
 		}
 
+        //회원 가입시 아이디 중복체크
+	  @PostMapping("/idCheck")
+	  @ResponseBody
+	  public int idCheck(@RequestParam("userId") String id) {
+          System.out.println("뭐가 들어오냐"+id);
+
+
+		User  result = userService.checkId(id);
+          System.out.println("리절트"+result);
+		if (result == null) {
+		    return 0;
+		} else {
+		    return 1;
+		}
+
+	  }
+
+
 
 }

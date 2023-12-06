@@ -40,6 +40,7 @@ private LocalDate birthday;
     private String accessToken;
     private String refreshToken;
     private String originProfileImg;
+    private String gender;
 
     //@JsonIgnore
     @JsonIgnore

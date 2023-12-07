@@ -27,6 +27,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // 휴대폰 번호로 사용자 찾기
     User findByPhoneNumber(String phoneNumber);
 
+    User findByEmail(String email);
+
     // 카카오 로그인 정보 확인
     @Query(value = "SELECT * FROM user WHERE memberEmail = :email AND login_type = 'L2'", nativeQuery = true)
     HashMap<String, Object> findKakaoByEmail(String email);
@@ -38,6 +40,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("UPDATE User u SET u.password = :newPassword WHERE u.email = :email")
     int updatePasswordByEmail(@Param("email") String email, @Param("newPassword") String newPassword);
 
+//회원가입시 유효성검사
+     boolean existsByUserId(String userId);
 
+     boolean existsByEmail(String email);
 
+     boolean existsByPhoneNumber(String PhoneNumber);
 }

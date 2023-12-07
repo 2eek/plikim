@@ -93,7 +93,7 @@ public SmsResponseDTO sendSms(MessageDTO messageDto) throws JsonProcessingExcept
         headers.set("x-ncp-iam-access-key", accessKey);
         headers.set("x-ncp-apigw-signature-v2", makeSignature(time));
 
-    System.out.println("여기 전화번호 있을껄???? 서비스"+messageDto.getPhonenumber());
+    System.out.println("여기 전화번호 있을껄???? 서비스"+messageDto.getTo());
         List<MessageDTO> messages = new ArrayList<>();
         messages.add(messageDto); // MessageDTO로 수정
 

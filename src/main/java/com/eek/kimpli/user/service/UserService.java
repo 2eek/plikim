@@ -45,9 +45,9 @@ public class UserService {
     public User findByPhoneNumber(String phoneNumber) {
         // findByPhoneNumber 메서드를 사용하여 사용자 찾기
         System.out.println("xxxxxxx");
-        System.out.println("번호없냐?"+phoneNumber);
+        System.out.println("번호없냐?" + phoneNumber);
         User user = userRepository.findByPhoneNumber(phoneNumber);
-    System.out.println("yyyyyyy");
+        System.out.println("yyyyyyy");
         // 사용자 정보 출력 또는 다른 작업 수행
         if (user != null) {
             System.out.println("사용자 찾음: " + user);
@@ -58,8 +58,8 @@ public class UserService {
     }
 
 
-	 //비밀번호 찾기 중 비밀번호 수정하기
-    	 public int editPassword(User user) {
+    //비밀번호 찾기 중 비밀번호 수정하기
+    public int editPassword(User user) {
         // 새로 변경된 비밀번호 암호화
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         // 비밀번호 업데이트 메서드 호출
@@ -67,12 +67,19 @@ public class UserService {
     }
 
 
-  //회원가입시 아이디 중복체크
+    //회원가입시 아이디 중복체크
 
-     public User checkId(String userId) {
-   User result = userRepository.findByUserId(userId);
-         System.out.println("유저유저유저"+result);
-    return result;
-}
-}
+    public User checkId(String userId) {
+        User result = userRepository.findByUserId(userId);
+        System.out.println("유저유저유저" + result);
+        return result;
+    }
 
+
+    public User checkEmail(String email) {
+        User result = userRepository.findByEmail(email);
+        System.out.println("유저유저유저" + result);
+        return result;
+    }
+
+}

@@ -28,6 +28,23 @@ public class UserController {
 
 
 
+    //가입한 회원 리스트 조회. 단순한 호출 GetMapping을 이용한다. URL에 매핑된 핸들러 필요하다
+    @GetMapping("/member/memberlist")
+    public String saveForm(){
+        return "member/memberlist";
+    }
+
+    //회원가입폼 호춯
+    @GetMapping("/member/memberjoin")
+    public String joinForm(){
+        return "member/memberjoinform";
+    }
+
+    @GetMapping("/member/loginForm")
+    public String loginForm(){
+        return "member/login";
+    }
+
 
 
     //마이페이지 조회
@@ -115,6 +132,26 @@ public String getUserDetailbySearch(@RequestParam(required = false) String userI
         @PostMapping("/user/save")
     public String Join(@ModelAttribute("user") User user, Model model, @PageableDefault(size = 3) Pageable pageable) {
         Page<User> users = userRepository.findAll(pageable);
+           // 아이디 중복 체크
+//  if (userRepository.existsByUserId(user.getUserId())) {
+//    // 아이디가 이미 존재하는 경우 처리 (예: 에러 메시지 전달)
+//    model.addAttribute("error", "아이디가 이미 존재합니다.");
+//        return "redirect:/user/save"; // 에러를 보여줄 뷰로 리다이렉트 또는 포워드
+//    }
+//
+//    // 이메일 중복 체크
+//    if (userRepository.existsByEmail(user.getEmail())) {
+//        // 이메일이 이미 존재하는 경우 처리 (예: 에러 메시지 전달)
+//        model.addAttribute("error", "이미 사용 중인 이메일입니다.");
+//        return "redirect:/user/save"; // 에러를 보여줄 뷰로 리다이렉트 또는 포워드
+//    }
+//
+//    // 휴대폰 번호 중복 체크
+//    if (userRepository.existsByPhoneNumber(user.getPhoneNumber())) {
+//        // 휴대폰 번호가 이미 존재하는 경우 처리 (예: 에러 메시지 전달)
+//        model.addAttribute("error", "이미 사용 중인 휴대폰 번호입니다.");
+//        return "redirect:/user/save"; // 에러를 보여줄 뷰로 리다이렉트 또는 포워드
+//    }
         int currentPage = users.getPageable().getPageNumber() + 1; // 현재 페이지 번호 (0부터 시작)
         int startPage = Math.max(1, currentPage - 2); // 현재 페이지 주변에 2 페이지씩 보여주기
         int endPage = Math.min(users.getTotalPages(), startPage + 4);
@@ -131,7 +168,8 @@ public String getUserDetailbySearch(@RequestParam(required = false) String userI
 		@ResponseBody
 		@PostMapping("/phoneNumberCheck")
 		public User phoneNumberCheck(String phoneNumber) {
-
+        User user =userService.findByPhoneNumber(phoneNumber);
+ System.out.println("User found: " + user);
 			return userService.findByPhoneNumber(phoneNumber);
 		}
 
@@ -171,9 +209,23 @@ public String getUserDetailbySearch(@RequestParam(required = false) String userI
 	  @ResponseBody
 	  public int idCheck(@RequestParam("userId") String id) {
           System.out.println("뭐가 들어오냐"+id);
-
-
 		User  result = userService.checkId(id);
+          System.out.println("리절트"+result);
+		if (result == null) {
+		    return 0;
+		} else {
+		    return 1;
+		}
+
+	  }
+
+      //회원 가입시 이메일 중복체크
+
+     @PostMapping(" /emailCheck")
+	  @ResponseBody
+	  public int emailCheck(String email) {
+          System.out.println("뭐가 들어오냐"+email);
+		User  result = userService.checkEmail(email);
           System.out.println("리절트"+result);
 		if (result == null) {
 		    return 0;

@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 @Builder
 public class MessageDTO {
-	private String phonenumber;
+//	private String phonenumber;
 	private String content;
 	 private String to;
 }

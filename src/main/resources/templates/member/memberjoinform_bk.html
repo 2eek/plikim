@@ -96,7 +96,7 @@ h8 {
 
 <!--									<label><span class=h5>*</span>국적</label>적-->
 
-<!--									<div class="mb-3">-->
+<!--									<div class="mb-3"> -->
 <!--										<select class="" id="nationality" name="nationality"-->
 <!--											aria-label="Default select example" required>-->
 <!--											<option value="">국가선택</option>-->
@@ -138,15 +138,16 @@ h8 {
 										<font id="spacePhonenum" size="2"></font> <font id="checkPhonenum"
 											size="2"></font>
 									</div>
-											<button type="button" id="approveButton" class="btn btn-default" style="">코드 발송</button>
+											<button type="button" id="sendCode" class="btn btn-default" style="">코드 발송</button>
 									</div>
 
 									<div id="codeCheck" class="mb-3" style="display: none">
 										<input type="text" class="form-control" name="smsCode"
 											id="smsCode" placeholder="코드 입력하세요" required>
 										<button type="button" id="code" name="codeConfirmBtn"
-											class="btn btn-default" onclick="confirmCode()" value="">코드
+											class="btn btn-default"  value="">코드
 											확인</button>
+<!--										onclick="confirmCode()"-->
 									</div>
 									<br> <input type="hidden" id="numValue" value="">
 
@@ -161,7 +162,7 @@ h8 {
 											type="radio" id="male" name="gender" value="G1">남 <input
 											type="radio" id="female" name="gender" value="G2">여
 									</div>
-									<br> <input onclick="joinform_check()" type="submit"
+									<br> <input id="submitButton"  type="submit"
 										value="회원가입"
 										class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">
 								</form>
@@ -176,10 +177,18 @@ h8 {
 
 	<!--  sms코드 전송 -->
 <script th:inline="javascript">
-    $(document).ready(function() {
+	//회원가입 버튼 누르면 메서드 실행 후 회원가입처리
+	document.getElementById("submitButton").addEventListener("click", function() {
+		joinform_check()
 
+	});
+
+
+
+//HTML 문서의 모든 요소들이 브라우저에 로드되고 초기화된 후에 스크립트 코드를 실행하고자 할 때 사용됨. 돔형성 후
+		 $(document).ready(function () {
 // 코드발송
-        $('#approveButton').on('click', function() {송
+        $('#sendCode').on('click', function() {
 			console.log('hi')
             let receiverId = document.getElementById("phonenumber").value;
 
@@ -188,13 +197,17 @@ h8 {
                 $("#Number").focus();
                 return false;
             }
-             ajaxApprove();
-           	 sendCode();
-				// checkPhoneNumber();
+			//문자 발송
+             sendSMS();
+			//코드 입력폼 활성화
+           	 sendCodeForm();
+
+			//휴대폰 중복체크
+
         });
 
-//문자 발송 ajax
-        function ajaxApprove() {
+		//문자 발송 ajax
+        function sendSMS() {
             let phoneNumber = document.getElementById("phonenumber").value;
 
             $.ajax({
@@ -215,149 +228,181 @@ h8 {
             .fail(reject => console.log(reject));
         }
 		//코드입력창, 검증 버튼 화면에 보이게 하기
-        function sendCode() {
+        function sendCodeForm() {
             $("#codeCheck").css("display", "block");
         }
     });
 
+	//코드 확인 버튼, ajax 뒷단에서 검사처리실행
+	$('#code').on('click', function () {
+			var userInputNumber = $("#smsCode").val();
+			$.ajax({
+				url: "/compareCodes",
+				type: 'post',
+				data: {userInputNumber: userInputNumber},
+			})
+					.done(success => {
+						console.log("서버로 회원의 입력값 보내기 성공");
+
+						if (success.result === "success") {
+							alert("입력 값이 일치합니다. ")
+							//코드 일치하면db에 휴대폰 정보 있는지 확인 필요.
+							checkPhoneNumber()
+							console.log('코드 인증 성공');
+							success.result = true;
 
 
+						} else {
+							alert("입력 값이 일치하지않습니다. ")
+							success.result = false;
+							disableSubmitButton();
+						}
+					})
+					.fail(() => {
+						console.error("서버요청 실패");
+						alert("서버요청 실패");
+					});
+	})
 
-//sms 코드 체크
-    function confirmCode() {
-		var userInputNumber = $("#smsCode").val();
-		$.ajax({
-			url: "/compareCodes",
-			type: 'post',
-			data: {userInputNumber: userInputNumber},
-		})
-				.done(success => {
-					console.log("서버로 회원의 입력값 보내기 성공");
 
-					if (success .result === "success") {
-						alert("입력 값이 일치합니다. ")
-						console.log('코드 인증 성공');
-					success.result = true;
-					} else {
-						alert("입력 값이 일치하지않습니다. ")
-						success.result = false;
-					}
-				})
-				.fail(() => {
-					console.error("서버요청 실패");
-					alert("서버요청 실패");
-				});
-	}
 
 
 //이메일 중복체크
-		function checkEmail() {
-			var email = $("#email").val();
+	$("#email").on('blur', function () {
+    checkEmail();
+});
+	function checkEmail() {
+    var email = $("#email").val();
 
-			$.ajax({
-				url: "/emailCheck",
-				type: "post",
-				//키(서버에서 사용), 밸류
-				data: {email: email},
-				dataType: 'json',
-				success: function (result) {
-					if (result == !0) {
-						console.log('이미 사용중인 이메일입니다.');
-					}
-				},
-				error: function () {
-					alert("서버요청실패");
-				}
-			});
-		}
+    // 이메일 형식 검사 (스페이스나 '@' 없는 이메일은 무시)
+    if (!isValidEmailFormat(email)) {
+        // alert("이메일을 다시 확인해주세요.");
+        disableSubmitButton();
+        return;
+    }
+
+    $.ajax({
+        url: "/emailCheck",
+        type: "post",
+        data: {email: email},
+        dataType: 'json',
+        success: function (result) {
+            if (result == !0) {
+                console.log('이미 사용중인 이메일입니다.');
+                disableSubmitButton();
+            } else {
+
+            }
+        },
+        error: function () {
+            alert("서버요청실패");
+        }
+    });
+}
+
+function isValidEmailFormat(email) {
+    // 이메일 형식 검사 (스페이스나 '@' 없는 이메일은 무시)
+    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
 
 
 //아이디 중복체크
-	$('#id').on('input', function(){
+			$('#id').on('input', function () {
+				var id = $("#id").val();
 
-	 var id = $("#id").val();
-	 console.log('아이디이잉이'+id)
-
-	 if(id === '' )  {
-		 $("#spaceId").html("");
-		 return false;
-	 }
-
-	 if(id.search(/\s/) != -1){
- 		$("#spaceId").html("아이디는 공백 없이 입력해주세요.");
-		$("#spaceId").attr('color','red');
-		$("#id").focus();
-	 	return false;
-	 }
-
-
-	 $.ajax({
-			/* url : "IdCheckService", */
-			url : "/idCheck",
-			type : "post",
-		 			//키 밸류
-			data :  {userId :id},
-			dataType : 'json',
-			success : function(result){
-				if(result === 0){
-					$("#spaceId").html('사용할 수 있는 아이디입니다.');
-					$("#spaceId").attr('color','green');
-
-				} else{
-
-					$("#spaceId").html('사용할 수 없는 아이디입니다.');
-					$("#spaceId").attr('color','red');
+				if (id === '') {
+					$("#spaceId").html("");
+					disableSubmitButton();
+					return false;
 				}
-			},
-			error : function(){
-				alert("서버요청실패");
-			}
-		})
+				if (id.length < 5 || id.search(/\s/) !== -1 || !/^[a-zA-Z0-9]*$/.test(id)) {
+					$("#spaceId").html("아이디는 최소 5글자 이상이어야 하며, 영문 대소문자와 숫자로만 입력해주세요.");
+					$("#spaceId").attr('color', 'red');
+					$("#id").focus();
+					disableSubmitButton();
+					return false;
+				}
+				$.ajax({
+					url: "/idCheck",
+					type: "post",
+					data: {userId: id},
+					dataType: 'json',
+					success: function (result) {
+						if (result === 0) {
+							$("#spaceId").html('사용할 수 있는 아이디입니다.');
+							$("#spaceId").attr('color', 'green');
 
-	});
-
+						} else if (result === 1) {
+							$("#spaceId").html('사용할 수 없는 아이디입니다.');
+							$("#spaceId").attr('color', 'red');
+							disableSubmitButton();
+						} else if (result === 2) {
+							$("#spaceId").html('아이디는 영문 대소문자와 숫자로만 입력해주세요.');
+							$("#spaceId").attr('color', 'red');
+							$("#id").focus();
+							disableSubmitButton();
+						}
+					},
+					error: function () {
+						alert("서버요청실패");
+					}
+				});
+			});
 
 
 //휴대폰 번호 중복 체크
-		function checkPhoneNumber() {
-			var phonenumber = $("#phonenumber").val();
+			function checkPhoneNumber() {
 
-			if (phonenumber === '') {
-				$("#spacePhonenum").html("");
-				return false;
-			}
 
-			// Ajax로 휴대폰 번호 중복 체크
-			$.ajax({
-				url: "/phoneNumberCheck",
-				type: "post",
-				data: {phoneNumber: phonenumber},
-				dataType: 'json',
-				success: function (result) {
-					if (result !== null) {
-						console.log('전화번호 중복 확인 결과:', result);
-						alert("이미 등록된 전화번호입니다.");
-						$("#spacePhonenum").html('이미 등록된 전화번호입니다.');
-						$("#spacePhonenum").css('color', 'red');
+				var phonenumber = $("#phonenumber").val();
+				var reg = /^[0-9]+/g;
 
-						// 중복된 전화번호인 경우 코드 발송 로직을 실행하지 않도록 설정
-
-					} else {
-						console.log('전화번호 사용 가능:', phonenumber);
-						// 코드 발송 등 필요한 로직 수행
-						$("#spacePhonenum").html('사용할 수 있는 전화번호입니다');
-						$("#spacePhonenum").css('color', 'green');
-
-						// 전화번호가 사용 가능한 경우 코드 발송 로직을 실행할 수 있도록 설정
-
-					}
-				},
-				error: function () {
-					alert("서버 요청 실패");
+				if (!reg.test(phonenumber)) {
+					alert("전화번호는 숫자만 입력할 수 있습니다.");
+					phonenumber.focus();
+					return false;
 				}
-			});
-		}
 
+				if (phonenumber === '') {
+					$("#spacePhonenum").html("");
+					disableSubmitButton();
+				}
+
+				// Ajax로 휴대폰 번호 중복 체크
+				$.ajax({
+					url: "/phoneNumberCheck",
+					type: "post",
+					data: {phoneNumber: phonenumber},
+					dataType: 'json',
+					success: function (result) {
+						if (result !== null) {
+							console.log('전화번호 중복 확인 결과:', result);
+							alert("이미 등록된 전화번호입니다.");
+							$("#spacePhonenum").html('이미 등록된 전화번호입니다.');
+							$("#spacePhonenum").css('color', 'red');
+							disableSubmitButton();
+							// 중복된 전화번호인 경우 코드 발송 로직을 실행하지 않도록 설정
+
+						} else {
+							console.log('전화번호 사용 가능:', phonenumber);
+							// 코드 발송 등 필요한 로직 수행
+							$("#spacePhonenum").html('사용할 수 있는 전화번호입니다');
+							$("#spacePhonenum").css('color', 'green');
+							// ajaxApprove();
+							// ajaxApprove()
+
+
+							// 전화번호가 사용 가능한 경우 코드 발송 로직을 실행할 수 있도록 설정
+
+						}
+					},
+					error: function () {
+						alert("서버 요청 실패");
+					}
+				});
+			}
 
 
 
@@ -371,19 +416,19 @@ h8 {
 				if (pw.length < 8 || pw.length > 20) {
 					$("#pw").html("8자리 ~ 20자리 이내로 입력해주세요.");
 					$("#pw").attr('color', 'red');
-					return false;
+					disableSubmitButton();
 				} else if (pw.search(/\s/) != -1) {
 					$("#pw").html("비밀번호는 공백 없이 입력해주세요.");
 					$("#pw").attr('color', 'red');
-					return false;
+					disableSubmitButton();
 				} else if (num < 0 || eng < 0 || spe < 0) {
 					$("#pw").html("영문,숫자, 특수문자를 혼합하여 입력해주세요.");
 					$("#pw").attr('color', 'red');
-					return false;
+					disableSubmitButton();
 				} else {
 					$("#pw").html("조건을 충족합니다.");
 					$("#pw").attr('color', 'green');
-					return true;
+
 				}
 			});
 
@@ -394,13 +439,15 @@ h8 {
 				if (number1 == number2) {
 					$("#checkPw").html('번호가 같습니다.');
 					$("#checkPw").attr('color', 'green');
+
 				} else {
 					$("#checkPw").html('번호가 다릅니다.');
 					$("#checkPw").attr('color', 'red');
+					disableSubmitButton();
 				}
 			});
 
-				//비밀번호 체크 eye
+			//비밀번호 체크 eye
 			$(document).ready(function () {
 				$('#togglePassword1, #togglePassword2').on('click', function () {
 					var inputField = $(this).siblings('input');
@@ -417,216 +464,162 @@ h8 {
 			});
 
 
+			<!-- Join form validation -->
 
-
-
-<!-- Join form validation -->
 //회원가입시 유효성 체크
+			function joinform_check() {
+				//이메일 체크 ajax
+				// checkEmail()
+				// Swal.fire({
+				// 	title: '정말로 그렇게 하시겠습니까?',
+				// 	text: '다시 되돌릴 수 없습니다. 신중하세요.',
+				// 	icon: 'warning',
+				//
+				// 	showCancelButton: true, // cancel버튼 보이기. 기본은 원래 없음
+				// 	confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+				// 	cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+				// 	confirmButtonText: '승인', // confirm 버튼 텍스트 지정
+				// 	cancelButtonText: '취소', // cancel 버튼 텍스트 지정
+				//
+				// 	reverseButtons: true, // 버튼 순서 거꾸로
+				//
+				// }).then(result => {
+				// 	// 만약 Promise리턴을 받으면,
+				// 	if (result.isConfirmed) { // 만약 모달창에서 confirm 버튼을 눌렀다면
+				//
+				// 		Swal.fire('승인이 완료되었습니다.', '화끈하시네요~!', 'success');
+				// 	}
+				// });
 
 
-    function joinform_check() {
-        var uid = document.getElementById("id");
-        var pwd = document.getElementById("pw1");
-        var repwd = document.getElementById("pw2");
-        var uname = document.getElementById("name");
-        var female = document.getElementById("female");
-        var male = document.getElementById("male");
-        var mobile = document.getElementById("phonenumber");
-        var email_id = document.getElementById("email");
-        var smsCode = document.getElementById("smsCode");
+				var uid = document.getElementById("id");
+				var pwd = document.getElementById("pw1");
+				var repwd = document.getElementById("pw2");
+				var uname = document.getElementById("name");
+				var female = document.getElementById("female");
+				var male = document.getElementById("male");
+				var mobile = document.getElementById("phonenumber");
+				var email = document.getElementById("email");
+				var smsCode = document.getElementById("smsCode");
 
-		if(dsuccess.result= false){
-			console.log('막자');
-			 return false;
+
+				//아이디 유효성 검사
+				if (uid.value == "" || uid.value.trim() === "") {
+					alert("아이디를 입력하세요.");
+					$("#id").focus();
+					disableSubmitButton();
+					return false;
+
+				}
+
+				//pw 유효성 검사
+				if (pwd.value == "") {
+					alert("비밀번호를 입력하세요.");
+					$("#pw1").focus();
+					disableSubmitButton();
+					return false;
+				}
+
+
+				var number1 = $("#pw1").val();
+				var number2 = $("#pw2").val();
+
+				// if (number1 !== number2) {
+				// 	alert('비밀번호가 일치하지 않습니다.');
+
+				if (repwd.value == "" || number1 !== number2) {
+					alert("비밀번호 확인하세요.");
+					$("#pw2").focus();
+					disableSubmitButton();
+					return false;
+				}
+				if (email.value == "") {
+					alert("이메일을 입력하세요!!!");
+					$("#email").focus();
+
+					return false;
+
+				}
+				if (uname.value.trim() === "") {
+					alert("이름을 입력하세요.");
+					$("#name").focus();
+					// disableSubmitButton();
+					return false;
+				}
+
+				if (mobile.value == "") {
+					alert("전화번호 입력하세요.");
+					$("#phonenumber").focus();
+					disableSubmitButton();
+					return false;
+				}
+
+				if (smsCode.value == "") {
+					alert("코드 발송 하세요.");
+				}
+				var smsCode = document.getElementById("smsCode");
+				if (smsCode.value === "") {
+					alert("휴대폰 인증 코드를 입력하세요.");
+					var sendCode = document.getElementById("sendCode");
+					sendCode.style.backgroundColor = "yellow";
+					sendCode.style.color = "blue";
+					setTimeout(function () {
+						sendCode.style.backgroundColor = "";
+						sendCode.style.color = "";
+					}, 1500);
+					return false;
+				}
+
+
+				var female = document.getElementById("female");
+				var male = document.getElementById("male");
+
+				// 성별을 선택하지 않았을 때
+				if(female.checked || male.checked){
+
+				}
+
+
+				var number1 = $("#pw1").val();
+				var number2 = $("#pw2").val();
+
+				if (number1 !== number2) {
+					alert('비밀번호가 일치하지 않습니다.');
+					disableSubmitButton();
+
+				} else {
+					var pwValidationResult = validatePassword(number1);
+
+					if (!pwValidationResult) {
+						alert('비밀번호 조건을 다시 확인해주세요.');
+
+						disableSubmitButton();
+
+					}
+				}
+
+
+	// enableSubmitButton();
+
 		}
 
 
-		//아이디 중복체크 유효성검사 test
-	$('#id').on('input', function(){
-    var id = $("#id").val();
-    console.log('아이디이잉이'+id)
+			function disableSubmitButton() {
+				//서브밋 막음
+				$("#submitButton").prop("disabled", true);
+			}
 
-    if (id === '' )  {
-        $("#spaceId").html("");
-        disableSignupButton();
-        return false;
-    }
-
-    if (id.search(/\s/) != -1) {
-        $("#spaceId").html("아이디는 공백 없이 입력해주세요.");
-        $("#spaceId").attr('color','red');
-        $("#id").focus();
-        disableSignupButton();
-        return false;
-    }
-
-    $.ajax({
-        url: "/idCheck",
-        type: "post",
-        data: { userId: id },
-        dataType: 'json',
-        success: function(result) {
-            if (result === 0) {
-                $("#spaceId").html('사용할 수 있는 아이디입니다.');
-                $("#spaceId").attr('color','green');
-                enableSignupButton();
-            } else {
-                $("#spaceId").html('사용할 수 없는 아이디입니다.');
-                $("#spaceId").attr('color','red');
-                disableSignupButton();
-            }
-        },
-        error: function() {
-            alert("서버요청실패");
-        }
-    });
-});
-
-// 회원가입 버튼 활성화
-function enableSignupButton() {
-    // 회원가입 버튼에 'disabled' 속성을 제거하여 활성화
-    $("#joinFormSubmitButton").prop("disabled", false);
-}
-
-// 회원가입 버튼 비활성화
-function disableSignupButton() {
-    // 회원가입 버튼에 'disabled' 속성을 추가하여 비활성화
-    $("#joinFormSubmitButton").prop("disabled", true);
-}
-
-// 클라이언트 측에서의 유효성 검사를 통과하지 못한 경우, 회원가입 버튼 비활성화
-$('#joinFormSubmitButton').on('click', function(event) {
-    if ($("#joinFormSubmitButton").prop("disabled")) {
-        event.preventDefault(); // 이벤트 막기
-        alert("유효성 검사를 통과해야 합니다.");
-        return false;
-    }
-});
+			function enableSubmitButton() {
+				//서브밋 안막음
+				$("#submitButton").prop("disabled", false);
+			}
 
 
 
 
 
-
-
-
-
-
-
-		//아이디 유효성 검사
-        if (uid.value == "") {
-            alert("아이디를 입력하세요.");
-            uid.focus();
-            return false;
-        }
-
-		//pw 유효성 검사
-        if (pwd.value == "") {
-            alert("비밀번호를 입력하세요.");
-            pwd.focus();
-            return false;
-        }
-
-        if (mobile.value == "") {
-            alert("전화번호 입력하세요.");
-            pwd.focus();
-            return false;
-        }
-
-        if (smsCode.value == "") {
-            alert("휴대폰 인증 코드를 입력하세요.");
-            return false;
-        }
-
-        if (uname.value == "") {
-            alert("이름을 입력하세요.");
-            uname.focus();
-            return false;
-        }
-
-
-
-    var female = document.getElementById("female");
-    var male = document.getElementById("male");
-
-    // 성별을 선택하지 않았을 때
-    if (!female.checked && !male.checked) {
-        alert("성별을 선택해 주세요.");
-		disableSignupButton();
-        return false; // 회원가입을 막기 위해 false를 반환
-    }
-
-
-        var reg = /^[0-9]+/g;
-
-        if (!reg.test(mobile.value)) {
-            alert("전화번호는 숫자만 입력할 수 있습니다.");
-            mobile.focus();
-            return false;
-        }
-
-        if (email_id.value == "") {
-            alert("이메일 주소를 입력하세요.");
-            email_id.focus();
-            return false;
-        }
-
-        var number1 = $("#pw1").val();
-        var number2 = $("#pw2").val();
-
-        if (number1 !== number2) {
-            alert('비밀번호가 일치하지 않습니다.');
-			disableSignupButton();
-            return false;
-        } else {
-            var pwValidationResult = validatePassword(number1);
-
-            if (!pwValidationResult) {
-                alert('비밀번호 조건을 다시 확인해주세요.');
-                return false;
-            }
-        }
-
-// 프로미스 또는 콜백을 사용하여 모든 비동기 체크가 완료되고 성공적일 때 양식이 제출되도록 코드를 재구성해야 한다.
-		var emailCheckPromise = new Promise(function(resolve, reject) {
-        checkEmail(resolve, reject);
-    });
-
-    emailCheckPromise.then(function() {
-        // 모든 검사가 성공하면 양식을 제출합니다.
-        document.insertForm.submit();
-    }).catch(function(error) {
-        // 필요한 경우 에러를 처리합니다.
-        console.error(error);
-    });
-    }
-
-
-
-    function validatePassword(pw) {
-        var num = pw.search(/[0-9]/g);
-        var eng = pw.search(/[a-z]/ig);
-        var spe = pw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
-
-        if (pw.length < 8 || pw.length > 20) {
-            $("#pw").html("8자리 ~ 20자리 이내로 입력해주세요.");
-            $("#pw").attr('color', 'red');
-            return false;
-        } else if (pw.search(/\s/) != -1) {
-            $("#pw").html("비밀번호는 공백 없이 입력해주세요.");
-            $("#pw").attr('color', 'red');
-            return false;
-        } else if (num < 0 || eng < 0 || spe < 0) {
-            $("#pw").html("영문,숫자, 특수문자를 혼합하여 입력해주세요.");
-            $("#pw").attr('color', 'red');
-            return false;
-        } else {
-            $("#pw").html("조건을 충족합니다.");
-            $("#pw").attr('color', 'green');
-            return true;
-        }
-    }
 </script>
+
 
 </body>
 </html>

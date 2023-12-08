@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -164,14 +165,80 @@ public String getUserDetailbySearch(@RequestParam(required = false) String userI
             return "redirect:/";
         }
 
-      //입력한 전화번호로 계정 ID 찾기
-		@ResponseBody
-		@PostMapping("/phoneNumberCheck")
-		public User phoneNumberCheck(String phoneNumber) {
-        User user =userService.findByPhoneNumber(phoneNumber);
- System.out.println("User found: " + user);
-			return userService.findByPhoneNumber(phoneNumber);
-		}
+
+//번호로 id 찾기
+//   @ResponseBody
+//@PostMapping("/phoneNumberCheck")
+//public ResponseEntity<User> phoneNumberCheck(String phoneNumber) {
+//    User user = userService.findByPhoneNumber(phoneNumber);
+//
+//    if (user != null) {
+//        System.out.println("User found: " + user);
+//        return ResponseEntity.ok(user);
+//    } else {
+//        System.out.println("컨트롤 널입니다 " + user);
+//        // 사용자가 없을 때도 200 OK를 반환하고 null을 전송
+//        return ResponseEntity.ok(null);
+//    }
+//}
+
+    //이거 되는거임
+    @ResponseBody
+@PostMapping("/phoneNumberCheck")
+public User phoneNumberCheck(String phoneNumber) {
+    User user = userService.findByPhoneNumber(phoneNumber);
+
+    if (user != null) {
+        System.out.println("User found: " + user);
+        return user;
+    } else {
+//        System.out.println("컨트롤 널입니다" + user);
+        return new User(); // 빈 User 객체 또는 다른 적절한 값을 반환
+
+    }
+}
+
+    @ResponseBody
+@PostMapping("/emailCheck")
+public User emailCheck(String email) {
+    User user = userService.checkEmail(email);
+
+    if (user != null) {
+        System.out.println("User found: " + user);
+        return user;
+    } else {
+//        System.out.println("컨트롤 널입니다" + user);
+        return new User(); // 빈 User 객체 또는 다른 적절한 값을 반환
+
+    }
+}
+//     @PostMapping("/phoneNumberCheck")
+//    public ResponseEntity<User> phoneNumberCheck(@RequestParam String phoneNumber) {
+//        User user = userService.findByPhoneNumber(phoneNumber);
+//
+//        if (user != null) {
+//            return ResponseEntity.ok(user);
+//        } else {
+//            System.out.println("뭔데?????????"+ResponseEntity.ok(null));
+//            return ResponseEntity.ok(null);
+//        }
+//    }
+
+//      //입력한 전화번호로 계정 ID 찾기
+//		@ResponseBody
+//@PostMapping("/phoneNumberCheck")
+//public User phoneNumberCheck(@RequestParam String phoneNumber) {
+//    User user = userService.findByPhoneNumber(phoneNumber);
+//
+//    if (user != null) {
+//        System.out.println("User found: " + user);
+//        return user;
+//    } else {
+//            System.out.println("dmaskdmaskdmaskdsakdsmoqwmdo: " );
+//        // 만약 사용자가 없을 때는 HttpStatus.NOT_FOUND로 응답
+//        return null;
+//    }
+//}
 
         		//휴대폰 번호로 아이디 찾기
 		@GetMapping("/findAccount")
@@ -205,36 +272,39 @@ public String getUserDetailbySearch(@RequestParam(required = false) String userI
 		}
 
         //회원 가입시 아이디 중복체크
-	  @PostMapping("/idCheck")
-	  @ResponseBody
-	  public int idCheck(@RequestParam("userId") String id) {
-          System.out.println("뭐가 들어오냐"+id);
-		User  result = userService.checkId(id);
-          System.out.println("리절트"+result);
-		if (result == null) {
-		    return 0;
-		} else {
-		    return 1;
-		}
+@PostMapping("/idCheck")
+@ResponseBody
+public int idCheck(@RequestParam("userId") String id) {
+    // 아이디에 공백이나 한글이 있는지 정규 표현식으로 검사
+    if (id.length() < 5 || id.matches(".*\\s.*") || !id.matches("^[a-zA-Z0-9]*$")) {
+        return 2; // 2는 공백이나 한글이 있는 경우를 나타냄
+    }
 
-	  }
+    User result = userService.checkId(id);
+
+    if (result == null) {
+        return 0; // 사용 가능한 아이디
+    } else {
+        return 1; // 이미 존재하는 아이디
+    }
+}
 
       //회원 가입시 이메일 중복체크
 
-     @PostMapping(" /emailCheck")
-	  @ResponseBody
-	  public int emailCheck(String email) {
-          System.out.println("뭐가 들어오냐"+email);
-		User  result = userService.checkEmail(email);
-          System.out.println("리절트"+result);
-		if (result == null) {
-		    return 0;
-		} else {
-		    return 1;
-		}
-
-	  }
-
+//     @PostMapping(" /emailCheck")
+//	  @ResponseBody
+//	  public int emailCheck(String email) {
+//          System.out.println("뭐가 들어오냐"+email);
+//		User  result = userService.checkEmail(email);
+//          System.out.println("리절트"+result);
+//		if (result == null) {
+//		    return 0;
+//		} else {
+//		    return 1;
+//		}
+//
+//	  }
+//
 
 
 }

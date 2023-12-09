@@ -200,8 +200,8 @@ public User phoneNumberCheck(String phoneNumber) {
 
     @ResponseBody
 @PostMapping("/emailCheck")
-public User emailCheck(String email) {
-    User user = userService.checkEmail(email);
+public User emailCheck(String email, String id) {
+    User user = userService.checkEmail(email,id);
 
     if (user != null) {
         System.out.println("User found: " + user);
@@ -253,7 +253,7 @@ public User emailCheck(String email) {
 		}
 
         		//비밀번호 찾기. 이메일 인증 후  비밀번호 업데이트 폼 호출
-		@PostMapping("/updatePaswordForm")
+		@PostMapping("/updatePasswordForm")
 		public String updatePassword(User user,Model model) {
 			//memberService.insertMemberInfo(memberVO);
 		System.out.println(user);

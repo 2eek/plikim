@@ -142,7 +142,7 @@ span {
 	left: 50px;
 }
 
-#updatePasword {
+#updatePassword {
 	left: 450px;
 }
 
@@ -157,7 +157,7 @@ span {
 
 
 
-#sendSmsBtn, #code, #sendBtn, #emailConfirmBtn,#codeConfirmBtn {
+#sendSmsBtn, #idCheckBtn, #sendBtn, #emailConfirmBtn,#codeConfirmBtn {
     border: 1px solid #ccc;
     padding: 5px 10px;
 }
@@ -177,9 +177,9 @@ span {
 		<div class="form-wrap">
 			<div class="button-wrap">
 				<div id="btn"></div>
-				<div type="button" class="togglebtn" onclick="member()"> &nbsp; &nbsp;아이디
+				<div type="button" class="togglebtn" onclick="findIdForm()"> &nbsp; &nbsp;아이디
 					찾기</div>
-				<div type="button" class="togglebtn" onclick="updatePasword()">비밀번호
+				<div type="button" class="togglebtn" onclick="findPasswordForm()">비밀번호
 					찾기 &nbsp; &nbsp;</div>
 			</div>
 
@@ -220,7 +220,7 @@ span {
 		</form>
 
 			<!--  비밀번호 찾기 -->
-			<form id="updatePasword" action="/updatePaswordForm" method="post" class="input-group">
+			<form id="updatePassword" action="/updatePasswordForm" method="post" class="input-group">
 				<div class="wrap-loading display-none">
     				<div><img src="/img/mailsending.gif" /></div>
 				</div>
@@ -230,14 +230,25 @@ span {
 				</div>
 
 				<!-- required  -->
-				<font id="checkemail" size="2"></font>
+
 
 				<div id="mail_input" name="mail_input">
 					<!--서버로 보낼 데이터 (input에 넣은 이메일을 서버로 보냄)  -->
-					<input  type="text" name="email" id="email" value=""
+
+<div>
+						<input  type="text" name="userId" id="id"
+						placeholder="아이디" style="width: 185px; , float: left; margin-right: 5px;"  class="form" required>
+						<button type="button" id="idCheckBtn"
+						 class="btn btn-default">확인</button>
+	</div>
+						<font id="spaceId" size="2"></font>
+	<div>
+					<input  type="email" name="email" id="email"
 						placeholder="이메일 입력" style="width: 185px; , float: left; margin-right: 5px;"  class="form">
 					<button type="button" id="sendBtn" name="sendBtn"
 						onclick="checkEmail()" class="btn btn-default">인증 요청</button>
+	</div>
+					<font id="checkemail" size="2"></font>
 				</div>
 
 				<br>
@@ -257,30 +268,68 @@ span {
 
 
 	<script>
+		//db에 아이디 있는지 확인
+				$('#idCheckBtn').on('click', function () {
+				var id = $("#id").val();
+				//
+				// if (id === '') {
+				// 	$("#spaceId").html("");
+				//
+				// }
+				// if (id.length < 5 || id.search(/\s/) !== -1 || !/^[a-zA-Z0-9]*$/.test(id)) {
+				// 	$("#spaceId").html("아이디는 최소 5글자 이상이어야 하며, 영문 대소문자와 숫자로만 입력해주세요.");
+				// 	$("#spaceId").attr('color', 'red');
+				// 	$("#id").focus();
+				// 	disableSubmitButton();
+				// 	return false;
+				// }
+				$.ajax({
+					url: "/idCheck",
+					type: "post",
+					data: {userId: id},
+					dataType: 'json',
+					success: function (result) {
+						if (result === 1) {
+						$("#spaceId").html('확인되었습니다.');
+						$("#spaceId").attr('color', 'green');
+
+						} else{
+						$("#spaceId").html('해당 계정을 확인할 수 없습니다.');
+						$("#spaceId").attr('color', 'red');
+						}
+					},
+					error: function () {
+						alert("서버요청실패");
+					}
+				});
+			});
+
 
 	//슬라이드
-
 		var x = document.getElementById("member");
-		var y = document.getElementById("updatePasword");
+		var y = document.getElementById("updatePassword");
 		var z = document.getElementById("btn");
-		function member() {
+		function findIdForm() {
 			x.style.left = "50px";
 			y.style.left = "450px";
 			z.style.left = "0";
 		}
 
-		function updatePasword() {
+		function findPasswordForm() {
 			x.style.left = "-400px";
 			y.style.left = "50px";
 			z.style.left = "150px";
 		}
+		//비밀번호 찾기
+
+
 	</script>
 
 	<!-- 로그인시 아이디 비밀번호 DB에 있는지 확인 -->
 	<script>
 		//이벤트 핸들링 등록. HTML 요소가 모두 로딩된 이후에 이루어져야 하므로.
 		$(document).ready(function() {
-			//updatePasword();
+			//findPasswordForm();
 			//$('#member').on('submit', loginAccountcheck);
 			//$('#guide').on('submit', loginAccountcheck1);
 			// findAccountId();
@@ -308,12 +357,11 @@ span {
 			 	let phonenumber = document.getElementById("Number").value;
 			 	console.log("있나:"+phonenumber);
 
-	       	 	if(phonenumber ==""){
-
-	       		 	alert("휴대폰 번호를 입력하세요.");
-	       		 $("#Number").focus();
-	       		    	return false;
-	       	 }
+	       if (!/^\d+$/.test(phonenumber)) {
+					alert("휴대폰 번호는 숫자만 입력 가능합니다.");
+					$("#Number").focus();
+					return false;
+				}
 	      	  sendCodeForm();
 			  console.log("sms 버튼 눌렀다.");
 
@@ -465,29 +513,34 @@ span {
     //     return;
     // }
 	var email = $("#email").val();
+var id = $("#id").val();
 	console.log('hi')
     $.ajax({
         url: "/emailCheck",
         type: "post",
-        data: {email: email},
+        data: {email: email, id: id},
         dataType: 'json',
- success: function (result) {
-						console.log(result);
-						if ($.isEmptyObject(result) || result.userId === null) {
-							console.log('빈객체!!'+result)
-							console.log("없는 이메일입니다..");
-							$("#checkemail").html('해당하는 이메일이 없습니다.');
-							$("#checkemail").attr('color', 'red');
-							return false;
-						}else{
-							sendEmailNumber()
-						}
-					},
-        error: function () {
-            alert("서버요청실패");
-        }
-    });
-}
+		 success: function (result) {
+								console.log(result);
+								if ($.isEmptyObject(result) || result.userId === null) {
+									console.log('빈객체!!'+result)
+									console.log("없는 이메일입니다..");
+									$("#spaceId").html('');
+									$("#checkemail").html('계정과 이메일을 확인하세요.');
+									$("#checkemail").attr('color', 'red');
+									return false;
+								}else{
+									$("#spaceId").html('');
+									$("#checkemail").html('확인되었습니다.');
+									$("#checkemail").attr('color', 'green');
+									sendEmailNumber()
+								}
+							},
+				error: function () {
+					alert("서버요청실패");
+				}
+			});
+		}
 
 
 				//휴대폰 번호로 아이디 찾기 ->코드 확인 버튼, ajax 뒷단에서 전송한 값과 입력한 값 맞는지 확인 처리
@@ -507,7 +560,7 @@ span {
 							//코드 일치하면db에 회원 정보 있는지 확인 필요.
 							// findAccountId()
 							console.log('코드 인증 성공');
-							 var updateForm  = document .getElementById( "updatePasword" );
+							 var updateForm  = document .getElementById( "updatePassword" );
 	                  		  updateForm.submit();
 
 

@@ -134,25 +134,7 @@ public String getUserDetailbySearch(@RequestParam(required = false) String userI
     public String Join(@ModelAttribute("user") User user, Model model, @PageableDefault(size = 3) Pageable pageable) {
         Page<User> users = userRepository.findAll(pageable);
            // 아이디 중복 체크
-//  if (userRepository.existsByUserId(user.getUserId())) {
-//    // 아이디가 이미 존재하는 경우 처리 (예: 에러 메시지 전달)
-//    model.addAttribute("error", "아이디가 이미 존재합니다.");
-//        return "redirect:/user/save"; // 에러를 보여줄 뷰로 리다이렉트 또는 포워드
-//    }
-//
-//    // 이메일 중복 체크
-//    if (userRepository.existsByEmail(user.getEmail())) {
-//        // 이메일이 이미 존재하는 경우 처리 (예: 에러 메시지 전달)
-//        model.addAttribute("error", "이미 사용 중인 이메일입니다.");
-//        return "redirect:/user/save"; // 에러를 보여줄 뷰로 리다이렉트 또는 포워드
-//    }
-//
-//    // 휴대폰 번호 중복 체크
-//    if (userRepository.existsByPhoneNumber(user.getPhoneNumber())) {
-//        // 휴대폰 번호가 이미 존재하는 경우 처리 (예: 에러 메시지 전달)
-//        model.addAttribute("error", "이미 사용 중인 휴대폰 번호입니다.");
-//        return "redirect:/user/save"; // 에러를 보여줄 뷰로 리다이렉트 또는 포워드
-//    }
+
         int currentPage = users.getPageable().getPageNumber() + 1; // 현재 페이지 번호 (0부터 시작)
         int startPage = Math.max(1, currentPage - 2); // 현재 페이지 주변에 2 페이지씩 보여주기
         int endPage = Math.min(users.getTotalPages(), startPage + 4);

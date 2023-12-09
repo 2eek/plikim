@@ -43,9 +43,11 @@ public HashMap<String, Object> sendSms(MessageDTO messageDto, HttpSession sessio
 	System.out.println("회원번호??"+messageDto.getTo());
 	HashMap<String, Object> smsMap = new HashMap<>();
     SmsResponseDTO response = smsService.sendSms(messageDto);
+    String phoneNumber = messageDto.getTo();
 
     int num = smsService.getRandomNumber();
-
+    //서버로 넘어온 회원의 전화번호
+    session.setAttribute("phoneNumber", phoneNumber);
     session.setAttribute("num", num); // 세션에 num 값을 저장
     smsMap.put("num", num);
     smsMap.put("response", response);
@@ -53,31 +55,34 @@ public HashMap<String, Object> sendSms(MessageDTO messageDto, HttpSession sessio
 
     return smsMap;
 }
-
 @PostMapping("/compareCodes")
 @ResponseBody
-public Map<String, String> compareCodes(@RequestParam String userInputNumber , HttpSession session) {
+public Map<String, String> compareCodes(@RequestParam String userInputNumber, @RequestParam String inputedPhonenumber, HttpSession session) {
 
-      Map<String, String> resultMap = new HashMap<>();
+    Map<String, String> resultMap = new HashMap<>();
 
-        // 서버에서 생성한 코드 가져오기
-        Integer serverGeneratedCode = (Integer) session.getAttribute("num");
-		System.out.println("브라우저에서 보내는 코드"+userInputNumber );
-		System.out.println("실제 코드"+serverGeneratedCode);
+    // 서버에서 생성한 코드 가져오기
+    Integer serverGeneratedCode = (Integer) session.getAttribute("num");
+    // 세션에 있던 회원의 전화번호
+    String userPhoneNum = (String) session.getAttribute("phoneNumber");
 
+    System.out.println("브라우저에서 보내는 코드: " + userInputNumber);
+    System.out.println("실제 코드: " + serverGeneratedCode);
 
-        // 사용자가 입력한 코드와 서버에서 생성한 코드 비교
-        if (userInputNumber .equals(String.valueOf(serverGeneratedCode))) {
+    // 사용자가 입력한 코드와 서버에서 생성한 코드 비교
+    if (userInputNumber.equals(String.valueOf(serverGeneratedCode))) {
+        // 전화번호 비교
+        if (inputedPhonenumber.equals(userPhoneNum)) {
             resultMap.put("result", "success");
         } else {
             resultMap.put("result", "failure");
         }
-
-        return resultMap;
+    } else {
+        resultMap.put("result", "failure");
     }
 
-
-
+    return resultMap;
+}
 
 
 

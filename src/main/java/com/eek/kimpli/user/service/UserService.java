@@ -1,5 +1,6 @@
 package com.eek.kimpli.user.service;
 
+import com.eek.kimpli.user.controller.DuplicateUserDataException;
 import com.eek.kimpli.user.model.Role;
 import com.eek.kimpli.user.model.User;
 import com.eek.kimpli.user.repository.UserRepository;
@@ -18,8 +19,13 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     // 회원가입
-    @Transactional
-    public User save(User user) {
+@Transactional
+    public void save(User user) throws DuplicateUserDataException {
+        // 중복된 값 체크
+        if (isDuplicateUser(user.getUserId(), user.getEmail(), user.getPhoneNumber())) {
+            throw new DuplicateUserDataException("Duplicate user data");
+        }
+
         // 비밀번호 암호화
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
@@ -34,8 +40,18 @@ public class UserService {
         user.setCreatedDate(LocalDateTime.now());
 
         // 사용자 정보 저장
-        return userRepository.save(user);
+        userRepository.save(user);
     }
+
+    private boolean isDuplicateUser(String userId, String email, String phoneNumber) {
+        return userRepository.existsByUserIdOrEmailOrPhoneNumber(userId, email, phoneNumber);
+    }
+
+
+private boolean isValidUsername(String username) {
+    // 유효성 검사를 수행하여 유효한 아이디인지 확인
+    return username != null && username.matches("^[a-zA-Z0-9가-힣]*$") && username.length() >= 5;
+}
 
     // 추가: 휴대폰 번호로 사용자 찾기
 //    public User findByPhoneNumber(String phoneNumber) {

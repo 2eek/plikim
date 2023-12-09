@@ -76,8 +76,8 @@ public class UserService {
     }
 
 
-    public User checkEmail(String email) {
-        User result = userRepository.findByEmail(email);
+    public User checkEmail(String email, String id) {
+        User result = userRepository.findByEmailAndUserId(email, id);
         System.out.println("유저유저유저" + result);
         return result;
     }

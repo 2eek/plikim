@@ -27,7 +27,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // 휴대폰 번호로 사용자 찾기
     User findByPhoneNumber(String phoneNumber);
 
-    User findByEmail(String email);
+    User findByEmailAndUserId(String email, String userId);
 
     // 카카오 로그인 정보 확인
     @Query(value = "SELECT * FROM user WHERE memberEmail = :email AND login_type = 'L2'", nativeQuery = true)

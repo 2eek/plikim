@@ -28,7 +28,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByPhoneNumber(String phoneNumber);
 
     User findByEmailAndUserId(String email, String userId);
-     User findByEmail(String email);
+    User findByEmail(String email);
 
     // 카카오 로그인 정보 확인
     @Query(value = "SELECT * FROM user WHERE memberEmail = :email AND login_type = 'L2'", nativeQuery = true)
@@ -47,4 +47,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
      boolean existsByEmail(String email);
 
      boolean existsByPhoneNumber(String PhoneNumber);
+
+     boolean existsByUserIdOrEmailOrPhoneNumber(String userId,String email,String phoneNumber);
 }

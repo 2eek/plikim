@@ -199,9 +199,9 @@ public User phoneNumberCheck(String phoneNumber) {
 }
 
     @ResponseBody
-@PostMapping("/emailCheck")
-public User emailCheck(String email, String id) {
-    User user = userService.checkEmail(email,id);
+@PostMapping("/emailAndIdCheck")
+public User checkEmailAndUserId(String email, String id) {
+    User user = userService.checkEmailAndUserId(email,id);
 
     if (user != null) {
         System.out.println("User found: " + user);
@@ -212,6 +212,58 @@ public User emailCheck(String email, String id) {
 
     }
 }
+//@ResponseBody
+//@PostMapping("/emailCheck")
+//public User emailCheck(String email) {
+//
+//    User user = userService.checkEmail(email);
+//
+//    if (user != null) {
+//        System.out.println("User found: " + user);
+//        return user;
+//    } else {
+////        System.out.println("컨트롤 널입니다" + user);
+//        return new User(); // 빈 User 객체 또는 다른 적절한 값을 반환
+//
+//    }
+//}
+
+@PostMapping("/emailCheck")
+    @ResponseBody
+    public int emailCheck(@RequestParam String email) {
+       int emailFormatResult = isValidEmailFormat(email);
+
+    if (emailFormatResult == 0) { //이메일 형식이라면 0 반환됨
+            User user = userService.checkEmail(email);
+
+            if (user != null) {
+                //유저가 존재한다. -> null을 반환
+                System.out.println("User found: " + user);
+
+                return  1;
+            } else {
+                // 사용자가 발견되지 않았을 경우 적절한 응답을 반환
+                //null 반환한다.
+                return  0; // 빈 User 객체 또는 다른 적절한 값을 반환
+            }
+        } else {
+            // 이메일 형식 아니면 -1 반환 -> 서버로 null값 반환한다.
+            return -1;
+        }
+    }
+
+private int isValidEmailFormat(String email) {
+        //문자@문자.문자
+    // 이메일 형식 검사(이메일 형식 아니면 -1 반환한다. 이메일 형식이라면 0반환)
+    String emailRegex = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$";
+    return email.matches(emailRegex) ? 0 : -1;
+}
+
+
+
+
+
+
 //     @PostMapping("/phoneNumberCheck")
 //    public ResponseEntity<User> phoneNumberCheck(@RequestParam String phoneNumber) {
 //        User user = userService.findByPhoneNumber(phoneNumber);

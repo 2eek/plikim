@@ -59,7 +59,7 @@ h8 {
 								<div>
 									<h3 class="text-center">회원가입</h3>
 								</div>
-								<form name="insertForm" action="/user/save" method="post">
+								<form  id="insertForm" action="/user/save" method="post">
 									<h8>*는 필수입력 사항입니다.</h8>
 
 									<div class="mb-3">
@@ -177,11 +177,61 @@ h8 {
 	<!--  sms코드 전송 -->
 <script th:inline="javascript">
 	//회원가입 버튼 누르면 메서드 실행 후 회원가입처리
-	document.getElementById("submitButton").addEventListener("click", function() {
-		joinform_check()
+	document.getElementById("submitButton").addEventListener("click", function(event) {
+		console.log('?????')
+		joinform_check(event)
 
 	});
 
+
+//아이디 중복체크
+
+$('#id').on('blur', checkUserIdAvailability);
+$('#id').on('input', checkUserIdAvailability);
+// $('#id').on('blur', checkUserIdAvailability);
+		function checkUserIdAvailability() {
+				var id = $("#id").val();
+
+				// if (id.length < 5 || id.search(/\s/) !== -1 || !/^[a-zA-Z0-9]*$/.test(id)) {
+				// 	$("#spaceId").html("아이디는 최소 5글자 이상이어야 하며, 영문 대소문자와 숫자로만 입력해주세요.");
+				// 	$("#spaceId").attr('color', 'red');
+				//
+				//
+				//
+				// }
+				$.ajax({
+					url: "/idCheck",
+					type: "post",
+					data: {userId: id},
+					dataType: 'json',
+					success: function (result) {
+						if (result === 0) {
+							$("#spaceId").html('사용할 수 있는 아이디입니다.');
+							$("#spaceId").attr('color', 'green');
+
+
+						} else if (result === 1) {
+							$("#spaceId").html('사용할 수 없는 아이디입니다.');
+							$("#spaceId").attr('color', 'red');
+							$("#id").focus();
+
+
+						} else if (result === 2) {
+							//유효성 검사
+							$("#spaceId").html("아이디는 최소 5글자 이상, 영문 대소문자와 숫자로만 입력해주세요.");
+							$("#spaceId").attr('color', 'red');
+							$("#id").focus();
+									console.log('AAAAAAA')
+
+
+						}
+					},
+					error: function () {
+						alert("서버요청실패");
+					}
+				});
+
+			}
 
 
 //HTML 문서의 모든 요소들이 브라우저에 로드되고 초기화된 후에 스크립트 코드를 실행하고자 할 때 사용됨. 돔형성 후
@@ -333,50 +383,6 @@ function isValidEmailFormat(email) {
 
 
 
-//아이디 중복체크
-
-$('#id').on('blur', checkUserIdAvailability);
-$('#id').on('input', checkUserIdAvailability);
-// $('#id').on('blur', checkUserIdAvailability);
-		function checkUserIdAvailability() {
-				var id = $("#id").val();
-
-				// if (id.length < 5 || id.search(/\s/) !== -1 || !/^[a-zA-Z0-9]*$/.test(id)) {
-				// 	$("#spaceId").html("아이디는 최소 5글자 이상이어야 하며, 영문 대소문자와 숫자로만 입력해주세요.");
-				// 	$("#spaceId").attr('color', 'red');
-				//
-				//
-				//
-				// }
-				$.ajax({
-					url: "/idCheck",
-					type: "post",
-					data: {userId: id},
-					dataType: 'json',
-					success: function (result) {
-						if (result === 0) {
-							$("#spaceId").html('사용할 수 있는 아이디입니다.');
-							$("#spaceId").attr('color', 'green');
-
-						} else if (result === 1) {
-							$("#spaceId").html('사용할 수 없는 아이디입니다.');
-							$("#spaceId").attr('color', 'red');
-							$("#id").focus();
-
-						} else if (result === 2) {
-							//유효성 검사
-							$("#spaceId").html("아이디는 최소 5글자 이상, 영문 대소문자와 숫자로만 입력해주세요.");
-							$("#spaceId").attr('color', 'red');
-							$("#id").focus();
-
-						}
-					},
-					error: function () {
-						alert("서버요청실패");
-					}
-				});
-
-			}
 
 // confirmSmsCode()
 
@@ -527,7 +533,9 @@ $('#id').on('input', checkUserIdAvailability);
 				// });
 
 //회원가입시 유효성 체크
-function joinform_check() {
+function joinform_check(event) {
+				// checkUserIdAvailability1()
+				console.log('test 버튼')
 	// 				checkUserIdAvailability()
 	// return false;
     var uid = document.getElementById("id");
@@ -544,20 +552,20 @@ function joinform_check() {
 
 //
 //     // 아이디 유효성 검사
-//     if (uid.value == "" || uid.value.trim() === "" || uid.value.search(/\s/) !== -1 || !/^[a-zA-Z0-9]*$/.test(uid.value) || uid.value.length < 5) {
-// 	$("#spaceId").html("아이디는 최소 5글자 이상이어야 하며, 영문 대소문자와 숫자로만 입력해주세요.");
-// 	$("#spaceId").attr('color', 'red');
-//     $("#id").focus();
-// 		return  false;
-// }
+    if (uid.value == "" || uid.value.trim() === "" || uid.value.search(/\s/) !== -1 || !/^[a-zA-Z0-9]*$/.test(uid.value) || uid.value.length < 5) {
+	$("#spaceId").html("아이디는 최소 5글자 이상이어야 하며, 영문 대소문자와 숫자로만 입력해주세요.");
+	$("#spaceId").attr('color', 'red');
+    $("#id").focus();
+		return  false;
+}
 
-		 checkUserIdAvailability()
+		 // checkUserIdAvailability()
 
 
 
     // pw 유효성 검사
     if (pwd.value == "") {
-        // alert("비밀번호를 입력하세요.");
+		alert("비밀번호를 입력하세요.");
         // $("#pw1").focus();
 
         return false;
@@ -607,11 +615,11 @@ function joinform_check() {
     var male = document.getElementById("male");
 
     // 성별을 선택하지 않았을 때
-    if (!female.checked && !male.checked) {
-        alert("성별을 선택하세요.");
-
-        // return false;
-    }
+    // if (!female.checked && !male.checked) {
+    //     alert("성별을 선택하세요.");
+	//
+    //      return false;
+    // }
 	// checkPhoneNumber()
 	// return false;
 
@@ -666,25 +674,90 @@ function joinform_check() {
 
         }
     }
+
 	//휴대폰 번호 중복 막기
 checkPhoneNumber()
 
-checkUserIdAvailability()
+checkUserIdAvailability1(event)
+function checkUserIdAvailability1(event) {
+				var id = $("#id").val();
+
+				// if (id.length < 5 || id.search(/\s/) !== -1 || !/^[a-zA-Z0-9]*$/.test(id)) {
+				// 	$("#spaceId").html("아이디는 최소 5글자 이상이어야 하며, 영문 대소문자와 숫자로만 입력해주세요.");
+				// 	$("#spaceId").attr('color', 'red');
+				//
+				//
+				//
+				// }
+				$.ajax({
+					url: "/idCheck",
+					type: "post",
+					data: {userId: id},
+					dataType: 'json',
+					success: function (result) {
+						if (result === 0) {
+							$("#spaceId").html('사용할 수 있는 아이디입니다.');
+							$("#spaceId").attr('color', 'green');
+enableSubmitButton()
+						} else if (result === 1) {
+							$("#spaceId").html('사용할 수 없는 아이디입니다.');
+							$("#spaceId").attr('color', 'red');
+							$("#id").focus();
+							alert('아이디 못쓴다@@@@@@@')
+
+	return false;
+
+						} else if (result === 2) {
+							//유효성 검사
+							$("#spaceId").html("아이디는 최소 5글자 이상, 영문 대소문자와 숫자로만 입력해주세요.");
+							$("#spaceId").attr('color', 'red');
+							$("#id").focus();
+								alert('BBBBB ')
+								alert('아이디 5글자 이상! ')
+	event.preventDefault(event);
+	return false;
+						}
+					},
+					error: function () {
+						alert("서버요청실패");
+					}
+				});
+
+			}
+	console.log('여기까지 오나')
+	// event.preventDefault(event);
 
     // 모든 조건이 만족하면 enableSubmitButton 호출
-    enableSubmitButton();
+
+// enableSubmitButton()
+	function enableSubmitButton() {
+    document.getElementById("insertForm").submit();
 }
 
-function disableSubmitButton() {
-    // 서브밋 막음
-    $("#submitButton").prop("disabled", true);
 }
 
-function enableSubmitButton() {
-    // 서브밋 안막음
-    // $("#submitButton").prop("disabled", false);
-	    document.getElementById("submitButton").type = "submit";
-}
+// function disableSubmitButton() {
+//     // 서브밋 막음
+//     $("#submitButton").prop("disabled", true);
+// }
+//
+// function enableSubmitButton() {
+//     // 서브밋 안막음
+//     // $("#submitButton").prop("disabled", false);
+// 	    document.getElementById("submitButton").type = "submit";
+// }
+//
+
+
+//
+// const $form = document.querySelecotr('form');
+//
+// $form.addEventListener("submit", (event) => {
+//   // 동작(이벤트)을 실행하지 못하게 막는 메서드입니다.
+//   event.preventDefault();
+//
+//   console.log(event.target);
+// });
 </script>
 
 

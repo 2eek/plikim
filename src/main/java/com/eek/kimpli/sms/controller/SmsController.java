@@ -11,6 +11,7 @@ import com.eek.kimpli.sms.dto.MessageDTO;
 import com.eek.kimpli.sms.dto.SmsResponseDTO;
 import com.eek.kimpli.sms.service.SmsService;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -73,6 +74,7 @@ public Map<String, String> compareCodes(@RequestParam String userInputNumber, @R
     if (userInputNumber.equals(String.valueOf(serverGeneratedCode))) {
         // 전화번호 비교
         if (inputedPhonenumber.equals(userPhoneNum)) {
+            //result"라는 키에 "success"라는 값을 매핑
             resultMap.put("result", "success");
         } else {
             resultMap.put("result", "failure");
@@ -84,7 +86,36 @@ public Map<String, String> compareCodes(@RequestParam String userInputNumber, @R
     return resultMap;
 }
 
+//@PostMapping("/saveIsCodeConfirmed")
+//@ResponseBody
+//public Map<String, String> saveIsCodeConfirmed(@RequestParam boolean isCodeConfirmed, HttpSession session) {
+//    // 코드 매칭이 맞았다면 세션에  isCodeConfirmed)저장한다. 저장된 값은 true이다.
+//     // 코드 매칭이 안맞았다면 세션에  isCodeConfirmed)저장한다. 저장된 값은 false이다.
+//    session.setAttribute("isCodeConfirmed", isCodeConfirmed);
+//    System.out.println("잉 여기 트루펄스 세션?"+isCodeConfirmed);
+//    Map<String, String> resultMap = new HashMap<>();
+//    resultMap.put("status", "success");
+//    return resultMap;
+//}
 
+//@GetMapping("/getIsCodeConfirmed")
+//@ResponseBody
+//public Map<String, Boolean> getIsCodeConfirmed(HttpSession session) {
+//    Boolean isCodeConfirmed = (Boolean) session.getAttribute("isCodeConfirmed");
+//    Map<String, Boolean> resultMap = new HashMap<>();
+//    System.out.println("true 아니면 false??"+isCodeConfirmed);
+//    resultMap.put("isCodeConfirmed", isCodeConfirmed != null && isCodeConfirmed == true);
+//    return resultMap;
+//}
+//
+////새로고침시 회원의 코드 검증 기록을 초기화
+//// 세션 값을 삭제하는 컨트롤러
+//@PostMapping("/clearSessionValue")
+//@ResponseBody
+//public void clearSessionValue(HttpSession session) {
+//    // 세션에서 특정 속성만을 삭제하거나 세션 전체를 초기화할 수 있음
+//    session.removeAttribute("isCodeConfirmed");
+//}
 
 
 }

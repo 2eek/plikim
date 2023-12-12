@@ -134,7 +134,7 @@ public String getUserDetailbySearch(@RequestParam(required = false) String userI
     public String Join(@ModelAttribute("user") User user, Model model, @PageableDefault(size = 3) Pageable pageable) {
         Page<User> users = userRepository.findAll(pageable);
            // 아이디 중복 체크
-
+System.out.println("중복값??회원가입"+user);
         int currentPage = users.getPageable().getPageNumber() + 1; // 현재 페이지 번호 (0부터 시작)
         int startPage = Math.max(1, currentPage - 2); // 현재 페이지 주변에 2 페이지씩 보여주기
         int endPage = Math.min(users.getTotalPages(), startPage + 4);
@@ -148,22 +148,6 @@ public String getUserDetailbySearch(@RequestParam(required = false) String userI
         }
 
 
-//번호로 id 찾기
-//   @ResponseBody
-//@PostMapping("/phoneNumberCheck")
-//public ResponseEntity<User> phoneNumberCheck(String phoneNumber) {
-//    User user = userService.findByPhoneNumber(phoneNumber);
-//
-//    if (user != null) {
-//        System.out.println("User found: " + user);
-//        return ResponseEntity.ok(user);
-//    } else {
-//        System.out.println("컨트롤 널입니다 " + user);
-//        // 사용자가 없을 때도 200 OK를 반환하고 null을 전송
-//        return ResponseEntity.ok(null);
-//    }
-//}
-
     //이거 되는거임
     @ResponseBody
 @PostMapping("/phoneNumberCheck")
@@ -171,6 +155,7 @@ public User phoneNumberCheck(String phoneNumber) {
     User user = userService.findByPhoneNumber(phoneNumber);
 
     if (user != null) {
+        //db에 있는 휴대폰 번호다
         System.out.println("User found: " + user);
         return user;
     } else {
@@ -194,21 +179,7 @@ public User checkEmailAndUserId(String email, String id) {
 
     }
 }
-//@ResponseBody
-//@PostMapping("/emailCheck")
-//public User emailCheck(String email) {
-//
-//    User user = userService.checkEmail(email);
-//
-//    if (user != null) {
-//        System.out.println("User found: " + user);
-//        return user;
-//    } else {
-////        System.out.println("컨트롤 널입니다" + user);
-//        return new User(); // 빈 User 객체 또는 다른 적절한 값을 반환
-//
-//    }
-//}
+
 
 @PostMapping("/emailCheck")
     @ResponseBody
@@ -235,44 +206,13 @@ public User checkEmailAndUserId(String email, String id) {
     }
 
 private int isValidEmailFormat(String email) {
-        //문자@문자.문자
-    // 이메일 형식 검사(이메일 형식 아니면 -1 반환한다. 이메일 형식이라면 0반환)
-    String emailRegex = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$";
+    // 이메일 형식 검사(한글x 숫자 알파벳만 가능)
+    String emailRegex = "^[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z0-9]+$";
     return email.matches(emailRegex) ? 0 : -1;
 }
 
 
 
-
-
-
-//     @PostMapping("/phoneNumberCheck")
-//    public ResponseEntity<User> phoneNumberCheck(@RequestParam String phoneNumber) {
-//        User user = userService.findByPhoneNumber(phoneNumber);
-//
-//        if (user != null) {
-//            return ResponseEntity.ok(user);
-//        } else {
-//            System.out.println("뭔데?????????"+ResponseEntity.ok(null));
-//            return ResponseEntity.ok(null);
-//        }
-//    }
-
-//      //입력한 전화번호로 계정 ID 찾기
-//		@ResponseBody
-//@PostMapping("/phoneNumberCheck")
-//public User phoneNumberCheck(@RequestParam String phoneNumber) {
-//    User user = userService.findByPhoneNumber(phoneNumber);
-//
-//    if (user != null) {
-//        System.out.println("User found: " + user);
-//        return user;
-//    } else {
-//            System.out.println("dmaskdmaskdmaskdsakdsmoqwmdo: " );
-//        // 만약 사용자가 없을 때는 HttpStatus.NOT_FOUND로 응답
-//        return null;
-//    }
-//}
 
         		//휴대폰 번호로 아이디 찾기
 		@GetMapping("/findAccount")
@@ -323,22 +263,6 @@ public int idCheck(@RequestParam("userId") String id) {
     }
 }
 
-      //회원 가입시 이메일 중복체크
-
-//     @PostMapping(" /emailCheck")
-//	  @ResponseBody
-//	  public int emailCheck(String email) {
-//          System.out.println("뭐가 들어오냐"+email);
-//		User  result = userService.checkEmail(email);
-//          System.out.println("리절트"+result);
-//		if (result == null) {
-//		    return 0;
-//		} else {
-//		    return 1;
-//		}
-//
-//	  }
-//
 
 
 }

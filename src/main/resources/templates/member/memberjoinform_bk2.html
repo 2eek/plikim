@@ -59,7 +59,7 @@ h8 {
 								<div>
 									<h3 class="text-center">회원가입</h3>
 								</div>
-								<form  id="insertForm" action="/user/save" method="post" onsubmit="return false">
+								<form  id="insertForm" action="/user/save" method="post">
 									<h8>*는 필수입력 사항입니다.</h8>
 
 									<div class="mb-3">
@@ -123,7 +123,7 @@ h8 {
 											id="smsCode" placeholder="코드 입력하세요" required>
 
 									</div>
-
+									<br> <input type="hidden" id="numValue" value="">
 
 
 									<br> <button id="submitButton" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">회원가입</button>
@@ -141,7 +141,7 @@ h8 {
 	<!--  sms코드 전송 -->
 <script th:inline="javascript">
 
-//1) 아이디 유효성 검사, db에 존재하는지 파악
+
 function checkUserIdAvailability(callback) {
     var id = $("#id").val();
 
@@ -176,7 +176,7 @@ function checkUserIdAvailability(callback) {
 }
 
 
-//2) 비밀번호 동일한 값인지 체크 ,유효성체크 (클릭시)
+//비밀번호 동일한 값인지 체크 ,유효성체크
 	$('#pw1').on('input', function () {
 		var pw = $("#pw1").val();
 		var num = pw.search(/[0-9]/g);
@@ -222,39 +222,20 @@ function checkUserIdAvailability(callback) {
 		}
 	});
 
-//비밀번호 eye토글
-			$(document).ready(function () {
-				$('#togglePassword1, #togglePassword2').on('click', function () {
-					var inputField = $(this).siblings('input');
-					inputField.toggleClass('active');
-
-					if (inputField.hasClass('active')) {
-						$(this).attr('class', 'fa-solid fa-eye-slash fa-xs');
-						inputField.attr('type', 'text');
-					} else {
-						$(this).attr('class', 'fa-solid fa-eye fa-xs');
-						inputField.attr('type', 'password');
-					}
-				});
-			});
-
-
-
-
-//3) 이메일 유효성 검사 콜백 함수
 $('#email').on('blur', function () {
     checkEmail(function (result) {
-
+        // 이 함수는 checkUserIdAvailability 함수가 완료된 후에 호출됩니다.
+        // console.log('외부에서 확인한 결과2 블러 이메일:', result);
     });
 });
 
 $('#email').on('input', function () {
     checkEmail(function (result) {
-
+        // 이 함수는 checkUserIdAvailability 함수가 완료된 후에 호출됩니다.
+        // console.log('외부에서 확인한 결과2 인풋 이메일:', result);
     });
 });
 
-//ajax 유효성 검사
 function checkEmail(callback) {
     var email = $("#email").val();
 
@@ -288,7 +269,10 @@ function checkEmail(callback) {
 //HTML 문서의 모든 요소들이 브라우저에 로드되고 초기화된 후에 스크립트 코드를 실행하고자 할 때 사용됨. 돔형성 후
 		 $(document).ready(function () {
 
-// 코드발송, (발송 전 전화번호 유효성 검사, 코드 발송, 코드입력폼 활성화)
+			  // clearSessionValue(); // 특정 세션값 초기화
+
+// 코드발송
+
         $('#sendCode').on('click', function() {
 			console.log('hi')
             let receiverId = document.getElementById("phonenumber").value;
@@ -321,7 +305,7 @@ function checkEmail(callback) {
 
         });
 
-//문자 발송 ajax
+		//문자 발송 ajax
         function sendSMS() {
 			//문구 비우기
 				$("#spacePhonenum").html('');
@@ -337,7 +321,7 @@ function checkEmail(callback) {
 
                 if (data != null && data.num != null) {
                     alert(`${phoneNumber} 문자발송했습니다`);
-                    // $("#numValue").val(data.num);
+                    $("#numValue").val(data.num);
                 } else {
                     alert(`문자 발송 안됐습니다.`);
                 }
@@ -349,10 +333,12 @@ function checkEmail(callback) {
             $("#codeCheck").css("display", "block");
         }
 
+
+
     });
 
 //함수 정의
-// 코드 비교 함수(회원가입 서브밋 후 실행됨 그다음 회원의 휴대폰 번호도 체크한다. )
+// 코드 비교 함수
 function confirmSmsCode(callback) {
     var phoneNumberValue = $("#phonenumber").val();
     var userCodeValue = $("#smsCode").val();
@@ -368,16 +354,22 @@ function confirmSmsCode(callback) {
             console.log("서버로 회원의 입력값 보내기 성공");
 
             if (success.result === "success") {
-                console.log('코드 인증 성공' + success);
-                console.log('코드 인증 확인' + success.result);
-                // 성공적으로 코드가 확인된 경우, 이 번호가 db에 있는지 체크시행한다
-                // 565에서 정의한 checkPhoneNumber의 결과인 result를 콜백함수에 넣음.
-                callback(true);
+                // 성공적으로 코드가 확인된 경우, 이 번호가 db에 있는지 체크
+				//checkPhoneNumber의 결과인 result를 콜백함수에 넣음.
+                checkPhoneNumber(function (result) {
+                    if (!result) {
+                        return false;
+                    }
+
+                    // 코드 일치 및 전화번호 중복 체크가 모두 성공한 경우
+                    if (typeof callback === 'function') {
+                        callback(true);  // 콜백 함수 호출, 성공 여부 전달 -> 회원가입처리
+                    }
+                });
             } else {
-                console.log("안나오나???왜 가입되냐?" + success.result);
-                // 코드가 일치하지 않는 경우 false를 전달하면
-                if (success.result === 'failure') {
-                    //callback(false)는 콜백 함수를 호출하며, false를 인자로 전달
+                // 코드가 일치하지 않는 경우
+                if (typeof callback === 'function') {
+					//callback(false)는 콜백 함수를 호출하며, false를 인자로 전달
                     callback(false);
                 }
             }
@@ -385,119 +377,61 @@ function confirmSmsCode(callback) {
         .fail(() => {
             console.error("서버요청 실패");
             alert("서버요청 실패");
-            callback(false);  // 콜백 함수 호출, 실패 여부 전달
+            if (typeof callback === 'function') {
+                callback(false);  // 콜백 함수 호출, 실패 여부 전달
+            }
         });
     } else {
         // phoneNumberValue 또는 userCodeValue가 값이 없는 경우에 대한 처리
         console.log("전화번호 또는 SMS 코드가 비어있습니다.");
-        console.log('값 안 넣으면 여기로??? 1')
-        console.log('여긴뭔데1' + typeof callback)
-        callback(false);  // 콜백 함수 호출, 실패 여부 전달
+        if (typeof callback === 'function') {
+            callback(false);  // 콜백 함수 호출, 실패 여부 전달
+        }
     }
 }
 
 
-//서브밋 과정에서 코드 적합 여부 판단 후 db에 존재하는 휴대폰 번호인지 확인
-// checkPhoneNumber 함수 정의
-
-$('#submitButton').on('click', function (event) {
 
 
-    // 코드 확인
-    var joinformResult = joinform_check();
-    console.log('트루냐 펄스냐???' + joinformResult)
-    if (!joinformResult) {
-        event.preventDefault(); // 이벤트의 기본 동작 중단
-        return false;
-    }
+//비밀번호 체크
 
-    // confirmSmsCode 실행 후 result를 가져와서 내부에서 실행한다.
-    // result는 confirmSmsCode 함수에서 비동기적으로 처리한 작업의 결과이다.
-    // 실행함수. 여기서 실행한다.
-    confirmSmsCode(function (result) {
-        // result에 false 들어오면 실행.인증 틀려서 회원가입 안되는 case
-        if (!result) {
-            console.log('최종 반환 값1' + result)
-            // 코드 인증은 성공했으나 중복된 휴대폰 번호인 경우 false 반환한다. -> 이쪽으로 오나?
-            alert('코드를 확인하세요.!!!');
-            alert('최종 false인데....!!!');
-            event.preventDefault(); // 코드 확인 결과에 따라서 여기에 이벤트 방지 코드 추가
-            event.stopPropagation(); // 이벤트 전파 중지
-        } else {
-            // 코드인증(true)인 경우
-            // result에 false 들어오면 실행.인증 돼서 db조회 필요한 case
-            var x = checkPhoneNumber(); // true나오면 가입 가능됨
-            console.log(x);
-            if (x === 'a') { // 비교 연산자 수정
-                alert('가입가능 alert');
-				// form.submit()
-            } else {
-                alert('가입불가능 alert');
-            }
-        }
-    });
-});
+			//비밀번호 체크 eye
+			$(document).ready(function () {
+				$('#togglePassword1, #togglePassword2').on('click', function () {
+					var inputField = $(this).siblings('input');
+					inputField.toggleClass('active');
 
-
-function checkPhoneNumber() {
-    console.log('실행하냐 폰넘버체크 12.12 23:30')
-    var phonenumber = $("#phonenumber").val();
-    var reg = /^[0-9]{11}$/;
-
-    if (!reg.test(phonenumber)) {
-        alert("전화번호는 숫자로만 입력해야 합니다.");
-        $("#phonenumber").focus();
-        return false;
-    }
-
-    phonenumber = phonenumber.replace(/-/g, '');
-
-    // 중복 여부 확인
-    // 비동기 처리를 위해 async: false 사용하지 않도록 주의
-    $.ajax({
-        url: "/phoneNumberCheck",
-        type: "post",
-        data: { phoneNumber: phonenumber },
-        dataType: 'json',
-        success: function (result) {
-            if ($.isEmptyObject(result) || result.userId === null) {
-                console.log('전화번호 사용 가능:', phonenumber);
-
-                // SMS 코드 확인이 성공하고 전화번호 중복이 없는 경우
-                $("#spacePhonenum").html('사용할 수 있는 전화번호입니다');
-                $("#spacePhonenum").css('color', 'green');
-				//회원가입처리. 서브밋
-				     document.getElementById("insertForm").submit();
-                return 'a';
-
-            } else {
-                // 전화번호가 이미 등록되어 있는 경우
-                console.log('전화번호 중복 확인 결과:', result);
-                console.log('빈 객체!!' + result);
-
-                // 이미 등록된 전화번호 안내
-                document.getElementById("phonenumber").value = '';
-                $("#codeCheck").css("display", "none");
-                document.getElementById("smsCode").value = '';
-                $("#spacePhonenum").html("이미 등록된 전화번호입니다.");
-                $("#spacePhonenum").css('color', 'red');
-
-                return 'b';
-            }
-        },
-        error: function (xhr, status, error) {
-            console.error("서버 요청 실패:", status, error);
-            alert("서버 요청 실패: " + status + " - " + error);
-        }
-    });
-}
-
+					if (inputField.hasClass('active')) {
+						$(this).attr('class', 'fa-solid fa-eye-slash fa-xs');
+						inputField.attr('type', 'text');
+					} else {
+						$(this).attr('class', 'fa-solid fa-eye fa-xs');
+						inputField.attr('type', 'password');
+					}
+				});
+			});
 
 
 
 	$(document).ready(function () {
 
+// 	// 회원가입 폼 제출 이벤트 핸들러
+$('#submitButton').on('click', function (event) {
+    // 코드 확인
 
+	joinform_check(event);
+
+    confirmSmsCode(function (result) {
+        if (!result) {
+            alert('코드를 확인하세요.');
+            event.preventDefault();  // 코드 확인 결과에 따라서 여기에 이벤트 방지 코드 추가
+
+        } else {
+            // 최종 결과에 따라 폼 제출
+            alert('가입가능 alert');
+        }
+    });
+});
 
 
 
@@ -519,27 +453,21 @@ function checkPhoneNumber() {
     $('#pw1').on('input', function () {
         validatePassword();
 		// $("#pw2").focus();
+
     });
 
-    $('#pw1').on('input', function () {
-        validatePasswordConfirmation();
-    });
-
-	  $('#pw2').on('blur', function () {
-        validatePasswordConfirmation();
-    });
-
+    // 비밀번호2 입력 중 이벤트
     $('#pw2').on('input', function () {
         validatePasswordConfirmation();
     });
 
 
+
 });
 
 
-//-			 회원가입 폼 전송 전에 유효성 검사 함수
-
-function joinform_check(event) {
+//------------------------------------------------------------------					 회원가입 폼 전송 전에 유효성 검사 함수
+function joinform_check() {
     var validationResult = true;
 
     // 아이디 중복 체크
@@ -569,20 +497,20 @@ function joinform_check(event) {
        // alert('비밀번호 확인을 확인하세요.');
         validationResult = false;
     }
-return validationResult;
-return event;
+	return validationResult;
+
 }
 
 
 
 
-//--------------			 회원가입 폼 전송 전에 유효성 검사 함수(end)
+//------------------------------------------------------------------				 회원가입 폼 전송 전에 유효성 검사 함수(end)
 
 
 
 
 
-//함수 정의
+
 
 
 // 비밀번호 유효성 체크 함수
@@ -632,7 +560,57 @@ function validatePasswordConfirmation() {
 }
 //함수 정의
 //db에 회원 휴대폰 중복 체크
+function checkPhoneNumber(callback) {
+    var phonenumber = $("#phonenumber").val();
+    var reg = /^[0-9]{11}$/;
 
+    if (!reg.test(phonenumber)) {
+    //    alert("전화번호는 숫자로만 입력할 수 있습니다.1");
+        $("#phonenumber").focus();
+        if (typeof callback === 'function') {
+            callback(false);
+        }
+        return;
+    }
+
+    phonenumber = phonenumber.replace(/-/g, '');
+	//중복여부 확인
+    $.ajax({
+        url: "/phoneNumberCheck",
+        type: "post",
+        data: { phoneNumber: phonenumber },
+        dataType: 'json',
+        success: function (result) {
+            if ($.isEmptyObject(result) || result.userId === null) {
+                console.log('전화번호 사용 가능:', phonenumber);
+                $("#spacePhonenum").html('사용할 수 있는 전화번호입니다');
+                $("#spacePhonenum").css('color', 'green');
+                if (typeof callback === 'function') {
+                    callback(true);
+                }
+            } else {
+                console.log('전화번호 중복 확인 결과:', result);
+                console.log('빈객체!!' + result);
+                 // alert("이미 등록된 전화번호입니다.");
+                document.getElementById("phonenumber").value = '';
+                $("#codeCheck").css("display", "none");
+                document.getElementById("smsCode").value = '';
+                $("#spacePhonenum").html("이미 등록된 전화번호입니다.");
+                $("#spacePhonenum").css('color', 'red');
+                if (typeof callback === 'function') {
+                    callback(false);
+                }
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("서버 요청 실패:", status, error);
+            alert("서버 요청 실패: " + status + " - " + error);
+            if (typeof callback === 'function') {
+                callback(false);
+            }
+        }
+    });
+}
 
 
 </script>

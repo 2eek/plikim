@@ -22,7 +22,7 @@ public class UserService {
 @Transactional
     public void save(User user) throws DuplicateUserDataException {
         // 중복된 값 체크
-        if (isDuplicateUser(user.getUserId(), user.getEmail(), user.getPhoneNumber())) {
+        if (isDuplicateUser(user.getUserId(), user.getPhoneNumber())) {
             throw new DuplicateUserDataException("Duplicate user data");
         }
 
@@ -43,8 +43,8 @@ public class UserService {
         userRepository.save(user);
     }
 
-    private boolean isDuplicateUser(String userId, String email, String phoneNumber) {
-        return userRepository.existsByUserIdOrEmailOrPhoneNumber(userId, email, phoneNumber);
+    private boolean isDuplicateUser(String userId, String phoneNumber) {
+        return userRepository.existsByUserIdOrPhoneNumber(userId ,phoneNumber);
     }
 
 

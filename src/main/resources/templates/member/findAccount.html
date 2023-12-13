@@ -353,9 +353,9 @@ span {
 
 		   function sendSMS(){
 
-			 	console.log("왜안돼")
+
 			 	let phonenumber = document.getElementById("Number").value;
-			 	console.log("있나:"+phonenumber);
+
 
 	       if (!/^\d+$/.test(phonenumber)) {
 					alert("휴대폰 번호는 숫자만 입력 가능합니다.");
@@ -363,10 +363,7 @@ span {
 					return false;
 				}
 	      	  sendCodeForm();
-			  console.log("sms 버튼 눌렀다.");
-
 		      // memberId 정의
-
 
 		     $.ajax({
 		         url : "/sms/send",
@@ -377,7 +374,6 @@ span {
 		      })
 		      .done( data => {
 		         // console.log("data :", data);
-		         console.log("통신은 성공");
 		         if(data != null && data.num != null){
 		            alert(`${phonenumber } 문자발송했습니다`);
 
@@ -413,15 +409,11 @@ span {
 					data: { phoneNumber: phoneNumberCheck },
 					dataType: 'json',
 					success: function (result) {
-						console.log(result);
 						if ($.isEmptyObject(result) || result.userId === null) {
-							console.log('빈객체!!'+result)
-							console.log("없는 전화번호입니다.");
+
 							$("#checkId").html('해당하는 계정이 없습니다.');
 							$("#checkId").attr('color', 'red');
 						} else {
-									console.log('null아닌가?'+result)
-							console.log("있는 전화번호입니다.");
 							$("#checkId").html('회원님의 아이디는<h3 style="display: inline;">' + result.userId + '</h3>입니다.');
 							$("#checkId").attr('color', 'green');
 						}
@@ -434,36 +426,6 @@ span {
 
 			}
 
-//휴대폰 번호로 아이디 찾기 ->코드 확인 버튼, ajax 뒷단에서 전송한 값과 입력한 값 맞는지 확인 처리
-// 	$('#codeConfirmBtn').on('click', function () {
-// 			var userInputNumber = $("#smsCode").val();
-// 			$.ajax({
-// 				url: "/compareCodes",
-// 				type: 'post',
-// 				data: {userInputNumber: userInputNumber},
-// 			})
-// 					.done(success => {
-// 						console.log("서버로 회원의 입력값 보내기 성공");
-//
-// 						if (success.result === "success") {
-// 							alert("입력 값이 일치합니다. ")
-// 							//코드 일치하면db에 휴대폰 정보 있는지 확인 필요.
-// 							 findAccountId()
-// 							console.log('코드 인증 성공');
-//
-// 						} else {
-// 							alert("입력 값이 일치하지않습니다. ")
-//
-// 							// disableSubmitButton();
-// 						}
-// 					})
-// 					.fail(() => {
-// 						console.error("서버요청 실패");
-// 						alert("서버요청 실패");
-// 					});
-// 			//전화번호 중복 체크
-// 			// checkPhoneNumber()
-// 	})
 	function confirmSmsCode(){
 		 	let phoneNumberValue = document.getElementById("Number").value;
 			var userCodeValue = $("#smsCode").val();
@@ -474,19 +436,19 @@ span {
 				data: { inputedPhonenumber:phoneNumberValue, userInputNumber: userCodeValue, },
 			})
 					.done(success => {
-						console.log("서버로 회원의 입력값 보내기 성공");
 
 						if (success.result === "success") {
 							alert("입력 값이 일치합니다. ")
 							//코드 일치하면db에 휴대폰 정보 있는지 확인 필요.
 
-							console.log('코드 인증 성공');
 							// checkPhoneNumber()
 							findAccountId()
 
 
 						} else {
 							alert("입력 값이 일치하지않습니다. ")
+							$("#checkId").html('');
+
 
 
 
@@ -531,14 +493,14 @@ span {
 							alert("인증번호 발송했습니다.");
 							$('.wrap-loading').addClass('display-none');
 							$("#Confirm").attr("value", data);
-							console.log(data)
+
 						}
 					});
 				}
 
 
 		function checkEmail() {
-			   console.log('hihihihihi')
+
     // var email = $("#email").val();
 
     // 이메일 형식 검사 (스페이스나 '@' 없는 이메일은 무시)
@@ -549,17 +511,15 @@ span {
     // }
 	var email = $("#email").val();
 var id = $("#id").val();
-	console.log('hi')
+
     $.ajax({
         url: "/emailAndIdCheck",
         type: "post",
         data: {email: email, id: id},
         dataType: 'json',
 		 success: function (result) {
-								console.log(result);
+
 								if ($.isEmptyObject(result) || result.userId === null) {
-									console.log('빈객체!!'+result)
-									console.log("없는 이메일입니다..");
 									$("#spaceId").html('');
 									$("#checkemail").html('계정과 이메일을 확인하세요.');
 									$("#checkemail").attr('color', 'red');
@@ -588,13 +548,11 @@ var id = $("#id").val();
 				data: {userInputNumber: userInputNumber},
 			})
 					.done(success => {
-						console.log("서버로 회원의 입력값 보내기 성공");
 
 						if (success.result === "success") {
 							alert("입력 값이 일치합니다. ")
 							//코드 일치하면db에 회원 정보 있는지 확인 필요.
 							// findAccountId()
-							console.log('코드 인증 성공');
 							 var updateForm  = document .getElementById( "updatePassword" );
 	                  		  updateForm.submit();
 
@@ -602,6 +560,7 @@ var id = $("#id").val();
 
 						} else {
 							alert("입력 값이 일치하지않습니다. ")
+
 
 
 						}

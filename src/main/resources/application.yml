@@ -1,0 +1,125 @@
+#logging:
+#  level:
+#    root: TRACE
+
+# Logback 설정
+logging:
+  level:
+    root: INFO
+    com.eek.kimpli.online: DEBUG
+
+# Console 출력 설정
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+# 로그 파일 설정
+  file:
+    name: myapplication.log
+    path: /path/to/logs
+
+#  appenders:
+#    - type: console
+#      threshold: INFO
+#      target: System.out
+#      layout:
+#        type: pattern
+#        pattern: "%-5p %c{1}:%L - %m%n"
+
+# 서버 포트 설정
+server:
+  servlet:
+    session:
+      timeout: 1800
+    encoding:
+      charset: utf-8
+      force-response: true
+  port: 9090
+
+
+
+# 스프링 시큐리티 기본 계정 설정
+spring:
+  cors:
+    allowed-origins: https://plikim.com
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+  security:
+    user:
+      name: user
+      password: 1230
+
+  #database 연동 설정
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://52.79.76.213/plikim?serverTimezone=Asia/Seoul&useSSL=false&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+    username: user1
+    password: 1234
+
+
+  data:
+    mongodb:
+      uri: mongodb://lee:1230@52.79.76.213:27017/chatdb?authSource=admin
+
+  #알림기능 소켓
+#  websocket:
+#    handlers:
+#      myHandler: kr.co.commons.socket.EchoHandler
+#    servlet:
+#      contextPath: /your-websocket-context-path
+#
+#  messages:
+#    stompPath: /your-stomp-endpoint
+#
+#  jackson:
+#    deserialization:
+#      ACCEPT_FLOAT_AS_INT: false
+
+#thymeleaf
+  devtools:
+    livereload:
+      enabled: true
+    thymeleaf:
+#    개발 과정에서는 캐시 설정을 false로 두어 캐시 기능을 사용하지 않도록 하여, 수정 내용이 바로 반영되도록할 수 있다.
+      cache: false
+    restart:
+      enabled: true
+
+
+
+  #spring data jpa 설정
+  jpa:
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format-sql: true
+
+  application:
+    name: kimpli
+    timezone: Asia/Seoul
+
+
+#mybatiså
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.eek.kimpli.member.dto
+  configuration:
+    jdbc-type-for-null: null
+    map-underscore-to-camel-case: true
+
+
+systemLog:
+  destination: file
+  path: /var/log/mongodb/mongod.log
+  logAppend: true
+  timeZoneInfo: Asia/Seoul
+
+
+
+

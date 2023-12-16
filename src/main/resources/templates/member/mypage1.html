@@ -1,0 +1,620 @@
+
+<!--    <h1>Welcome, <span th:text="${userSession.username}"></span></h1>-->
+<!DOCTYPE>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" >
+<head th:replace="fragments/common :: head('plikim')">
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('home')">
+    </nav>
+
+<style>
+	body {
+    background-image: url('/img/space4.jpeg');
+    /*background-color: #777777;*/
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh; /* 추가된 부분 */
+}
+<!--
+아이디 중복체크-->.id_ok {
+	color: #008000;
+	display: none;
+}
+
+.id_already {
+	color: #6A82FB;
+	display: none;
+}
+
+.h5 {
+	color: red;
+}
+
+h8 {
+	color: red;
+}
+
+.btn-default{
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+}
+</style>
+
+
+<!--	<script src="https://kit.fontawesome.com/d58c3728d1.js"-->
+<!--		crossorigin="anonymous"></script>-->
+
+	<div class="wrap" >
+		<div
+			class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
+			<div class="d-flex align-items-center justify-content-center w-100">
+				<div class="row justify-content-center w-100">
+					<div class="col-md-8 col-lg-6 col-xxl-8">
+						<div class="card mb-0">
+							<div class="card-body" >
+								<a href="index.html"
+									class="text-nowrap logo-img text-center d-block py-3 w-100">
+								</a>
+
+								<div>
+									<h3 class="text-center">회원정보</h3>
+								</div>
+								<form  id="insertForm" action="/user/update" method="post" onsubmit="return false">
+
+									<div>
+										<font id="spaceId" size="2"></font>
+									</div>
+									<div class="mb-3">
+										<div class="main">
+											<label class="form-label">비밀번호</label>
+											<i class="fa-solid fa-eye-slash fa-xs" id="togglePassword1"></i> <input
+												type="password" name="password" placeholder="비밀번호"
+												class="form-control" id="pw1" required> <font
+												id="pw" size="2"></font>
+										</div>
+									</div>
+
+									<div class="mb-3">
+										<div class="main">
+											<label  class="form-label">비밀번호
+												확인</label> <i class="fa-solid fa-eye-slash fa-xs" id="togglePassword2"></i> <input
+												type="password" name="" placeholder="비밀번호 확인"
+												class="form-control" id="pw2" required>
+										</div>
+									</div>
+									<font id="checkPw" size="2"></font> <br>
+
+
+
+									<div class="mb-3">
+										<label  class="form-label">이메일</label>
+										<input type="email" name="email" placeholder="이메일"
+											class="form-control" id="email" required>
+										<font id="spaceEmail" size="2"></font>
+									</div>
+
+
+									<div id="codeCheck" class="mb-3" style="display: none">
+										<input type="text" class="form-control" name="smsCode"
+											id="smsCode" placeholder="코드 입력하세요" required>
+
+									</div>
+
+									<div class="mb-3">
+										<label  class="form-label">생년월일</label> <input
+											type="date" name="birthday" placeholder="생일"
+											class="form-control" id="birthday" >
+									</div>
+
+									<div>
+										<label  class="form-label"><span class=h5>*</span>성별</label> <br /> <input
+											type="radio" id="male" name="gender" value="G1">남 <input
+											type="radio" id="female" name="gender" value="G2">여
+									</div>
+
+
+									<div class="mb-3">
+										<label  class="form-label">전화번호
+											&nbsp; </label>
+
+										<input type="text" class="form-control" name="phoneNumber"
+											id="phonenumber" placeholder="전화번호를 입력하세요" style="width: 50%; " required>
+												<div>
+										<font id="spacePhonenum" size="2"></font>
+									</div>
+											<button type="button" id="sendCode" class="btn btn-default" style="">코드 발송</button>
+									</div>
+
+
+
+									<br> <button id="submitButton" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">회원가입</button>
+
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!--  sms코드 전송 -->
+<script th:inline="javascript">
+
+//1) 아이디 유효성 검사, db에 존재하는지 파악
+function checkUserIdAvailability(callback) {
+    var id = $("#id").val();
+
+    $.ajax({
+        url: "/idCheck",
+        type: "post",
+        data: { userId: id },
+        dataType: 'json',
+        success: function (result) {
+            if (result === 0) {
+                $("#spaceId").html('사용할 수 있는 아이디입니다.');
+                $("#spaceId").attr('color', 'green');
+            } else if (result === 1) {
+                $("#spaceId").html('사용할 수 없는 아이디입니다.');
+                $("#spaceId").attr('color', 'red');
+                $("#id").focus();
+            } else if (result === 2) {
+                $("#spaceId").html("아이디는 최소 5글자 이상, 영문 대소문자와 숫자로만 입력해주세요.");
+                $("#spaceId").attr('color', 'red');
+                $("#id").focus();
+            }
+
+            // 비동기 작업이 완료된 후에 콜백 함수 호출
+            if (typeof callback === 'function') {
+                callback(result === 0);
+            }
+        },
+        error: function () {
+            alert("서버요청실패");
+        }
+    });
+}
+
+
+//2) 비밀번호 동일한 값인지 체크 ,유효성체크 (클릭시)
+	$('#pw1').on('input', function () {
+		var pw = $("#pw1").val();
+		var num = pw.search(/[0-9]/g);
+		var eng = pw.search(/[a-z]/ig);
+		var spe = pw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
+
+		if (pw.length < 8 || pw.length > 20) {
+			$("#pw").html("8자리 ~ 20자리 이내로 입력해주세요.");
+			$("#pw").attr('color', 'red');
+			$("#pw1").focus();
+			return false;
+		} else if (pw.search(/\s/) != -1) {
+			$("#pw").html("비밀번호는 공백 없이 입력해주세요.");
+			$("#pw").attr('color', 'red');
+			$("#pw1").focus();
+		} else if (num < 0 || eng < 0 || spe < 0) {
+			$("#pw").html("영문,숫자, 특수문자를 혼합하여 입력해주세요.");
+			$("#pw").attr('color', 'red');
+			$("#pw1").focus();
+				return false;
+		} else {
+			$("#pw").html("조건을 충족합니다.");
+			$("#pw").attr('color', 'green');
+
+		}
+	});
+
+	$('#pw2').on('input', function () {
+		var number1 = $("#pw1").val();
+		var number2 = $("#pw2").val();
+
+		if (number1 !== '' && number2 !== '' && number1 == number2) {
+			$("#checkPw").html('번호가 같습니다.');
+			$("#checkPw").attr('color', 'green');
+			// $("#email").focus();
+
+		} else if (number1 !== '' && number2 !== '' && number1 != number2) {
+			$("#checkPw").html('번호가 다릅니다.');
+			$("#checkPw").attr('color', 'red');
+			$("#pw2").focus();
+			return false;
+
+		}
+	});
+
+//비밀번호 eye토글
+			$(document).ready(function () {
+				$('#togglePassword1, #togglePassword2').on('click', function () {
+					var inputField = $(this).siblings('input');
+					inputField.toggleClass('active');
+
+					if (inputField.hasClass('active')) {
+						$(this).attr('class', 'fa-solid fa-eye-slash fa-xs');
+						inputField.attr('type', 'text');
+					} else {
+						$(this).attr('class', 'fa-solid fa-eye fa-xs');
+						inputField.attr('type', 'password');
+					}
+				});
+			});
+
+
+
+
+//3) 이메일 유효성 검사 콜백 함수
+$('#email').on('blur', function () {
+    checkEmail(function (result) {
+
+    });
+});
+
+$('#email').on('input', function () {
+    checkEmail(function (result) {
+
+    });
+});
+
+//ajax 유효성 검사
+function checkEmail(callback) {
+    var email = $("#email").val();
+
+     $.ajax({
+        url: "/emailCheck",
+        type: "post",
+        data: {email: email},
+        dataType: 'json',
+        success: function (result) {
+            if (result==-1)  {
+         	$("#spaceEmail").html('이메일 형식이 아닙니다.');
+ 				$("#spaceEmail").attr('color', 'red');
+				 // $("#email").focus();
+             } else {
+				$("#spaceEmail").html('');
+
+			}
+
+            // 비동기 작업이 완료된 후에 콜백 함수 호출
+            if (typeof callback === 'function') {
+                callback(result !== -1);
+            }
+        },
+        error: function () {
+            alert("서버요청실패");
+        }
+    });
+}
+
+
+//HTML 문서의 모든 요소들이 브라우저에 로드되고 초기화된 후에 스크립트 코드를 실행하고자 할 때 사용됨. 돔형성 후
+		 $(document).ready(function () {
+
+// 코드발송, (발송 전 전화번호 유효성 검사, 코드 발송, 코드입력폼 활성화)
+        $('#sendCode').on('click', function() {
+            let receiverId = document.getElementById("phonenumber").value;
+
+
+				   // 숫자로만 구성되어 있는지 체크
+					var reg = /^[0-9]{11}$/;
+					if (!reg.test(receiverId)) {
+						// alert('숫자로 입력바랍니다.')
+						$("#spacePhonenum").html('전화번호를 다시 확인하세요');
+						$("#spacePhonenum").css('color', 'red');
+						$("#phonenumber").focus();
+						return false;
+					}
+
+
+            if (receiverId === "") {
+                alert("휴대폰 번호를 입력하세요.");
+                $("#Number").focus();
+                return false;
+            }
+			//문자 발송
+             sendSMS();
+
+
+			//코드 입력폼 활성화
+           	 sendCodeForm();
+
+			//휴대폰 중복체크
+
+        });
+
+//문자 발송 ajax
+        function sendSMS() {
+			//문구 비우기
+				$("#spacePhonenum").html('');
+            let phoneNumber = document.getElementById("phonenumber").value;
+
+            $.ajax({
+                url: "/sms/send",
+                type: 'post',
+                data: {to : phoneNumber },
+            })
+            .done(data => {
+
+                if (data != null && data.num != null) {
+                    alert(`${phoneNumber} 문자발송했습니다`);
+                    // $("#numValue").val(data.num);
+                } else {
+                    alert(`문자 발송 안됐습니다.`);
+                }
+            })
+            .fail(reject => console.log(reject));
+        }
+		//코드입력창, 검증 버튼 화면에 보이게 하기
+        function sendCodeForm() {
+            $("#codeCheck").css("display", "block");
+        }
+
+    });
+
+//함수 정의
+// 코드 비교 함수(회원가입 서브밋 후 실행됨 그다음 회원의 휴대폰 번호도 체크한다. )
+function confirmSmsCode(callback) {
+    var phoneNumberValue = $("#phonenumber").val();
+    var userCodeValue = $("#smsCode").val();
+
+    // phoneNumberValue와 userCodeValue가 모두 값이 있는 경우에만 AJAX 통신 수행
+    if (phoneNumberValue && userCodeValue) {
+        $.ajax({
+            url: "/compareCodes",
+            type: 'post',
+            data: { inputedPhonenumber: phoneNumberValue, userInputNumber: userCodeValue },
+        })
+        .done(success => {
+
+
+            if (success.result === "success") {
+                // 성공적으로 코드가 확인된 경우, 이 번호가 db에 있는지 체크시행한다
+                // 565에서 정의한 checkPhoneNumber의 결과인 result를 콜백함수에 넣음.
+                callback(true);
+            } else {
+
+                // 코드가 일치하지 않는 경우 false를 전달하면
+                if (success.result === 'failure') {
+					alert('코드가 일치하지 않습니다.')
+                    //callback(false)는 콜백 함수를 호출하며, false를 인자로 전달
+                    callback(false);
+                }
+            }
+        })
+        .fail(() => {
+            console.error("서버요청 실패");
+            alert("서버요청 실패");
+            callback(false);  // 콜백 함수 호출, 실패 여부 전달
+        });
+    } else {
+        // phoneNumberValue 또는 userCodeValue가 값이 없는 경우에 대한 처리
+        callback(false);  // 콜백 함수 호출, 실패 여부 전달
+    }
+}
+
+
+//서브밋 과정에서 코드 적합 여부 판단 후 db에 존재하는 휴대폰 번호인지 확인
+// checkPhoneNumber 함수 정의
+
+$('#submitButton').on('click', function (event) {
+
+
+    // 코드 확인
+    var joinformResult = joinform_check();
+		if (!joinformResult) {
+			event.preventDefault(); // 이벤트의 기본 동작 중단
+			return false;
+		}
+
+    // confirmSmsCode 실행 후 result를 가져와서 내부에서 실행한다.
+    // result는 confirmSmsCode 함수에서 비동기적으로 처리한 작업의 결과이다.
+    // 실행함수. 여기서 실행한다.
+	confirmSmsCode(function (result) {
+		// result에 false가 반환되면 실행되는 부분. 코드가 올바르게 확인되지 않아 회원가입이 안 되는 경우
+		if (!result) {
+			// 코드 인증은 성공했으나 중복된 휴대폰 번호인 경우 false 반환. 이 부분으로 들어올까요?
+
+			event.preventDefault(); // 코드 확인 결과에 따라 이벤트 방지 코드를 여기에 추가
+			event.stopPropagation(); // 이벤트 전파 중지
+		} else {
+			// 코드 인증이 성공한 경우
+			// result에 false가 반환되면 실행되는 부분. 인증이 성공하여 DB 조회가 필요한 경우
+			checkPhoneNumber(function (checkResult) {
+				if (checkResult === 'a') {
+					// 여기서 폼을 제출, 회원가입처리
+					document.getElementById("insertForm").submit();
+				} else {
+					alert('가입이 불가능합니다.');
+				}
+			});
+		}
+	});
+});
+
+
+// checkPhoneNumber 함수 수정
+function checkPhoneNumber(callback) {
+    var phonenumber = $("#phonenumber").val();
+    var reg = /^[0-9]{11}$/;
+
+    if (!reg.test(phonenumber)) {
+        // alert("전화번호는 숫자로만 입력해야 합니다.");
+        $("#phonenumber").focus();
+        callback('b'); // 실패 시 콜백에 'b'를 전달
+        return;
+    }
+
+    phonenumber = phonenumber.replace(/-/g, '');
+
+    $.ajax({
+        url: "/phoneNumberCheck",
+        type: "post",
+        data: { phoneNumber: phonenumber },
+        dataType: 'json',
+        success: function (result) {
+            if ($.isEmptyObject(result) || result.userId === null) {
+                // $("#spacePhonenum").html('사용할 수 있는 전화번호입니다');
+                // $("#spacePhonenum").css('color', 'green');
+                callback('a'); // 성공 시 콜백에 'a'를 전달
+            } else {
+                document.getElementById("phonenumber").value = '';
+                $("#codeCheck").css("display", "none");
+                document.getElementById("smsCode").value = '';
+                $("#spacePhonenum").html("이미 등록된 전화번호입니다.");
+                $("#spacePhonenum").css('color', 'red');
+                callback('b'); // 실패 시 콜백에 'b'를 전달
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("서버 요청 실패:", status, error);
+            alert("서버 요청 실패: " + status + " - " + error);
+            callback('b'); // 실패 시 콜백에 'b'를 전달
+        }
+    });
+}
+
+
+
+
+	$(document).ready(function () {
+
+
+    //아이디 입력창에서 포커스 아웃 이벤트
+    $('#id').on('blur', function () {
+        checkUserIdAvailability(function (result) {
+        });
+    });
+
+    // 아이디 입력 중 이벤트
+    $('#id').on('input', function () {
+        checkUserIdAvailability(function (result) {
+        });
+    });
+
+    // 비밀번호1 입력 중 이벤트
+    $('#pw1').on('input', function () {
+        validatePassword();
+		// $("#pw2").focus();
+    });
+
+    $('#pw1').on('input', function () {
+        validatePasswordConfirmation();
+    });
+
+	  $('#pw2').on('blur', function () {
+        validatePasswordConfirmation();
+    });
+
+    $('#pw2').on('input', function () {
+        validatePasswordConfirmation();
+    });
+
+
+});
+
+
+//-			 회원가입 폼 전송 전에 유효성 검사 함수
+
+function joinform_check(event) {
+    var validationResult = true;
+
+    // 아이디 중복 체크
+    checkUserIdAvailability(function (result) {
+        if (!result) {
+          //  alert('아이디를 확인하세요.');
+            validationResult = false;
+        }
+    });
+
+    // 이메일 형식 체크
+    checkEmail(function (result) {
+        if (!result) {
+           // alert('이메일을 확인하세요.');
+            validationResult = false;
+        }
+    });
+
+    // 비밀번호 유효성 체크
+    if (!validatePassword()) {
+       // alert('비밀번호를 확인하세요.');
+        validationResult = false;
+    }
+
+    // 비밀번호 확인 체크
+    if (!validatePasswordConfirmation()) {
+       // alert('비밀번호 확인을 확인하세요.');
+        validationResult = false;
+    }
+
+return validationResult;
+return event;
+}
+
+
+
+
+//--------------			 회원가입 폼 전송 전에 유효성 검사 함수(end)
+
+
+
+
+
+//함수 정의
+
+
+// 비밀번호 유효성 체크 함수
+function validatePassword() {
+    var pw = $("#pw1").val();
+    var num = pw.search(/[0-9]/g);
+    var eng = pw.search(/[a-z]/ig);
+    var spe = pw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
+
+    if (pw.length < 8 || pw.length > 20) {
+        $("#pw").html("8자리 ~ 20자리 이내로 입력해주세요.");
+        $("#pw").attr('color', 'red');
+		$("#pw1").focus();
+        return false;
+    } else if (pw.search(/\s/) !== -1) {
+        $("#pw").html("비밀번호는 공백 없이 입력해주세요.");
+        $("#pw").attr('color', 'red');
+        return false;
+    } else if (num < 0 || eng < 0 || spe < 0) {
+        $("#pw").html("영문,숫자, 특수문자를 혼합하여 입력해주세요.");
+        $("#pw").attr('color', 'red');
+        return false;
+    } else {
+        $("#pw").html("조건을 충족합니다.");
+        $("#pw").attr('color', 'green');
+        return true;
+
+    }
+}
+
+// 비밀번호 확인 체크 함수
+function validatePasswordConfirmation() {
+    var number1 = $("#pw1").val();
+    var number2 = $("#pw2").val();
+
+    if (number1 !== '' && number2 !== '' && number1 == number2) {
+        $("#checkPw").html('번호가 같습니다.');
+        $("#checkPw").attr('color', 'green');
+        return true;
+    } else if (number1 !== '' && number2 !== '' && number1 !== number2) {
+        $("#checkPw").html('번호가 다릅니다.');
+        $("#checkPw").attr('color', 'red');
+        return false;
+    } else {
+        return false;
+    }
+}
+//함수 정의
+//db에 회원 휴대폰 중복 체크
+
+
+
+</script>
+
+
+</body>
+</html>

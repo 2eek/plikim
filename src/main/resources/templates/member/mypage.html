@@ -1,10 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <title>Dashboard</title>
+    <meta charset="UTF-8">
+    <title>Title</title>
 </head>
 <body>
-    <h1>Welcome, <span th:text="${userSession.username}"></span></h1>
-    <!-- 다른 세션 정보 필드도 표시할 수 있음 -->
+    <form action="/user/update" enctype="multipart/form-data" method="post">
+        file:<input type="file" name="originProfileImg">
+    <input type="submit" value="파일 저장">
+    </form>
 </body>
 </html>

@@ -237,9 +237,9 @@ span {
 
 <div>
 						<input  type="text" name="userId" id="id"
-						placeholder="아이디" style="width: 185px; , float: left; margin-right: 5px;"  class="form" required>
-						<button type="button" id="idCheckBtn"
-						 class="btn btn-default">확인</button>
+						placeholder="아이디 입력" style="width: 185px; , float: left; margin-right: 5px;"  class="form" required>
+<!--						<button type="button" id="idCheckBtn"-->
+<!--						 class="btn btn-default">확인</button>-->
 	</div>
 						<font id="spaceId" size="2"></font>
 	<div>
@@ -269,40 +269,29 @@ span {
 
 	<script>
 		//db에 아이디 있는지 확인
-				$('#idCheckBtn').on('click', function () {
-				var id = $("#id").val();
-				//
-				// if (id === '') {
-				// 	$("#spaceId").html("");
-				//
-				// }
-				// if (id.length < 5 || id.search(/\s/) !== -1 || !/^[a-zA-Z0-9]*$/.test(id)) {
-				// 	$("#spaceId").html("아이디는 최소 5글자 이상이어야 하며, 영문 대소문자와 숫자로만 입력해주세요.");
-				// 	$("#spaceId").attr('color', 'red');
-				// 	$("#id").focus();
-				// 	disableSubmitButton();
-				// 	return false;
-				// }
-				$.ajax({
-					url: "/idCheck",
-					type: "post",
-					data: {userId: id},
-					dataType: 'json',
-					success: function (result) {
-						if (result === 1) {
-						$("#spaceId").html('확인되었습니다.');
-						$("#spaceId").attr('color', 'green');
-
-						} else{
-						$("#spaceId").html('해당 계정을 확인할 수 없습니다.');
-						$("#spaceId").attr('color', 'red');
-						}
-					},
-					error: function () {
-						alert("서버요청실패");
-					}
-				});
-			});
+		// 		$('#idCheckBtn').on('click', function () {
+		// 		var id = $("#id").val();
+		//
+		// 		$.ajax({
+		// 			url: "/idCheck",
+		// 			type: "post",
+		// 			data: {userId: id},
+		// 			dataType: 'json',
+		// 			success: function (result) {
+		// 				if (result === 1) {
+		// 				$("#spaceId").html('확인되었습니다.');
+		// 				$("#spaceId").attr('color', 'green');
+		//
+		// 				} else{
+		// 				$("#spaceId").html('해당 계정을 확인할 수 없습니다.');
+		// 				$("#spaceId").attr('color', 'red');
+		// 				}
+		// 			},
+		// 			error: function () {
+		// 				alert("서버요청실패");
+		// 			}
+		// 		});
+		// 	});
 
 
 	//슬라이드

@@ -42,11 +42,19 @@ public interface UserRepository extends JpaRepository<User, Long> {
     int updatePasswordByEmail(@Param("email") String email, @Param("newPassword") String newPassword);
 
 //회원가입시 유효성검사
-     boolean existsByUserId(String userId);
-
-     boolean existsByEmail(String email);
-
-     boolean existsByPhoneNumber(String PhoneNumber);
 
      boolean existsByUserIdOrPhoneNumber(String userId,String phoneNumber);
+
+     @Modifying
+@Transactional
+@Query("UPDATE User u SET " +
+       "u.userName = COALESCE(:#{#user.userName}, u.userName), " +
+       "u.phoneNumber = COALESCE(:#{#user.phoneNumber}, u.phoneNumber), " +
+       "u.birthday = COALESCE(:#{#user.birthday}, u.birthday), " +
+       "u.profileFile = COALESCE(:#{#user.profileFile}, u.profileFile), " +
+       "u.password = COALESCE(:#{#user.password}, u.password) " +
+       "WHERE u.email = :#{#user.email}")
+int updateMyInfo(@Param("user") User user);
+
+
 }

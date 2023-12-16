@@ -106,18 +106,29 @@ public class UserService {
     }
 
     //회원마이페이지 업데이트
-public User updateMyInfo(User user) throws IOException {
-    if (user.getProfileFile() != null && !user.getProfileFile().isEmpty()) {
-        MultipartFile profileFile = user.getProfileFile();
+@Transactional
+public User updateMyInfo(User user, MultipartFile profileFile) throws IOException {
+    // 프로필 파일이 업로드되면 처리
+    if (profileFile != null && !profileFile.isEmpty()) {
         String originalFilename = profileFile.getOriginalFilename();
         String storedFilename = System.currentTimeMillis() + "_" + originalFilename;
-        String savePath = "Users/2eek/plikim_img/user_profileImg/" + storedFilename;
+        String savePath = "/Users/2eek/plikim_img/user_profileImg/" + storedFilename;
+
+        // 서버에 파일 저장
         profileFile.transferTo(new File(savePath));
+
+        // 파일 업로드 처리가 끝나면 필드 설정
+        user.setOriginProfileImg(originalFilename);
+        user.setStoredFileName(storedFilename);
+        user.setFileAttached(1);
+
         // 파일 업로드 처리가 끝나면 업데이트 로직 호출
-        userRepository.updateMyInfo(user);
+        userFileRepository.updateMyProfileImgByUserId(user);
     }
+
+    // 나머지 업데이트 로직
+    userRepository.updateMyInfo(user);
+
     return user;
 }
-
-
 }

@@ -14,7 +14,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.io.IOError;
 import java.io.IOException;
 import java.util.List;
@@ -142,23 +146,26 @@ public class UserController {
         return "redirect:/";
     }
 
+
     //회원정보 수정
-    @PostMapping("/user/update")
-    public String updateMyInfo(@ModelAttribute("user") User user, Model model, @PageableDefault(size = 3) Pageable pageable) throws IOException {
-        Page<User> users = userRepository.findAll(pageable);
-        // 아이디 중복 체크
+// 회원정보 수정
+@PostMapping("/user/update")
+public String updateMyInfo(@RequestParam("profileFile") MultipartFile profileFile, @ModelAttribute("user") User user, Model model, @PageableDefault(size = 3) Pageable pageable) throws IOException {
+    Page<User> users = userRepository.findAll(pageable);
+    // 아이디 중복 체크
 
-        int currentPage = users.getPageable().getPageNumber() + 1; // 현재 페이지 번호 (0부터 시작)
-        int startPage = Math.max(1, currentPage - 2); // 현재 페이지 주변에 2 페이지씩 보여주기
-        int endPage = Math.min(users.getTotalPages(), startPage + 4);
-        model.addAttribute("startPage", startPage);
-        model.addAttribute("endPage", endPage);
-        model.addAttribute("user", users);
+    int currentPage = users.getPageable().getPageNumber() + 1; // 현재 페이지 번호 (0부터 시작)
+    int startPage = Math.max(1, currentPage - 2); // 현재 페이지 주변에 2 페이지씩 보여주기
+    int endPage = Math.min(users.getTotalPages(), startPage + 4);
+    model.addAttribute("startPage", startPage);
+    model.addAttribute("endPage", endPage);
+    model.addAttribute("user", users);
 
-        userService.updateMyInfo(user);
-        return "redirect:/";
-    }
+    // 회원정보 업데이트
+    userService.updateMyInfo(user, profileFile);
 
+    return "redirect:/";
+}
 
 
     @ResponseBody

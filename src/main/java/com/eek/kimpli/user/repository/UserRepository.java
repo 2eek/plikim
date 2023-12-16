@@ -45,7 +45,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
      boolean existsByUserIdOrPhoneNumber(String userId,String phoneNumber);
 
-     @Modifying
+ @Modifying
 @Transactional
 @Query("UPDATE User u SET " +
        "u.userName = COALESCE(:#{#user.userName}, u.userName), " +

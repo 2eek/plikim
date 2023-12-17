@@ -52,7 +52,7 @@ h8 {
 					<div class="col-md-8 col-lg-6 col-xxl-8">
 						<div class="card mb-0">
 							<div class="card-body" >
-								<a href="index.html"
+								<a href="/index.html"
 									class="text-nowrap logo-img text-center d-block py-3 w-100">
 								</a>
 
@@ -229,10 +229,10 @@ function checkUserIdAvailability(callback) {
 					inputField.toggleClass('active');
 
 					if (inputField.hasClass('active')) {
-						$(this).attr('class', 'fa-solid fa-eye-slash fa-xs');
+						$(this).attr('class', 'fa-solid fa-eye fa-xs');
 						inputField.attr('type', 'text');
 					} else {
-						$(this).attr('class', 'fa-solid fa-eye fa-xs');
+						$(this).attr('class', 'fa-solid fa-eye-slash fa-xs');
 						inputField.attr('type', 'password');
 					}
 				});

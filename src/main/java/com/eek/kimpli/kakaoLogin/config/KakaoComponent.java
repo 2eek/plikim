@@ -8,8 +8,8 @@ public class KakaoComponent {
 
     @Value("${kakao.client-id}")
     private String kakaoClientId;
-
-    @Value("${kakao.redirect-uri}")
+    @Value("https://plikim.com/kakaologin")
+//    @Value("${kakao.redirect-uri}")
     private String kakaoRedirectUri;
 
     @Value("${kakao.response-type}")

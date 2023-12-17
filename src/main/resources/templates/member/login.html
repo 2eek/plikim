@@ -196,8 +196,8 @@ span {
                                  <div class="social-icons">
                                     <!--  카카오 API를 사용하여 OAuth 2.0 인증을 위한 URL -->
 <!--                                 <a  th:href="@{https://kauth.kakao.com/oauth/authorize?client_id=1e411be4c9538cd8fc4f1b4c817968b4&redirect_uri=https://plikim.com/kakaologin&response_type=code}">-->
-<!--             <a  th:href="@{https://kauth.kakao.com/oauth/authorize?client_id=1e411be4c9538cd8fc4f1b4c817968b4&redirect_uri=http://localhost:9090/kakaologin&response_type=code}">-->
-<a th:href="'https://kauth.kakao.com/oauth/authorize?' + 'client_id=' + ${@environment.getProperty('kakao.client-id')} + '&redirect_uri=' + ${@environment.getProperty('kakao.redirect-uri')} + '&response_type=' + ${@environment.getProperty('kakao.response-type')}">
+             <a  th:href="@{https://kauth.kakao.com/oauth/authorize?client_id=1e411be4c9538cd8fc4f1b4c817968b4&redirect_uri=http://localhost:9090/kakaologin&response_type=code}">
+<!--<a th:href="'https://kauth.kakao.com/oauth/authorize?' + 'client_id=' + ${@environment.getProperty('kakao.client-id')} + '&redirect_uri=' + ${@environment.getProperty('kakao.redirect-uri')} + '&response_type=' + ${@environment.getProperty('kakao.response-type')}">-->
                                  <img  id="kakao" src="/img/카카오로그인.png" height="50" alt="kakao"></a>
                                 </div>
                              </div>

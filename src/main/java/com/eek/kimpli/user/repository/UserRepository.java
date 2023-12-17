@@ -45,16 +45,16 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
      boolean existsByUserIdOrPhoneNumber(String userId,String phoneNumber);
 
-     @Modifying
+@Modifying
 @Transactional
-@Query("UPDATE User u SET " +
-       "u.userName = COALESCE(:#{#user.userName}, u.userName), " +
-       "u.phoneNumber = COALESCE(:#{#user.phoneNumber}, u.phoneNumber), " +
-       "u.birthday = COALESCE(:#{#user.birthday}, u.birthday), " +
-       "u.profileFile = COALESCE(:#{#user.profileFile}, u.profileFile), " +
-       "u.password = COALESCE(:#{#user.password}, u.password) " +
-       "WHERE u.email = :#{#user.email}")
-int updateMyInfo(@Param("user") User user);
-
-
+@Query(value = "UPDATE user " +
+       "SET user_name = COALESCE(:#{#user.userName}, user_name), " +
+       "phone_number = COALESCE(:#{#user.phoneNumber}, phone_number), " +
+       "origin_profile_img = COALESCE(:#{#user.originProfileImg}, origin_profile_img), " +
+       "stored_file_name = COALESCE(:#{#user.storedFileName}, stored_file_name), " +
+       "file_attached = COALESCE(:#{#user.fileAttached}, file_attached) " +
+       "WHERE user_id = :#{#user.userId}", nativeQuery = true)
+int updateUserInfo(@Param("user") User user);
 }
+
+

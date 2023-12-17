@@ -53,25 +53,10 @@ public class UserService {
         return userRepository.existsByUserIdOrPhoneNumber(userId ,phoneNumber);
     }
 
-
-//private boolean isValidUsername(String username) {
-//    // 유효성 검사를 수행하여 유효한 아이디인지 확인
-//    return username != null && username.matches("^[a-zA-Z0-9가-힣]*$") && username.length() >= 5;
-//}
-
     //사용중인 휴대전화인지 체크
     public User findByPhoneNumber(String phoneNumber) {
         // findByPhoneNumber 메서드를 사용하여 사용자 찾기
-
-        User user = userRepository.findByPhoneNumber(phoneNumber);
-        System.out.println("yyyyyyy");
-        // 사용자 정보 출력 또는 다른 작업 수행
-        if (user != null) {
-            System.out.println("사용자 찾음: " + user);
-        } else {
-            System.out.println("사용자 없음");
-        }
-        return user;
+            return userRepository.findByPhoneNumber(phoneNumber);
     }
 
 
@@ -106,18 +91,14 @@ public class UserService {
     }
 
     //회원마이페이지 업데이트
-public User updateMyInfo(User user) throws IOException {
-    if (user.getProfileFile() != null && !user.getProfileFile().isEmpty()) {
-        MultipartFile profileFile = user.getProfileFile();
-        String originalFilename = profileFile.getOriginalFilename();
-        String storedFilename = System.currentTimeMillis() + "_" + originalFilename;
-        String savePath = "Users/2eek/plikim_img/user_profileImg/" + storedFilename;
-        profileFile.transferTo(new File(savePath));
-        // 파일 업로드 처리가 끝나면 업데이트 로직 호출
-        userRepository.updateMyInfo(user);
+    @Transactional
+    public void updateUserInfo(User user) {
+        // 업데이트 로직 추가
+        userRepository.updateUserInfo(user);
     }
-    return user;
-}
 
-
+     public User getUserById(String userId) {
+        // userRepository를 사용하여 userId를 기반으로 사용자 정보를 가져옴
+        return userRepository.findByUserId(userId);
+    }
 }

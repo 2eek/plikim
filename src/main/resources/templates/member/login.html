@@ -160,30 +160,6 @@ span {
 </style>
 
 <body>
-<!--        <div th:if="${param.error}">-->
-<!--      아이디 비번 다시 입력하세요.-->
-<!--        </div>-->
-<!--        <div th:if="${param.logout}">-->
-<!--            로그아웃 상태입니다.-->
-<!--        </div>-->
-<!--    <form th:action="@{/member/login1}" method="post">&lt;!&ndash;CSRF토큰 같이 보내기 위해&ndash;&gt;-->
-<!--        <input type="text" name="memberEmail" placeholder="이메일">-->
-<!--        <input type="text" name="memberPassword" placeholder="비밀번호">-->
-<!--        <button type="submit">로그인</button>-->
-<!--    </form>-->
-
-
-<!--        <form th:action="@{/login}" method="post">-->
-<!--            <input name="userId" placeholder=" 아이디">-->
-<!--            <input type="password" name="password" placeholder=" 비밀번호">-->
-<!--            <button>테스트 로그인</button>-->
-<!--        </form>-->
-
-
-
-<!--        <form th:action="@{/logout}" method="post">-->
-<!--            <input type="submit" value="Sign Out"/>-->
-<!--        </form>-->
 
 
 
@@ -219,9 +195,9 @@ span {
                              <div class="sns">
                                  <div class="social-icons">
                                     <!--  카카오 API를 사용하여 OAuth 2.0 인증을 위한 URL -->
-                                 <a  th:href="@{https://kauth.kakao.com/oauth/authorize?client_id=1e411be4c9538cd8fc4f1b4c817968b4&redirect_uri=https://plikim.com/kakaologin&response_type=code}">
-<!--             <a  th:href="@{https://kauth.kakao.com/oauth/authorize?client_id=1e411be4c9538cd8fc4f1b4c817968b4&redirect_uri=http://localhost:9090/kakaologin&response_type=code}">-->
-
+<!--                                 <a  th:href="@{https://kauth.kakao.com/oauth/authorize?client_id=1e411be4c9538cd8fc4f1b4c817968b4&redirect_uri=https://plikim.com/kakaologin&response_type=code}">-->
+             <a  th:href="@{https://kauth.kakao.com/oauth/authorize?client_id=1e411be4c9538cd8fc4f1b4c817968b4&redirect_uri=http://localhost:9090/kakaologin&response_type=code}">
+<!--<a th:href="'https://kauth.kakao.com/oauth/authorize?' + 'client_id=' + ${@environment.getProperty('kakao.client-id')} + '&redirect_uri=' + ${@environment.getProperty('kakao.redirect-uri')} + '&response_type=' + ${@environment.getProperty('kakao.response-type')}">-->
                                  <img  id="kakao" src="/img/카카오로그인.png" height="50" alt="kakao"></a>
                                 </div>
                              </div>
@@ -233,50 +209,8 @@ span {
 
 
 
-<!--         로그인시 아이디 비밀번호 DB에 있는지 확인 -->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script>
-
-      //이벤트 핸들링 등록. HTML 요소가 모두 로딩된 이후에 이루어져야 하므로.
-        $(document).ready(function(){
-           $('#member').on('submit', loginAccountcheck);
-        });
 
 
-   //      function loginAccountcheck(event){
-   //      event.preventDefault();
-   //      let userId = $('#id').val(); // input_id에 입력되는 값
-   //    let userPassword = $('#pw').val();
-   //    $.ajax({
-   //       /* url : "IdCheckService", */
-   //       url : "/loginAccountCheck",
-   //       type : "post",
-   //       data :  {memberId :userId , password:userPassword},
-   //       dataType : 'json',
-   //
-   //       success : function(result){
-   //          if(result == 0){
-   //
-   //             $("#checkId").html('아이디 또는 비밀번호가 틀렸습니다.');
-   //             $("#checkId").attr('color','red');//멈춰야함
-   //
-   //
-   //          } else{
-   //             //event.unbind();
-   //             //$("#checkId").html('사용할 수 있는 아이디입니다.');
-   //             //$("#checkId").attr('color','green');
-   //             $('#member')[0].submit();
-   //             //$('#guide')[0].submit();
-   //          }
-   //       },
-   //       error : function(){
-   //
-   //          alert("서버요청실패");
-   //       }
-   //    });
-   //    //$('#member').submit();
-   //
-   // }
 
 
  </script>

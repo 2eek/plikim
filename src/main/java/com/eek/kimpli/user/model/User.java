@@ -26,8 +26,8 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)// 자동 증 (IDENTITY사용하면 시퀀스 따로 안만들어도 됨)
-    private Long index;
-
+//    private Long index;
+    private Long userIndex;
     private String userId; //회원의 아이디
     private String email;
     private String userName;
@@ -52,10 +52,17 @@ public class User {
 
     //첨부파일. 실제 파일 담아줄 수 있음
     @Lob
-    private MultipartFile profileFile; //MultipartFile 타입으로 담아와서 컨트롤러로 넘겨준다. 파일음 담는 용도
+    @Transient
+    private MultipartFile profileFile;  //MultipartFile 타입으로 담아와서 컨트롤러로 넘겨준다. 파일음 담는 용도
     private String originProfileImg; //원본 파일 이름
     private String storedFileName; //서버 저장용 파일 이름(중복 이름 구분하기 위해)
     private int fileAttached; //파일 첨부 여부(첨부1 미첨부0)
+
+ // 파일 정보만 저장
+//    private String originalFilename;
+//    private String storedFilename;
+
+
 
 
     //@JsonIgnore

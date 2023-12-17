@@ -7,18 +7,18 @@ import java.util.Collection;
 
 public class KakaoAuthentication implements Authentication {
 
-    private final Object principal;
+    private final KakaoUserDetails userDetails;
     private boolean authenticated;
 
-    public KakaoAuthentication(Object principal) {
-        this.principal = principal;
+    public KakaoAuthentication(KakaoUserDetails userDetails) {
+        this.userDetails = userDetails;
         this.authenticated = true; // 인증 상태를 true로 설정
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // 권한을 부여할 필요가 있다면 구현
-        return null;
+        return userDetails.getAuthorities();
     }
 
     @Override
@@ -33,7 +33,7 @@ public class KakaoAuthentication implements Authentication {
 
     @Override
     public Object getPrincipal() {
-        return principal;
+        return userDetails;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class KakaoAuthentication implements Authentication {
 
     @Override
     public String getName() {
-        return null;
+        // 사용자 이름을 반환
+        return userDetails.getUsername();
     }
 }
-

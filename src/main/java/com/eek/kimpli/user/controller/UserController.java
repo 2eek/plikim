@@ -2,6 +2,7 @@ package com.eek.kimpli.user.controller;
 
 import com.eek.kimpli.user.model.User;
 import com.eek.kimpli.user.repository.UserRepository;
+import com.eek.kimpli.user.service.FileService;
 import com.eek.kimpli.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -11,10 +12,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.io.IOError;
 import java.io.IOException;
 import java.util.List;
@@ -46,12 +52,23 @@ public class UserController {
     }
 
 
-    //마이페이지 조회
     @GetMapping("/member/mypage")
     public String showDashboard(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        // 현재 사용자의 세션 정보
-//    model.addAttribute("userSession", authentication.getPrincipal());
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        System.out.println("Spring Security의 UserDetails 사용: " + userDetails);
+
+        // Spring Security의 UserDetails 정보 활용
+        // 이때, UserDetails에는 사용자의 아이디, 패스워드, 권한 등의 기본 정보만 들어있을 것입니다.
+
+        // 여기서 사용자 모델(User 클래스)에 추가된 정보를 가져와서 모델에 추가
+        User customUser = userService.getUserById(userDetails.getUsername());
+        model.addAttribute("userId", customUser.getUserId());
+        model.addAttribute("userName", customUser.getUserName());
+        model.addAttribute("userEmail", customUser.getEmail());
+        model.addAttribute("createdDate", customUser.getCreatedDate());
+
 
         return "member/mypage";
     }
@@ -142,23 +159,46 @@ public class UserController {
         return "redirect:/";
     }
 
-    //회원정보 수정
+    // 회원정보 수정
     @PostMapping("/user/update")
-    public String updateMyInfo(@ModelAttribute("user") User user, Model model, @PageableDefault(size = 3) Pageable pageable) throws IOException {
-        Page<User> users = userRepository.findAll(pageable);
-        // 아이디 중복 체크
+    public String updateMyInfo(@RequestParam("profileFile") MultipartFile profileFile,
+                               @RequestParam("userId") String userId,
+                               Model model) {
+        System.out.println("유저아이디?" + userId);
+        // userId를 사용하여 현재 로그인 중인 사용자 정보를 가져오는 작업
+        User loggedInUser = userService.getUserById(userId);
+        System.out.println("로그인정보" + loggedInUser);
 
-        int currentPage = users.getPageable().getPageNumber() + 1; // 현재 페이지 번호 (0부터 시작)
-        int startPage = Math.max(1, currentPage - 2); // 현재 페이지 주변에 2 페이지씩 보여주기
-        int endPage = Math.min(users.getTotalPages(), startPage + 4);
-        model.addAttribute("startPage", startPage);
-        model.addAttribute("endPage", endPage);
-        model.addAttribute("user", users);
+        try {
+            if (profileFile != null && !profileFile.isEmpty()) {
+                // 파일 정보 저장
+                loggedInUser.setOriginProfileImg(profileFile.getOriginalFilename());
+                loggedInUser.setStoredFileName(System.currentTimeMillis() + "_" + profileFile.getOriginalFilename());
+                loggedInUser.setFileAttached(1);
 
-        userService.updateMyInfo(user);
+
+// 서버에 파일 저장
+                String savePath = "/Users/2eek/plikim_img/user_profileImg/" + loggedInUser.getStoredFileName();
+                System.out.println("저장경로" + savePath);
+
+// 파일 저장 (한 번만 저장하도록 수정)
+                FileService.saveFile(profileFile.getBytes(), savePath);
+
+// 업로드된 파일을 서버에 저장
+// 아래 라인에서 'file' 대신 'profileFile'을 사용해야 합니다.
+                FileService.saveProfileImage(profileFile, "src/main/resources/static/profileImg", loggedInUser.getStoredFileName());
+
+// 업데이트 로직 호출
+                userService.updateUserInfo(loggedInUser);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
         return "redirect:/";
     }
-
 
 
     @ResponseBody

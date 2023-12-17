@@ -11,10 +11,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.eek.kimpli.kakaoLogin.config.KakaoAuthentication;
+import com.eek.kimpli.kakaoLogin.config.KakaoComponent;
+import com.eek.kimpli.kakaoLogin.config.KakaoUserDetails;
 import com.eek.kimpli.kakaoLogin.repository.KakaoLoginRepository;
 //import com.eek.kimpli.member.repository.MemberRepository;
 import com.eek.kimpli.user.model.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -25,9 +28,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RequiredArgsConstructor
 public class KakaoLoginServiceImpl implements KakaoLoginService {
 
-//    private final MemberRepository memberRepository;
     private final KakaoLoginRepository kakaoLoginRepository;
-    private final User user;
+//    private final User user;
+//        private final KakaoComponent kakaoComponent;
+
+    @Value("${kakao.client-id}")
+    private String kakaoClientId;
+
+    @Value("${kakao.redirect-uri}")
+    private String kakaoRedirectUri;
+
+    @Value("${kakao.response-type}")
+    private String kakaoResponseType;
 
 	//로그인 성공하면 authorize_code 받아옴
    public Map<String, String>  getAccessToken (String authorize_code) {
@@ -47,9 +59,13 @@ public class KakaoLoginServiceImpl implements KakaoLoginService {
          BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
          StringBuilder sb = new StringBuilder();
          sb.append("grant_type=authorization_code");
-         sb.append("&client_id=1e411be4c9538cd8fc4f1b4c817968b4"); //본인이 발급받은 key
-         sb.append("&redirect_uri=https://plikim.com/kakaologin"); // 본인이 설정한 주소
+         sb.append("&client_id=").append(kakaoClientId);//본인이 발급받은 key
+         sb.append("&redirect_uri=").append(kakaoRedirectUri);// 본인이 설정한 주소 -> 이쪽으로 간다
+
+
+//              sb.append("&client_id=1e411be4c9538cd8fc4f1b4c817968b4"); //본인이 발급받은 key
 //         sb.append("&redirect_uri=http://localhost:9090/kakaologin"); // 본인이 설정한 주소 -> 이쪽으로 간다
+
          sb.append("&code=" + authorize_code);
          bw.write(sb.toString());
 
@@ -154,7 +170,7 @@ public class KakaoLoginServiceImpl implements KakaoLoginService {
 //       role.setIndex(1L);  //어떤 권한 줄건지 1번이 'ROLE_user'
 //       user.getRoles().add(role);
       User result = kakaoLoginRepository.findKakao(userInfo);
-    KakaoAuthentication kakaoAuthentication = new KakaoAuthentication(userInfo);
+KakaoAuthentication kakaoAuthentication = new KakaoAuthentication(new KakaoUserDetails(userInfo.get("username").toString()));
 
         // SecurityContextHolder에 Authentication 객체 저장
         SecurityContextHolder.getContext().setAuthentication(kakaoAuthentication);

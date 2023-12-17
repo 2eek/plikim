@@ -1,13 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
     <form action="/user/update" enctype="multipart/form-data" method="post">
-        file:<input type="file" name="originProfileImg">
-    <input type="submit" value="파일 저장">
+<!--        <input type="hidden" name="userId" th:value="${userSession.userId}">-->
+        <h1 th:text="'Welcome, 아이디 ' + ${userId} + '!'"></h1>
+        <h1 th:text="'Welcome, 이름 ' + ${userEmail} + '!'"></h1>
+
+        <input type="hidden" name="userId" th:value="${userId}">
+
+        file: <input type="file" name="profileFile">
+        <input type="submit" value="파일 저장">
     </form>
 </body>
 </html>

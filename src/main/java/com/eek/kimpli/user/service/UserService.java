@@ -53,25 +53,10 @@ public class UserService {
         return userRepository.existsByUserIdOrPhoneNumber(userId ,phoneNumber);
     }
 
-
-//private boolean isValidUsername(String username) {
-//    // 유효성 검사를 수행하여 유효한 아이디인지 확인
-//    return username != null && username.matches("^[a-zA-Z0-9가-힣]*$") && username.length() >= 5;
-//}
-
     //사용중인 휴대전화인지 체크
     public User findByPhoneNumber(String phoneNumber) {
         // findByPhoneNumber 메서드를 사용하여 사용자 찾기
-
-        User user = userRepository.findByPhoneNumber(phoneNumber);
-        System.out.println("yyyyyyy");
-        // 사용자 정보 출력 또는 다른 작업 수행
-        if (user != null) {
-            System.out.println("사용자 찾음: " + user);
-        } else {
-            System.out.println("사용자 없음");
-        }
-        return user;
+            return userRepository.findByPhoneNumber(phoneNumber);
     }
 
 
@@ -106,29 +91,14 @@ public class UserService {
     }
 
     //회원마이페이지 업데이트
-@Transactional
-public User updateMyInfo(User user, MultipartFile profileFile) throws IOException {
-    // 프로필 파일이 업로드되면 처리
-    if (profileFile != null && !profileFile.isEmpty()) {
-        String originalFilename = profileFile.getOriginalFilename();
-        String storedFilename = System.currentTimeMillis() + "_" + originalFilename;
-        String savePath = "/Users/2eek/plikim_img/user_profileImg/" + storedFilename;
-
-        // 서버에 파일 저장
-        profileFile.transferTo(new File(savePath));
-
-        // 파일 업로드 처리가 끝나면 필드 설정
-        user.setOriginProfileImg(originalFilename);
-        user.setStoredFileName(storedFilename);
-        user.setFileAttached(1);
-
-        // 파일 업로드 처리가 끝나면 업데이트 로직 호출
-        userFileRepository.updateMyProfileImgByUserId(user);
+    @Transactional
+    public void updateUserInfo(User user) {
+        // 업데이트 로직 추가
+        userRepository.updateUserInfo(user);
     }
 
-    // 나머지 업데이트 로직
-    userRepository.updateMyInfo(user);
-
-    return user;
-}
+     public User getUserById(String userId) {
+        // userRepository를 사용하여 userId를 기반으로 사용자 정보를 가져옴
+        return userRepository.findByUserId(userId);
+    }
 }

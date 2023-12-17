@@ -67,8 +67,12 @@
             </thead>
             <tbody>
             <tr th:each="user : ${user}" th:id="'user-row-' + ${user.userId}" class="user-row">
-                <td>프로필 사진 이미지</td>
+<!--                 <img th:src="@{'/path/to/images/' + ${user.originProfileImg}}" alt="프로필 이미지" />-->
                 <td>
+<img th:src="@{'/profileImg/' + ${user.storedFileName}}" alt="Profile Image" style="width: 100px; height: 100px;">
+                </td>
+                <td>
+
                     <!-- 링크는 그대로 두되, 클릭 이벤트에 대한 핸들링을 추가 -->
                     <a th:href="@{/user/userdetail(id=${user.userId})}" th:text="${user.userId}" class="user-link">
                         아이디

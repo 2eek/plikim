@@ -12,6 +12,7 @@ import java.util.Map;
 
 import com.eek.kimpli.kakaoLogin.config.KakaoAuthentication;
 import com.eek.kimpli.kakaoLogin.config.KakaoComponent;
+import com.eek.kimpli.kakaoLogin.config.KakaoUserDetails;
 import com.eek.kimpli.kakaoLogin.repository.KakaoLoginRepository;
 //import com.eek.kimpli.member.repository.MemberRepository;
 import com.eek.kimpli.user.model.User;
@@ -169,7 +170,7 @@ public class KakaoLoginServiceImpl implements KakaoLoginService {
 //       role.setIndex(1L);  //어떤 권한 줄건지 1번이 'ROLE_user'
 //       user.getRoles().add(role);
       User result = kakaoLoginRepository.findKakao(userInfo);
-    KakaoAuthentication kakaoAuthentication = new KakaoAuthentication(userInfo);
+KakaoAuthentication kakaoAuthentication = new KakaoAuthentication(new KakaoUserDetails(userInfo.get("username").toString()));
 
         // SecurityContextHolder에 Authentication 객체 저장
         SecurityContextHolder.getContext().setAuthentication(kakaoAuthentication);

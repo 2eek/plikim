@@ -184,7 +184,7 @@ public class UserController {
                 System.out.println("저장경로" + savePath);
 System.out.println("업데잍트 하나? 여기는?  "+loggedInUser.getStoredFileName());
 // 파일 저장 (한 번만 저장하도록 수정)
-                FileService.saveFile(profileFile.getBytes(), savePath);
+//                FileService.saveFile(profileFile.getBytes(), savePath);
 
 // 업로드된 파일을 서버에 저장
 // 아래 라인에서 'file' 대신 'profileFile'을 사용해야 합니다.

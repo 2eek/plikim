@@ -76,10 +76,11 @@ public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception 
                 + "from user "
                 + "where user_id = ?")
             //인가처리 (사용자 권한) Authorization
-        .authoritiesByUsernameQuery("select u.user_id, r.name "
-                + "from user_role ur inner join user u on ur.user_index = u.index "
-                + "inner join role r on ur.role_index = r.index "
-                + "where u.user_id = ?");
+        .authoritiesByUsernameQuery("select u.user_id, r.name " +
+                "from user_role ur " +
+                "inner join user u on ur.user_index = u.user_index " +
+                "inner join role r on ur.role_index = r.index " +
+                "where u.user_id = ?");
 
 }
 

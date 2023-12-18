@@ -3,17 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        #preview {
+            max-width: 300px;
+            max-height: 300px;
+        }
+    </style>
 </head>
 <body>
     <form action="/user/update" enctype="multipart/form-data" method="post">
-<!--        <input type="hidden" name="userId" th:value="${userSession.userId}">-->
         <h1 th:text="'Welcome, 아이디 ' + ${userId} + '!'"></h1>
         <h1 th:text="'Welcome, 이름 ' + ${userEmail} + '!'"></h1>
 
         <input type="hidden" name="userId" th:value="${userId}">
 
-        file: <input type="file" name="profileFile">
+        file: <input type="file" name="profileFile" onchange="previewImage(this)">
+        <br>
+        <img id="preview" src="#" alt="미리보기">
+        <br>
         <input type="submit" value="파일 저장">
     </form>
+
+    <script>
+        function previewImage(input) {
+            var preview = document.getElementById('preview');
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
 </body>
 </html>

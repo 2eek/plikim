@@ -6,14 +6,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class KakaoComponent {
 
+
     @Value("${kakao.client-id}")
     private String kakaoClientId;
-    @Value("https://plikim.com/kakaologin")
-//    @Value("${kakao.redirect-uri}")
+
+    @Value("${kakao.redirect-uri}")
     private String kakaoRedirectUri;
 
     @Value("${kakao.response-type}")
     private String kakaoResponseType;
+
 
     public String getKakaoClientId() {
         return kakaoClientId;

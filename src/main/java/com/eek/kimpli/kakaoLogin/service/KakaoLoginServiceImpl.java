@@ -151,13 +151,9 @@ public class KakaoLoginServiceImpl implements KakaoLoginService {
 
          userInfo.put("thumbnailImage", thumbnailImage);
          userInfo.put("profileImage", profileImage);
-         userInfo.put("profileImage", profileImage);
          userInfo.put("access_Token", access_Token);
          userInfo.put("refresh_Token", refresh_Token);
-         userInfo.put("refresh_Token", profileImage);
-
-//         userInfo.put("id", id);
-          userInfo.put("username", email.substring(0, email.indexOf('@')));
+         userInfo.put("username", email.substring(0, email.indexOf('@')));
 
 
       } catch (IOException e) {

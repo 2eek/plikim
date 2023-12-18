@@ -14,9 +14,9 @@
     <update id="insertKakaoLogin" parameterType="java.util.HashMap">
     <!-- 사용자 정보 저장 -->
     insert into user
-    (user_id, email, password, user_name, origin_profile_img, access_token, refresh_token, login_type, created_date)
+    (user_id, email, password, user_name, origin_profile_img, access_token, refresh_token, stored_file_name,login_type, created_date)
     values
-    (#{username}, #{email}, #{password}, #{nickname}, #{profileImage}, #{access_Token}, #{refresh_Token}, 'L2', NOW())
+    (#{username}, #{email}, #{password}, #{nickname}, #{profileImage}, #{access_Token}, #{refresh_Token},#{stored_file_name}, 'L2', NOW())
 </update>
 
 <!-- 사용자에게 역할 할당 (가입자는 기본적으로 'ROLE_USER' 역할을 가지게 됨) -->

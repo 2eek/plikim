@@ -156,8 +156,9 @@ public class KakaoLoginServiceImpl implements KakaoLoginService {
          userInfo.put("refresh_Token", refresh_Token);
          userInfo.put("username", email.substring(0, email.indexOf('@')));
 
-         imageDownloader.imgServerSave(profileImage);
+          String  fileName = imageDownloader.imgServerSave(profileImage);
 
+userInfo.put("stored_file_name", fileName);
       } catch (IOException e) {
          e.printStackTrace();
       }

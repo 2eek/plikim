@@ -16,6 +16,7 @@ import com.eek.kimpli.kakaoLogin.config.KakaoUserDetails;
 import com.eek.kimpli.kakaoLogin.repository.KakaoLoginRepository;
 //import com.eek.kimpli.member.repository.MemberRepository;
 import com.eek.kimpli.user.model.User;
+import com.eek.kimpli.user.service.ImageDownloader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,6 +30,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class KakaoLoginServiceImpl implements KakaoLoginService {
 
     private final KakaoLoginRepository kakaoLoginRepository;
+    private final ImageDownloader imageDownloader;
 //    private final User user;
 //        private final KakaoComponent kakaoComponent;
 
@@ -140,8 +142,6 @@ public class KakaoLoginServiceImpl implements KakaoLoginService {
          JsonNode kakao_account = jsonNode.get("kakao_account");
          String nickname = properties.get("nickname").asText();
          String email = kakao_account.get("email").asText();
-         //String gender = kakao_account.get("gender").asText();
-         //String birthday = kakao_account.get("birthday").asText();
          String thumbnailImage = properties.get("thumbnail_image").asText();
          String profileImage = properties.get("profile_image").asText();
 //      String profileImage = properties.get("profile_image").asText().replace("http://", "");
@@ -156,21 +156,15 @@ public class KakaoLoginServiceImpl implements KakaoLoginService {
          userInfo.put("refresh_Token", refresh_Token);
          userInfo.put("username", email.substring(0, email.indexOf('@')));
 
+         imageDownloader.imgServerSave(profileImage);
 
       } catch (IOException e) {
          e.printStackTrace();
       }
 
-//        user.setEnabled(true); //enabled 칼럼 1
-//       Role role = new Role();
-//      // 권한 이름에  1 주기
-//       role.setIndex(1L);  //어떤 권한 줄건지 1번이 'ROLE_user'
-//       user.getRoles().add(role);
       User result = kakaoLoginRepository.findKakao(userInfo);
 String username = userInfo.get("username") != null ? userInfo.get("username").toString() : null;
 KakaoAuthentication kakaoAuthentication = new KakaoAuthentication(new KakaoUserDetails(username));
-
-//KakaoAuthentication kakaoAuthentication = new KakaoAuthentication(new KakaoUserDetails(userInfo.get("username").toString()));
 
         // SecurityContextHolder에 Authentication 객체 저장
         SecurityContextHolder.getContext().setAuthentication(kakaoAuthentication);

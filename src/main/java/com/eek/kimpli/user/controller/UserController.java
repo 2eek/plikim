@@ -182,7 +182,7 @@ public class UserController {
                 String savePath = "/home/serve/plikim_img/user_profileImg/" + loggedInUser.getStoredFileName();
 
                 System.out.println("저장경로" + savePath);
-
+System.out.println("업데잍트 하나? 여기는?  "+loggedInUser.getStoredFileName());
 // 파일 저장 (한 번만 저장하도록 수정)
                 FileService.saveFile(profileFile.getBytes(), savePath);
 

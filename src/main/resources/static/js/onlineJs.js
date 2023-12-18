@@ -52,7 +52,8 @@ $(document).on('click', 'tr.user-row', function () {
 
 function updateStatus(username, status) {
     // 사용자 이름(username)을 기반으로 해당하는 span 요소를 찾아 상태를 변경
-    const statusElement = $("#status-" + username);
+    const statusElement = $(".status-" + username);
+    // const statusElement = $("#status-" + username);
     statusElement.text(status).css("color", "green");
 
     // 사용자의 아이디를 읽어오기 위해 data-username을 사용

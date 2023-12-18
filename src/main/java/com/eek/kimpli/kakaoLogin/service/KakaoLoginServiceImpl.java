@@ -170,7 +170,10 @@ public class KakaoLoginServiceImpl implements KakaoLoginService {
 //       role.setIndex(1L);  //어떤 권한 줄건지 1번이 'ROLE_user'
 //       user.getRoles().add(role);
       User result = kakaoLoginRepository.findKakao(userInfo);
-KakaoAuthentication kakaoAuthentication = new KakaoAuthentication(new KakaoUserDetails(userInfo.get("username").toString()));
+String username = userInfo.get("username") != null ? userInfo.get("username").toString() : null;
+KakaoAuthentication kakaoAuthentication = new KakaoAuthentication(new KakaoUserDetails(username));
+
+//KakaoAuthentication kakaoAuthentication = new KakaoAuthentication(new KakaoUserDetails(userInfo.get("username").toString()));
 
         // SecurityContextHolder에 Authentication 객체 저장
         SecurityContextHolder.getContext().setAuthentication(kakaoAuthentication);

@@ -1,5 +1,7 @@
 package com.eek.kimpli.user.service;
 
+import org.springframework.stereotype.Component;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -7,7 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
-
+@Component
 public class ImageDownloader {
 
     public static void imgServerSave(String imageUrl) {

@@ -3,6 +3,8 @@ package com.eek.kimpli.chat.contorller;
 import com.eek.kimpli.EncryptionUtils.AesUtil;
 import com.eek.kimpli.chat.model.Chat;
 import com.eek.kimpli.chat.repository.ChatRepository;
+import com.eek.kimpli.user.model.User;
+import com.eek.kimpli.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 public class ChatViewController {
 
      private final ChatRepository chatRepository;
+     private final UserService userService;
 
  @GetMapping("/mychatrooms")
  public String chatRoomList(Model model) {
@@ -86,6 +89,8 @@ public class ChatViewController {
     @GetMapping("/chat")
     public String chat(Model model, @RequestParam(name = "userId") String userId) {
         model.addAttribute("userId", userId); // userId를 모델에 추가' 대화 상대방.
+        User userById = userService.getUserById(userId);
+model.addAttribute("userinfo", userById); // userId를 모델에 추가' 대화 상대방.
         //로그인한 계정
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("userSession", authentication.getPrincipal());

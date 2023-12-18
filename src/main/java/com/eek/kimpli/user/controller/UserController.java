@@ -189,9 +189,10 @@ public class UserController {
 // 업로드된 파일을 서버에 저장
 // 아래 라인에서 'file' 대신 'profileFile'을 사용해야 합니다.
                 FileService.saveProfileImage(profileFile, "src/main/resources/static/profileImg", loggedInUser.getStoredFileName());
-
+   System.out.println("업데잍트 하나?그러면 이름은?1 "+loggedInUser.getStoredFileName());
 // 업데이트 로직 호출
                 userService.updateUserInfo(loggedInUser);
+                System.out.println("업데잍트 하나?그러면 이름은?2 "+loggedInUser.getStoredFileName());
             }
 
         } catch (IOException e) {

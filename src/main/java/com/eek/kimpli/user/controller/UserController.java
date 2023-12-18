@@ -169,7 +169,7 @@ public class UserController {
         User loggedInUser = userService.getUserById(userId);
         System.out.println("로그인정보" + loggedInUser);
 
-
+        try {
             if (profileFile != null && !profileFile.isEmpty()) {
                 // 파일 정보 저장
                 loggedInUser.setOriginProfileImg(profileFile.getOriginalFilename());
@@ -182,20 +182,23 @@ public class UserController {
                 String savePath = "/home/serve/plikim_img/user_profileImg/" + loggedInUser.getStoredFileName();
 
                 System.out.println("저장경로" + savePath);
-                System.out.println("업데잍트 하나? 여기는?  " + loggedInUser.getStoredFileName());
+System.out.println("업데잍트 하나?요가눈> "+loggedInUser.getStoredFileName());
 // 파일 저장 (한 번만 저장하도록 수정)
-//               FileService.saveFile(profileFile.getBytes(), savePath);
+                FileService.saveFile(profileFile.getBytes(), savePath);
 
 // 업로드된 파일을 서버에 저장
 // 아래 라인에서 'file' 대신 'profileFile'을 사용해야 합니다.
-                //   FileService.saveProfileImage(profileFile, "src/main/resources/static/profileImg", loggedInUser.getStoredFileName());
-                System.out.println("업데잍트 하나?그러면 이름은?1 " + loggedInUser.getStoredFileName());
+//                FileService.saveProfileImage(profileFile, "src/main/resources/static/profileImg", loggedInUser.getStoredFileName());
+   System.out.println("업데잍트 하나?그러면 이름은?1 "+loggedInUser.getStoredFileName());
 // 업데이트 로직 호출
                 userService.updateUserInfo(loggedInUser);
-                System.out.println("업데잍트 하나?그러면 이름은?2 " + loggedInUser.getStoredFileName());
-
-
+                System.out.println("업데잍트 하나?그러면 이름은?2 "+loggedInUser.getStoredFileName());
             }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
         return "redirect:/";
     }

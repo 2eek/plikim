@@ -178,7 +178,8 @@ public class UserController {
 
 
 // 서버에 파일 저장
-                String savePath = "/Users/2eek/plikim_img/user_profileImg/" + loggedInUser.getStoredFileName();
+                //String savePath = "/Users/2eek/plikim_img/user_profileImg/" + loggedInUser.getStoredFileName();
+                String savePath = "/home/server/plikim_img/user_profileImg/" + loggedInUser.getStoredFileName();
                 System.out.println("저장경로" + savePath);
 
 // 파일 저장 (한 번만 저장하도록 수정)

@@ -14,7 +14,7 @@
     <update id="insertKakaoLogin" parameterType="java.util.HashMap">
     <!-- 사용자 정보 저장 -->
     insert into user
-    (user_id, email, password, user_name, stored_file_name, access_token, refresh_token, login_type, created_date)
+    (user_id, email, password, user_name, origin_profile_img, access_token, refresh_token, login_type, created_date)
     values
     (#{username}, #{email}, #{password}, #{nickname}, #{profileImage}, #{access_Token}, #{refresh_Token}, 'L2', NOW())
 </update>
@@ -40,7 +40,7 @@
         password = #{password},
         user_name = #{nickname},
         email = #{email},
-        stored_file_name = #{profileImage},
+        origin_profile_img = #{profileImage},
         access_token = #{access_Token},
         refresh_token = #{refresh_Token},
         created_date = NOW()

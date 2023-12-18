@@ -143,7 +143,8 @@ public class KakaoLoginServiceImpl implements KakaoLoginService {
          //String gender = kakao_account.get("gender").asText();
          //String birthday = kakao_account.get("birthday").asText();
          String thumbnailImage = properties.get("thumbnail_image").asText();
-         String profileImage = properties.get("profile_image").asText();
+//         String profileImage = properties.get("profile_image").asText();
+      String profileImage = properties.get("profile_image").asText().replace("http://", "");
 
          userInfo.put("nikname", nickname);
          System.out.println("@@@@@@닉네임@@@@@"+nickname);

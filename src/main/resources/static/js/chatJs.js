@@ -94,9 +94,11 @@ function initMyMessage(data) {
 // 	document.documentElement.scrollTop = document.body.scrollHeight;
 // }
 // 회색박스 초기화하기
+
 function initYourMessage(data) {
     let chatBox = document.querySelector("#chat-box");
 
+    // 새로운 회색 상자 엘리먼트 생성
     let receivedBox = document.createElement("div");
     receivedBox.className = "received_msg";
 
@@ -115,14 +117,20 @@ function initYourMessage(data) {
     // 이미지를 왼쪽에 위치시키기
     profileImageElement.style.position = "absolute";
     profileImageElement.style.left = "0";
-	profileImageElement.style.display = "block";
+    profileImageElement.style.display = "block";
 
-    // 채팅 박스에 추가
+    // 채팅 박스의 모든 하위 엘리먼트를 제거하여 초기화
+    while (chatBox.firstChild) {
+        chatBox.removeChild(chatBox.firstChild);
+    }
+
+    // 채팅 박스에 새로운 회색 상자 추가
     chatBox.appendChild(receivedBox);
 
     // 스크롤 조정
     document.documentElement.scrollTop = document.body.scrollHeight;
 }
+
 
 
 

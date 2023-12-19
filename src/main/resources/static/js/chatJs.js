@@ -63,7 +63,7 @@ function getReceiveMsgBox(data) {
 	let tm = data.createdAt.substring(11, 16)
 	convertTime = tm + " | " + md
 
-	return `<div class="received_withd_msg">
+	return `<div class="received_withd_msg" style="float: left;">
 	<p>${data.msg}</p>
 	<span class="time_date"> ${convertTime} / <b>${data.sender}</b> </span>
 </div>`;

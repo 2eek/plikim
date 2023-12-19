@@ -94,8 +94,8 @@ function initYourMessage(data) {
     receivedBox.className = "received_msg";
 
     // 대화 상자 엘리먼트 생성
-    let messageBox = document.createElement("div");
-    messageBox.innerHTML = getReceiveMsgBox(data); // 대화 내용 추가
+    // let messageBox = document.createElement("div");
+    let messageBox = getReceiveMsgBox(data); // 대화 내용 추가
 
     // 새로운 div 엘리먼트 생성
     let newDivElement = document.createElement("div");

@@ -89,32 +89,31 @@ function initMyMessage(data) {
 function initYourMessage(data) {
     let chatBox = document.querySelector("#chat-box");
 
+    // 받은 메시지를 감싸는 상자 생성
     let receivedBox = document.createElement("div");
     receivedBox.className = "received_msg";
 
-// 새로운 이미지 엘리먼트 생성
-let profileImageElement = document.querySelector(".profile_name img");
+    // 대화 상자 엘리먼트 생성
+    let messageBox = document.createElement("div");
+    messageBox.innerHTML = getReceiveMsgBox(data); // 대화 내용 추가
 
-// 대화 상자 엘리먼트 생성
-let messageBox = document.createElement("div");
+    // 새로운 div 엘리먼트 생성
+    let newDivElement = document.createElement("div");
 
-// 새로운 div 엘리먼트 생성
-let newDivElement = document.createElement("div");
+    // 이미지를 복제하여 새로운 div 엘리먼트에 추가
+    newDivElement.appendChild(profileImageElement.cloneNode(true)); // 이미지 추가
 
-// 이미지를 복제하여 새로운 div 엘리먼트에 추가
-newDivElement.appendChild(profileImageElement.cloneNode(true));
+    // 새로운 div 엘리먼트와 대화 상자를 받은 상자에 추가
+    receivedBox.appendChild(newDivElement);
+    receivedBox.appendChild(messageBox);
 
-messageBox.innerHTML = getReceiveMsgBox(data);
+    // 채팅 박스에 받은 메시지 상자 추가
+    chatBox.appendChild(receivedBox);
 
-// 이미지와 대화 상자를 받은 상자에 추가
-receivedBox.appendChild(messageBox);
-
-// 채팅 박스에 추가
-chatBox.appendChild(receivedBox);
-
-// 스크롤 조정
-document.documentElement.scrollTop = document.body.scrollHeight;
+    // 스크롤 조정
+    document.documentElement.scrollTop = document.body.scrollHeight;
 }
+
 
 
 

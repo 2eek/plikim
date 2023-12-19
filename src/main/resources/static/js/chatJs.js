@@ -102,7 +102,7 @@ function initYourMessage(data) {
 
     // 새로운 이미지 엘리먼트 생성
     let profileImage = document.createElement("img");
-    profileImage.src = `@{${#strings.isEmpty(userinfo.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + userinfo.storedFileName}}`;
+profileImage.src = '/uploads/' + (userinfo.storedFileName ? userinfo.storedFileName : 'basicProfile.jpg');
     profileImage.alt = "Profile Image";
     profileImage.style.width = "20px";
     profileImage.style.height = "20px";

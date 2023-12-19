@@ -99,7 +99,7 @@ let messageBox = document.createElement("div");
 messageBox.innerHTML = getReceiveMsgBox(data);
 
 // 이미지와 대화 상자를 받은 상자에 추가
-receivedBox.appendChild(profileImageElement.cloneNode(true));  // 이미지 복제해서 추가
+messageBox.appendChild(profileImageElement.cloneNode(true));  // 이미지 복제해서 추가
 receivedBox.appendChild(messageBox);
 
 // 채팅 박스에 추가

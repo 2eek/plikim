@@ -63,7 +63,7 @@ function getReceiveMsgBox(data) {
 	let tm = data.createdAt.substring(11, 16)
 	convertTime = tm + " | " + md
 
-	return `<div class="received_withd_msg" style="float: left;">
+	return `<div class="received_withd_msg" style="float: left; margin-top: 0px">
 	<p>${data.msg}</p>
 	<span class="time_date"> ${convertTime} / <b>${data.sender}</b> </span>
 </div>`;
@@ -96,10 +96,10 @@ let profileImageElement = document.querySelector(".profile_name img");
 
 // 대화 상자 엘리먼트 생성
 let messageBox = document.createElement("div");
+messageBox.appendChild(profileImageElement.cloneNode(true));  // 이미지 복제해서 추가
 messageBox.innerHTML = getReceiveMsgBox(data);
 
 // 이미지와 대화 상자를 받은 상자에 추가
-messageBox.appendChild(profileImageElement.cloneNode(true));  // 이미지 복제해서 추가
 receivedBox.appendChild(messageBox);
 
 // 채팅 박스에 추가

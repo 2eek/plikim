@@ -99,13 +99,20 @@ document.addEventListener('DOMContentLoaded', function () {
         let profileImageElement = document.querySelector(".profile_name img");
         let clonedImageElement = profileImageElement.cloneNode(true);
         let newDivElement = document.createElement("div");
-        newDivElement.appendChild(clonedImageElement);
 
-        // 대화 상자 엘리먼트 생성
+
         let messageBox = document.createElement("div");
 
-        messageBox.appendChild(newDivElement.appendChild(profileImageElement.cloneNode(true)));
-        messageBox.innerHTML = getReceiveMsgBox(data); // 대화 내용 추가
+        newDivElement.appendChild(clonedImageElement);
+
+// 대화 상자 엘리먼트 생성
+        let receiveMsgBoxContent = getReceiveMsgBox(data);
+
+// newDivElement를 messageBox에 추가
+        messageBox.appendChild(newDivElement);
+
+// getReceiveMsgBox(data)의 결과를 messageBox에 추가
+        messageBox.innerHTML += receiveMsgBoxContent;
 
         // 새로운 div 엘리먼트와 대화 상자를 받은 상자에 추가
         receivedBox.appendChild(newDivElement);//이 div안에 이미지 있음

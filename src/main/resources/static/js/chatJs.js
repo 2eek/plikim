@@ -103,7 +103,7 @@ messageBox.innerHTML = getReceiveMsgBox(data);
 	var divElement = messageBox.querySelector('div');
 if (divElement) {
     // div 태그 아래에 새로운 이미지 엘리먼트 추가
-    divElement.appendChild(profileImageElement.cloneNode(true));
+    divElement.insertBefore(profileImageElement.cloneNode(true), divElement.firstChild);
 }
 receivedBox.appendChild(messageBox);
 

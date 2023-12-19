@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOError;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 
 
@@ -315,4 +316,11 @@ public class UserController {
     }
 
 
+//    @GetMapping("/")
+//    public String userProfile(Model model, Principal principal) {
+//        String username = principal.getName();
+//        User user = userService.getUserById(username);
+//        model.addAttribute("user", user);
+//        return "fragments/common";
+//    }
 }

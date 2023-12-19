@@ -57,6 +57,9 @@
 <!--                <li class="nav-item" th:classappend="${menu} == 'mypage'? 'active'" sec:authorize="isAuthenticated()">-->
 <!--                    <a class="nav-link" th:href="@{/mychatrooms}">채팅</a>-->
 <!--                </li>-->
+<img th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"
+     alt="Profile Image" style="width: 30px; height: 30px;" sec:authorize="isAuthenticated()">
+
                 <li class="nav-item" th:classappend="${menu} == '채팅'? 'active'" sec:authorize="isAuthenticated()">
                     <a class="nav-link" th:href="@{/mychatrooms}">
                         채팅<span id="notificationBadge" class="badge badge-danger">0</span>

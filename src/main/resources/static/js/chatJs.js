@@ -101,11 +101,12 @@ function initYourMessage(data) {
     let newDivElement = document.createElement("div");
 
     // 이미지를 복제하여 새로운 div 엘리먼트에 추가
+	let profileImageElement = document.querySelector(".profile_name img");
     newDivElement.appendChild(profileImageElement.cloneNode(true)); // 이미지 추가
 
     // 새로운 div 엘리먼트와 대화 상자를 받은 상자에 추가
-    receivedBox.appendChild(newDivElement);
-    receivedBox.appendChild(messageBox);
+    receivedBox.appendChild(newDivElement);//이 div안에 이미지 있음
+    receivedBox.appendChild(messageBox);//이 div안에 대화내용 있음
 
     // 채팅 박스에 받은 메시지 상자 추가
     chatBox.appendChild(receivedBox);

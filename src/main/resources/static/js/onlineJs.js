@@ -58,12 +58,12 @@ function updateStatus(username, status) {
 
     // 사용자의 아이디를 읽어오기 위해 data-username을 사용
     const dataUsername = statusElement.attr('data-username');
-    console.log('User ID !!:', dataUsername);
+
 }
 
 // 예시: 세션 업데이트 함수
 function updateLoginStatus(username, status) {
-    console.log('Logout Event Received:', username);
+    // console.log('Logout Event Received:', username);
     removeUserRow(username); // 로그아웃 시 해당 사용자 행 제거
 }
 
@@ -84,7 +84,7 @@ stompClient.onConnect = (frame) => {
         const status = JSON.parse(greeting.body).content;
         showGreeting(status);
         updateStatus(status);
-        console.log('로그인한 회원:'+status);
+        // console.log('로그인한 회원:'+status);
     });
 
 

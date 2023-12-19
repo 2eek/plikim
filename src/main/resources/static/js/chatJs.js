@@ -101,20 +101,15 @@ function initYourMessage(data) {
     receivedBox.className = "received_msg";
 
     // 새로운 이미지 엘리먼트 생성
-    let profileImage = document.createElement("img");
-profileImage.src = '/uploads/' + (userinfo.storedFileName ? userinfo.storedFileName : 'basicProfile.jpg');
-    profileImage.alt = "Profile Image";
-    profileImage.style.width = "20px";
-    profileImage.style.height = "20px";
-    profileImage.style.borderRadius = "50%";
-    profileImage.style.marginRight = "10px"; // 이미지와 텍스트 사이 간격 조절
+    let profileImageElement = document.querySelector(".profile_name img").cloneNode(true);
+    profileImageElement.src = profileImageElement.getAttribute("data-profile-image");
 
     // 대화 상자 엘리먼트 생성
     let messageBox = document.createElement("div");
     messageBox.innerHTML = getReceiveMsgBox(data);
 
     // 이미지와 대화 상자를 받은 상자에 추가
-    receivedBox.appendChild(profileImage);
+    receivedBox.appendChild(profileImageElement);
     receivedBox.appendChild(messageBox);
 
     // 채팅 박스에 추가
@@ -123,6 +118,7 @@ profileImage.src = '/uploads/' + (userinfo.storedFileName ? userinfo.storedFileN
     // 스크롤 조정
     document.documentElement.scrollTop = document.body.scrollHeight;
 }
+
 
 
 async function addMessage() {

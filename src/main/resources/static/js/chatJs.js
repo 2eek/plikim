@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let tm = data.createdAt.substring(11, 16)
         convertTime = tm + " | " + md
 
-        return `<div class="received_withd_msg" style="float: left;">
+        return `<div class="received_withd_msg" style="float: left; margin-top: 0px;"">
 
 	<p>${data.msg}</p>
 	<span class="time_date"> ${convertTime} / <b>${data.sender}</b> </span>
@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
         messageBox.innerHTML += receiveMsgBoxContent;
 
         // 새로운 div 엘리먼트와 대화 상자를 받은 상자에 추가
-        receivedBox.appendChild(newDivElement);//이 div안에 이미지 있음
+        // receivedBox.appendChild(newDivElement);//이 div안에 이미지 있음
         receivedBox.appendChild(messageBox);//이 div안에 대화내용 있음
 
         // 채팅 박스에 받은 메시지 상자 추가

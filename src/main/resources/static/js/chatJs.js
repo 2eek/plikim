@@ -97,7 +97,13 @@ let profileImageElement = document.querySelector(".profile_name img");
 
 // 대화 상자 엘리먼트 생성
 let messageBox = document.createElement("div");
-messageBox.appendChild(profileImageElement.cloneNode(true));
+
+// 새로운 div 엘리먼트 생성
+let newDivElement = document.createElement("div");
+
+// 이미지를 복제하여 새로운 div 엘리먼트에 추가
+newDivElement.appendChild(profileImageElement.cloneNode(true));
+
 messageBox.innerHTML = getReceiveMsgBox(data);
 
 // 이미지와 대화 상자를 받은 상자에 추가

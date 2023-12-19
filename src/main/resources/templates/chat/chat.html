@@ -33,7 +33,7 @@
             </nav>
             <div class="profile_name" th:attr="data-profile-image=@{${#strings.isEmpty(userinfo.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + userinfo.storedFileName}}">
     <img th:src="@{${#strings.isEmpty(userinfo.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + userinfo.storedFileName}}"
-         alt="Profile Image"  style="width: 10px; height: 10px; object-fit: cover; border-radius: 50%; overflow: hidden;"> <span id="username"></span>
+         alt="Profile Image"  style="width: 30px; height: 30px; object-fit: cover; border-radius: 50%; overflow: hidden;"> <span id="username"></span>
 </div>
                 <!--채팅박스-->
                 <div class="container-fluid chat_section" id="chat-box" style="margin-top: 20vh;">

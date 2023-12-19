@@ -82,16 +82,46 @@ function initMyMessage(data) {
 }
 
 // 회색박스 초기화하기
+// function initYourMessage(data) {
+// 	let chatBox = document.querySelector("#chat-box");
+//
+// 	let receivedBox = document.createElement("div");
+// 	receivedBox.className = "received_msg";
+//
+// 	receivedBox.innerHTML = getReceiveMsgBox(data);
+// 	chatBox.append(receivedBox);
+//
+// 	document.documentElement.scrollTop = document.body.scrollHeight;
+// }
+// 회색박스 초기화하기
 function initYourMessage(data) {
-	let chatBox = document.querySelector("#chat-box");
+    let chatBox = document.querySelector("#chat-box");
 
-	let receivedBox = document.createElement("div");
-	receivedBox.className = "received_msg";
+    let receivedBox = document.createElement("div");
+    receivedBox.className = "received_msg";
 
-	receivedBox.innerHTML = getReceiveMsgBox(data);
-	chatBox.append(receivedBox);
+    // 새로운 이미지 엘리먼트 생성
+    let profileImage = document.createElement("img");
+    profileImage.src = `@{${#strings.isEmpty(userinfo.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + userinfo.storedFileName}}`;
+    profileImage.alt = "Profile Image";
+    profileImage.style.width = "20px";
+    profileImage.style.height = "20px";
+    profileImage.style.borderRadius = "50%";
+    profileImage.style.marginRight = "10px"; // 이미지와 텍스트 사이 간격 조절
 
-	document.documentElement.scrollTop = document.body.scrollHeight;
+    // 대화 상자 엘리먼트 생성
+    let messageBox = document.createElement("div");
+    messageBox.innerHTML = getReceiveMsgBox(data);
+
+    // 이미지와 대화 상자를 받은 상자에 추가
+    receivedBox.appendChild(profileImage);
+    receivedBox.appendChild(messageBox);
+
+    // 채팅 박스에 추가
+    chatBox.appendChild(receivedBox);
+
+    // 스크롤 조정
+    document.documentElement.scrollTop = document.body.scrollHeight;
 }
 
 

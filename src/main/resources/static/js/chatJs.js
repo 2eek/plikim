@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let clonedImageElement = profileImageElement.cloneNode(true);
         let newDivElement = document.createElement("div");
             newDivElement.style.float = "left";
-            newDivElement.style.marginRight = "5px";
+            newDivElement.style.marginRight = "8px";
 
 
         let messageBox = document.createElement("div");

@@ -5,6 +5,7 @@ import com.eek.kimpli.user.repository.UserRepository;
 import com.eek.kimpli.user.service.FileService;
 import com.eek.kimpli.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +31,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Controller
 public class UserController {
-
+     @Value("${external.upload.path}")
+    private String path;
     final UserService userService;
     final UserRepository userRepository;
 
@@ -180,7 +182,7 @@ public class UserController {
 
 // 서버에 파일 저장
                 //String savePath = "/Users/2eek/plikim_img/user_profileImg/" + loggedInUser.getStoredFileName();
-                String savePath = "/home/serve/plikim_img/user_profileImg/" + loggedInUser.getStoredFileName();
+                String savePath = path + loggedInUser.getStoredFileName();
 
                 System.out.println("저장경로" + savePath);
 

@@ -14,10 +14,10 @@ public class ImageDownloader {
 
 
 
-    private static String generateFileName(String imageUrl) {
-        // 파일명을 UUID를 이용하여 랜덤하게 생성
-        return UUID.randomUUID().toString() + ".jpg";
-    }
+//    private static String generateFileName(String imageUrl) {
+//        // 파일명을 UUID를 이용하여 랜덤하게 생성
+//        return UUID.randomUUID().toString() + ".jpg";
+//    }
 
   public static String imgServerSave(String imageUrl) {
     String savePath = "/home/serve/plikim_img/user_profileImg/";
@@ -40,7 +40,7 @@ public class ImageDownloader {
         // 이미지 다운로드를 위한 InputStream
         try (InputStream in = url.openStream()) {
             // 저장할 경로와 파일명 지정
-            String fileName = generateFileName(imageUrl);
+            String fileName = imageUrl;
             Path filePath = Path.of(savePath + fileName);
 
             // 이미지를 파일로 저장

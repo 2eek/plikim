@@ -66,9 +66,9 @@
                 </a>
             </li>
             <li>
-                <a class="nav-link" href="/member/mypage"></a>
+                <a class="nav-link" href="/member/mypage">
                 <img th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"
-                     alt="Profile Image" style="width: 30px; height: 30px;" sec:authorize="isAuthenticated()">
+                     alt="Profile Image" style="width: 40px; height: 40px;" sec:authorize="isAuthenticated()">
                 </a>
             </li>
             <li class="nav-item" th:classappend="${menu} == 'mypage'? 'active'" th:action="@{/mypage}"

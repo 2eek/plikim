@@ -17,7 +17,6 @@ import java.util.Map;
 public class KakaoLoginController {
     private final KakaoLoginServiceImpl ks;
 
-    // 'user' 필드는 필요 없을 것으로 판단하여 제거
 
   @GetMapping("/kakaologin")
 public String kakaoLogin(@RequestParam(value = "code", required = false) String code, Model model) throws Exception {

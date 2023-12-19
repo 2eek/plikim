@@ -66,33 +66,27 @@
                     채팅<span id="notificationBadge" class="badge badge-danger">0</span>
                 </a>
             </li>
-
-<!--            <li class="nav-item" th:classappend="${menu} == '마이페이지'? 'active'" sec:authorize="isAuthenticated()">-->
-<!--                <a class="nav-link" href="/member/mypage">-->
-<!--                        <img th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"-->
-<!--                             alt="Profile Image" style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;-->
-<!--        overflow: hidden;" sec:authorize="isAuthenticated()">-->
-<!--                </a>-->
-<!--            </li>-->
         </ul>
-                    <ul class="navbar-nav">
-                        <li class="nav-item" th:classappend="${menu} == 'mypage'? 'active'" th:action="@{/mypage}"
-                            sec:authorize="isAuthenticated()">
-                                <a class="nav-link" href="/member/mypage">
-                        <img th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"
-                             alt="Profile Image" style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;
-        overflow: hidden;" sec:authorize="isAuthenticated()">
+
+        <ul class="navbar-nav" style="margin-left: 10px;"> <!-- 여기에 간격을 조절할 수 있는 스타일을 추가 -->
+
+            <div class="dropdown" style="position: relative;">
+                <a id="dropdownMenu2" class="btn" data-toggle="dropdown"
+                   style="background-color: transparent; border: none; padding: 0;">
+
+                    <img th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"
+                         alt="Profile Image"
+                         style="width: 35px; height: 35px; object-fit: cover; border-radius: 50%; overflow: hidden;"
+                         sec:authorize="isAuthenticated()">
+
                 </a>
-                        </li>
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu2" style="margin-top: 10px;">
+                    <a class="dropdown-item" th:href="@{/member/mypage}" sec:authorize="isAuthenticated()">마이페이지</a>
+                    <a class="dropdown-item" th:href="@{/logout}" sec:authorize="isAuthenticated()">로그아웃</a>
+                </div>
+            </div>
         </ul>
-
-        <!-- 두 번째 폼을 별도로 추가 -->
-        <form class="form-inline my-2 my-lg-0" th:classappend="${menu} == 'mypage'? 'active'" th:action="@{/logout}"
-              method="post" sec:authorize="isAuthenticated()">
-            <button class="btn btn-secondary my-2 my-sm-0" type="submit">logout</button>
-        </form>
-
-
         <!-- 검색 -->
         <form class="d-flex" role="search" , method="GET" th:classappend="${menu} == 'mypage'? 'active'"
               th:action="@{/board/list}">
@@ -102,7 +96,10 @@
         </form>
 
     </div>
+
+
 </nav>
+
 
 </body>
 </html>

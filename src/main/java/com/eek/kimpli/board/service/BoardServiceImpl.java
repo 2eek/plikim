@@ -25,7 +25,7 @@ public class BoardServiceImpl implements BoardService {
         this.boardValidator = boardValidator;
     }
 
-    @Override
+    @Override// 하나의 메서드로 게시글 작성, 업데이트 처리
     public String saveOrUpdateBoard(Board board, BindingResult bindingResult) {
         try {
             // 현재 사용자의 세션 정보를 가져와서 작성자로 설정

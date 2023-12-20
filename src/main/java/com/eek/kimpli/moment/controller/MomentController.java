@@ -1,19 +1,15 @@
 package com.eek.kimpli.moment.controller;
 
 
-import com.eek.kimpli.board.model.Board;
-import com.eek.kimpli.moment.dto.Moment;
+import com.eek.kimpli.moment.model.Moment;
 import com.eek.kimpli.moment.service.MomentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/moment")

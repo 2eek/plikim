@@ -6,6 +6,7 @@ import com.eek.kimpli.user.model.User;
 import com.eek.kimpli.user.repository.UserFileRepository;
 import com.eek.kimpli.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +19,8 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @Service
 public class UserService {
-
+     @Value("${external.upload.path}")
+    private String path;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserFileRepository userFileRepository;
@@ -101,4 +103,22 @@ public class UserService {
         // userRepository를 사용하여 userId를 기반으로 사용자 정보를 가져옴
         return userRepository.findByUserId(userId);
     }
+
+
+    //회원 사진 업데이트
+     public void updateProfileInfo(User loggedInUser, MultipartFile profileFile) throws IOException {
+        if (profileFile != null && !profileFile.isEmpty()) {
+            loggedInUser.setOriginProfileImg(profileFile.getOriginalFilename());
+            loggedInUser.setStoredFileName(System.currentTimeMillis() + "_" + profileFile.getOriginalFilename());
+            loggedInUser.setFileAttached(1);
+
+            String savePath = path + loggedInUser.getStoredFileName();
+            System.out.println("저장경로" + savePath);
+
+            FileService.saveFile(profileFile.getBytes(), savePath);
+
+            updateUserInfo(loggedInUser);
+        }
+    }
 }
+

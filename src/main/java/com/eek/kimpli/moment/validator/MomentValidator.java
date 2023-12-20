@@ -1,7 +1,6 @@
 package com.eek.kimpli.moment.validator;
 
-import com.eek.kimpli.board.model.Board;
-import com.eek.kimpli.moment.dto.Moment;
+import com.eek.kimpli.moment.model.Moment;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;

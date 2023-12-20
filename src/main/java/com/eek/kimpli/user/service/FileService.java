@@ -16,14 +16,14 @@ public class FileService {
     }
 
     // 실제 웹 애플리케이션에서 사용하는 메서드
-    public static void saveProfileImage(MultipartFile file, String directory, String fileName) throws IOException {
-        // 서버에 저장할 경로
-        String savePath = directory + File.separator + fileName;
-
-        // 파일 정보 저장
-        byte[] fileContent = file.getBytes();
-
-        // 서버에 파일 저장
-        saveFile(fileContent, savePath);
-    }
+//    public static void saveProfileImage(MultipartFile file, String directory, String fileName) throws IOException {
+//        // 서버에 저장할 경로
+//        String savePath = directory + File.separator + fileName;
+//
+//        // 파일 정보 저장
+//        byte[] fileContent = file.getBytes();
+//
+//        // 서버에 파일 저장
+//        saveFile(fileContent, savePath);
+//    }
 }

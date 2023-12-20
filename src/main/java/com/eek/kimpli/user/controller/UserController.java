@@ -31,8 +31,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Controller
 public class UserController {
-     @Value("${external.upload.path}")
-    private String path;
+
     final UserService userService;
     final UserRepository userRepository;
 
@@ -165,44 +164,14 @@ public class UserController {
     // 회원정보 수정
     @PostMapping("/user/update")
     public String updateMyInfo(@RequestParam("profileFile") MultipartFile profileFile,
-                               @RequestParam("userId") String userId,
-                               Model model) {
-        System.out.println("유저아이디?" + userId);
+                               @RequestParam("userId") String userId) {
         // userId를 사용하여 현재 로그인 중인 사용자 정보를 가져오는 작업
         User loggedInUser = userService.getUserById(userId);
-        System.out.println("로그인정보" + loggedInUser);
-
         try {
-            if (profileFile != null && !profileFile.isEmpty()) {
-                // 파일 정보 저장
-                loggedInUser.setOriginProfileImg(profileFile.getOriginalFilename());
-                loggedInUser.setStoredFileName(System.currentTimeMillis() + "_" + profileFile.getOriginalFilename());
-                loggedInUser.setFileAttached(1);
-
-
-// 서버에 파일 저장
-                //String savePath = "/Users/2eek/plikim_img/user_profileImg/" + loggedInUser.getStoredFileName();
-                String savePath = path + loggedInUser.getStoredFileName();
-
-                System.out.println("저장경로" + savePath);
-
-// 파일 저장 (한 번만 저장하도록 수정)
-                FileService.saveFile(profileFile.getBytes(), savePath);
-
-// 업로드된 파일을 서버에 저장
-// 아래 라인에서 'file' 대신 'profileFile'을 사용해야 합니다.
-//                FileService.saveProfileImage(profileFile, "src/main/resources/static/profileImg", loggedInUser.getStoredFileName());
-
-// 업데이트 로직 호출
-                userService.updateUserInfo(loggedInUser);
-
-            }
-
+            userService.updateProfileInfo(loggedInUser, profileFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
         return "redirect:/";
     }
 

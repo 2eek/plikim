@@ -1,4 +1,4 @@
-package com.eek.kimpli.moment.dto;
+package com.eek.kimpli.moment.model;
 
 import lombok.Data;
 
@@ -8,7 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 

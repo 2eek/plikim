@@ -2,32 +2,27 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:fragment="head(title)">
+    <title th:text="${title}"></title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <script src="https://kit.fontawesome.com/d58c3728d1.js"
             crossorigin="anonymous"></script>
-    <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
           integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous"/>
     <link href="css/starter-template.css" th:href="@{/css/starter-template.css}" rel="stylesheet">
     <!--    파라미터로 값을 받아온 후 타이틀을 동적으로 표시해줌.-->
-    <title th:text="${title}"></title>
+
     <script src="https://code.jquery.com/jquery-3.6.3.min.js"
             integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
 
-    <!--    <script-->
-    <!--        src="https://code.jquery.com/jquery-3.5.1.slim.min.js"-->
-    <!--        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"-->
-    <!--        crossorigin="anonymous"-->
-    <!--&gt;</script>-->
     <script
             src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
             crossorigin="anonymous"
     ></script>
-    <!--  <script src="/js/onlineJs.js"></script>-->
+
 
 </head>
 
@@ -41,6 +36,9 @@
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
+            <li class="nav-item" th:classappend="${menu} == 'moment'? 'active'">
+                <a class="nav-link" href="/moment/list">모멘트</a>
+            </li>
             <li class="nav-item" th:classappend="${menu} == 'boardList'? 'active'">
                 <a class="nav-link" href="/board/list">게시판</a>
             </li>
@@ -61,7 +59,7 @@
             <!--                </li>-->
 
 
-            <li class="nav-item" th:classappend="${menu} == '채팅'? 'active'" sec:authorize="isAuthenticated()">
+              <li class="nav-item" th:classappend="${menu} == 'chat'? 'active'" sec:authorize="isAuthenticated()">
                 <a class="nav-link" th:href="@{/mychatrooms}">
                     채팅<span id="notificationBadge" class="badge badge-danger">0</span>
                 </a>

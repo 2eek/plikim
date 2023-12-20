@@ -1,4 +1,4 @@
-package com.eek.kimpli.EncryptionUtils;
+package com.eek.kimpli.encryptionUtils;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;

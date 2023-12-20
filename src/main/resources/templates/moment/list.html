@@ -50,6 +50,9 @@
         max-height: 100px;
         margin-right: 10px;
     }
+
+
+
 </style>
 
 <head th:replace="fragments/common :: head('moment')">
@@ -66,10 +69,13 @@
     <textarea class="input-area" placeholder="5줄 정도 입력하세요" maxlength="200"></textarea>
 
     <!-- 파일 선택 input -->
-    <input type="file" class="image-upload" accept="image/*" multiple onchange="previewImages(this)">
-
-    <!-- 이미지 미리보기 영역 -->
+<!--    <input type="file" class="image-upload" accept="image/*" multiple onchange="previewImages(this)">-->
+<input id="upload_file" type="file" class="image-upload" accept="image/*" multiple onchange="onChange(event)"style="position:absolute; clip:rect(0, 0, 0, 0);">
+<label for="upload_file" style="border: 1px solid darkgray; padding: 5px; cursor: pointer; display: inline-block; background-color: #f0f0f0; border-radius: 5px;">
+    업로드
+</label>    <!-- 이미지 미리보기 영역 -->
     <div id="image-preview-container" class="selected-images"></div>
+
 
     <div class="button-container">
         <button onclick="submitForm()">입력</button>
@@ -79,43 +85,15 @@
 </div>
 
 <script th:inline="javascript">
-    let selectedImages = [];
+let selectedImages = [];
 
-    // 입력 기능 예시 함수
-    function submitForm() {
-        console.log('Submit button clicked');
+function onChange(event) {
+    previewImages(event.target.files);
+    event.target.value = '';
+}
 
-        // 텍스트 에어리어 내용 가져오기
-        const content = document.querySelector('.input-area').value;
-
-        // FormData 객체 생성
-        const formData = new FormData();
-        formData.append('content', content);
-
-        // 선택된 이미지들을 FormData에 추가
-        selectedImages.forEach((file, index) => {
-            formData.append(`image${index + 1}`, file);
-        });
-
-        // 서버에 데이터 전송
-        fetch('/moment/save', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Server response:', data);
-            // 서버에서의 응답에 따라 추가적인 로직을 여기에 추가
-            // 예를 들어, 성공 시 화면 갱신 등의 작업을 수행할 수 있습니다.
-        })
-        .catch(error => console.error('Error submitting form:', error));
-    }
-function previewImages(input) {
+function previewImages(files) {
     const previewContainer = document.getElementById('image-preview-container');
-    const files = input.files;
-
-    // 이미지 미리보기 영역 초기화
-    // previewContainer.innerHTML = '';  // 주석 해제
 
     // 최대 3개까지만 미리보기 표시
     for (let i = 0; i < Math.min(files.length, 3); i++) {
@@ -134,33 +112,29 @@ function previewImages(input) {
         const previewImg = createPreviewImage(file);
         previewContainer.appendChild(previewImg);
     }
-
-    // 미리보기 이미지 엘리먼트 생성 함수
-    function createPreviewImage(file) {
-        const previewImg = document.createElement('img');
-        previewImg.src = URL.createObjectURL(file);
-        previewImg.alt = 'Image Preview';
-        previewImg.style.width = '100px';  // 이미지 너비를 100px로 설정
-        previewImg.style.height = '100px'; // 이미지 높이를 100px로 설정
-
-        // 이미지 클릭 시 제거 이벤트 리스너 추가
-        previewImg.addEventListener('click', () => removePreviewImage(previewImg, file));
-
-        return previewImg;
-    }
-
-    function removePreviewImage(previewImg, file) {
-        const index = selectedImages.indexOf(file);
-        if (index !== -1) {
-            selectedImages.splice(index, 1);  // 배열에서 해당 파일 제거
-        }
-
-        previewImg.remove();  // 뷰에서 해당 이미지 제거
-    }
 }
 
+function createPreviewImage(file) {
+    const previewImg = document.createElement('img');
+    previewImg.src = URL.createObjectURL(file);
+    previewImg.alt = 'Image Preview';
+    previewImg.style.width = '100px';  // 이미지 너비를 100px로 설정
+    previewImg.style.height = '100px'; // 이미지 높이를 100px로 설정
 
+    // 이미지 클릭 시 제거 이벤트 리스너 추가
+    previewImg.addEventListener('click', () => removePreviewImage(previewImg, file));
 
+    return previewImg;
+}
+
+function removePreviewImage(previewImg, file) {
+    const index = selectedImages.indexOf(file);
+    if (index !== -1) {
+        selectedImages.splice(index, 1);  // 배열에서 해당 파일 제거
+    }
+
+    previewImg.remove();  // 뷰에서 해당 이미지 제거
+}
 
 
 

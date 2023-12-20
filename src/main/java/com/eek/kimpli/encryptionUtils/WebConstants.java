@@ -1,4 +1,4 @@
-package com.eek.kimpli.EncryptionUtils;
+package com.eek.kimpli.encryptionUtils;
 
 
 public final class WebConstants {

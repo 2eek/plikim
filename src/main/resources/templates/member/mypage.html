@@ -1,19 +1,30 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <style>
-        #preview {
-            max-width: 300px;
-            max-height: 300px;
-        }
-    </style>
+<html xmlns:th="http://www.thymeleaf.org">
+<style>
+    .user-table {
+        float: left;
+        width: 100px; /* 너비를 100px로 설정 */
+        margin-right: 20px;
+    }
+
+    .user-table th, .user-table td {
+        font-size: 12px;
+    }
+
+    .user-row {
+        cursor: pointer;
+    }
+</style>
+
+
+<head th:replace="fragments/common :: head('게시판')">
 </head>
 <body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('home')">
+</nav>
     <form action="/user/update" enctype="multipart/form-data" method="post">
         <h1 th:text="'Welcome, 아이디 ' + ${userId} + '!'"></h1>
-        <h1 th:text="'Welcome, 이름 ' + ${userEmail} + '!'"></h1>
+        <h1 th:text="'Welcome, 이메일 ' + ${userEmail} + '!'"></h1>
 
         <input type="hidden" name="userId" th:value="${userId}">
 

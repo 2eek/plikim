@@ -2,7 +2,7 @@ package com.eek.kimpli.chat.contorller;
 
 import com.eek.kimpli.chat.model.Chat;
 import com.eek.kimpli.chat.repository.ChatRepository;
-import com.eek.kimpli.EncryptionUtils.AesUtil;
+import com.eek.kimpli.encryptionUtils.AesUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;

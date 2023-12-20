@@ -1,6 +1,6 @@
 package com.eek.kimpli.chat.contorller;
 
-import com.eek.kimpli.EncryptionUtils.AesUtil;
+import com.eek.kimpli.encryptionUtils.AesUtil;
 import com.eek.kimpli.chat.model.Chat;
 import com.eek.kimpli.chat.repository.ChatRepository;
 import com.eek.kimpli.user.model.User;

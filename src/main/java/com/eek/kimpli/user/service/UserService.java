@@ -108,6 +108,7 @@ public class UserService {
     //회원 사진 업데이트
      public void updateProfileInfo(User loggedInUser, MultipartFile profileFile) throws IOException {
         if (profileFile != null && !profileFile.isEmpty()) {
+            //업로드된 파일의 원본 파일 이름을 OriginalFilename로 설정
             loggedInUser.setOriginProfileImg(profileFile.getOriginalFilename());
             loggedInUser.setStoredFileName(System.currentTimeMillis() + "_" + profileFile.getOriginalFilename());
             loggedInUser.setFileAttached(1);

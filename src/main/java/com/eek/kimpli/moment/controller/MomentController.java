@@ -7,9 +7,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/moment")
@@ -29,12 +31,22 @@ public class MomentController {
 //        return resultView;
 //    }
 
-  public String save(@Valid Moment moment, BindingResult bindingResult) {
-        System.out.println("Received data: " + moment.toString());
-        String resultView =  momentService.saveOrUpdateMoment(moment, bindingResult);
-        //케이스에 따라 뷰 구분
-        return resultView;
+@PostMapping("/moment/save")
+public String save(@Valid Moment moment,
+                   BindingResult bindingResult,
+                   @RequestParam("profileFiles") List<MultipartFile> profileFiles) {
+
+    System.out.println("Received data: " + moment.toString());
+
+    // 이미지 파일들을 처리하는 로직 추가
+    for (MultipartFile profileFile : profileFiles) {
+        // 각 이미지에 대한 처리 로직 수행
     }
+
+    String resultView =  momentService.saveOrUpdateMoment(moment, bindingResult);
+    // 케이스에 따라 뷰 구분
+    return resultView;
+}
 
 
 

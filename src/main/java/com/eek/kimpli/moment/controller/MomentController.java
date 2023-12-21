@@ -45,8 +45,8 @@ public class MomentController {
 
         if (bindingResult.hasErrors()) {
             // 에러가 있으면 에러 메시지를 JSON으로 반환
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Validation errors");
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\": \"Validation errors\"}");
+   //         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Validation errors");
+           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\": \"Validation errors\"}");
         }
 
         // 에러가 없으면 정상적으로 처리

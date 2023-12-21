@@ -1,18 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <style>
-    .user-table {
-        float: left;
-        width: 100px; /* 너비를 100px로 설정 */
-        margin-right: 20px;
-    }
-
     .user-table th, .user-table td {
         font-size: 12px;
-    }
-
-    .user-row {
-        cursor: pointer;
     }
 
     /* 추가된 스타일 */
@@ -51,8 +41,6 @@
         margin-right: 10px;
     }
 
-
-
 </style>
 
 <head th:replace="fragments/common :: head('moment')">
@@ -65,15 +53,22 @@
     <!-- Thymeleaf fragment로 content를 정의 -->
 </div>
 <!-- 추가된 폼 -->
-<div class="form-container">
-    <textarea class="input-area" placeholder="5줄 정도 입력하세요" maxlength="200"></textarea>
 
+
+<div class="form-container">
+<textarea class="input-area form-control"
+          placeholder="5줄 정도 입력하세요" id="area-content" name="content" maxlength="200"></textarea>
+<div class="invalid-feedback" id="error-content">
+    내용 에러 메세지
+</div>
     <!-- 파일 선택 input -->
-<!--    <input type="file" class="image-upload" accept="image/*" multiple onchange="previewImages(this)">-->
-<input id="upload_file" type="file" class="image-upload" accept="image/*" multiple onchange="onChange(event)"style="position:absolute; clip:rect(0, 0, 0, 0);">
-<label for="upload_file" style="border: 1px solid darkgray; padding: 5px; cursor: pointer; display: inline-block; background-color: #f0f0f0; border-radius: 5px;">
-    업로드
-</label>    <!-- 이미지 미리보기 영역 -->
+    <!--    <input type="file" class="image-upload" accept="image/*" multiple onchange="previewImages(this)">-->
+    <input id="upload_file" type="file" class="image-upload" accept="image/*" multiple onchange="onChange(event)"
+           style="position:absolute; clip:rect(0, 0, 0, 0);">
+    <label for="upload_file"
+           style="border: 1px solid darkgray; padding: 5px; cursor: pointer; display: inline-block; background-color: #f0f0f0; border-radius: 5px;">
+        업로드
+    </label>    <!-- 이미지 미리보기 영역 -->
     <div id="image-preview-container" class="selected-images"></div>
 
 
@@ -85,57 +80,114 @@
 </div>
 
 <script th:inline="javascript">
-let selectedImages = [];
+    let selectedImages = [];
 
-function onChange(event) {
-    previewImages(event.target.files);
-    event.target.value = '';
-}
+    function onChange(event) {
+        previewImages(event.target.files);
+        event.target.value = '';
+    }
 
-function previewImages(files) {
-    const previewContainer = document.getElementById('image-preview-container');
+    function previewImages(files) {
+        const previewContainer = document.getElementById('image-preview-container');
 
-    // 최대 3개까지만 미리보기 표시
-    for (let i = 0; i < Math.min(files.length, 3); i++) {
-        const file = files[i];
+        // 최대 3개까지만 미리보기 표시
+        for (let i = 0; i < Math.min(files.length, 3); i++) {
+            const file = files[i];
 
-        // 이미지가 3개를 넘어가면 alert 창 띄우고 추가 중단
-        if (selectedImages.length >= 3) {
-            alert('최대 3개까지만 선택할 수 있습니다.');
-            break;
+            // 이미지가 3개를 넘어가면 alert 창 띄우고 추가 중단
+            if (selectedImages.length >= 3) {
+                alert('최대 3개까지만 선택할 수 있습니다.');
+                break;
+            }
+
+            // 선택된 이미지 배열에 추가
+            selectedImages.push(file);
+
+            // 미리보기 이미지 엘리먼트 생성 및 추가
+            const previewImg = createPreviewImage(file);
+            previewContainer.appendChild(previewImg);
+        }
+    }
+
+    function createPreviewImage(file) {
+        const previewImg = document.createElement('img');
+        previewImg.src = URL.createObjectURL(file);
+        previewImg.alt = 'Image Preview';
+        previewImg.style.width = '100px';  // 이미지 너비를 100px로 설정
+        previewImg.style.height = '100px'; // 이미지 높이를 100px로 설정
+
+        // 이미지 클릭 시 제거 이벤트 리스너 추가
+        previewImg.addEventListener('click', () => removePreviewImage(previewImg, file));
+
+        return previewImg;
+    }
+
+    function removePreviewImage(previewImg, file) {
+        const index = selectedImages.indexOf(file);
+        if (index !== -1) {
+            selectedImages.splice(index, 1);  // 배열에서 해당 파일 제거
         }
 
-        // 선택된 이미지 배열에 추가
-        selectedImages.push(file);
+        previewImg.remove();  // 뷰에서 해당 이미지 제거
+    }
 
-        // 미리보기 이미지 엘리먼트 생성 및 추가
-        const previewImg = createPreviewImage(file);
-        previewContainer.appendChild(previewImg);
+    <!--   전송  -->
+function submitForm() {
+    // FormData 객체 생성
+    var formData = new FormData();
+
+    // Moment 객체의 content 필드와 동일한 이름으로 추가
+    formData.append('content', $('#area-content').val());
+
+    // 선택된 이미지를 FormData에 추가
+    for (var i = 0; i < selectedImages.length; i++) {
+        formData.append('profileFiles', selectedImages[i]);
+    }
+
+    // 다른 입력 필드의 데이터를 FormData에 추가
+    // formData.append('otherField', $('#otherField').val());
+    // formData.append('anotherField', $('#anotherField').val());
+
+
+// AJAX 요청 수행
+// AJAX 요청 수행
+$.ajax({
+    type: 'POST',
+    url: '/moment/save',
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function (data) {
+        // 성공적으로 저장되면 실행되는 로직
+        console.log('Save successful:', data);
+        // 추가적으로 필요한 로직 수행
+    },
+error: function (error) {
+    // 저장 중 오류가 발생하면 실행되는 로직
+    console.error('Error saving data:', error.responseText);
+
+    // 받은 JSON 응답에서 에러 메시지 추출
+    var errorMessage = JSON.parse(error.responseText).error;
+
+    // 에러 메시지를 화면에 표시하는 등의 처리 로직 수행
+    // 예를 들어, 어떤 특정한 DOM 요소에 표시한다면:
+    $('#error-message').text(errorMessage);
+
+    // 내용 에러 메시지를 표시하는 부분
+    if (errorMessage && errorMessage.includes('Validation errors')) {
+        // 내용 필드에 대한 처리
+        $('#area-content').addClass('is-invalid');  // 빨간 테두리 클래스 추가
+        $('#error-content').text('내용을 입력하세요');
+    } else {
+        // 다른 필드에 대한 처리를 추가할 수 있음
+        $('#area-content').removeClass('is-invalid');  // 에러가 없으면 클래스 제거
+        $('#error-content').text('');  // 에러 메시지 초기화
     }
 }
 
-function createPreviewImage(file) {
-    const previewImg = document.createElement('img');
-    previewImg.src = URL.createObjectURL(file);
-    previewImg.alt = 'Image Preview';
-    previewImg.style.width = '100px';  // 이미지 너비를 100px로 설정
-    previewImg.style.height = '100px'; // 이미지 높이를 100px로 설정
+})
 
-    // 이미지 클릭 시 제거 이벤트 리스너 추가
-    previewImg.addEventListener('click', () => removePreviewImage(previewImg, file));
-
-    return previewImg;
 }
-
-function removePreviewImage(previewImg, file) {
-    const index = selectedImages.indexOf(file);
-    if (index !== -1) {
-        selectedImages.splice(index, 1);  // 배열에서 해당 파일 제거
-    }
-
-    previewImg.remove();  // 뷰에서 해당 이미지 제거
-}
-
 
 
     function updateForm() {

@@ -18,10 +18,10 @@ public class Moment {
     @NotNull
     private String content;
 
-    @NotNull
+
     private String author;
 
-    @NotNull
+
     private LocalDateTime createdDate; // 등록일
 
     private LocalDateTime updatedDate; // 수정일

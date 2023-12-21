@@ -3,8 +3,11 @@ package com.eek.kimpli.moment.controller;
 
 import com.eek.kimpli.moment.model.Moment;
 import com.eek.kimpli.moment.service.MomentService;
+import com.eek.kimpli.moment.validator.MomentValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,8 +21,9 @@ import java.util.List;
 @RequiredArgsConstructor //생성자 자동으로 만들어준다.
 public class MomentController {
 
-    @Autowired
+
      final MomentService momentService;
+        private final MomentValidator momentValidator;
 
 //    private final List<Moment> data = generateSampleData();
 
@@ -31,22 +35,28 @@ public class MomentController {
 //        return resultView;
 //    }
 
-@PostMapping("/moment/save")
-public String save(@Valid Moment moment,
-                   BindingResult bindingResult,
-                   @RequestParam("profileFiles") List<MultipartFile> profileFiles) {
+@PostMapping("/save")
+    public ResponseEntity<String> save(@Valid Moment moment,
+                                       BindingResult bindingResult,
+                                       @RequestParam(value = "profileFiles", required = false)List<MultipartFile> profileFiles) {
 
-    System.out.println("Received data: " + moment.toString());
+        // 유효성 검사 수행
+        momentValidator.validate(moment, bindingResult);
 
-    // 이미지 파일들을 처리하는 로직 추가
-    for (MultipartFile profileFile : profileFiles) {
-        // 각 이미지에 대한 처리 로직 수행
+        if (bindingResult.hasErrors()) {
+            // 에러가 있으면 에러 메시지를 JSON으로 반환
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Validation errors");
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\": \"Validation errors\"}");
+        }
+
+        // 에러가 없으면 정상적으로 처리
+        String resultView = momentService.saveOrUpdateMoment(moment, bindingResult);
+
+        // 처리 결과를 JSON으로 반환
+        return ResponseEntity.ok(resultView);
     }
 
-    String resultView =  momentService.saveOrUpdateMoment(moment, bindingResult);
-    // 케이스에 따라 뷰 구분
-    return resultView;
-}
+    // 다른 API 엔드포인트 및 메소드들...
 
 
 

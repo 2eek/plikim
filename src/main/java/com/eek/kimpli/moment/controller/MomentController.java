@@ -48,7 +48,8 @@ public class MomentController {
         }
 
         // 에러가 없으면 정상적으로 처리
-        String resultView = momentService.saveOrUpdateMoment(moment, bindingResult);
+        String resultView = momentService.saveOrUpdateMoment(moment);
+        momentService.saveMoment(moment, profileFiles);
 
         // 처리 결과를 JSON으로 반환
         return ResponseEntity.ok(resultView);

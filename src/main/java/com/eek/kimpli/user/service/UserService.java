@@ -109,15 +109,20 @@ public class UserService {
      public void updateProfileInfo(User loggedInUser, MultipartFile profileFile) throws IOException {
         if (profileFile != null && !profileFile.isEmpty()) {
             //업로드된 파일의 원본 파일 이름을 OriginalFilename로 설정
+
+            //OriginProfileImg 필드에 이름 저장
             loggedInUser.setOriginProfileImg(profileFile.getOriginalFilename());
+            //StoredFileName 필드에 저장되는 이름 저장(중복 피하기 위해 이름 생성) -> 이 이름으로 파일 불러온다.
             loggedInUser.setStoredFileName(System.currentTimeMillis() + "_" + profileFile.getOriginalFilename());
             loggedInUser.setFileAttached(1);
-
+            //스프링프로퍼티 참조해서 저장경로 설정
             String savePath = path + loggedInUser.getStoredFileName();
-            System.out.println("저장경로" + savePath);
+            System.out.println("저장경로+이름" + savePath);
 
+            //서버에 파일 저장
             FileService.saveFile(profileFile.getBytes(), savePath);
 
+            // 회원의 정보 업데이트 DB에 데이터 넣음 (originProfileImg,storedFileName, fileAttached )
             updateUserInfo(loggedInUser);
         }
     }

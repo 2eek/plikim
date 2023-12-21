@@ -53,17 +53,17 @@
     <!-- Thymeleaf fragment로 content를 정의 -->
 </div>
 <!-- 추가된 폼 -->
-                <a id="dropdownMenu2" class="btn" data-toggle="dropdown"
+
+<div class="form-container">
+                    <a  class="btn"
                    style="background-color: transparent; border: none; padding: 0;">
 
-                    <img th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"
+                    <img  th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"
                          alt="Profile Image"
-                         style="width: 35px; height: 35px; object-fit: cover; border-radius: 50%; overflow: hidden;"
+                         style="width: 35px; height: 35px; object-fit: cover; margin-bottom:10px; border-radius: 50%; overflow: hidden;"
                          sec:authorize="isAuthenticated()">
 
                 </a>
-
-<div class="form-container">
 <textarea class="input-area form-control"
           placeholder="5줄 정도 입력하세요" id="area-content" name="content" maxlength="200"></textarea>
 <div class="invalid-feedback" id="error-content">
@@ -146,7 +146,6 @@ function submitForm() {
 
     // Moment 객체의 content 필드와 동일한 이름으로 추가
     formData.append('content', $('#area-content').val());
-
     // 선택된 이미지를 FormData에 추가
     for (var i = 0; i < selectedImages.length; i++) {
         formData.append('profileFiles', selectedImages[i]);

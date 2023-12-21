@@ -168,6 +168,7 @@ public class UserController {
         // userId를 사용하여 현재 로그인 중인 사용자 정보를 가져오는 작업
         User loggedInUser = userService.getUserById(userId);
         try {
+            //프로필 사진 업데이트
             userService.updateProfileInfo(loggedInUser, profileFile);
         } catch (IOException e) {
             e.printStackTrace();

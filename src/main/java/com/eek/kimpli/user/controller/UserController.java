@@ -161,7 +161,7 @@ public class UserController {
         return "redirect:/";
     }
 
-    // 회원정보 수정
+    // 회원정보 수정+ 프로필 사진 등록
     @PostMapping("/user/update")
     public String updateMyInfo(@RequestParam("profileFile") MultipartFile profileFile,
                                @RequestParam("userId") String userId) {

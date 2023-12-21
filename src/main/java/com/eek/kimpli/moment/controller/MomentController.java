@@ -7,7 +7,6 @@ import com.eek.kimpli.moment.validator.MomentValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,8 +44,7 @@ public class MomentController {
 
         if (bindingResult.hasErrors()) {
             // 에러가 있으면 에러 메시지를 JSON으로 반환
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Validation errors");
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\": \"Validation errors\"}");
+           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\": \"Validation errors\"}");
         }
 
         // 에러가 없으면 정상적으로 처리

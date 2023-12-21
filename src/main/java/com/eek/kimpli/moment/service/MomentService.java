@@ -5,5 +5,5 @@ import org.springframework.validation.BindingResult;
 
 public interface MomentService {
 
-    String saveOrUpdateMoment(Moment moment , BindingResult bindingResult);
+    String saveOrUpdateMoment(Moment moment);
 }

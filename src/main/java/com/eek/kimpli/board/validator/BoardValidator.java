@@ -19,12 +19,5 @@ public class BoardValidator implements Validator {
         if (StringUtils.isEmpty(b.getContent())) {
             errors.rejectValue("content", "key", "내용을 입력하세요");
         }
-
-//        // 작성자(author)에 대한 유효성 검사
-//        if (StringUtils.isEmpty(b.getAuthor())) {
-//            errors.rejectValue("author", "key", "작성자를 입력하세요");
-//
-//        }
-
     }
 }

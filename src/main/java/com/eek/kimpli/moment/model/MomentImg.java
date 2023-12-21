@@ -30,6 +30,8 @@ public class MomentImg {
 
     private int displayOrder;
 
+
+
     // 다른 필드들은 사진에 대한 정보 (파일 경로, 파일 이름 등)를 나타낼 수 있습니다.
     // 예: private String filePath;
     // 예: private String fileName;

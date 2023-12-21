@@ -117,10 +117,12 @@ public class UserService {
             loggedInUser.setFileAttached(1);
             //스프링프로퍼티 참조해서 저장경로 설정
             String savePath = path + loggedInUser.getStoredFileName();
-            System.out.println("저장경로" + savePath);
+            System.out.println("저장경로+이름" + savePath);
 
+            //서버에 파일 저장
             FileService.saveFile(profileFile.getBytes(), savePath);
 
+            // 회원의 정보 업데이트 DB에 데이터 넣음 (originProfileImg,storedFileName, fileAttached )
             updateUserInfo(loggedInUser);
         }
     }

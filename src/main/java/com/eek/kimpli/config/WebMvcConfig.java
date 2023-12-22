@@ -20,11 +20,19 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Value("${external.upload.path}")
     private String externalUploadPath;
 
+    @Value("${external.upload.momentPath}")
+    private String externalUploadMomentPath;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/uploads/**")
                 .addResourceLocations("file:" + externalUploadPath);
+
+         registry.addResourceHandler("/uploads/moment/**")
+                .addResourceLocations("file:" + externalUploadMomentPath);
     }
+
+
     //common.html에 회원 프로필사진
 
     @Override

@@ -2,10 +2,8 @@ package com.eek.kimpli.user.controller;
 
 import com.eek.kimpli.user.model.User;
 import com.eek.kimpli.user.repository.UserRepository;
-import com.eek.kimpli.user.service.FileService;
 import com.eek.kimpli.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,13 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOError;
 import java.io.IOException;
-import java.security.Principal;
 import java.util.List;
 
 

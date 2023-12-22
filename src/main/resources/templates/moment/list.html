@@ -119,7 +119,7 @@
     <!-- content 내용 -->
 </div>
 <!--여기-->
-
+<!--데이터 반환 폼-->
 <div class="moment" th:each="moment : ${moments}" style="overflow: auto;">
     <div class="form-container" style="border: 2px solid blue;">
         <div>
@@ -132,7 +132,7 @@
         </div>
         <div style="overflow: auto;">
             <textarea class="input-area form-control"
-                      th:text="${moment.content}" name="content" maxlength="200"></textarea>
+                      th:text="${moment.content}" name="content" maxlength="200" readonly></textarea>
                <div th:each="momentImg : ${moment.momentImg}">
             <img th:src="@{'/uploads/moment/' + ${momentImg.storedFileName}}" alt="Moment Image"
                  style="width: 100px; height: 100px; margin-right: 10px; float: left;">
@@ -288,50 +288,7 @@ function appendMomentToScreen(momentData) {
     newMoment.className = 'form-container';
     newMoment.style.border = '2px solid blue';
 
-    const userImage = document.createElement('a');
-    userImage.className = 'btn';
-    userImage.style.backgroundColor = 'transparent';
-    userImage.style.border = 'none';
-    userImage.style.padding = '0';
-
-    const userImg = document.createElement('img');
-    userImg.src = momentData.userImageSrc;
-    userImg.alt = 'Profile Image';
-    userImg.style.width = '35px';
-    userImg.style.height = '35px';
-    userImg.style.objectFit = 'cover';
-    userImg.style.marginBottom = '10px';
-    userImg.style.borderRadius = '50%';
-    userImg.style.overflow = 'hidden';
-
-    userImage.appendChild(userImg);
-
-    const momentContent = document.createElement('div');
-    momentContent.style.overflow = 'auto';
-
-    const textArea = document.createElement('textarea');
-    textArea.className = 'input-area form-control';
-    textArea.textContent = momentData.content;
-    textArea.name = 'content';
-    textArea.maxLength = '200';
-
-    const momentImages = document.createElement('div');
-    momentData.momentImgs.forEach(momentImg => {
-        const img = document.createElement('img');
-        img.src = momentImg.imageSrc;
-        img.alt = 'Moment Image';
-        img.style.width = '100px';
-        img.style.height = '100px';
-        img.style.marginRight = '10px';
-        img.style.float = 'left';
-        momentImages.appendChild(img);
-    });
-
-    momentContent.appendChild(textArea);
-    momentContent.appendChild(momentImages);
-
-    newMoment.appendChild(userImage);
-    newMoment.appendChild(momentContent);
+    // ... (새로운 Moment의 내용을 생성하는 코드 추가)
 
     // 새로운 Moment를 추가
     momentContainer.appendChild(newMoment);
@@ -341,6 +298,9 @@ function appendMomentToScreen(momentData) {
     clearfix.style.clear = 'both';
     momentContainer.appendChild(clearfix);
 }
+
+
+
 
     }
 
@@ -355,38 +315,8 @@ function appendMomentToScreen(momentData) {
         // 여기에 삭제 로직 추가
     }
 
-    <!--        무한스크롤-->
-    let page = 1;
 
-    function fetchMoreContent() {
-        // Simulating an asynchronous request to the server
-        setTimeout(() => {
-            fetch(`/moment/data?page=${page}`)
-                .then(response => response.json())
-                .then(data => {
-                    const contentDiv = document.getElementById('content');
-                    data.forEach(moment => {
-                        const momentDiv = document.createElement('div');
-                        momentDiv.textContent = moment.text;
-                        contentDiv.appendChild(momentDiv);
-                    });
-                    page++;
-                })
-                .catch(error => console.error('Error fetching data:', error));
-        }, 1000); // Simulating network delay
-    }
 
-    function handleScroll() {
-        const contentDiv = document.getElementById('content');
-        if (contentDiv.scrollHeight - contentDiv.scrollTop === contentDiv.clientHeight) {
-            fetchMoreContent();
-        }
-    }
-
-    document.getElementById('content').addEventListener('scroll', handleScroll);
-
-    // Initial content load
-    fetchMoreContent();
 </script>
 </body>
 </html>

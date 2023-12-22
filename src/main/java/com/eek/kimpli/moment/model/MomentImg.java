@@ -13,7 +13,7 @@ public class MomentImg {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    //moment_id라는 외래키는 MomentImg 엔티티의 moment 필드와 매핑되어 있다.
     @ManyToOne
     @JoinColumn(name = "moment_id", nullable = false)
     private Moment moment;

@@ -54,6 +54,21 @@
 </div>
 <!-- 추가된 폼 -->
 
+ <div id="moment-content" class="moment-container">
+        <!-- 여기에 이미 존재하는 게시물과 이미지를 표시 -->
+        <!-- Thymeleaf를 사용하여 기존 게시물과 이미지를 반복적으로 표시할 수 있음 -->
+<div class="moment" th:each="moment : ${moments}">
+    <!-- 게시물 내용을 표시 -->
+    <p th:text="${moment.content}"></p>
+
+    <!-- 게시물 이미지를 표시 -->
+    <div th:each="momentImg : ${moment.momentImg}">
+        <img th:src="@{'/uploads/' + ${momentImg.storedFileName}}" alt="Moment Image" style="max-width: 100px; max-height: 100px; margin-right: 10px;">
+    </div>
+</div>
+
+
+
 <div class="form-container">
                     <a  class="btn"
                    style="background-color: transparent; border: none; padding: 0;">
@@ -116,28 +131,31 @@
             previewContainer.appendChild(previewImg);
         }
     }
+function createPreviewImage(file) {
+    const previewImg = document.createElement('img');
+    previewImg.src = URL.createObjectURL(file);
+    previewImg.alt = 'Image Preview';
+    previewImg.style.width = '100px';  // 이미지 너비를 100px로 설정
+    previewImg.style.height = '100px'; // 이미지 높이를 100px로 설정
 
-    function createPreviewImage(file) {
-        const previewImg = document.createElement('img');
-        previewImg.src = URL.createObjectURL(file);
-        previewImg.alt = 'Image Preview';
-        previewImg.style.width = '100px';  // 이미지 너비를 100px로 설정
-        previewImg.style.height = '100px'; // 이미지 높이를 100px로 설정
+    // 손가락 표시 및 이미지 이름 뜨게 설정
+    previewImg.style.cursor = 'pointer';
+    previewImg.title = file.name;
 
-        // 이미지 클릭 시 제거 이벤트 리스너 추가
-        previewImg.addEventListener('click', () => removePreviewImage(previewImg, file));
+    // 이미지 클릭 시 제거 이벤트 리스너 추가
+    previewImg.addEventListener('click', () => removePreviewImage(previewImg, file));
 
-        return previewImg;
+    return previewImg;
+}
+
+function removePreviewImage(previewImg, file) {
+    const index = selectedImages.indexOf(file);
+    if (index !== -1) {
+        selectedImages.splice(index, 1);  // 배열에서 해당 파일 제거
     }
 
-    function removePreviewImage(previewImg, file) {
-        const index = selectedImages.indexOf(file);
-        if (index !== -1) {
-            selectedImages.splice(index, 1);  // 배열에서 해당 파일 제거
-        }
-
-        previewImg.remove();  // 뷰에서 해당 이미지 제거
-    }
+    previewImg.remove();  // 뷰에서 해당 이미지 제거
+}
 
     <!--   전송  -->
 function submitForm() {

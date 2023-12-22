@@ -59,12 +59,12 @@ public class MomentController {
 
 
 
-
-//게시글이 있으면 불러와야됨
-//    @GetMapping("/data")
+////게시글이 있으면 불러와야됨
+//    @GetMapping("/list")
 //    public List<Moment> getData() {
 //        return data; // JSON 데이터를 반환하는 메소드
 //    }
+
 
 //private List<Moment> generateSampleData() {
 //    List<Moment> sampleData = new ArrayList<>();

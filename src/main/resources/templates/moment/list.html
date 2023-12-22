@@ -148,7 +148,7 @@ function submitForm() {
     formData.append('content', $('#area-content').val());
     // 선택된 이미지를 FormData에 추가
     for (var i = 0; i < selectedImages.length; i++) {
-        formData.append('profileFiles', selectedImages[i]);
+        formData.append('momentImgs', selectedImages[i]);
     }
 
     // 다른 입력 필드의 데이터를 FormData에 추가

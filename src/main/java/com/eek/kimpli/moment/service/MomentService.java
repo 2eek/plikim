@@ -9,5 +9,5 @@ import java.util.List;
 public interface MomentService {
 
     String saveOrUpdateMoment(Moment moment);
-   String saveMoment(Moment moment, List<MultipartFile> profileFiles);
+   String saveMoment(Moment moment, List<MultipartFile> momentImgs);
 }

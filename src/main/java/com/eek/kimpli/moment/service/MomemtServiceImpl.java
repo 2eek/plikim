@@ -62,9 +62,10 @@ public class MomemtServiceImpl implements MomentService {
     }
 
    @Override
-    public String saveMoment(Moment moment, List<MultipartFile> profileFiles) {
-        if (profileFiles != null && !profileFiles.isEmpty()) {
-            for (MultipartFile profileFile : profileFiles) {
+    public String saveMoment(Moment moment, List<MultipartFile> momentImgs) {
+        if (momentImgs != null && !momentImgs.isEmpty()) {
+            for (MultipartFile profileFile : momentImgs) {
+                System.out.println("이미지리스트2"+momentImgs);
                 // 업로드된 파일의 원본 파일 이름을 OriginalFilename로 설정
                 String originalFilename = profileFile.getOriginalFilename();
 

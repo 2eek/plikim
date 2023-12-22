@@ -30,7 +30,7 @@ public class Moment {
 
     @OneToMany(mappedBy = "moment", cascade = CascadeType.ALL)
     @OrderBy("displayOrder") // displayOrder 필드를 기준으로 정렬
-    private List<MomentImg> momentImgs;
+    private List<MomentImg> momentImg;
 
     // 생성자, 세터 등 필요에 따라 추가할 수 있음
 }

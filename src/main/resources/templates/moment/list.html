@@ -7,11 +7,49 @@
 
     /* 추가된 스타일 */
     .form-container {
-        margin-top: 20px;
+
+        margin-bottom: 10px;
         padding: 20px;
         border: 1px solid #ccc;
         border-radius: 8px;
+
     }
+
+
+ .form-container-inputform {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        position: fixed;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background-color: white;
+        z-index: 1000;
+        padding: 20px;
+        border-bottom: 1px solid darkgray;
+    }
+   .moment {
+        position: relative; /* 부모가 position: relative; 여야 자식에게 z-index가 적용됩니다. */
+        z-index: 999; /* .moment 요소의 z-index를 .form-container-inputform 미만으로 설정합니다. */
+    }
+    /*.moment {*/
+    /*    margin-top:200px; !* 조절 가능한 값 *!*/
+    /*    !*overflow: auto;*!*/
+    /*}*/
+   /*.moment {*/
+   /*     overflow: auto;*/
+   /*     margin-top: 20vh; !* 상단의 20%에 해당하는 높이를 지정합니다. *!*/
+   /* }*/
+
+    /*.form-container {*/
+    /*    border: 2px solid blue;*/
+    /*    margin-top: 20px; !* .moment와의 간격을 조정합니다. *!*/
+    /*    !* 나머지 스타일은 그대로 유지 *!*/
+    /*}*/
+
 
     .input-area {
         width: 100%;
@@ -48,42 +86,21 @@
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('moment')">
 </nav>
+<div class="form-container-inputform">
+    <a class="btn"
+       style="background-color: transparent; border: none; padding: 0;">
 
-<div id="content" th:fragment="content">
-    <!-- Thymeleaf fragment로 content를 정의 -->
-</div>
-<!-- 추가된 폼 -->
+        <img th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"
+             alt="Profile Image"
+             style="width: 35px; height: 35px; object-fit: cover; margin-bottom:10px; border-radius: 50%; overflow: hidden;"
+             sec:authorize="isAuthenticated()">
 
- <div id="moment-content" class="moment-container">
-        <!-- 여기에 이미 존재하는 게시물과 이미지를 표시 -->
-        <!-- Thymeleaf를 사용하여 기존 게시물과 이미지를 반복적으로 표시할 수 있음 -->
-<div class="moment" th:each="moment : ${moments}">
-    <!-- 게시물 내용을 표시 -->
-    <p th:text="${moment.content}"></p>
-
-    <!-- 게시물 이미지를 표시 -->
-    <div th:each="momentImg : ${moment.momentImg}">
-        <img th:src="@{'/uploads/' + ${momentImg.storedFileName}}" alt="Moment Image" style="max-width: 100px; max-height: 100px; margin-right: 10px;">
+    </a>
+    <textarea class="input-area form-control"
+              placeholder="5줄 정도 입력하세요" id="area-content" name="content" maxlength="200"></textarea>
+    <div class="invalid-feedback" id="error-content">
+        내용 에러 메세지
     </div>
-</div>
-
-
-
-<div class="form-container">
-                    <a  class="btn"
-                   style="background-color: transparent; border: none; padding: 0;">
-
-                    <img  th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"
-                         alt="Profile Image"
-                         style="width: 35px; height: 35px; object-fit: cover; margin-bottom:10px; border-radius: 50%; overflow: hidden;"
-                         sec:authorize="isAuthenticated()">
-
-                </a>
-<textarea class="input-area form-control"
-          placeholder="5줄 정도 입력하세요" id="area-content" name="content" maxlength="200"></textarea>
-<div class="invalid-feedback" id="error-content">
-    내용 에러 메세지
-</div>
     <!-- 파일 선택 input -->
     <!--    <input type="file" class="image-upload" accept="image/*" multiple onchange="previewImages(this)">-->
     <input id="upload_file" type="file" class="image-upload" accept="image/*" multiple onchange="onChange(event)"
@@ -101,6 +118,49 @@
         <button class="btn btn-primary" onclick="deleteForm()">삭제</button>
     </div>
 </div>
+<!--<style>-->
+<!--    .fixed-container {-->
+<!--        width: 100%;-->
+<!--        height: 300px;-->
+<!--        position: fixed;-->
+<!--        top: 0;-->
+<!--        left: 0;-->
+<!--        background-color: #ccc; /* 배경색을 원하는 색상으로 지정합니다. */-->
+<!--        border: 1px solid #000; /* 테두리 스타일을 원하는 스타일로 지정합니다. */-->
+<!--    }-->
+<!--</style>-->
+
+<div class="fixed-container" style="overflow: auto;">
+    <!-- 내용을 추가하거나 고정시킬 영역입니다. -->
+</div>
+
+<div class="moment" th:each="moment : ${moments}" style="overflow: auto;">
+    <div class="form-container" style="border: 2px solid blue;">
+        <div>
+            <a class="btn" style="background-color: transparent; border: none; padding: 0;">
+                <img th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"
+                     alt="Profile Image"
+                     style="width: 35px; height: 35px; object-fit: cover; margin-bottom:10px; border-radius: 50%; overflow: hidden;"
+                     sec:authorize="isAuthenticated()">
+            </a>
+        </div>
+        <div style="overflow: auto;">
+            <textarea class="input-area form-control"
+                      th:text="${moment.content}" name="content" maxlength="200"></textarea>
+               <div th:each="momentImg : ${moment.momentImg}">
+            <img th:src="@{'/uploads/moment/' + ${momentImg.storedFileName}}" alt="Moment Image"
+                 style="width: 100px; height: 100px; margin-right: 10px; float: left;">
+        </div>
+
+        </div>
+
+    </div>
+    <!-- 추가된 clearfix -->
+    <div style="clear: both;"></div>
+</div>
+
+
+
 
 <script th:inline="javascript">
     let selectedImages = [];
@@ -131,88 +191,89 @@
             previewContainer.appendChild(previewImg);
         }
     }
-function createPreviewImage(file) {
-    const previewImg = document.createElement('img');
-    previewImg.src = URL.createObjectURL(file);
-    previewImg.alt = 'Image Preview';
-    previewImg.style.width = '100px';  // 이미지 너비를 100px로 설정
-    previewImg.style.height = '100px'; // 이미지 높이를 100px로 설정
 
-    // 손가락 표시 및 이미지 이름 뜨게 설정
-    previewImg.style.cursor = 'pointer';
-    previewImg.title = file.name;
+    function createPreviewImage(file) {
+        const previewImg = document.createElement('img');
+        previewImg.src = URL.createObjectURL(file);
+        previewImg.alt = 'Image Preview';
+        previewImg.style.width = '100px';  // 이미지 너비를 100px로 설정
+        previewImg.style.height = '100px'; // 이미지 높이를 100px로 설정
 
-    // 이미지 클릭 시 제거 이벤트 리스너 추가
-    previewImg.addEventListener('click', () => removePreviewImage(previewImg, file));
+        // 손가락 표시 및 이미지 이름 뜨게 설정
+        previewImg.style.cursor = 'pointer';
+        previewImg.title = file.name;
 
-    return previewImg;
-}
+        // 이미지 클릭 시 제거 이벤트 리스너 추가
+        previewImg.addEventListener('click', () => removePreviewImage(previewImg, file));
 
-function removePreviewImage(previewImg, file) {
-    const index = selectedImages.indexOf(file);
-    if (index !== -1) {
-        selectedImages.splice(index, 1);  // 배열에서 해당 파일 제거
+        return previewImg;
     }
 
-    previewImg.remove();  // 뷰에서 해당 이미지 제거
-}
+    function removePreviewImage(previewImg, file) {
+        const index = selectedImages.indexOf(file);
+        if (index !== -1) {
+            selectedImages.splice(index, 1);  // 배열에서 해당 파일 제거
+        }
+
+        previewImg.remove();  // 뷰에서 해당 이미지 제거
+    }
 
     <!--   전송  -->
-function submitForm() {
-    // FormData 객체 생성
-    var formData = new FormData();
+    function submitForm() {
+        // FormData 객체 생성
+        var formData = new FormData();
 
-    // Moment 객체의 content 필드와 동일한 이름으로 추가
-    formData.append('content', $('#area-content').val());
-    // 선택된 이미지를 FormData에 추가
-    for (var i = 0; i < selectedImages.length; i++) {
-        formData.append('momentImgs', selectedImages[i]);
-    }
+        // Moment 객체의 content 필드와 동일한 이름으로 추가
+        formData.append('content', $('#area-content').val());
+        // 선택된 이미지를 FormData에 추가
+        for (var i = 0; i < selectedImages.length; i++) {
+            formData.append('momentImgs', selectedImages[i]);
+        }
 
-    // 다른 입력 필드의 데이터를 FormData에 추가
-    // formData.append('otherField', $('#otherField').val());
-    // formData.append('anotherField', $('#anotherField').val());
+        // 다른 입력 필드의 데이터를 FormData에 추가
+        // formData.append('otherField', $('#otherField').val());
+        // formData.append('anotherField', $('#anotherField').val());
 
 
 // AJAX 요청 수행
 // AJAX 요청 수행
-$.ajax({
-    type: 'POST',
-    url: '/moment/save',
-    data: formData,
-    contentType: false,
-    processData: false,
-    success: function (data) {
-        // 성공적으로 저장되면 실행되는 로직
-        console.log('Save successful:', data);
-        // 추가적으로 필요한 로직 수행
-    },
-error: function (error) {
-    // 저장 중 오류가 발생하면 실행되는 로직
-    console.error('Error saving data:', error.responseText);
+        $.ajax({
+            type: 'POST',
+            url: '/moment/save',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                // 성공적으로 저장되면 실행되는 로직
+                console.log('Save successful:', data);
+                // 추가적으로 필요한 로직 수행
+            },
+            error: function (error) {
+                // 저장 중 오류가 발생하면 실행되는 로직
+                console.error('Error saving data:', error.responseText);
 
-    // 받은 JSON 응답에서 에러 메시지 추출
-    var errorMessage = JSON.parse(error.responseText).error;
+                // 받은 JSON 응답에서 에러 메시지 추출
+                var errorMessage = JSON.parse(error.responseText).error;
 
-    // 에러 메시지를 화면에 표시하는 등의 처리 로직 수행
-    // 예를 들어, 어떤 특정한 DOM 요소에 표시한다면:
-    $('#error-message').text(errorMessage);
+                // 에러 메시지를 화면에 표시하는 등의 처리 로직 수행
+                // 예를 들어, 어떤 특정한 DOM 요소에 표시한다면:
+                $('#error-message').text(errorMessage);
 
-    // 내용 에러 메시지를 표시하는 부분
-    if (errorMessage && errorMessage.includes('Validation errors')) {
-        // 내용 필드에 대한 처리
-        $('#area-content').addClass('is-invalid');  // 빨간 테두리 클래스 추가
-        $('#error-content').text('내용을 입력하세요');
-    } else {
-        // 다른 필드에 대한 처리를 추가할 수 있음
-        $('#area-content').removeClass('is-invalid');  // 에러가 없으면 클래스 제거
-        $('#error-content').text('');  // 에러 메시지 초기화
+                // 내용 에러 메시지를 표시하는 부분
+                if (errorMessage && errorMessage.includes('Validation errors')) {
+                    // 내용 필드에 대한 처리
+                    $('#area-content').addClass('is-invalid');  // 빨간 테두리 클래스 추가
+                    $('#error-content').text('내용을 입력하세요');
+                } else {
+                    // 다른 필드에 대한 처리를 추가할 수 있음
+                    $('#area-content').removeClass('is-invalid');  // 에러가 없으면 클래스 제거
+                    $('#error-content').text('');  // 에러 메시지 초기화
+                }
+            }
+
+        })
+
     }
-}
-
-})
-
-}
 
 
     function updateForm() {

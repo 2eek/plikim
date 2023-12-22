@@ -31,8 +31,8 @@ public class MomemtServiceImpl implements MomentService {
     private final MomentRepository momentRepository;
     private final MomentImgRepository momentImgRepository;
 
-    @Override// 하나의 메서드로 게시글 작성, 업데이트 처리
-    public String saveOrUpdateMoment(Moment moment) {
+    @Override
+    public Moment saveOrUpdateMoment(Moment moment) {
         try {
             // 현재 사용자의 세션 정보를 가져와서 작성자로 설정
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -42,52 +42,47 @@ public class MomemtServiceImpl implements MomentService {
             moment.setAuthor(username);
 
             // 게시글 조회
-            //기존 모멘트를 업데이트
+            // 기존 모멘트를 업데이트
             if (moment.getId() != null) {
                 moment.setUpdatedDate(LocalDateTime.now());
-                momentRepository.save(moment);
+                return momentRepository.save(moment);
             } else {
-                //신규 모멘트 저장
+                // 신규 모멘트 저장
                 // 키 값인 id가 없으면 그냥 저장
-
-
                 moment.setCreatedDate(LocalDateTime.now());
-                momentRepository.save(moment);
+                return momentRepository.save(moment);
             }
-            System.out.println("이쪽도 오나");
-            return "redirect:list";
         } catch (Exception e) {
-            System.out.println("설마");
             e.printStackTrace();
             throw e;
         }
     }
 
-   @Override
+    @Override
     public String saveMoment(Moment moment, List<MultipartFile> momentImgs) {
-     if (momentImgs != null && !momentImgs.isEmpty()) {
-        int displayOrder = 1;  // 초기값 설정
+        if (momentImgs != null && !momentImgs.isEmpty()) {
+            int displayOrder = 1;  // 초기값 설정
 
-        for (MultipartFile profileFile : momentImgs) {
-            System.out.println("이미지리스트2" + momentImgs);
+            for (MultipartFile profileFile : momentImgs) {
+                System.out.println("이미지리스트2" + momentImgs);
 
-            // 업로드된 파일의 원본 파일 이름을 OriginalFilename로 설정
-            String originalFilename = profileFile.getOriginalFilename();
+                // 업로드된 파일의 원본 파일 이름을 OriginalFilename로 설정
+                String originalFilename = profileFile.getOriginalFilename();
 
-            // MomentImg 엔티티 생성
-            MomentImg momentImg = new MomentImg();
-            momentImg.setMoment(moment);
-            momentImg.setStoredFileName(System.currentTimeMillis() + "_" + originalFilename);
-            momentImg.setOriginProfileImg(originalFilename);
-            momentImg.setImgCreatedDate(LocalDateTime.now());
-            momentImg.setDisplayOrder(displayOrder);  // display_order 설정
+                // MomentImg 엔티티 생성
+                MomentImg momentImg = new MomentImg();
+                momentImg.setMoment(moment);
+                momentImg.setStoredFileName(System.currentTimeMillis() + "_" + originalFilename);
+                momentImg.setOriginProfileImg(originalFilename);
+                momentImg.setImgCreatedDate(LocalDateTime.now());
+                momentImg.setDisplayOrder(displayOrder);  // display_order 설정
 
-            // 스프링 프로퍼티 참조해서 저장 경로 설정
-            String savePath = momentPath + momentImg.getStoredFileName();
-            System.out.println("저장 경로 + 이름: " + savePath);
+                // 스프링 프로퍼티 참조해서 저장 경로 설정
+                String savePath = momentPath + momentImg.getStoredFileName();
+                System.out.println("저장 경로 + 이름: " + savePath);
 
-            // display_order 증가
-            displayOrder++;
+                // display_order 증가
+                displayOrder++;
 
                 // 서버에 파일 저장
                 try {
@@ -113,11 +108,11 @@ public class MomemtServiceImpl implements MomentService {
     }
 
 
-@Override
-@Transactional
-public List<Moment> findAll() {
-    return momentRepository.findAll();
-}
+    @Override
+    @Transactional
+    public List<Moment> findAll() {
+        return momentRepository.findAll();
+    }
 
 //@Override
 //    public List<MomentImg> getImagesByMomentId(Long momentId) {

@@ -35,25 +35,24 @@ public class MomentController {
 //    }
 
 @PostMapping("/save")
-    public ResponseEntity<String> save(@Valid Moment moment,
-                                       BindingResult bindingResult,
-                                       @RequestParam(value = "momentImgs", required = false)List<MultipartFile> momentImgs) {
+public ResponseEntity<Moment> save(@Valid Moment moment,
+                                   BindingResult bindingResult,
+                                   @RequestParam(value = "momentImgs", required = false) List<MultipartFile> momentImgs) {
+    // 유효성 검사 수행
+    momentValidator.validate(moment, bindingResult);
 
-        // 유효성 검사 수행
-        momentValidator.validate(moment, bindingResult);
-
-        if (bindingResult.hasErrors()) {
-            // 에러가 있으면 에러 메시지를 JSON으로 반환
-           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\": \"Validation errors\"}");
-        }
-
-        // 에러가 없으면 정상적으로 처리
-        String resultView = momentService.saveOrUpdateMoment(moment);
-        momentService.saveMoment(moment, momentImgs);
-
-        // 처리 결과를 JSON으로 반환
-        return ResponseEntity.ok(resultView);
+    if (bindingResult.hasErrors()) {
+        // 에러가 있으면 에러 메시지를 JSON으로 반환
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
+
+    // 에러가 없으면 정상적으로 처리
+    Moment savedMoment = momentService.saveOrUpdateMoment(moment);
+    momentService.saveMoment(moment, momentImgs);
+
+    // 처리 결과를 JSON으로 반환
+    return ResponseEntity.ok(savedMoment);
+}
 
     // 다른 API 엔드포인트 및 메소드들...
 

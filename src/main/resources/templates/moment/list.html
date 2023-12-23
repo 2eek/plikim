@@ -84,6 +84,7 @@
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('moment')">
 </nav>
+<!--입력폼-->
 <div class="form-container-inputform">
     <a class="btn"
        style="background-color: transparent; border: none; padding: 0;">
@@ -101,6 +102,7 @@
     </div>
     <!-- 파일 선택 input -->
     <!--    <input type="file" class="image-upload" accept="image/*" multiple onchange="previewImages(this)">-->
+
 
     <div class="button-container">
         <input id="upload_file" type="file" class="image-upload" accept="image/*" multiple onchange="onChange(event)"
@@ -124,7 +126,8 @@
 <div id="content"> <!-- 이 부분이 있는지 확인하세요. -->
     <!-- content 내용 -->
 </div>
-<!--여기-->
+
+
 <!--데이터 반환 폼-->
 <div class="moment" th:each="moment : ${moments}" style="overflow: auto;">
     <div class="form-container" style="border: 2px solid blue;">
@@ -260,7 +263,11 @@
 
        function createMomentHtml(moment, moments) {
            // 기존 목록을 지우고 새로운 목록을 추가하기 전에 기존 목록을 초기화합니다.
-           $('#content').empty();
+
+            $('#image-preview-container').empty();
+            $('#area-content').val('');
+           $('.moment').empty();
+           // $('#content').empty();
 
            // 각 moment 객체에 대한 HTML을 생성하고 #content에 추가합니다.
            moments.forEach(function (momentItem) {
@@ -268,10 +275,10 @@
            });
        }
 
-       function generateMomentHtml(moment) {
-           const momentHtml = $('<div>').addClass('moment');
+       function generateMomentHtml(moment){
+           const momentHtml = $('<div>').addClass('moment').css('overflow', 'auto');
 
-           const formContainer = $('<div>').addClass('form-container').css('border', '2px solid blue');
+           const formContainer = $('<div>').addClass('form-container').css({'border': '2px solid blue','overflow': 'auto'});
 
            const imgContainer = $('<div>').append(
                $('<a>').addClass('btn').css({

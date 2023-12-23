@@ -7,6 +7,7 @@ import com.eek.kimpli.moment.validator.MomentValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -26,16 +27,6 @@ public class MomentController {
 
      final MomentService momentService;
         private final MomentValidator momentValidator;
-
-//    private final List<Moment> data = generateSampleData();
-
-//           @PostMapping("/save")
-//    public String save(@Valid Moment moment, BindingResult bindingResult) {
-//        System.out.println("Received data: " + board.toString());
-//        String resultView =  boardService.saveOrUpdateBoard(board, bindingResult);
-//        //케이스에 따라 뷰 구분
-//        return resultView;
-//    }
 
 @PostMapping("/save")
 public ResponseEntity<?> save(@Valid Moment moment,
@@ -61,34 +52,13 @@ public ResponseEntity<?> save(@Valid Moment moment,
     return ResponseEntity.ok(savedMoment);
 }
 
-    // 다른 API 엔드포인트 및 메소드들...
 
+    @GetMapping("/result")
+public Moment saveResult() {
+ Moment moments = momentService.findLatestMoment();;
+  return  moments ;
+}
 
-
-////게시글이 있으면 불러와야됨
-//    @GetMapping("/list")
-//    public List<Moment> getData() {
-//        return data; // JSON 데이터를 반환하는 메소드
-//    }
-
-
-//private List<Moment> generateSampleData() {
-//    List<Moment> sampleData = new ArrayList<>();
-//
-//    for (int i = 1; i <= 10; i++) {
-//        sampleData.add(new Moment(i, "Moment " + i));
-//    }
-//
-//    return sampleData;
-//}
-//
-//         @PostMapping("/save")
-//    public String save(@Valid Moment moment, BindingResult bindingResult) {
-//        System.out.println("Received data: " + moment.toString());
-//        String resultView =  momentService.saveOrUpdateBoard(moment, bindingResult);
-//        //케이스에 따라 뷰 구분
-//        return resultView;
-//    }
 
 
 }

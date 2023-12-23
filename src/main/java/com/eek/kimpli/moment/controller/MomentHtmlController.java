@@ -19,19 +19,14 @@ public class MomentHtmlController {
 
     private MomentService momentService;
 
-//    @GetMapping("/moment/list")
-//    public String list(Model model) {
-////        List<Moment> moments = momentService.getAllMoments();
-//        List<Moment> moments = momentService.findAll();
-//        System.out.println("뭐있나?모멘츠에"+moments);
-//
-//        model.addAttribute("moments", moments);
-//        return "moment/list"; // HTML View를 반환하는 메소드
-//    }
     @GetMapping("/moment/list")
 public String list(Model model) {
     List<Moment> moments = momentService.findAll();
     model.addAttribute("moments", moments);
     return "moment/list";
 }
+
+
+
+
 }

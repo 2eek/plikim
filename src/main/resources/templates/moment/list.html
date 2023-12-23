@@ -84,6 +84,7 @@
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('moment')">
 </nav>
+<!--입력폼-->
 <div class="form-container-inputform">
     <a class="btn"
        style="background-color: transparent; border: none; padding: 0;">
@@ -101,6 +102,7 @@
     </div>
     <!-- 파일 선택 input -->
     <!--    <input type="file" class="image-upload" accept="image/*" multiple onchange="previewImages(this)">-->
+
 
     <div class="button-container">
         <input id="upload_file" type="file" class="image-upload" accept="image/*" multiple onchange="onChange(event)"
@@ -124,7 +126,8 @@
 <div id="content"> <!-- 이 부분이 있는지 확인하세요. -->
     <!-- content 내용 -->
 </div>
-<!--여기-->
+
+
 <!--데이터 반환 폼-->
 <div class="moment" th:each="moment : ${moments}" style="overflow: auto;">
     <div class="form-container" style="border: 2px solid blue;">
@@ -209,134 +212,123 @@
     }
 
     <!--   전송  -->
-    function submitForm() {
-        // FormData 객체 생성
-        var formData = new FormData();
+   function submitForm() {
+       var formData = new FormData();
 
-        // Moment 객체의 content 필드와 동일한 이름으로 추가
-        formData.append('content', $('#area-content').val());
-        // 선택된 이미지를 FormData에 추가
-        for (var i = 0; i < selectedImages.length; i++) {
-            formData.append('momentImgs', selectedImages[i]);
-        }
+       formData.append('content', $('#area-content').val());
+       for (var i = 0; i < selectedImages.length; i++) {
+           formData.append('momentImgs', selectedImages[i]);
+       }
 
-        $.ajax({
-            type: 'POST',
-            url: '/moment/save',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function (data) {
-                // 성공적으로 저장되면 실행되는 로직
-                console.log('Save successful:', data);
-fetchMomentList();
-                // 새로운 Moment를 화면에 추가
-                // appendMomentToScreen(data);
+       $.ajax({
+           type: 'POST',
+           url: '/moment/save',
+           data: formData,
+           contentType: false,
+           processData: false,
+           success: function (data) {
+               console.log('Save successful:', data);
+               fetchMomentList(data);  // 수정된 부분
+           },
+           error: function (error) {
+               console.error('Error saving data:', error.responseText);
 
-                // 추가적으로 필요한 로직 수행
-            },
-            error: function (error) {
-                // 저장 중 오류가 발생하면 실행되는 로직
-                console.error('Error saving data:', error.responseText);
+               var validationErrors = JSON.parse(error.responseText);
 
-// 받은 JSON 응답에서 에러 메시지 추출
-var validationErrors = JSON.parse(error.responseText);
+               $('#error-message').text(validationErrors.content);
 
-// 에러 메시지를 화면에 표시하는 등의 처리 로직 수행
-// 예를 들어, 어떤 특정한 DOM 요소에 표시한다면:
-$('#error-message').text(validationErrors.content);
+               if (validationErrors.content) {
+                   $('#area-content').addClass('is-invalid');
+                   $('#error-content').text(validationErrors.content);
+               } else {
+                   $('#area-content').removeClass('is-invalid');
+                   $('#error-content').text('');
+               }
+           }
+       });
 
-// 내용 에러 메시지를 표시하는 부분
-if (validationErrors.content) {
-    // 내용 필드에 대한 처리
-    $('#area-content').addClass('is-invalid');  // 빨간 테두리 클래스 추가
-    $('#error-content').text(validationErrors.content);
-} else {
-    // 다른 필드에 대한 처리를 추가할 수 있음
-    $('#area-content').removeClass('is-invalid');  // 에러가 없으면 클래스 제거
-    $('#error-content').text('');  // 에러 메시지 초기화
-}
+       function fetchMomentList(data) {
+           $.ajax({
+               type: 'GET',
+               url: '/moment/result',
+               success: function (moments) {
+                   console.log("데이터", moments);
+                   createMomentHtml(data, moments);  // 수정된 부분
+               },
+               error: function (error) {
+                   console.error('Error fetching moment list:', error);
+               }
+           });
+       }
 
-            }
-        });
-                function fetchMomentList() {
-            $.ajax({
-                type: 'GET',
-                url: '/moment/result',
-                success: function (data) {
-                    // 성공적으로 목록을 가져왔을 때, 화면에 갱신
-                    updateMomentList(data);
-                },
-                error: function (error) {
-                    console.error('Error fetching moment list:', error);
-                }
-            });
-        }
-function updateMomentList(moments) {
-    const momentContainer = document.querySelector('.moment');
-    momentContainer.innerHTML = ''; // 목록 초기화
+       function createMomentHtml(moment, moments) {
+           // 기존 목록을 지우고 새로운 목록을 추가하기 전에 기존 목록을 초기화합니다.
 
-        appendMomentToScreen(moments);
+            $('#image-preview-container').empty();
+            $('#area-content').val('');
+           $('.moment').empty();
+           // $('#content').empty();
 
-}
+           // 각 moment 객체에 대한 HTML을 생성하고 #content에 추가합니다.
+           moments.forEach(function (momentItem) {
+               $('#content').append(generateMomentHtml(momentItem));
+           });
+       }
 
+       function generateMomentHtml(moment){
+           const momentHtml = $('<div>').addClass('moment').css('overflow', 'auto');
 
-function appendMomentToScreen(momentData) {
-    const momentContainer = document.querySelector('.moment');
-    console.log('뭐있어' + momentContainer);
+           const formContainer = $('<div>').addClass('form-container').css({'border': '2px solid blue','overflow': 'auto'});
 
-    // Create new div element for each moment
-    const newMomentDiv = document.createElement('div');
-    newMomentDiv.className = 'form-container';
-    newMomentDiv.style.border = '2px solid blue';
+           const imgContainer = $('<div>').append(
+               $('<a>').addClass('btn').css({
+                   'background-color': 'transparent',
+                   'border': 'none',
+                   'padding': '0'
+               }).append(
+                   $('<img>').attr({
+                       'src': moment && moment.commonUser && moment.commonUser.storedFileName ? '/uploads/' + moment.commonUser.storedFileName : '/uploads/basicProfile.jpg',
+                       'alt': 'Profile Image'
+                   }).css({
+                       'width': '35px',
+                       'height': '35px',
+                       'object-fit': 'cover',
+                       'margin-bottom': '10px',
+                       'border-radius': '50%',
+                       'overflow': 'hidden'
+                   }).attr('sec:authorize', 'isAuthenticated')
+               )
+           );
 
-    // Create an anchor element with a button for the profile image
-    const profileImageAnchor = document.createElement('a');
-    profileImageAnchor.className = 'btn';
-    profileImageAnchor.style.backgroundColor = 'transparent';
-    profileImageAnchor.style.border = 'none';
-    profileImageAnchor.style.padding = '0';
+           const textContainer = $('<div>').css('overflow', 'auto').append(
+               $('<textarea>').addClass('input-area form-control').attr({
+                   'name': 'content',
+                   'maxlength': '200',
+                   'readonly': 'readonly'
+               }).text(moment.content)
+           );
 
-    const profileImage = document.createElement('img');
-    profileImage.src = '/uploads/basicProfile.jpg'; // Set a default image source
-    profileImage.alt = 'Profile Image';
-    profileImage.style.width = '35px';
-    profileImage.style.height = '35px';
-    profileImage.style.objectFit = 'cover';
-    profileImage.style.marginBottom = '10px';
-    profileImage.style.borderRadius = '50%';
-    profileImage.style.overflow = 'hidden';
+           const imgListContainer = $('<div>').addClass('img-list-container').append(  // 수정된 부분
+               moment.imageUrls ? moment.imageUrls.map(imageUrl =>
+                   $('<img>').attr({
+                       'src': imageUrl,
+                       'alt': 'Moment Image'
+                   }).css({
+                       'width': '100px',
+                       'height': '100px',
+                       'margin-right': '10px',
+                       'float': 'left'
+                   })
+               ) : []
+           );
 
-    profileImageAnchor.appendChild(profileImage);
-    newMomentDiv.appendChild(profileImageAnchor);
+           formContainer.append(imgContainer, textContainer, imgListContainer);
+           momentHtml.append(formContainer);
+           momentHtml.append($('<div>').css('clear', 'both'));
 
-    // Create a div for the text area
-    const textAreaDiv = document.createElement('div');
-    textAreaDiv.style.overflow = 'auto';
-
-    const textArea = document.createElement('textarea');
-    textArea.className = 'input-area form-control';
-    textArea.textContent = momentData.content; // Set the content
-    textArea.name = 'content';
-    textArea.maxLength = '200';
-    textArea.readOnly = true;
-
-    // ... (Create other elements like images, etc., inside this div)
-
-    textAreaDiv.appendChild(textArea);
-    newMomentDiv.appendChild(textAreaDiv);
-
-    // Append the new moment div to the container
-    momentContainer.appendChild(newMomentDiv);
-
-    // Create a div for clearfix and append it
-    const clearfixDiv = document.createElement('div');
-    clearfixDiv.style.clear = 'both';
-    momentContainer.appendChild(clearfixDiv);
-}
-
-    }
-
+           return momentHtml;
+       }
+   }
 
 
 

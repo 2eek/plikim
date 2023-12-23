@@ -263,7 +263,8 @@
 
        function createMomentHtml(moment, moments) {
            // 기존 목록을 지우고 새로운 목록을 추가하기 전에 기존 목록을 초기화합니다.
-
+           // selectedImages.length = 0;
+             selectedImages = [];
             $('#image-preview-container').empty();
             $('#area-content').val('');
            $('.moment').empty();

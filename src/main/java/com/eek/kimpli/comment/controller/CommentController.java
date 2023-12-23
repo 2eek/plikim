@@ -3,6 +3,7 @@ package com.eek.kimpli.comment.controller;
 //import com.eek.kimpli.comment.converter.CommentConverter;
 import com.eek.kimpli.comment.model.Comment;
 import com.eek.kimpli.comment.service.CommentService;
+import com.eek.kimpli.moment.model.Moment;
 import com.eek.kimpli.replycomment.dto.ReplyCommentDTO;
 import com.eek.kimpli.replycomment.model.ReplyComment;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -78,13 +80,6 @@ public class CommentController {
     ) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Comment> commentsPage = commentService.getCommentsByBoardId(boardId, pageable);
-System.out.println("Current Page: " + commentsPage.getNumber());
-    System.out.println("Total Pages: " + commentsPage.getTotalPages());
-    System.out.println("Total Elements: " + commentsPage.getTotalElements());
-    System.out.println("Is First Page: " + commentsPage.isFirst());
-    System.out.println("Is Last Page: " + commentsPage.isLast());
-    System.out.println("Has Previous Page: " + commentsPage.hasPrevious());
-    System.out.println("Has Next Page: " + commentsPage.hasNext());
         if (commentsPage == null || commentsPage.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -96,7 +91,7 @@ System.out.println("Current Page: " + commentsPage.getNumber());
 //JSON 데이터를 처리합니다. @RequestBody 어노테이션을 통해 HTTP 요청 본문에 있는 JSON 데이터를 ReplyComment 객체로 변환합니다. 또한, URL 쿼리 매개변수인 commentId를 받아옴
 @PostMapping("/replySave")
 public ResponseEntity<String> saveReplyComment(
-        @RequestBody ReplyComment replyComment,
+    @RequestBody ReplyComment replyComment,
     @RequestParam Long commentId
 ) {
     System.out.println("여기오나??");

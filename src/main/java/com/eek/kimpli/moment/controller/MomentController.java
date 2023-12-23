@@ -52,11 +52,11 @@ public ResponseEntity<?> save(@Valid Moment moment,
     return ResponseEntity.ok(savedMoment);
 }
 
-
-    @GetMapping("/result")
-public Moment saveResult() {
- Moment moments = momentService.findLatestMoment();;
-  return  moments ;
+        @GetMapping("/result")
+public List<Moment> list(Model model) {
+    List<Moment> moments = momentService.findAll();
+    model.addAttribute("moments", moments);
+    return moments;
 }
 
 

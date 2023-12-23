@@ -12,6 +12,6 @@ public interface MomentService {
 
    List<Moment> findAll();
 //   List<MomentImg> getImagesByMomentId(Long momentId);
-
+    Moment findLatestMoment();
 
 }

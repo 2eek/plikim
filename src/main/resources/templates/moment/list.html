@@ -229,9 +229,9 @@
             success: function (data) {
                 // 성공적으로 저장되면 실행되는 로직
                 console.log('Save successful:', data);
-
+fetchMomentList();
                 // 새로운 Moment를 화면에 추가
-                appendMomentToScreen(data);
+                // appendMomentToScreen(data);
 
                 // 추가적으로 필요한 로직 수행
             },
@@ -259,39 +259,85 @@ if (validationErrors.content) {
 
             }
         });
-
-// 새로운 Moment를 화면에 추가하는 함수
-        function appendMomentToScreen(momentData) {
-            const momentContainer = document.querySelector('.moment');
-
-            // 새로운 Moment를 생성
-            const newMoment = document.createElement('div');
-            newMoment.className = 'form-container';
-            newMoment.style.border = '2px solid blue';
-
-            // ... (새로운 Moment의 내용을 생성하는 코드 추가)
-
-            // 새로운 Moment를 추가
-            momentContainer.appendChild(newMoment);
-
-            // 추가된 clearfix
-            const clearfix = document.createElement('div');
-            clearfix.style.clear = 'both';
-            momentContainer.appendChild(clearfix);
+                function fetchMomentList() {
+            $.ajax({
+                type: 'GET',
+                url: '/moment/result',
+                success: function (data) {
+                    // 성공적으로 목록을 가져왔을 때, 화면에 갱신
+                    updateMomentList(data);
+                },
+                error: function (error) {
+                    console.error('Error fetching moment list:', error);
+                }
+            });
         }
+function updateMomentList(moments) {
+    const momentContainer = document.querySelector('.moment');
+    momentContainer.innerHTML = ''; // 목록 초기화
+
+        appendMomentToScreen(moments);
+
+}
+
+
+function appendMomentToScreen(momentData) {
+    const momentContainer = document.querySelector('.moment');
+    console.log('뭐있어' + momentContainer);
+
+    // Create new div element for each moment
+    const newMomentDiv = document.createElement('div');
+    newMomentDiv.className = 'form-container';
+    newMomentDiv.style.border = '2px solid blue';
+
+    // Create an anchor element with a button for the profile image
+    const profileImageAnchor = document.createElement('a');
+    profileImageAnchor.className = 'btn';
+    profileImageAnchor.style.backgroundColor = 'transparent';
+    profileImageAnchor.style.border = 'none';
+    profileImageAnchor.style.padding = '0';
+
+    const profileImage = document.createElement('img');
+    profileImage.src = '/uploads/basicProfile.jpg'; // Set a default image source
+    profileImage.alt = 'Profile Image';
+    profileImage.style.width = '35px';
+    profileImage.style.height = '35px';
+    profileImage.style.objectFit = 'cover';
+    profileImage.style.marginBottom = '10px';
+    profileImage.style.borderRadius = '50%';
+    profileImage.style.overflow = 'hidden';
+
+    profileImageAnchor.appendChild(profileImage);
+    newMomentDiv.appendChild(profileImageAnchor);
+
+    // Create a div for the text area
+    const textAreaDiv = document.createElement('div');
+    textAreaDiv.style.overflow = 'auto';
+
+    const textArea = document.createElement('textarea');
+    textArea.className = 'input-area form-control';
+    textArea.textContent = momentData.content; // Set the content
+    textArea.name = 'content';
+    textArea.maxLength = '200';
+    textArea.readOnly = true;
+
+    // ... (Create other elements like images, etc., inside this div)
+
+    textAreaDiv.appendChild(textArea);
+    newMomentDiv.appendChild(textAreaDiv);
+
+    // Append the new moment div to the container
+    momentContainer.appendChild(newMomentDiv);
+
+    // Create a div for clearfix and append it
+    const clearfixDiv = document.createElement('div');
+    clearfixDiv.style.clear = 'both';
+    momentContainer.appendChild(clearfixDiv);
+}
 
     }
 
 
-    // function updateForm() {
-    //     console.log('Update button clicked');
-    //     // 여기에 수정 로직 추가
-    // }
-    //
-    // function deleteForm() {
-    //     console.log('Delete button clicked');
-    //     // 여기에 삭제 로직 추가
-    // }
 
 
 </script>

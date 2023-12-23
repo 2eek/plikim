@@ -120,6 +120,11 @@ public class MomemtServiceImpl implements MomentService {
 //        return moment != null ? moment.getMomentImg() : Collections.emptyList();
 //    }
 
+    @Override
+    public Moment findLatestMoment(){
+        return momentRepository.findFirstByOrderByCreatedDateDesc();
+    }
+
 }
 
 

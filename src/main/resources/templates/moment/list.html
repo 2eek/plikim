@@ -133,10 +133,10 @@
     <div class="form-container" style="border: 2px solid blue;">
         <div>
             <a class="btn" style="background-color: transparent; border: none; padding: 0;">
-                <img th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"
-                     alt="Profile Image"
-                     style="width: 35px; height: 35px; object-fit: cover; margin-bottom:10px; border-radius: 50%; overflow: hidden;"
-                     sec:authorize="isAuthenticated()">
+<!--                <img th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"-->
+<!--                     alt="Profile Image"-->
+<!--                     style="width: 35px; height: 35px; object-fit: cover; margin-bottom:10px; border-radius: 50%; overflow: hidden;"-->
+<!--                     sec:authorize="isAuthenticated()">-->
             </a>
         </div>
         <div style="overflow: auto;">
@@ -281,25 +281,25 @@
 
            const formContainer = $('<div>').addClass('form-container').css({'border': '2px solid blue','overflow': 'auto'});
 
-           const imgContainer = $('<div>').append(
-               $('<a>').addClass('btn').css({
-                   'background-color': 'transparent',
-                   'border': 'none',
-                   'padding': '0'
-               }).append(
-                   $('<img>').attr({
-                       'src': moment && moment.commonUser && moment.commonUser.storedFileName ? '/uploads/' + moment.commonUser.storedFileName : '/uploads/basicProfile.jpg',
-                       'alt': 'Profile Image'
-                   }).css({
-                       'width': '35px',
-                       'height': '35px',
-                       'object-fit': 'cover',
-                       'margin-bottom': '10px',
-                       'border-radius': '50%',
-                       'overflow': 'hidden'
-                   }).attr('sec:authorize', 'isAuthenticated')
-               )
-           );
+           // const imgContainer = $('<div>').append(
+           //     $('<a>').addClass('btn').css({
+           //         'background-color': 'transparent',
+           //         'border': 'none',
+           //         'padding': '0'
+           //     }).append(
+           //         $('<img>').attr({
+           //             'src': moment && moment.commonUser && moment.commonUser.storedFileName ? '/uploads/' + moment.commonUser.storedFileName : '/uploads/basicProfile.jpg',
+           //             'alt': 'Profile Image'
+           //         }).css({
+           //             'width': '35px',
+           //             'height': '35px',
+           //             'object-fit': 'cover',
+           //             'margin-bottom': '10px',
+           //             'border-radius': '50%',
+           //             'overflow': 'hidden'
+           //         }).attr('sec:authorize', 'isAuthenticated')
+           //     )
+           // );
 
            const textContainer = $('<div>').css('overflow', 'auto').append(
                $('<textarea>').addClass('input-area form-control').attr({
@@ -323,7 +323,8 @@
                ) : []
            );
 
-           formContainer.append(imgContainer, textContainer, imgListContainer);
+           // formContainer.append(imgContainer, textContainer, imgListContainer);
+           formContainer.append(textContainer, imgListContainer);
            momentHtml.append(formContainer);
            momentHtml.append($('<div>').css('clear', 'both'));
 

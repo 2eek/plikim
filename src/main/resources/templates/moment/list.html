@@ -133,10 +133,10 @@
     <div class="form-container" style="border: 2px solid blue;">
         <div>
             <a class="btn" style="background-color: transparent; border: none; padding: 0;">
-<!--                <img th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"-->
-<!--                     alt="Profile Image"-->
-<!--                     style="width: 35px; height: 35px; object-fit: cover; margin-bottom:10px; border-radius: 50%; overflow: hidden;"-->
-<!--                     sec:authorize="isAuthenticated()">-->
+                <!--                <img th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"-->
+                <!--                     alt="Profile Image"-->
+                <!--                     style="width: 35px; height: 35px; object-fit: cover; margin-bottom:10px; border-radius: 50%; overflow: hidden;"-->
+                <!--                     sec:authorize="isAuthenticated()">-->
             </a>
         </div>
         <div style="overflow: auto;">
@@ -212,126 +212,128 @@
     }
 
     <!--   전송  -->
-   function submitForm() {
-       var formData = new FormData();
+    function submitForm() {
+        var formData = new FormData();
 
-       formData.append('content', $('#area-content').val());
-       for (var i = 0; i < selectedImages.length; i++) {
-           formData.append('momentImgs', selectedImages[i]);
-       }
+        formData.append('content', $('#area-content').val());
+        for (var i = 0; i < selectedImages.length; i++) {
+            formData.append('momentImgs', selectedImages[i]);
+        }
 
-       $.ajax({
-           type: 'POST',
-           url: '/moment/save',
-           data: formData,
-           contentType: false,
-           processData: false,
-           success: function (data) {
-               console.log('Save successful:', data);
-               fetchMomentList(data);  // 수정된 부분
-           },
-           error: function (error) {
-               console.error('Error saving data:', error.responseText);
+        $.ajax({
+            type: 'POST',
+            url: '/moment/save',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                console.log('Save successful:', data);
+                fetchMomentList(data);  // 수정된 부분
+            },
+            error: function (error) {
+                console.error('Error saving data:', error.responseText);
 
-               var validationErrors = JSON.parse(error.responseText);
+                var validationErrors = JSON.parse(error.responseText);
 
-               $('#error-message').text(validationErrors.content);
+                $('#error-message').text(validationErrors.content);
 
-               if (validationErrors.content) {
-                   $('#area-content').addClass('is-invalid');
-                   $('#error-content').text(validationErrors.content);
-               } else {
-                   $('#area-content').removeClass('is-invalid');
-                   $('#error-content').text('');
-               }
-           }
-       });
+                if (validationErrors.content) {
+                    $('#area-content').addClass('is-invalid');
+                    $('#error-content').text(validationErrors.content);
+                } else {
+                    $('#area-content').removeClass('is-invalid');
+                    $('#error-content').text('');
+                }
+            }
+        });
 
-       function fetchMomentList(data) {
-           $.ajax({
-               type: 'GET',
-               url: '/moment/result',
-               success: function (moments) {
-                   console.log("데이터", moments);
-                   createMomentHtml(data, moments);  // 수정된 부분
-               },
-               error: function (error) {
-                   console.error('Error fetching moment list:', error);
-               }
-           });
-       }
+        function fetchMomentList(data) {
+            $.ajax({
+                type: 'GET',
+                url: '/moment/result',
+                success: function (moments) {
+                    console.log("데이터", moments);
+                    createMomentHtml(data, moments);  // 수정된 부분
+                },
+                error: function (error) {
+                    console.error('Error fetching moment list:', error);
+                }
+            });
+        }
 
-       function createMomentHtml(moment, moments) {
-           // 기존 목록을 지우고 새로운 목록을 추가하기 전에 기존 목록을 초기화합니다.
-           // selectedImages.length = 0;
-             selectedImages = [];
+        function createMomentHtml(moment, moments) {
+            // 기존 목록을 지우고 새로운 목록을 추가하기 전에 기존 목록을 초기화합니다.
+            // selectedImages.length = 0;
+            selectedImages = [];
             $('#image-preview-container').empty();
             $('#area-content').val('');
-           $('.moment').empty();
-           // $('#content').empty();
+            $('.moment').empty();
+            // $('#content').empty();
 
-           // 각 moment 객체에 대한 HTML을 생성하고 #content에 추가합니다.
-           moments.forEach(function (momentItem) {
-               $('#content').append(generateMomentHtml(momentItem));
-           });
-       }
+            // 각 moment 객체에 대한 HTML을 생성하고 #content에 추가합니다.
+            moments.forEach(function (momentItem) {
+                $('#content').append(generateMomentHtml(momentItem));
+            });
+        }
 
-       function generateMomentHtml(moment){
-           const momentHtml = $('<div>').addClass('moment').css('overflow', 'auto');
+        function generateMomentHtml(moment) {
+            const momentHtml = $('<div>').addClass('moment').css('overflow', 'auto');
 
-           const formContainer = $('<div>').addClass('form-container').css({'border': '2px solid blue','overflow': 'auto'});
+            const formContainer = $('<div>').addClass('form-container').css({
+                'border': '2px solid blue',
+                'overflow': 'auto'
+            });
 
-           // const imgContainer = $('<div>').append(
-           //     $('<a>').addClass('btn').css({
-           //         'background-color': 'transparent',
-           //         'border': 'none',
-           //         'padding': '0'
-           //     }).append(
-           //         $('<img>').attr({
-           //             'src': moment && moment.commonUser && moment.commonUser.storedFileName ? '/uploads/' + moment.commonUser.storedFileName : '/uploads/basicProfile.jpg',
-           //             'alt': 'Profile Image'
-           //         }).css({
-           //             'width': '35px',
-           //             'height': '35px',
-           //             'object-fit': 'cover',
-           //             'margin-bottom': '10px',
-           //             'border-radius': '50%',
-           //             'overflow': 'hidden'
-           //         }).attr('sec:authorize', 'isAuthenticated')
-           //     )
-           // );
+            // const imgContainer = $('<div>').append(
+            //     $('<a>').addClass('btn').css({
+            //         'background-color': 'transparent',
+            //         'border': 'none',
+            //         'padding': '0'
+            //     }).append(
+            //         $('<img>').attr({
+            //             'src': moment && moment.commonUser && moment.commonUser.storedFileName ? '/uploads/' + moment.commonUser.storedFileName : '/uploads/basicProfile.jpg',
+            //             'alt': 'Profile Image'
+            //         }).css({
+            //             'width': '35px',
+            //             'height': '35px',
+            //             'object-fit': 'cover',
+            //             'margin-bottom': '10px',
+            //             'border-radius': '50%',
+            //             'overflow': 'hidden'
+            //         }).attr('sec:authorize', 'isAuthenticated')
+            //     )
+            // );
 
-           const textContainer = $('<div>').css('overflow', 'auto').append(
-               $('<textarea>').addClass('input-area form-control').attr({
-                   'name': 'content',
-                   'maxlength': '200',
-                   'readonly': 'readonly'
-               }).text(moment.content)
-           );
+            const textContainer = $('<div>').css('overflow', 'auto').append(
+                $('<textarea>').addClass('input-area form-control').attr({
+                    'name': 'content',
+                    'maxlength': '200',
+                    'readonly': 'readonly'
+                }).text(moment.content)
+            );
 
-           const imgListContainer = $('<div>').addClass('img-list-container').append(  // 수정된 부분
-               moment.imageUrls ? moment.imageUrls.map(imageUrl =>
-                   $('<img>').attr({
-                       'src': imageUrl,
-                       'alt': 'Moment Image'
-                   }).css({
-                       'width': '100px',
-                       'height': '100px',
-                       'margin-right': '10px',
-                       'float': 'left'
-                   })
-               ) : []
-           );
+            const imgListContainer = $('<div>').addClass('img-list-container').append(  // 수정된 부분
+                moment.imageUrls ? moment.imageUrls.map(imageUrl =>
+                    $('<img>').attr({
+                        'src': imageUrl,
+                        'alt': 'Moment Image'
+                    }).css({
+                        'width': '100px',
+                        'height': '100px',
+                        'margin-right': '10px',
+                        'float': 'left'
+                    })
+                ) : []
+            );
 
-           // formContainer.append(imgContainer, textContainer, imgListContainer);
-           formContainer.append(textContainer, imgListContainer);
-           momentHtml.append(formContainer);
-           momentHtml.append($('<div>').css('clear', 'both'));
+            // formContainer.append(imgContainer, textContainer, imgListContainer);
+            formContainer.append(textContainer, imgListContainer);
+            momentHtml.append(formContainer);
+            momentHtml.append($('<div>').css('clear', 'both'));
 
-           return momentHtml;
-       }
-   }
-
+            return momentHtml;
+        }
+    }
 
 
 </script>

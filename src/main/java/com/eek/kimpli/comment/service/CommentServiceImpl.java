@@ -32,7 +32,7 @@ public class CommentServiceImpl implements CommentService {
     // 댓글 페이징 조회
     @Override
     public Page<Comment> getCommentsByBoardId(Long boardId, Pageable pageable) {
-        return commentRepository.findByBoardId(boardId, pageable);
+        return commentRepository.findByBoardIdOrderByCommentCreatedTimeDesc(boardId, pageable);
     }
 
     // 대댓글 저장
@@ -60,8 +60,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
         @Override
-    public Comment getCommentWithReplies(Long commentId) {
-        return commentRepository.findById(commentId).orElse(null);
+    public  List<ReplyComment> getReplyWithCommentId(Long commentId) {
+          System.out.println("서비스 임플"+commentId);
+          List<ReplyComment> a =commentRepository.findReplyComments(commentId);
+                 System.out.println("서비스 임플 대댓글 리스트"+a);
+        return commentRepository.findReplyComments(commentId);
     }
 
 }

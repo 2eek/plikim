@@ -62,6 +62,15 @@ public class CommentController {
         }
     }
 
+       //댓글 화면에 뿌리기
+//    @GetMapping("/list/{boardId}")
+//    @ResponseBody
+//    public List<Comment> getCommentsByBoardId(@PathVariable Long boardId) {
+//        // 게시글 ID에 해당하는 댓글 목록을 가져오는 서비스 메서드 호출
+//        return commentService.getCommentsByBoardId(boardId);
+//    }
+
+
     // 댓글 화면에 뿌리기 (페이징 처리)
  @GetMapping("/list/{boardId}")
     public ResponseEntity<Page<Comment>> getCommentsByBoardId(
@@ -85,6 +94,7 @@ public ResponseEntity<String> saveReplyComment(
     @RequestBody ReplyComment replyComment,
     @RequestParam Long commentId
 ) {
+    System.out.println("여기오나??");
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -101,16 +111,34 @@ public ResponseEntity<String> saveReplyComment(
     }
 }
 
+////대댓글 조회
+//@GetMapping("/getReplyComments/{commentId}")
+//@ResponseBody
+//public ResponseEntity<List<ReplyComment>> getReplyComments(@PathVariable Long commentId) {
+//    System.out.println("test 부모 아이디" + commentId);
+//    System.out.println(1);
+//        System.out.println("!!!"+commentService.findByParentComment(commentId));
+//    commentService.findByParentComment(commentId);
+//    System.out.println("???"+commentService.findByParentComment(commentId));
+//    System.out.println("test");
+//    List<ReplyComment> replyComments = commentService.findByParentComment(commentId);
+//    System.out.println(replyComments);
+//    System.out.println(2);
+//    return ResponseEntity.ok(replyComments);
+//}
 @GetMapping("/getReplyComments/{commentId}")
+public ResponseEntity<List<ReplyComment>> getgetReplyCommentsWithCommentId(@PathVariable Long commentId) {
+    List<ReplyComment> commentWithReplies = commentService.getReplyWithCommentId(commentId);
+    System.out.println("컨트롤러"+commentId);
+    System.out.println("대댓글 리스트"+commentWithReplies);
+    if (commentWithReplies != null && !commentWithReplies.isEmpty()) {
+            System.out.println("대댓글 리스트!!!"+commentWithReplies);
 
-    public ResponseEntity<Comment> getCommentWithReplies(@PathVariable Long commentId) {
-        Comment commentWithReplies = commentService.getCommentWithReplies(commentId);
-
-        if (commentWithReplies != null) {
-            return new ResponseEntity<>(commentWithReplies, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(commentWithReplies, HttpStatus.OK);
+    } else {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+}
+
 
 }

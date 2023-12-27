@@ -127,15 +127,18 @@ public ResponseEntity<String> saveReplyComment(
 //    return ResponseEntity.ok(replyComments);
 //}
 @GetMapping("/getReplyComments/{commentId}")
+public ResponseEntity<List<ReplyComment>> getgetReplyCommentsWithCommentId(@PathVariable Long commentId) {
+    List<ReplyComment> commentWithReplies = commentService.getReplyWithCommentId(commentId);
+    System.out.println("컨트롤러"+commentId);
+    System.out.println("대댓글 리스트"+commentWithReplies);
+    if (commentWithReplies != null && !commentWithReplies.isEmpty()) {
+            System.out.println("대댓글 리스트!!!"+commentWithReplies);
 
-    public ResponseEntity<Comment> getCommentWithReplies(@PathVariable Long commentId) {
-        Comment commentWithReplies = commentService.getCommentWithReplies(commentId);
-
-        if (commentWithReplies != null) {
-            return new ResponseEntity<>(commentWithReplies, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(commentWithReplies, HttpStatus.OK);
+    } else {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+}
+
 
 }

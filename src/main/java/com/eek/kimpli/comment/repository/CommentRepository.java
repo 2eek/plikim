@@ -17,9 +17,16 @@ public interface CommentRepository extends JpaRepository<Comment, Long > {
     //게시글에 해당하는 댓글 조회
 //    List<Comment> findByBoardId(Long boardId);
     //페이징 객체 처리하는 댓글 (게시글 아이디에 해당하는)
-    Page<Comment> findByBoardId(Long boardId, Pageable pageable);
+
+   Page<Comment> findByBoardIdOrderByCommentCreatedTimeDesc(Long boardId, Pageable pageable);
+
 
     List<ReplyComment> findReplyCommentsById(Long Id);
+
+    //댓글을 이용해 대댓글을 최신순으로 get
+
+    @Query("SELECT rc FROM ReplyComment rc WHERE rc.commentId =  :commentId ORDER BY rc.replyCommentCreatedTime DESC ")
+    List<ReplyComment> findReplyComments(@Param("commentId") Long commentId);
 
     //댓글 soft delete
     @Modifying

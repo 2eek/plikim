@@ -21,7 +21,9 @@ public interface CommentService {
     List<ReplyComment> findByParentComment(Long commentId);
 
 
-    // 댓글과 대댓글을 함께 가져오는 메서드
-    Comment getCommentWithReplies(Long commentId);
+
+    // 댓글과 대댓글을 함께 가져오는 메서드(댓글아이디에 해당하는 최신순 대댓글)
+     List<ReplyComment> getReplyWithCommentId(Long commentId);
+
 
 }

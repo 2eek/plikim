@@ -1,4 +1,3 @@
-
 // 1)댓글 목록을 불러오는 함수
 const loadComments = (page = 0, size = 10) => {
     //1-1-1) 게시글 ID를 가져옴
@@ -23,10 +22,16 @@ const loadComments = (page = 0, size = 10) => {
             commentListElement.innerHTML = "";
 
             commentsPage.content.forEach(function (comment) {
-                  const commentElement = document.createElement("div");
+
+                const commentElement = document.createElement("div");
+
                 commentElement.className = "comment"; // 클래스 추가
+                commentElement.id = "comment-id-" + `${comment.id}`;
+
                 commentElement.innerHTML = `
+                    <hr style="width: 100%;">         
                     <div style="width: 80%; margin: 0 auto;">
+                    
                         <div style="float: left; width: 20%;">${comment.commentWriter}</div>
                         <div style="float: left; width: 40%; margin-left: 5%;">${comment.commentContents}</div>
                         <div style="float: right; width: 20%;">${comment.commentCreatedTime}</div>
@@ -49,14 +54,13 @@ const loadComments = (page = 0, size = 10) => {
 };
 
 
-
 //2) 페이징 버튼을 생성하는 함수
 const createPaginationButtons = (commentsPage) => {
     const paginationElement = document.getElementById("pagination");
 
     //2-1) 페이징 컨테이너 초기화
     if (!paginationElement) {
-        console.error("paginationElement가 존재하지 않습니다.");
+        console.error("paginationElement가 존재하지 않음.");
         return;
     }
     paginationElement.innerHTML = "";
@@ -82,7 +86,6 @@ const createPaginationButtons = (commentsPage) => {
     //2-6) 페이징 컨테이너를 실제 페이지에 추가
     paginationElement.appendChild(paginationContainer);
 };
-
 
 
 //3) 페이지 번호 버튼 스타일 생성하는 함수
@@ -116,7 +119,7 @@ const createPaginationButton = (text, enabled, pageIndex, commentsPage) => {
 
     //3-4) 현재 페이지와 일치하는 경우 파란색 스타일 적용
     if (pageIndex === commentsPage.number) {
-        link.style.color = "blue"; // 또는 다른 파란색 스타일을 적용할 수 있습니다.
+        link.style.color = "blue"; // 또는 다른 파란색 스타일을 적용할 수 있음.
         link.classList.remove("text-dark");
     }
 
@@ -125,9 +128,8 @@ const createPaginationButton = (text, enabled, pageIndex, commentsPage) => {
 };
 
 
-
 //4)입력창 엔터로 댓글, 대댓글 전송 가능
-document.getElementById('commentContents').addEventListener('keydown', function(event) {
+document.getElementById('commentContents').addEventListener('keydown', function (event) {
     if (event.key === 'Enter') {
         event.preventDefault(); // 엔터 키의 기본 동작(개행 추가)을 막음
         commentWrite(); // commentWrite() 메서드 호출터
@@ -172,7 +174,7 @@ const commentWrite = () => {
                 });
             } else {
                 //5-2) 로그인되지 않은 경우, 알림창 표시
-                alert("로그인이 필요합니다.");
+                alert("로그인이 필요.");
             }
         },
         error: function (xhr, status, error) {
@@ -182,10 +184,9 @@ const commentWrite = () => {
 };
 
 
-
 // 6)페이지 로딩 완료 후 초기 댓글 목록 및 페이징 버튼 생성
 document.addEventListener("DOMContentLoaded", function () {
-    const initialCommentsPage = { number: 0, size: 10 };
+    const initialCommentsPage = {number: 0, size: 10};
     createPaginationButtons(initialCommentsPage);
     loadComments();
 
@@ -193,88 +194,53 @@ document.addEventListener("DOMContentLoaded", function () {
     attachCommentEventListeners();
 });
 
-
-
-
-// 전역 변수 초기화
-let openReplyForm = null;
-
 //7)대댓글 이벤트리스너
 function attachCommentEventListeners() {
-  $(document).off('click', '.open-reply-form-button').on('click', '.open-reply-form-button', function () {
-    console.log('hello');
+    $(document).off('click', '.open-reply-form-button').on('click', '.open-reply-form-button', function () {
 
-    // 새로운 코드: 형제요소의 commentId 값을 가져오기
-    const commentId = $(this).siblings(".commentId").text();
-    console.log('아이디테스트'+commentId)
+        console.log('hello');
 
-    // 대댓글을 추가할 부모 컨테이너를 찾거나 생성합니다.
-    var replyCommentsContainer = $(this).closest('.comment').find('.reply-comments');
-    if (replyCommentsContainer.length === 0) {
-      // 대댓글을 추가할 부모 컨테이너가 없으면 생성합니다.
-      replyCommentsContainer = $('<div class="reply-comments"></div>');
-      $(this).closest('.comment').append(replyCommentsContainer);
+        // 새로운 코드: 형제요소의 commentId 값을 가져오기
+        const commentId = $(this).siblings(".commentId").text();
 
-      // 대댓글이 없는 경우에도 대댓글 입력 폼을 생성합니다.
-      // 이 부분을 추가하였습니다.
-      var replyForm = $('<div>').html(`
-        <textarea id="replyCommentContents-${commentId}" style="width: 70%; height: 100px; margin-bottom: 5px; display: inline-block;"></textarea>
-        <button class="btn btn-primary" onclick="replyCommentWrite(${commentId})" style="margin-bottom: 5px;">대댓글작성</button>
-        <hr style="width: 100%;">      
-      `);
+        // 대댓글을 추가할 부모 컨테이너를 찾거나 생성.
+        var replyCommentsContainer = $(this).closest('.comment').find('.reply-comments');
+        if (replyCommentsContainer.length === 0) {
+            loadReplyComments(commentId);
+            // 대댓글을 추가할 부모 컨테이너가 없으면 생성.
+            replyCommentsContainer = $('<div class="reply-comments"></div>');
+            console.log(replyCommentsContainer)
+            $(this).closest('.comment').append(replyCommentsContainer);
 
-      // 대댓글 입력 폼을 대댓글 컨테이너에 추가
-      replyCommentsContainer.append(replyForm);
+            // 대댓글이 없는 경우에도 대댓글 입력 폼을 생성.
+            // 이 부분을 추가하였음.
+            var replyForm = $('<div>').html(`
+                <textarea id="replyCommentContents-${commentId}" style="width: 70%; height: 100px; margin-left: 200px; margin-bottom: 5px; display: inline-block;"></textarea>
+                <button class="btn btn-primary" onclick="replyCommentWriteForm(${commentId})" style="margin-bottom: 5px;">대댓글작성</button>
+             
+            `);
+            console.log("댓글폼+ 번호?" + replyForm)
 
-      // 대댓글 입력 폼이 추가되었음을 표시
-      $(this).data('reply-form', true);
+            // 대댓글 입력 폼을 대댓글 컨테이너에 추가
+            replyCommentsContainer.append(replyForm);
 
-      // 현재 열린 대댓글 입력 폼 정보를 전역 변수에 저장
-      openReplyForm = {
-        commentId: commentId,
-        replyForm: replyForm
-      };
-    }
+            // 대댓글 입력 폼이 추가되었음을 표시
+            $(this).data('reply-form', true);
+        } else {
+            $(this).closest('.comment').find('.reply-comments').remove();
+            $(this).closest('.comment').find('.second-child').remove();
 
-    // 답글목록 가져오기
-    loadReplyComments(commentId);
-  });
+        }
+    });
 }
-
-
-
-
-
-
-
-
-
-// 8) 대댓글 입력 폼 닫기 함수
-function closeReplyForm(commentId) {
-    if (openReplyForm && openReplyForm.commentId !== commentId) {
-        // 다른 댓글의 대댓글 입력 폼이 열려있으면 닫기
-        openReplyForm.replyForm.remove();
-        console.log(`Closed reply form for commentId: ${openReplyForm.commentId}`);
-
-        // 열린 대댓글 입력 폼 정보 초기화
-        openReplyForm = null;
-    }
-}
-
-
-
-
-
-
-
 
 
 //9) 대댓글 작성 함수
 
 
+function replyCommentWriteForm(commentId) {
 
-function replyCommentWrite(commentId) {
-    console.log('콘솔아이디테스트있냐'+commentId)
+    console.log('콘솔아이디테스트있냐' + commentId)
 
     // 대댓글 내용 가져오기
     var replyContents = document.getElementById('replyCommentContents-' + commentId).value;
@@ -295,28 +261,29 @@ function replyCommentWrite(commentId) {
     };
 
     // Ajax를 사용하여 서버로 데이터 전송
-$.ajax({
-    type: 'POST',
-    url: '/comment/replySave?commentId=' + commentId,
-    contentType: 'application/json',
-    data: JSON.stringify(replyComment),
-    success: function (response) {
-        // 성공적으로 데이터를 서버로 전송한 경우
-        console.log(response);
+    $.ajax({
+        type: 'POST',
+        url: '/comment/replySave?commentId=' + commentId,
+        contentType: 'application/json',
+        data: JSON.stringify(replyComment),
+        success: function (response) {
+            // 성공적으로 데이터를 서버로 전송한 경우
+            console.log(response);
 
-        // 필요한 추가 작업 수행 (예: 화면 갱신, 메시지 표시 등)
+            // 필요한 추가 작업 수행 (예: 화면 갱신, 메시지 표시 등)
 
-        // 성공 후 대댓글 목록 다시 불러오기
-        loadReplyComments(commentId);
-    },
-    error: function (error) {
-        // 전송 실패 시 처리
-        console.log(error);
-    }
-});
+            // 성공 후 대댓글 목록 다시 불러오기
+            loadReplyComments(commentId);
+            console.log('부모댓글 id?' + commentId)
+        },
+        error: function (error) {
+            // 전송 실패 시 처리
+            console.log(error);
+        }
+    });
 }
-    // 스크립트 코드 작성
 
+// 스크립트 코드 작성
 
 
 //10) 대댓글 목록을 불러오는 함수
@@ -330,14 +297,24 @@ function loadReplyComments(commentId) {
             return response.json(); // JSON 데이터로 변환
         })
         .then(commentWithReplies => {
-            const replyComments = commentWithReplies.childComments;
+            const replyComments = commentWithReplies;
 
             // 대댓글 목록을 화면에 표시
 // const replyCommentsContainer = document.querySelector(`.reply-comments-${commentId}`);
-const replyCommentsContainer = document.querySelector('.reply-comments');
+// const replyCommentsContainer = document.querySelector('.reply-comments');
+            const parentCommentElement = document.querySelector(`#comment-id-${commentId}`);
+
+// 새로운 <div> 엘리먼트를 생성하고 추가
+            const newDiv = document.createElement("div");
+            newDiv.className = "second-child"; // 클래스 추가
+            parentCommentElement.appendChild(newDiv);
+
+// 할당
+            const replyCommentsContainer = document.querySelector(`#comment-id-${commentId} .second-child`);
+
 
             if (!replyCommentsContainer) {
-                console.error(`대댓글 컨테이너를 찾을 수 없습니다: .reply-comments-${commentId}`);
+                console.error(`대댓글 컨테이너를 찾을 수 없음: .reply-comments-${commentId}`);
                 return;
             }
 
@@ -346,14 +323,14 @@ const replyCommentsContainer = document.querySelector('.reply-comments');
             replyComments.forEach(replyComment => {
                 const replyCommentElement = document.createElement("div");
                 replyCommentElement.innerHTML = `
-                    <div class="reply-comments" style="width: 80%; margin: 0 auto;">
-                        <div style="float: left; width: 20%;">${replyComment.replyCommentWriter || ''}</div>
-                        <div style="float: left; width: 40%; margin-left: 5%;">${replyComment.replyCommentContents}</div>
-                        <div style="float: right; width: 20%;">${replyComment.replyCommentCreatedTime}</div>
-                        <div style="clear: both;"></div>
-                        <hr style="width: 100%;">
-                    </div>
-                `;
+        <div class="reply-comments" style="width: 80%; margin: 0 auto;">
+            <div style="float: left; width: 20%;">${replyComment.replyCommentWriter || ''}</div>
+            <div style="float: left; width: 40%; margin-left: 5%;">${replyComment.replyCommentContents}</div>
+            <div style="float: right; width: 20%;">${replyComment.replyCommentCreatedTime}</div>
+            <div style="clear: both;"></div>
+            <hr style="width: 100%;">
+        </div>
+    `;
                 replyCommentsContainer.appendChild(replyCommentElement);
             });
         })

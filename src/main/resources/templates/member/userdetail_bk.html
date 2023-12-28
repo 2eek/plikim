@@ -21,7 +21,7 @@
 </head>
 
 <body>
-  <input type="hidden" id="loggedInUserId" name="loggedInUserId" th:value="${userSession.username}" />
+<!--  <input type="hidden" id="loggedInUserId" name="loggedInUserId" th:value="${userSession.username}" />-->
 
   <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('home')">
   </nav>
@@ -62,16 +62,18 @@
   </div>
 </body>
 
-<script type="text/javascript">
-  document.addEventListener('DOMContentLoaded', function() {
-    var userButton = document.getElementById('user-id-button');
-    var userId = userButton.getAttribute('data-user-id');
-    userButton.addEventListener('click', function() {
-      var sender = document.getElementById('loggedInUserId').value;
-      var url = '/chat?userId=' + userId; // 상대방(디테일 정보의 주체) 사용자 ID를 쿼리 매개변수로 추가
-      location.href = url; // /chat로 이동
+<script type="text/javascript" th:inline="javascript">
+    /*<![CDATA[*/
+    document.addEventListener('DOMContentLoaded', function() {
+        var userButton = document.getElementById('user-id-button');
+        var userId = userButton.getAttribute('data-user-id');
+        userButton.addEventListener('click', function() {
+            var sender = /*[[${commonUser}]]*/ null;
+            var url = '/chat?userId=' + userId;
+            location.href = url;
+        });
     });
-  });
+    /*]]>*/
 </script>
 
 

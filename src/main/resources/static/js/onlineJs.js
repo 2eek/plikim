@@ -113,6 +113,8 @@ function connect() {
 function sendName() {
     const loggedInUserId = $("#loggedInUserId").val();
 
+
+
     // 사용자가 로그인한 경우에만 아이디를 서버로 전송
     if (loggedInUserId !== null && loggedInUserId !== undefined) {
         stompClient.publish({

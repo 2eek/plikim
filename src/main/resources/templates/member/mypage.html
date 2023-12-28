@@ -1,53 +1,93 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <style>
-    .user-table {
-        float: left;
-        width: 100px; /* 너비를 100px로 설정 */
-        margin-right: 20px;
+    /* 추가된 스타일 */
+    #preview {
+        max-width: 300px;
+        max-height: 300px;
+        border-radius: 50%;
+        overflow: hidden;
     }
 
-    .user-table th, .user-table td {
-        font-size: 12px;
+    table {
+        border-collapse: collapse;
+        width: 50%;
+        margin-top: 20px;
     }
 
-    .user-row {
-        cursor: pointer;
+    th, td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    textarea {
+        width: 100%;
+        height: 100px;
     }
 </style>
 
-
-<head th:replace="fragments/common :: head('게시판')">
+<head th:replace="fragments/common :: head('회원 수정')">
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('home')">
 </nav>
-    <form action="/user/update" enctype="multipart/form-data" method="post">
-        <h1 th:text="'Welcome, 아이디 ' + ${userId} + '!'"></h1>
-        <h1 th:text="'Welcome, 이메일 ' + ${userEmail} + '!'"></h1>
+<form action="/user/update" enctype="multipart/form-data" method="post">
+<!--    <h1 th:text="'Welcome, 아이디 ' + ${userId} + '!'"></h1>-->
+<!--    <h1 th:text="'Welcome, 이메일 ' + ${userEmail} + '!'"></h1>-->
 
-        <input type="hidden" name="userId" th:value="${userId}">
+    <input type="hidden" name="userId" th:value="${userId}">
 
-        file: <input type="file" name="profileFile" onchange="previewImage(this)">
-        <br>
-<img id="preview" src="#" alt="미리보기" style="max-width: 300px; max-height: 300px;">
-        <br>
-        <input type="submit" value="파일 저장">
-    </form>
+    <!-- 파일 업로드 -->
+    <label for="profileFile">프로필 이미지:</label>
+    <input type="file" name="profileFile" id="profileFile" onchange="previewImage(this)">
+    <br>
+    <div id="preview">
+        <img th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"
+             alt="Profile Image" style="width: 100%; height: 100%; object-fit: cover;">
+    </div>
+    <br>
 
-    <script>
-        function previewImage(input) {
-            var preview = document.getElementById('preview');
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
+    <!-- 회원 정보 테이블 -->
+    <table>
+        <tr>
+            <th>항목</th>
+            <th>값</th>
+        </tr>
+        <tr>
+            <td>아이디</td>
+            <td><span th:text="${userId}"></span></td>
+        </tr>
+        <tr>
+            <td>이메일</td>
+            <td><span th:text="${userEmail}"></span></td>
+        </tr>
+        <tr>
+            <td>자기소개</td>
+            <td><textarea name="selfIntroduction" th:text="${selfIntroduction}"></textarea></td>
+        </tr>
+    </table>
 
-                reader.onload = function (e) {
-                    preview.src = e.target.result;
-                };
+    <input type="submit" value="저장">
+</form>
 
-                reader.readAsDataURL(input.files[0]);
-            }
+<script>
+    function previewImage(input) {
+        var preview = document.getElementById('preview');
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                preview.innerHTML = '<img src="' + e.target.result + '" alt="Profile Image" style="width: 100%; height: 100%; object-fit: cover;">';
+            };
+
+            reader.readAsDataURL(input.files[0]);
         }
-    </script>
+    }
+</script>
 </body>
 </html>

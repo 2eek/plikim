@@ -1,6 +1,4 @@
-    var commonUser = /*[[${commonUser}]]*/ null;
 function showGreeting(message) {
-
     const dataUsername = message.trim(); // 웹소켓을 통해 수신된 메시지의 공백 제거
 
     // 중복을 방지하기 위해 이미 존재하는 사용자인지 확인
@@ -15,7 +13,6 @@ function showGreeting(message) {
     }
 }
 
-
 // 사용자 행 제거 함수
 function removeUserRow(username) {
     const cleanedUsername = username.trim().toLowerCase();
@@ -29,7 +26,8 @@ function removeUserRow(username) {
 // 테이블 내의 tr 클릭 이벤트 리스너
 $(document).on('click', 'tr.user-row', function () {
     // 세션 값 확인
-    if (!commonUser || !commonUser.loggedIn) {
+    var loggedInUserId = $('#loggedInUserId').val();
+    if (!loggedInUserId) {
         // 세션 값이 없는 경우 로그인 페이지로 리다이렉트
         window.location.href = '/member/loginForm';
     } else {
@@ -42,10 +40,10 @@ $(document).on('click', 'tr.user-row', function () {
  // 사용자 아이디 클릭 시 로그인 페이지로 리다이렉트 (세션 값이 없는 경우)
     $(document).on('click', 'a.user-link', function (e) {
         // 세션 값 확인
-
+        var loggedInUserId = $('#loggedInUserId').val();
 
         // 세션 값이 없는 경우 로그인 페이지로 리다이렉트
-        if (!commonUser) {
+        if (!loggedInUserId) {
             e.preventDefault(); // 기본 동작 중단
             window.location.href = '/member/loginForm';
         }
@@ -113,10 +111,12 @@ function connect() {
 }
 
 function sendName() {
+    const loggedInUserId = $("#loggedInUserId").val();
 
-    // 서버에서 전달한 commonUser 객체를 사용하여 로그인 여부 확인
-    if (commonUser) {
-        const loggedInUserId = commonUser.userId;
+
+
+    // 사용자가 로그인한 경우에만 아이디를 서버로 전송
+    if (loggedInUserId !== null && loggedInUserId !== undefined) {
         stompClient.publish({
             destination: "/app/hello",
             body: JSON.stringify({'name': loggedInUserId})

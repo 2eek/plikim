@@ -20,7 +20,7 @@
 <head th:replace="fragments/common :: head('게시판')">
 </head>
 <body>
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('home')">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('')">
 </nav>
 
 <main role="main" class="container">
@@ -28,8 +28,7 @@
         <h1>회원리스트</h1>
     </div>
 </main>
-<!--<input type="hidden" id="loggedInUserId" name="loggedInUserId" th:if="${#authorization.expression('isAuthenticated()')}"-->
-<!--       th:value="${userSession.username}"/>-->
+
 
 <div class="container-fluid" style="width: 150px; float: right;">
     <div class="col-md-6" style=" justify-content: end;">
@@ -158,8 +157,6 @@
 
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
-<script src="/js/onlineJs.js"></script>
 
 <script>
     $(document).ready(function () {
@@ -180,7 +177,6 @@
         });
     });
 </script>
-
 
 </body>
 </html>

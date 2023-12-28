@@ -12,11 +12,9 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+
     }
 
-    form {
-        width: 700px
-    }
 
     /*#table-container {*/
     /*    width: 150%;*/
@@ -47,6 +45,11 @@
         align-self: flex-end;
         margin-top: 20px;
     }
+
+    #table-container table tr td:first-child {
+        width: 130px;
+    }
+
 </style>
 
 <head th:replace="fragments/common :: head('회원 수정')">
@@ -57,38 +60,61 @@
 </nav>
 
 <div id="sform">
-    <form action="/user/update" enctype="multipart/form-data" method="post">
+    <form action="/user/update" enctype="multipart/form-data" method="post" style=" width: 700px">
         <input type="hidden" name="userId" th:value="${userId}">
 
         <!-- 파일 업로드 -->
-
-        <br>
-        <div id="preview" style="width: 200px;">
-            <img th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"
-                 alt="Profile Image" style="width: 200px; height: 200px; object-fit: cover;">
+        <div style="margin-bottom: 20px">
+            <br>
+            <div id="preview" style="width: 200px;">
+                <img th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"
+                     alt="Profile Image" style="width: 200px; height: 200px; object-fit: cover;">
+            </div>
+            <div style="margin-top: 20px">
+                <label for="profileFile">프로필 이미지:</label>
+                <input type="file" name="profileFile" id="profileFile" onchange="previewImage(this)">
+            </div>
+            <br>
         </div>
-        <label for="profileFile">프로필 이미지:</label>
-        <input type="file" name="profileFile" id="profileFile" onchange="previewImage(this)">
-        <br>
-
         <!-- 회원 정보 테이블 -->
         <div id="table-container">
             <table>
-                <tr>
-                    <th>항목</th>
-                    <th>값</th>
-                </tr>
+                <!--                <tr>-->
+                <!--                    <th>항목</th>-->
+                <!--                    <th>값</th>-->
+                <!--                </tr>-->
                 <tr>
                     <td>아이디</td>
                     <td><span th:text="${userId}"></span></td>
                 </tr>
                 <tr>
                     <td>이메일</td>
-                    <td><span th:text="${userEmail}"></span></td>
+                    <td colspan=1><input type="email" name="email" placeholder="이메일"
+                                         id="email" th:value="${userEmail}">
+                        <font id="spaceEmail" size="2"></font>
+                    </td>
+
+
                 </tr>
                 <tr>
                     <td>휴대폰 번호</td>
-                    <td><span th:text="${userPhoneNumber}"></span></td>
+                    <td>
+                        <input type="text" name="phoneNumber" id="phonenumber" th:value="${userPhoneNumber}">
+                            <button type="button" id="sendCode" class="btn btn-default"
+                                style="border: 1px solid #ccc; padding: 5px 10px;">코드 발송
+                        </button>
+                        <div style="margin-top: 5px">
+                            <font id="spacePhonenum" size="2"></font>
+                        </div>
+
+                        <div id="codeCheck" class="mb-3" style="display: none; align-items: center;">
+                            <input type="text" class="form-control" name="smsCode" id="smsCode" placeholder="코드 입력하세요"
+                                   style="width:185px; margin-right: 3px" required>
+                            <button type="button" id="codeCheckButton" class="btn btn-default"
+                                    style="float: left; border: 1px solid #ccc; padding: 5px 10px;">코드 확인
+                            </button>
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <td>자기소개</td>
@@ -113,6 +139,226 @@
 
             reader.readAsDataURL(input.files[0]);
         }
+    }
+
+
+    $('#email').on('input', function () {
+        checkEmail(function (result) {
+
+        });
+    });
+
+    //ajax 유효성 검사
+    function checkEmail(callback) {
+        var email = $("#email").val();
+
+        $.ajax({
+            url: "/emailCheck",
+            type: "post",
+            data: {email: email},
+            dataType: 'json',
+            success: function (result) {
+                if (result == -1) {
+                    $("#spaceEmail").html('이메일 형식이 아닙니다.');
+                    $("#spaceEmail").attr('color', 'red');
+                    // $("#email").focus();
+                } else {
+                    $("#spaceEmail").html('');
+
+                }
+
+                // 비동기 작업이 완료된 후에 콜백 함수 호출
+                if (typeof callback === 'function') {
+                    callback(result !== -1);
+                }
+            },
+            error: function () {
+                alert("서버요청실패!");
+            }
+        });
+    }
+
+    //HTML 문서의 모든 요소들이 브라우저에 로드되고 초기화된 후에 스크립트 코드를 실행하고자 할 때 사용됨. 돔형성 후
+    $(document).ready(function () {
+
+// 코드발송, (발송 전 전화번호 유효성 검사, 코드 발송, 코드입력폼 활성화)
+        $('#sendCode').on('click', function () {
+            let receiverId = document.getElementById("phonenumber").value;
+
+
+            // 숫자로만 구성되어 있는지 체크
+            var reg = /^[0-9]{11}$/;
+            if (!reg.test(receiverId)) {
+                // alert('숫자로 입력바랍니다.')
+                $("#spacePhonenum").html('전화번호를 다시 확인하세요');
+                $("#spacePhonenum").css('color', 'red');
+                $("#phonenumber").focus();
+                return false;
+            }
+
+
+            if (receiverId === "") {
+                alert("휴대폰 번호를 입력하세요.");
+                $("#Number").focus();
+                return false;
+            }
+            //문자 발송
+            sendSMS();
+
+
+            //코드 입력폼 활성화
+            sendCodeForm();
+
+            //휴대폰 중복체크
+
+        });
+
+//문자 발송 ajax
+        function sendSMS() {
+            //문구 비우기
+            $("#spacePhonenum").html('');
+            let phoneNumber = document.getElementById("phonenumber").value;
+
+            $.ajax({
+                url: "/sms/send",
+                type: 'post',
+                data: {to: phoneNumber},
+            })
+                .done(data => {
+
+                    if (data != null && data.num != null) {
+                        alert(`${phoneNumber} 문자발송했습니다`);
+                        // $("#numValue").val(data.num);
+                    } else {
+                        alert(`문자 발송 안됐습니다.`);
+                    }
+                })
+                .fail(reject => console.log(reject));
+        }
+
+        //코드입력창, 검증 버튼 화면에 보이게 하기
+        function sendCodeForm() {
+            $('#codeCheck').css('display', 'flex');
+            // $("#codeCheck").css("display", "block");
+
+        }
+
+    });
+
+    //함수 정의
+    // 코드 비교 함수(회원가입 서브밋 후 실행됨 그다음 회원의 휴대폰 번호도 체크한다. )
+    function confirmSmsCode(callback) {
+        var phoneNumberValue = $("#phonenumber").val();
+        var userCodeValue = $("#smsCode").val();
+
+        // phoneNumberValue와 userCodeValue가 모두 값이 있는 경우에만 AJAX 통신 수행
+        if (phoneNumberValue && userCodeValue) {
+            $.ajax({
+                url: "/compareCodes",
+                type: 'post',
+                data: {inputedPhonenumber: phoneNumberValue, userInputNumber: userCodeValue},
+            })
+                .done(success => {
+
+
+                    if (success.result === "success") {
+                        // 성공적으로 코드가 확인된 경우, 이 번호가 db에 있는지 체크시행한다
+                        // 565에서 정의한 checkPhoneNumber의 결과인 result를 콜백함수에 넣음.
+                        callback(true);
+                    } else {
+
+                        // 코드가 일치하지 않는 경우 false를 전달하면
+                        if (success.result === 'failure') {
+                            alert('코드가 일치하지 않습니다.')
+                            //callback(false)는 콜백 함수를 호출하며, false를 인자로 전달
+                            callback(false);
+                        }
+                    }
+                })
+                .fail(() => {
+                    console.error("서버요청 실패");
+                    alert("서버요청 실패");
+                    callback(false);  // 콜백 함수 호출, 실패 여부 전달
+                });
+        } else {
+            // phoneNumberValue 또는 userCodeValue가 값이 없는 경우에 대한 처리
+            callback(false);  // 콜백 함수 호출, 실패 여부 전달
+        }
+    }
+
+
+    //서브밋 과정에서 코드 적합 여부 판단 후 db에 존재하는 휴대폰 번호인지 확인
+    // checkPhoneNumber 함수 정의
+
+    $('#codeCheckButton').on('click', function (event) {
+
+
+        // 코드 확인
+
+
+        // confirmSmsCode 실행 후 result를 가져와서 내부에서 실행한다.
+        // result는 confirmSmsCode 함수에서 비동기적으로 처리한 작업의 결과이다.
+        // 실행함수. 여기서 실행한다.
+        confirmSmsCode(function (result) {
+            // result에 false가 반환되면 실행되는 부분. 코드가 올바르게 확인되지 않아 회원가입이 안 되는 경우
+            if (!result) {
+                // 코드 인증은 성공했으나 중복된 휴대폰 번호인 경우 false 반환. 이 부분으로 들어올까요?
+
+            } else {
+                // 코드 인증이 성공한 경우
+                // result에 false가 반환되면 실행되는 부분. 인증이 성공하여 DB 조회가 필요한 경우
+                checkPhoneNumber(function (checkResult) {
+                    if (checkResult === 'a') {
+                        // 여기서 폼을 제출, 회원가입처리
+                        alert('코드가 인증되었습니다.')
+                    } else {
+                        alert('코드가 맞지 않습니다.');
+                    }
+                });
+            }
+        });
+    });
+
+
+    // checkPhoneNumber 함수 수정
+    function checkPhoneNumber(callback) {
+        var phonenumber = $("#phonenumber").val();
+        var reg = /^[0-9]{11}$/;
+
+        if (!reg.test(phonenumber)) {
+            // alert("전화번호는 숫자로만 입력해야 합니다.");
+            $("#phonenumber").focus();
+            callback('b'); // 실패 시 콜백에 'b'를 전달
+            return;
+        }
+
+        phonenumber = phonenumber.replace(/-/g, '');
+
+        $.ajax({
+            url: "/phoneNumberCheck",
+            type: "post",
+            data: {phoneNumber: phonenumber},
+            dataType: 'json',
+            success: function (result) {
+                if ($.isEmptyObject(result) || result.userId === null) {
+                    // $("#spacePhonenum").html('사용할 수 있는 전화번호입니다');
+                    // $("#spacePhonenum").css('color', 'green');
+                    callback('a'); // 성공 시 콜백에 'a'를 전달
+                } else {
+                    document.getElementById("phonenumber").value = '';
+                    $("#codeCheck").css("display", "none");
+                    document.getElementById("smsCode").value = '';
+                    $("#spacePhonenum").html("이미 등록된 전화번호입니다.");
+                    $("#spacePhonenum").css('color', 'red');
+                    callback('b'); // 실패 시 콜백에 'b'를 전달
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("서버 요청 실패:", status, error);
+                alert("서버 요청 실패: " + status + " - " + error);
+                callback('b'); // 실패 시 콜백에 'b'를 전달
+            }
+        });
     }
 </script>
 </body>

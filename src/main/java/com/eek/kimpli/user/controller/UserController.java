@@ -157,12 +157,14 @@ public class UserController {
     // 회원정보 수정+ 프로필 사진 등록
     @PostMapping("/user/update")
     public String updateMyInfo(@RequestParam("profileFile") MultipartFile profileFile,
-                               @RequestParam("userId") String userId) {
+                              User user) {
+        System.out.println("컨트롤러 유저"+user);
         // userId를 사용하여 현재 로그인 중인 사용자 정보를 가져오는 작업
-        User loggedInUser = userService.getUserById(userId);
+//        User loggedInUser = userService.getUserById(user.getUserId());
+
         try {
             //프로필 사진 업데이트
-            userService.updateProfileInfo(loggedInUser, profileFile);
+            userService.updateMyInfo(user, profileFile);
         } catch (IOException e) {
             e.printStackTrace();
         }

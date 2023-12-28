@@ -1,3 +1,4 @@
+
 function showGreeting(message) {
     const dataUsername = message.trim(); // 웹소켓을 통해 수신된 메시지의 공백 제거
 

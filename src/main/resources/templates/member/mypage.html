@@ -63,7 +63,7 @@
         <!-- 파일 업로드 -->
 
         <br>
-        <div id="preview">
+        <div id="preview" style="width: 200px;">
             <img th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"
                  alt="Profile Image" style="width: 200px; height: 200px; object-fit: cover;">
         </div>

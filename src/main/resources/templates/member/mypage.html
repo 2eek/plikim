@@ -100,7 +100,7 @@
                     <td>휴대폰 번호</td>
                     <td>
                         <input type="text" name="phoneNumber" id="phonenumber" th:value="${userPhoneNumber}">
-                            <button type="button" id="sendCode" class="btn btn-default"
+                        <button type="button" id="sendCode" class="btn btn-default"
                                 style="border: 1px solid #ccc; padding: 5px 10px;">코드 발송
                         </button>
                         <div style="margin-top: 5px">
@@ -109,7 +109,7 @@
 
                         <div id="codeCheck" class="mb-3" style="display: none; align-items: center;">
                             <input type="text" class="form-control" name="smsCode" id="smsCode" placeholder="코드 입력하세요"
-                                   style="width:185px; margin-right: 3px" required>
+                                   style="width:185px; margin-right: 3px" >
                             <button type="button" id="codeCheckButton" class="btn btn-default"
                                     style="float: left; border: 1px solid #ccc; padding: 5px 10px;">코드 확인
                             </button>
@@ -127,7 +127,47 @@
     </form>
 </div>
 
-<script>
+<script th:inline="javascript">
+       var userPhoneNumber = /*[[${userPhoneNumber}]]*/ '';
+
+
+    $('#form-submit').on('click', function (event) {
+        //원래 휴대폰 번호와 새로 입력한 휴대폰 번호가 다른지 체크. 같다면 그냥 submit. 다르다면 인증코드 한 번 더 확인.
+        var userInputPhoneNumber = $("#phonenumber").val();
+
+       if (userInputPhoneNumber == userPhoneNumber) {
+
+        $('#form-submit').submit();
+
+        } else {
+
+
+            confirmSmsCode(function (result) {
+                // result에 false가 반환되면 실행되는 부분. 코드가 올바르게 확인되지 않아 회원가입이 안 되는 경우
+                if (!result) {
+                    // 코드 인증은 성공했으나 중복된 휴대폰 번호인 경우 false 반환.
+                    event.preventDefault(); // 이벤트의 기본 동작 중단
+                    alert('휴대폰 번호를 확인하세요')
+                    return false;
+
+                } else {
+                    // 코드 인증이 성공한 경우
+                    // result에 false가 반환되면 실행되는 부분. 인증이 성공하여 DB 조회가 필요한 경우
+                    checkPhoneNumber(function (checkResult) {
+                        if (checkResult === 'a') {
+                            // 여기서 폼을 제출, 회원가입처리
+                            alert('코드가 인증되었습니다.')
+                                                       $('#form-submit').submit();
+                        } else {
+                            alert('코드가 맞지 않습니다.');
+                        }
+                    });
+                }
+            });
+        }
+    })
+
+
     function previewImage(input) {
         var preview = document.getElementById('preview');
         if (input.files && input.files[0]) {
@@ -136,15 +176,12 @@
             reader.onload = function (e) {
                 preview.innerHTML = '<img src="' + e.target.result + '" alt="Profile Image" style="width: 200px; height: 200px; object-fit: cover;">';
             };
-
             reader.readAsDataURL(input.files[0]);
         }
     }
 
-
     $('#email').on('input', function () {
         checkEmail(function (result) {
-
         });
     });
 
@@ -185,18 +222,18 @@
         $('#sendCode').on('click', function () {
             let receiverId = document.getElementById("phonenumber").value;
 
-
             // 숫자로만 구성되어 있는지 체크
             var reg = /^[0-9]{11}$/;
             if (!reg.test(receiverId)) {
                 // alert('숫자로 입력바랍니다.')
+              $("#phonenumber").val(userPhoneNumber);
+             console.log(userPhoneNumber);
+                $("#phonenumber").focus();
                 $("#spacePhonenum").html('전화번호를 다시 확인하세요');
                 $("#spacePhonenum").css('color', 'red');
                 $("#phonenumber").focus();
                 return false;
             }
-
-
             if (receiverId === "") {
                 alert("휴대폰 번호를 입력하세요.");
                 $("#Number").focus();
@@ -204,13 +241,8 @@
             }
             //문자 발송
             sendSMS();
-
-
             //코드 입력폼 활성화
             sendCodeForm();
-
-            //휴대폰 중복체크
-
         });
 
 //문자 발송 ajax
@@ -246,7 +278,7 @@
     });
 
     //함수 정의
-    // 코드 비교 함수(회원가입 서브밋 후 실행됨 그다음 회원의 휴대폰 번호도 체크한다. )
+    // 코드 비교 함수( 서브밋 후 실행됨 그다음 회원의 휴대폰 번호도 체크한다. )
     function confirmSmsCode(callback) {
         var phoneNumberValue = $("#phonenumber").val();
         var userCodeValue = $("#smsCode").val();
@@ -312,13 +344,37 @@
                         // 여기서 폼을 제출, 회원가입처리
                         alert('코드가 인증되었습니다.')
                     } else {
-                        alert('코드가 맞지 않습니다.');
+                        // alert('코드가 맞지 않습니다.');
                     }
                 });
             }
         });
     });
+    //휴대폰 번호 유효성체크
+    $(document).ready(function () {
+        // 입력 필드에서 포커스 아웃 이벤트를 감지
+        $("#phonenumber").blur(function () {
+            phoneNumberValidate();
+        });
+    });
 
+    function phoneNumberValidate() {
+        var phonenumber = $("#phonenumber").val();
+        var reg = /^[0-9]{11}$/;
+
+        if (!reg.test(phonenumber)) {
+            // alert("전화번호는 숫자로만 입력해야 합니다.");
+
+             $("#phonenumber").val(userPhoneNumber);
+             console.log(userPhoneNumber);
+                $("#phonenumber").focus();
+            $("#spacePhonenum").html("전화번호를 다시 확인하세요.");
+            $("#spacePhonenum").css('color', 'red');
+
+
+            return;
+        }
+    }
 
     // checkPhoneNumber 함수 수정
     function checkPhoneNumber(callback) {
@@ -326,6 +382,8 @@
         var reg = /^[0-9]{11}$/;
 
         if (!reg.test(phonenumber)) {
+            $("#spacePhonenum").html("전화번호를 다시 확인하세요.");
+            $("#spacePhonenum").css('color', 'red');
             // alert("전화번호는 숫자로만 입력해야 합니다.");
             $("#phonenumber").focus();
             callback('b'); // 실패 시 콜백에 'b'를 전달
@@ -345,9 +403,12 @@
                     // $("#spacePhonenum").css('color', 'green');
                     callback('a'); // 성공 시 콜백에 'a'를 전달
                 } else {
-                    document.getElementById("phonenumber").value = '';
+      $("#phonenumber").val(userPhoneNumber);
+             console.log(userPhoneNumber);
+                $("#phonenumber").focus();
                     $("#codeCheck").css("display", "none");
                     document.getElementById("smsCode").value = '';
+
                     $("#spacePhonenum").html("이미 등록된 전화번호입니다.");
                     $("#spacePhonenum").css('color', 'red');
                     callback('b'); // 실패 시 콜백에 'b'를 전달

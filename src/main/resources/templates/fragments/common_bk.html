@@ -2,6 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head th:fragment="head(title)">
+    <script src="/js/onlineJs.js"></script>
+
     <title th:text="${title}"></title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
@@ -23,14 +25,10 @@
             crossorigin="anonymous"
     ></script>
 
-<!--<input type="hidden" id="loggedInUserId" name="loggedInUserId" th:if="${#authorization.expression('isAuthenticated()')}"-->
-<!--       th:value="${commonUser}"/>-->
-
 
 </head>
 
 <body>
-<script src="/js/onlineJs.js"></script>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:fragment="menu(menu)">
     <a class="navbar-brand" href="/" style="font-style: oblique;">plikim</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
@@ -38,10 +36,7 @@
         <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        <input  type="hidden" id="loggedInUserId" name="loggedInUserId"
-       th:if="${#authorization.expression('isAuthenticated()')}"
-       th:value="${commonUser.userId}"/>
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault" >
         <ul class="navbar-nav mr-auto">
             <li class="nav-item" th:classappend="${menu} == 'moment'? 'active'">
                 <a class="nav-link" href="/moment/list">모멘트</a>
@@ -49,9 +44,6 @@
             <li class="nav-item" th:classappend="${menu} == 'boardList'? 'active'">
                 <a class="nav-link" href="/board/list">게시판</a>
             </li>
-            <!--                <li class="nav-item" th:classappend="${menu} == 'member'? 'active'">-->
-            <!--                    <a class="nav-link" href="/member/memberlist">회원목록 조회 </a>-->
-            <!--                </li>-->
         </ul>
 
         <ul class="navbar-nav">
@@ -61,18 +53,15 @@
             <li class="nav-item" th:classappend="${menu} == 'join'? 'active'">
                 <a class="nav-link" th:href="@{/member/memberjoin}" sec:authorize="!isAuthenticated()">회원가입</a>
             </li>
-            <!--                <li class="nav-item" th:classappend="${menu} == 'mypage'? 'active'" sec:authorize="isAuthenticated()">-->
-            <!--                    <a class="nav-link" th:href="@{/mychatrooms}">채팅</a>-->
-            <!--                </li>-->
 
 
-              <li class="nav-item" th:classappend="${menu} == 'chat'? 'active'" sec:authorize="isAuthenticated()">
+            <li class="nav-item" th:classappend="${menu} == 'chat'? 'active'" sec:authorize="isAuthenticated()">
                 <a class="nav-link" th:href="@{/mychatrooms}">
                     채팅<span id="notificationBadge" class="badge badge-danger">0</span>
                 </a>
             </li>
         </ul>
-
+        <!--드롭바-->
         <ul class="navbar-nav" style="margin-left: 10px;"> <!-- 여기에 간격을 조절할 수 있는 스타일을 추가 -->
 
             <div class="dropdown" style="position: relative;">
@@ -93,16 +82,19 @@
             </div>
         </ul>
         <!-- 검색 -->
-        <form class="d-flex" role="search" , method="GET" th:classappend="${menu} == 'mypage'? 'active'"
-              th:action="@{/board/list}">
-            <input id="searchText" name="searchText" th:value="${param.searchText}" class="form-control me-2"
-                   type="text" placeholder="게시글 검색" style="margin-left: 7px;" aria-label="Search">
-            <button class="btn btn-outline-success" style="margin-left:3px;" type="submit">Search</button>
-        </form>
-
+        <ul class="navbar-nav" style="height: 38px">
+            <form class="d-flex" style="height: 38px" role="search" , method="GET" th:classappend="${menu} == 'mypage'? 'active'"
+                  th:action="@{/board/list}">
+                <input id="searchText" name="searchText" th:value="${param.searchText}" class="form-control me-2"
+                       type="text" placeholder="게시글 검색" style="margin-left: 7px;" aria-label="Search">
+                <button class="btn btn-outline-success" style="margin-left:3px;" type="submit">Search</button>
+            </form>
+        </ul>
     </div>
 
 
 </nav>
+
+
 </body>
 </html>

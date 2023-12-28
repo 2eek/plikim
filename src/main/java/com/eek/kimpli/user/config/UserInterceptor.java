@@ -11,6 +11,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 
 @Component
 public class UserInterceptor implements HandlerInterceptor {
@@ -22,7 +24,6 @@ public class UserInterceptor implements HandlerInterceptor {
         this.userService = userService;
     }
 
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -30,14 +31,16 @@ public class UserInterceptor implements HandlerInterceptor {
             String userId = ((UserDetails) authentication.getPrincipal()).getUsername();
             System.out.println("유저1 " + userId);
 
-
             User user = userService.getUserById(userId);
             request.setAttribute("commonUser", user);
 
+            // 세션에 사용자 정보 설정
+            HttpSession session = request.getSession();
+            session.setAttribute("loggedInUserId", userId);
         }
         return true;
     }
 
 
-    // 다른 메소드들도 오버라이드할 수 있음 (postHandle, afterCompletion 등)
 }
+

@@ -28,8 +28,8 @@
             crossorigin="anonymous"
     ></script>
 
-<!--<input type="hidden" id="loggedInUserId" name="loggedInUserId" th:if="${#authorization.expression('isAuthenticated()')}"-->
-<!--       th:value="${commonUser}"/>-->
+    <!--<input type="hidden" id="loggedInUserId" name="loggedInUserId" th:if="${#authorization.expression('isAuthenticated()')}"-->
+    <!--       th:value="${commonUser}"/>-->
 
 
 </head>
@@ -43,10 +43,10 @@
         <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        <input  type="hidden" id="loggedInUserId" name="loggedInUserId"
-       th:if="${#authorization.expression('isAuthenticated()')}"
-       th:value="${commonUser.userId}"/>
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault" style="height: 40px">
+        <input type="hidden" id="loggedInUserId" name="loggedInUserId"
+               th:if="${#authorization.expression('isAuthenticated()')}"
+               th:value="${commonUser.userId}"/>
         <ul class="navbar-nav mr-auto">
             <li class="nav-item" th:classappend="${menu} == 'moment'? 'active'">
                 <a class="nav-link" href="/moment/list">모멘트</a>
@@ -71,7 +71,7 @@
             <!--                </li>-->
 
 
-              <li class="nav-item" th:classappend="${menu} == 'chat'? 'active'" sec:authorize="isAuthenticated()">
+            <li class="nav-item" th:classappend="${menu} == 'chat'? 'active'" sec:authorize="isAuthenticated()">
                 <a class="nav-link" th:href="@{/mychatrooms}">
                     채팅<span id="notificationBadge" class="badge badge-danger">0</span>
                 </a>
@@ -98,12 +98,15 @@
             </div>
         </ul>
         <!-- 검색 -->
-        <form class="d-flex" role="search" , method="GET" th:classappend="${menu} == 'mypage'? 'active'"
-              th:action="@{/board/list}">
-            <input id="searchText" name="searchText" th:value="${param.searchText}" class="form-control me-2"
-                   type="text" placeholder="게시글 검색" style="margin-left: 7px;" aria-label="Search">
-            <button class="btn btn-outline-success" style="margin-left:3px;" type="submit">Search</button>
-        </form>
+        <ul class="navbar-nav " style="height: 40px">
+
+            <form class="d-flex" role="search" , method="GET" th:classappend="${menu} == 'mypage'? 'active'"
+                  th:action="@{/board/list}" style="height: 38px;">
+                <input id="searchText" name="searchText" th:value="${param.searchText}" class="form-control me-2"
+                       type="text" placeholder="게시글 검색" style="margin-left: 7px;" aria-label="Search">
+                <button class="btn btn-outline-success" style="margin-left:3px;" type="submit">Search</button>
+            </form>
+        </ul>
 
     </div>
 

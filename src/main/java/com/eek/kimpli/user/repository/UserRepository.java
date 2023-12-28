@@ -50,6 +50,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 @Query(value = "UPDATE user " +
        "SET user_name = COALESCE(:#{#user.userName}, user_name), " +
        "phone_number = COALESCE(:#{#user.phoneNumber}, phone_number), " +
+               "email = COALESCE(:#{#user.email}, email), " +
        "origin_profile_img = COALESCE(:#{#user.originProfileImg}, origin_profile_img), " +
        "stored_file_name = COALESCE(:#{#user.storedFileName}, stored_file_name), " +
        "file_attached = COALESCE(:#{#user.fileAttached}, file_attached) " +

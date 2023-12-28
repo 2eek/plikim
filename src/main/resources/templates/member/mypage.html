@@ -12,11 +12,9 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+
     }
 
-    form {
-        width: 700px
-    }
 
     /*#table-container {*/
     /*    width: 150%;*/
@@ -47,6 +45,9 @@
         align-self: flex-end;
         margin-top: 20px;
     }
+      #table-container table tr td:first-child {
+        width: 130px;
+    }
 </style>
 
 <head th:replace="fragments/common :: head('회원 수정')">
@@ -57,38 +58,45 @@
 </nav>
 
 <div id="sform">
-    <form action="/user/update" enctype="multipart/form-data" method="post">
+    <form action="/user/update" enctype="multipart/form-data" method="post" style=" width: 700px">
         <input type="hidden" name="userId" th:value="${userId}">
 
         <!-- 파일 업로드 -->
-
-        <br>
-        <div id="preview" style="width: 200px;">
-            <img th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"
-                 alt="Profile Image" style="width: 200px; height: 200px; object-fit: cover;">
+        <div style="margin-bottom: 20px">
+            <br>
+            <div id="preview" style="width: 200px;">
+                <img th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"
+                     alt="Profile Image" style="width: 200px; height: 200px; object-fit: cover;">
+            </div>
+            <div style="margin-top: 20px">
+                <label for="profileFile">프로필 이미지:</label>
+                <input type="file" name="profileFile" id="profileFile" onchange="previewImage(this)">
+            </div>
+            <br>
         </div>
-        <label for="profileFile">프로필 이미지:</label>
-        <input type="file" name="profileFile" id="profileFile" onchange="previewImage(this)">
-        <br>
-
         <!-- 회원 정보 테이블 -->
         <div id="table-container">
             <table>
-                <tr>
-                    <th>항목</th>
-                    <th>값</th>
-                </tr>
+<!--                <tr>-->
+<!--                    <th>항목</th>-->
+<!--                    <th>값</th>-->
+<!--                </tr>-->
                 <tr>
                     <td>아이디</td>
                     <td><span th:text="${userId}"></span></td>
                 </tr>
                 <tr>
                     <td>이메일</td>
-                    <td><span th:text="${userEmail}"></span></td>
+                    <td colspan=1><input type="email" name="email" placeholder="이메일"
+                               id="email" th:value="${userEmail}">
+                     <font id="spaceEmail" size="2"></font>
+                    </td>
+
+
                 </tr>
                 <tr>
                     <td>휴대폰 번호</td>
-                    <td><span th:text="${userPhoneNumber}"></span></td>
+                    <td> <input type="text" name="phoneNumber" th:value="${userPhoneNumber}"></td>
                 </tr>
                 <tr>
                     <td>자기소개</td>
@@ -114,6 +122,45 @@
             reader.readAsDataURL(input.files[0]);
         }
     }
+
+
+$('#email').on('input', function () {
+    checkEmail(function (result) {
+
+    });
+});
+
+//ajax 유효성 검사
+function checkEmail(callback) {
+    var email = $("#email").val();
+
+     $.ajax({
+        url: "/emailCheck",
+        type: "post",
+        data: {email: email},
+        dataType: 'json',
+        success: function (result) {
+            if (result==-1)  {
+         	$("#spaceEmail").html('이메일 형식이 아닙니다.');
+ 				$("#spaceEmail").attr('color', 'red');
+				 // $("#email").focus();
+             } else {
+				$("#spaceEmail").html('');
+
+			}
+
+            // 비동기 작업이 완료된 후에 콜백 함수 호출
+            if (typeof callback === 'function') {
+                callback(result !== -1);
+            }
+        },
+        error: function () {
+            alert("서버요청실패!");
+        }
+    });
+}
+
+
 </script>
 </body>
 

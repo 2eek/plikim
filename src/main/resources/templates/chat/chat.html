@@ -15,10 +15,10 @@
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
-        <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"
             integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
-        <script src="/js/onlineJs.js"></script>
+    <script src="/js/onlineJs.js"></script>
 
     <link rel="stylesheet" type="text/css" href="/css/chatStyle.css">
 </head>
@@ -36,24 +36,27 @@
             <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top"
                  th:replace="fragments/common :: menu('home')">
             </nav>
-            <div class="profile_name" th:attr="data-profile-image=@{${#strings.isEmpty(userinfo.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + userinfo.storedFileName}}">
-    <img th:src="@{${#strings.isEmpty(userinfo.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + userinfo.storedFileName}}"
-         alt="Profile Image"  style="width: 30px; height: 30px; object-fit: cover; border-radius: 50%; overflow: hidden;"> <span id="username"></span>
-</div>
-                <!--채팅박스-->
-                <div class="container-fluid chat_section" id="chat-box" style="margin-top: 20vh;">
-                </div>
-                <div class="type_msg">
-                    <div class="input_msg_write fixed-bottom">
-                        <!--채팅 인풋창-->
-                        <input id="chat-outgoing-msg" type="text" class="write_msg " placeholder="Type a message"/>
-                        <button id="chat-outgoing-button" class="msg_send_btn" type="button"><i
-                                class="fa fa-paper-plane" aria-hidden="true"></i></button>
-                    </div>
+            <div class="profile_name"
+                 th:attr="data-profile-image=@{${#strings.isEmpty(userinfo.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + userinfo.storedFileName}}">
+                <img th:src="@{${#strings.isEmpty(userinfo.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + userinfo.storedFileName}}"
+                     alt="Profile Image"
+                     style="width: 30px; height: 30px; object-fit: cover; border-radius: 50%; overflow: hidden;"> <span
+                    id="username"></span>
+            </div>
+            <!--채팅박스-->
+            <div class="container-fluid chat_section" id="chat-box" style="margin-top: 20vh;">
+            </div>
+            <div class="type_msg">
+                <div class="input_msg_write fixed-bottom">
+                    <!--채팅 인풋창-->
+                    <input id="chat-outgoing-msg" type="text" class="write_msg " placeholder="Type a message"/>
+                    <button id="chat-outgoing-button" class="msg_send_btn" type="button"><i
+                            class="fa fa-paper-plane" aria-hidden="true"></i></button>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 
 <script src="/js/chatJs.js"></script>

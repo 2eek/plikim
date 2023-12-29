@@ -56,11 +56,11 @@
 
     .sidebar {
         background-color: #343A40;
-        margin-top: 100px;
+        margin-top: 30px;
         color: white;
         width: 200px;
         padding: 20px;
-        height: 500px;
+        height: 600px;
     }
 
     .sidebar ul {
@@ -122,7 +122,7 @@
                     <input type="hidden" name="userId" th:value="${userId}">
 
                     <!-- 파일 업로드 -->
-                    <div style="margin-bottom: 20px; margin-top: 100px">
+                    <div style="margin-bottom: 20px; ">
                         <br>
                         <div id="preview" style="width: 200px;">
                             <img th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"

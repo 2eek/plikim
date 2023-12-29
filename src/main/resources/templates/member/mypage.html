@@ -129,37 +129,40 @@
 
 <script th:inline="javascript">
        var userPhoneNumber = /*[[${userPhoneNumber}]]*/ '';
-
+//제출시
 $("#form-submit").on("click", function (event) {
-    // 이벤트 기본 동작 중지 (페이지 새로고침 등 방지)
-    // event.preventDefault();
 
     // 코드 확인 수행
      var userInputPhoneNumber = $("#phonenumber").val();
        if (userInputPhoneNumber == userPhoneNumber) {
 
-        $('#form-submit').submit();
+        // $('#form-submit').submit();
 
         } else{
-              // event.preventDefault();
-
     confirmSmsCode(function (result) {
+
         // 코드 확인 실패한 경우
-        if (!result) {
-             event.preventDefault();
-            // 저장 폼 제출
-            alert('187코드인증 틀림')
-              // event.preventDefault();
+        if (result) {
 
-
-
-                    // 코드 확인에 성공한 경우에만 서버로의 제출 수행
+          alert('코드 인증 완료')
+              submitForm();
         } else {
-            $("#form-submit").submit();
-            alert('코드 인증 완료')
         }
-    });}
+
+    });
+        //휴대폰 번호 다름
+                 event.preventDefault();  //이게 먹힌다.
+        // event.preventDefault();
+
+
+       }
 });
+
+// 폼 제출 함수
+function submitForm() {
+    // 여기에서 폼을 직접 제출합니다.
+    $('#form-submit').closest('form').submit();
+}
 
     function previewImage(input) {
         var preview = document.getElementById('preview');
@@ -271,7 +274,8 @@ $("#form-submit").on("click", function (event) {
     });
 
     //함수 정의
-    // 코드 비교 함수( 서브밋 후 실행됨 그다음 회원의 휴대폰 번호도 체크한다. )
+       //서브밋시
+    // 코드 비교 함수 정의( 서브밋 후 실행됨 그다음 회원의 휴대폰 번호도 체크한다. )
     function confirmSmsCode(callback) {
         var phoneNumberValue = $("#phonenumber").val();
         var userCodeValue = $("#smsCode").val();
@@ -294,10 +298,11 @@ $("#form-submit").on("click", function (event) {
 
                         // 코드가 일치하지 않는 경우 false를 전달하면
                         if (success.result === 'failure') {
-                             alert('코드가 일치하지 않습니다. 335')
-                            return false;
-                            callback(false);
-                            callback(false);
+                             alert('코드가 일치하지 않습니다.')
+              //코드 지우기
+                                            $("#smsCode").val('');
+    callback(false);
+
                         }
                     }
                 })
@@ -307,8 +312,10 @@ $("#form-submit").on("click", function (event) {
                     callback(false);  // 콜백 함수 호출, 실패 여부 전달
                 });
         } else {
+            //??
             // phoneNumberValue 또는 userCodeValue가 값이 없는 경우에 대한 처리
             callback(false);  // 콜백 함수 호출, 실패 여부 전달
+
         }
     }
 
@@ -316,7 +323,7 @@ $("#form-submit").on("click", function (event) {
     //서브밋 과정에서 코드 적합 여부 판단 후 db에 존재하는 휴대폰 번호인지 확인
     // checkPhoneNumber 함수 정의
 
-    $('#codeCheckButton').on('click', function (event) {
+    $('#codeCheckButton').on('click', function () {
 
 
         // 코드 확인
@@ -329,7 +336,7 @@ $("#form-submit").on("click", function (event) {
             // result에 false가 반환되면 실행되는 부분. 코드가 올바르게 확인되지 않아 회원가입이 안 되는 경우
             if (!result) {
                 // 코드 인증은 성공했으나 중복된 휴대폰 번호인 경우 false 반환.
-                alert('364라인 코드 실패요')
+                alert('330라인 코드 실패요')
                         return false;
             } else {
                 // 코드 인증이 성공한 경우

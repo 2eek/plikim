@@ -129,36 +129,31 @@
 
 <script th:inline="javascript">
        var userPhoneNumber = /*[[${userPhoneNumber}]]*/ '';
-
+//제출시
 $("#form-submit").on("click", function (event) {
     // 이벤트 기본 동작 중지 (페이지 새로고침 등 방지)
-    // event.preventDefault();
+    event.preventDefault();
 
     // 코드 확인 수행
-     var userInputPhoneNumber = $("#phonenumber").val();
-       if (userInputPhoneNumber == userPhoneNumber) {
-
+    var userInputPhoneNumber = $("#phonenumber").val();
+    if (userInputPhoneNumber == userPhoneNumber) {
+        // 코드가 일치하면 서버로의 제출 수행
         $('#form-submit').submit();
+    } else {
+        // 코드가 일치하지 않으면 confirmSmsCode 함수 실행
+        confirmSmsCode(function (result) {
+            //일단 막자
+                event.preventDefault();
 
-        } else{
-              // event.preventDefault();
-
-    confirmSmsCode(function (result) {
-        // 코드 확인 실패한 경우
-        if (!result) {
-             event.preventDefault();
-            // 저장 폼 제출
-            alert('187코드인증 틀림')
-              // event.preventDefault();
-
-
-
-                    // 코드 확인에 성공한 경우에만 서버로의 제출 수행
-        } else {
-            $("#form-submit").submit();
-            alert('코드 인증 완료')
-        }
-    });}
+            // 코드 확인 실패한 경우
+            if (!result) {
+                alert('151코드인증 틀림');
+            } else {
+                // 코드 확인 성공한 경우 서버로의 제출 수행
+                $('#form-submit').submit();
+            }
+        }); // event를 confirmSmsCode 함수로 전달
+    }
 });
 
     function previewImage(input) {
@@ -271,46 +266,43 @@ $("#form-submit").on("click", function (event) {
     });
 
     //함수 정의
+       //서브밋시
     // 코드 비교 함수( 서브밋 후 실행됨 그다음 회원의 휴대폰 번호도 체크한다. )
-    function confirmSmsCode(callback) {
-        var phoneNumberValue = $("#phonenumber").val();
-        var userCodeValue = $("#smsCode").val();
+// confirmSmsCode 함수 수정
+function confirmSmsCode(callback) {
+    var phoneNumberValue = $("#phonenumber").val();
+    var userCodeValue = $("#smsCode").val();
 
-        // phoneNumberValue와 userCodeValue가 모두 값이 있는 경우에만 AJAX 통신 수행
-        if (phoneNumberValue && userCodeValue) {
-            $.ajax({
-                url: "/compareCodes",
-                type: 'post',
-                data: {inputedPhonenumber: phoneNumberValue, userInputNumber: userCodeValue},
-            })
-                .done(success => {
+    // phoneNumberValue와 userCodeValue가 모두 값이 있는 경우에만 AJAX 통신 수행
+    if (phoneNumberValue && userCodeValue) {
+        $.ajax({
+            url: "/compareCodes",
+            type: 'post',
+            data: {inputedPhonenumber: phoneNumberValue, userInputNumber: userCodeValue},
+        })
+        .done(success => {
+            if (success.result === "success") {
+                // 성공적으로 코드가 확인된 경우
+                callback(true);
+            } else {
+                // 코드가 일치하지 않는 경우
+                if (success.result === 'failure') {
+                    alert('코드가 일치하지 않습니다. 297');
+                    callback(false);
 
-
-                    if (success.result === "success") {
-                        // 성공적으로 코드가 확인된 경우, 이 번호가 db에 있는지 체크시행한다
-                        // 565에서 정의한 checkPhoneNumber의 결과인 result를 콜백함수에 넣음.
-                        callback(true);
-                    } else {
-
-                        // 코드가 일치하지 않는 경우 false를 전달하면
-                        if (success.result === 'failure') {
-                             alert('코드가 일치하지 않습니다. 335')
-                            return false;
-                            callback(false);
-                            callback(false);
-                        }
-                    }
-                })
-                .fail(() => {
-                    console.error("서버요청 실패");
-                    alert("서버요청 실패");
-                    callback(false);  // 콜백 함수 호출, 실패 여부 전달
-                });
-        } else {
-            // phoneNumberValue 또는 userCodeValue가 값이 없는 경우에 대한 처리
-            callback(false);  // 콜백 함수 호출, 실패 여부 전달
-        }
+                }
+            }
+        })
+        .fail(() => {
+            console.error("서버요청 실패");
+            alert("서버요청 실패");
+            callback(false);
+        });
+    } else {
+        // phoneNumberValue 또는 userCodeValue가 값이 없는 경우에 대한 처리
+        callback(false);
     }
+}
 
 
     //서브밋 과정에서 코드 적합 여부 판단 후 db에 존재하는 휴대폰 번호인지 확인
@@ -329,7 +321,7 @@ $("#form-submit").on("click", function (event) {
             // result에 false가 반환되면 실행되는 부분. 코드가 올바르게 확인되지 않아 회원가입이 안 되는 경우
             if (!result) {
                 // 코드 인증은 성공했으나 중복된 휴대폰 번호인 경우 false 반환.
-                alert('364라인 코드 실패요')
+                alert('330라인 코드 실패요')
                         return false;
             } else {
                 // 코드 인증이 성공한 경우

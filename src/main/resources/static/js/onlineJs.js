@@ -46,7 +46,8 @@ $(document).on('click', 'tr.user-row', function () {
         // 세션 값이 없는 경우 로그인 페이지로 리다이렉트
         if (!loggedInUserId) {
             e.preventDefault(); // 기본 동작 중단
-            window.location.href = '/member/loginForm';
+            alert('로그인 후 이용 가능')
+            // window.location.href = '/member/loginForm';
         }
     });
 

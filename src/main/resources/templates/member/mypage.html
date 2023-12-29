@@ -8,12 +8,12 @@
         overflow: hidden;
     }
 
-    #sform {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+    /*#sform {*/
+    /*    display: flex;*/
+    /*    flex-direction: column;*/
+    /*    align-items: center;*/
 
-    }
+    /*}*/
 
     table {
         border-collapse: collapse;
@@ -43,6 +43,53 @@
     #table-container table tr td:first-child {
         width: 130px;
     }
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+.wrapper {
+    display: flex;
+}
+
+.sidebar {
+    background-color: #343A40;
+    margin-top: 100px;
+    color: white;
+    width: 200px;
+    padding: 20px;
+    height: 500px;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: white;
+    padding: 8px 16px;
+    display: block;
+}
+
+.sidebar a:hover {
+    background-color: #555;
+}
+
+.main-content {
+
+    flex-grow: 1;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.main{
+    align-items: center;
+}
+
 
 </style>
 
@@ -53,12 +100,29 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('home')">
 </nav>
 
+
+
+
+
 <div id="sform">
-    <form action="/user/update" enctype="multipart/form-data" method="post" style=" width: 700px">
+               <nav class="sidebar" style="float: left">
+        <!-- Sidebar content goes here -->
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+    <div class="main-content">
+        <!-- Main content goes here -->
+        <div class="content-center">
+
+    <container style="float: left" >
+    <form   action="/user/update" enctype="multipart/form-data" method="post" style=" width: 700px">
         <input type="hidden" name="userId" th:value="${userId}">
 
         <!-- 파일 업로드 -->
-        <div style="margin-bottom: 20px">
+        <div style="margin-bottom: 20px; margin-top: 100px" >
             <br>
             <div id="preview" style="width: 200px;">
                 <img th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"
@@ -70,8 +134,9 @@
             </div>
             <br>
         </div>
+
         <!-- 회원 정보 테이블 -->
-        <div id="table-container">
+        <div id="table-container" >
             <table>
                 <tr>
                     <td>아이디</td>
@@ -117,7 +182,11 @@
         <input type="submit" value="저장" id="form-submit">
  </div>
     </form>
+    </container>
+            </div>
+        </div>
 </div>
+
 
 <script th:inline="javascript">
     var userPhoneNumber = /*[[${userPhoneNumber}]]*/ '';

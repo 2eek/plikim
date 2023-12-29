@@ -19,14 +19,14 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @Service
 public class UserService {
-     @Value("${external.upload.path}")
+    @Value("${external.upload.path}")
     private String path;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserFileRepository userFileRepository;
 
     // 회원가입
-@Transactional
+    @Transactional
     public void save(User user) throws DuplicateUserDataException {
         // 중복된 값 체크
         if (isDuplicateUser(user.getUserId(), user.getPhoneNumber())) {
@@ -52,13 +52,13 @@ public class UserService {
 
     //하나의 계정에 하나의 휴대폰 번호(휴대폰 번호 중복체크)
     private boolean isDuplicateUser(String userId, String phoneNumber) {
-        return userRepository.existsByUserIdOrPhoneNumber(userId ,phoneNumber);
+        return userRepository.existsByUserIdOrPhoneNumber(userId, phoneNumber);
     }
 
     //사용중인 휴대전화인지 체크
     public User findByPhoneNumber(String phoneNumber) {
         // findByPhoneNumber 메서드를 사용하여 사용자 찾기
-            return userRepository.findByPhoneNumber(phoneNumber);
+        return userRepository.findByPhoneNumber(phoneNumber);
     }
 
 
@@ -86,7 +86,7 @@ public class UserService {
     }
 
     //유효한 이메일인지 확인
-     public User checkEmail(String email) {
+    public User checkEmail(String email) {
         User result = userRepository.findByEmail(email);
         System.out.println("유저유저유저 이메일과 아이디" + result);
         return result;
@@ -95,38 +95,72 @@ public class UserService {
     //회원마이페이지 업데이트
     @Transactional
     public void updateUserInfo(User user) {
+        System.out.println("업데이트 전 유저 정보" + user);
         // 업데이트 로직 추가
         userRepository.updateUserInfo(user);
     }
 
-     public User getUserById(String userId) {
+    public User getUserById(String userId) {
         // userRepository를 사용하여 userId를 기반으로 사용자 정보를 가져옴
         return userRepository.findByUserId(userId);
     }
 
 
     //회원 사진 업데이트
-     public void updateMyInfo(User user, MultipartFile profileFile) throws IOException {
-        if (profileFile != null && !profileFile.isEmpty()) {
-            //업로드된 파일의 원본 파일 이름을 OriginalFilename로 설정
+    public void updateMyInfo(User user, MultipartFile profileFile) throws IOException {
+        User upUser = userRepository.findByUserId(user.getUserId());
+        if (!"L2".equals(upUser.getLoginType()))  {
+            //프로필 사진 있다면
+            if (profileFile != null && !profileFile.isEmpty()) {
+                //업로드된 파일의 원본 파일 이름을 OriginalFilename로 설정
 
-            //OriginProfileImg 필드에 이름 저장
-            user.setOriginProfileImg(profileFile.getOriginalFilename());
-            //StoredFileName 필드에 저장되는 이름 저장(중복 피하기 위해 이름 생성) -> 이 이름으로 파일 불러온다.
-            user.setStoredFileName(System.currentTimeMillis() + "_" + profileFile.getOriginalFilename());
-            user.setFileAttached(1);
-            System.out.println("유저정보" + user);
-            //스프링프로퍼티 참조해서 저장경로 설정
-            String savePath = path + user.getStoredFileName();
-            System.out.println("저장경로+이름" + savePath);
+                //OriginProfileImg 필드에 이름 저장
+                user.setOriginProfileImg(profileFile.getOriginalFilename());
+                //StoredFileName 필드에 저장되는 이름 저장(중복 피하기 위해 이름 생성) -> 이 이름으로 파일 불러온다.
+                user.setStoredFileName(System.currentTimeMillis() + "_" + profileFile.getOriginalFilename());
+                user.setFileAttached(1);
+                System.out.println("유저정보" + user);
+                //스프링프로퍼티 참조해서 저장경로 설정
+                String savePath = path + user.getStoredFileName();
+                System.out.println("저장경로+이름" + savePath);
 
-            // 회원의 정보 업데이트 DB에 데이터 넣음 (originProfileImg,storedFileName, fileAttached )
+                // 회원의 정보 업데이트 DB에 데이터 넣음 (originProfileImg,storedFileName, fileAttached )
 
-            //서버에 파일 저장
-            FileService.saveFile(profileFile.getBytes(), savePath);
+                //서버에 파일 저장
+                FileService.saveFile(profileFile.getBytes(), savePath);
+                   updateUserInfo(user);
+            } else {
+
+updateUserInfo(user);
+
+            }
+        }else{//카카오 계정일 때 이메일 업데이트 안됨. 로그인타입 필요해서 upUser사용
+                  user.setLoginType(upUser.getLoginType());
+            if (profileFile != null && !profileFile.isEmpty()) {
+                //업로드된 파일의 원본 파일 이름을 OriginalFilename로 설정
+
+                //OriginProfileImg 필드에 이름 저장
+               user.setOriginProfileImg(profileFile.getOriginalFilename());
+                //StoredFileName 필드에 저장되는 이름 저장(중복 피하기 위해 이름 생성) -> 이 이름으로 파일 불러온다.
+                user.setStoredFileName(System.currentTimeMillis() + "_" + profileFile.getOriginalFilename());
+               user.setFileAttached(1);
+                System.out.println("유저정보" + user);
+                //스프링프로퍼티 참조해서 저장경로 설정
+                String savePath = path + user.getStoredFileName();
+                System.out.println("저장경로+이름" + savePath);
+
+                // 회원의 정보 업데이트 DB에 데이터 넣음 (originProfileImg,storedFileName, fileAttached )
+
+                //서버에 파일 저장
+                FileService.saveFile(profileFile.getBytes(), savePath);
+                updateUserInfo(user);
+            }
+
+                updateUserInfo(user);
 
 
-        }   updateUserInfo(user);
+        }
     }
 }
+
 

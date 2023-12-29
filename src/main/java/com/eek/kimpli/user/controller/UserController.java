@@ -63,7 +63,7 @@ public class UserController {
         model.addAttribute("userEmail", customUser.getEmail());
         model.addAttribute("createdDate", customUser.getCreatedDate());
         model.addAttribute("userPhoneNumber", customUser.getPhoneNumber());
-
+        model.addAttribute("userLoginType", customUser.getLoginType());
 
         return "member/mypage";
     }

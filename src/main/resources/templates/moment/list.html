@@ -132,13 +132,12 @@
     <div class="form-container" style="border: 2px solid blue;">
 
         <div style="display: flex; align-items: center;">
-            <a th:href="@{/user/userdetail(id=${moment.author})}" class="user-link"
-               style="background-color: transparent; border: none; padding: 0;">
-                <img th:src="@{'/uploads/' + ${moment.authorProfileImg}}"
-                     alt="Profile Image"
-                     style="width: 35px; height: 35px; object-fit: cover; margin-bottom: 10px; border-radius: 50%; overflow: hidden;"
-                     sec:authorize="isAuthenticated()">
-            </a>
+            <a  class="user-link" th:href="@{/user/userdetail(id=${moment.author})}"
+   style="background-color: transparent; border: none; padding: 0; display: inline-block;">
+    <img  th:src="@{'/uploads/' + ${moment.authorProfileImg}}"
+         alt="Profile Image"
+         style="width: 35px; height: 35px; object-fit: cover; margin-bottom: 10px; border-radius: 50%; overflow: hidden; display: inline-block;">
+</a>
             <div style="margin-left: 10px;" th:text="${moment.author}"></div>
         </div>
         <div style="overflow: auto;">
@@ -150,12 +149,10 @@
             </div>
         </div>
         <!-- 추가된 수정 및 삭제 버튼 -->
-        <div class="text-right">
-<button class="btn btn-primary" onclick="updateForm(this)" th:if="${moment.author eq #session.getAttribute('loggedInUserId')}">수정</button>
-<button class="btn btn-primary" onclick="updateForm(this)" th:if="${moment.author eq #session.getAttribute('loggedInUserId')}">삭제</button>
-
-
-        </div>
+<div class="text-right">
+    <button class="btn btn-primary" onclick="updateForm(this)" th:if="${#httpSession != null and moment.author eq #httpSession.getAttribute('loggedInUserId') ?: ''}">수정</button>
+    <button class="btn btn-primary" onclick="updateForm(this)" th:if="${#httpSession != null and moment.author eq #httpSession.getAttribute('loggedInUserId') ?: ''}">삭제</button>
+</div>
     </div>
     <!-- 추가된 clearfix -->
     <div style="clear: both;"></div>
@@ -165,6 +162,7 @@
 
 
 <script th:inline="javascript">
+
     document.getElementById('wri').addEventListener('click', function () {
         // Check if the user is authenticated (logged in)
         //UserInterceptor에 있음
@@ -379,7 +377,7 @@
                         'margin-right': '10px',
                         'border-radius': '50%',
                         'overflow': 'hidden'
-                    }).attr('sec:authorize', 'isAuthenticated()')
+                    })
                 ).click(function () {
                     window.location.href = '/user/userdetail?id=' + moment.author;
                 }),

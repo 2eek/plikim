@@ -60,7 +60,7 @@
         color: white;
         width: 200px;
         padding: 20px;
-        height: 600px;
+        height: 610px;
     }
 
     .sidebar ul {
@@ -107,9 +107,10 @@
     <nav class="sidebar" style="float: left">
         <!-- Sidebar content goes here -->
         <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About</a></li>
-            <li style="margin-bottom: 300px"><a href="#">Contact</a></li>
+            <li><a href="#">나의 게시글</a></li>
+            <li><a href="#">나의 모멘트</a></li>
+            <li style="margin-bottom: 400px"><a href="#">나의 댓글</a></li>
+
             <li><a href="#">회원탈퇴</a></li>
         </ul>
     </nav>
@@ -122,7 +123,7 @@
                     <input type="hidden" name="userId" th:value="${userId}">
 
                     <!-- 파일 업로드 -->
-                    <div style="margin-bottom: 20px; ">
+                    <div>
                         <br>
                         <div id="preview" style="width: 200px;">
                             <img th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"

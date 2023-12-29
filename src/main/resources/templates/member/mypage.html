@@ -79,8 +79,9 @@
                 </tr>
                 <tr>
                     <td>이메일</td>
-                    <td colspan=1><input type="email" name="email" placeholder="이메일"
-                                         id="email" th:value="${userEmail}">
+                    <td colspan="1">
+                        <input type="email" name="email" placeholder="이메일" id="email" th:value="${userEmail}"
+                               th:readonly="${userLoginType eq 'L2'}">
                         <font id="spaceEmail" size="2"></font>
                     </td>
 
@@ -112,8 +113,9 @@
                 </tr>
             </table>
         </div>
-
+ <div class="text-right">
         <input type="submit" value="저장" id="form-submit">
+ </div>
     </form>
 </div>
 

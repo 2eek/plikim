@@ -5,6 +5,8 @@ import com.eek.kimpli.moment.model.MomentImg;
 import com.eek.kimpli.moment.repository.MomentImgRepository;
 import com.eek.kimpli.moment.repository.MomentRepository;
 import com.eek.kimpli.moment.validator.MomentValidator;
+import com.eek.kimpli.user.model.User;
+import com.eek.kimpli.user.repository.UserRepository;
 import com.eek.kimpli.user.service.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +32,8 @@ public class MomemtServiceImpl implements MomentService {
     private String momentPath;
     private final MomentRepository momentRepository;
     private final MomentImgRepository momentImgRepository;
+    private final User user;
+    private final UserRepository userRepository;
 
     @Override
     public Moment saveOrUpdateMoment(Moment moment) {
@@ -37,9 +41,10 @@ public class MomemtServiceImpl implements MomentService {
             // 현재 사용자의 세션 정보를 가져와서 작성자로 설정
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             String username = auth.getName();
-
-            // 작성자 이름으로 설정
+            User upUser = userRepository.findByUserId(username);
+            // 작성자 이름(아이디)으로 설정
             moment.setAuthor(username);
+            moment.setAuthorProfileImg(upUser.getStoredFileName());
 
             // 게시글 조회
             // 기존 모멘트를 업데이트

@@ -31,8 +31,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmail(String email);
 
     // 카카오 로그인 정보 확인
-    @Query(value = "SELECT * FROM user WHERE memberEmail = :email AND login_type = 'L2'", nativeQuery = true)
-    HashMap<String, Object> findKakaoByEmail(String email);
+//    @Query(value = "SELECT * FROM user WHERE email = :email AND login_type = 'L2'", nativeQuery = true)
+//    HashMap<String, Object> findKakaoByEmail(String email);
 
 
     //비밀번호 변경
@@ -48,9 +48,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 @Modifying
 @Transactional
 @Query(value = "UPDATE user " +
-       "SET user_name = COALESCE(:#{#user.userName}, user_name), " +
-       "phone_number = COALESCE(:#{#user.phoneNumber}, phone_number), " +
-               "email = COALESCE(:#{#user.email}, email), " +
+       "SET phone_number = COALESCE(:#{#user.phoneNumber}, phone_number), " +
+       "email = CASE WHEN :#{#user.loginType} = 'L2' THEN email ELSE COALESCE(:#{#user.email}, email) END, " +
        "origin_profile_img = COALESCE(:#{#user.originProfileImg}, origin_profile_img), " +
        "stored_file_name = COALESCE(:#{#user.storedFileName}, stored_file_name), " +
        "file_attached = COALESCE(:#{#user.fileAttached}, file_attached) " +

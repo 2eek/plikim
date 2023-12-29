@@ -130,17 +130,17 @@
 <!--데이터 반환 폼-->
 <div class="moment" th:each="moment : ${moments}" style="overflow: auto;">
     <div class="form-container" style="border: 2px solid blue;">
-        <div>
-            <a class="btn" style="background-color: transparent; border: none; padding: 0;"></a>
+
+        <div style="display: flex; align-items: center;">
+            <a th:href="@{/user/userdetail(id=${moment.author})}" class="user-link"
+               style="background-color: transparent; border: none; padding: 0;">
+                <img th:src="@{'/uploads/' + ${moment.authorProfileImg}}"
+                     alt="Profile Image"
+                     style="width: 35px; height: 35px; object-fit: cover; margin-bottom: 10px; border-radius: 50%; overflow: hidden;"
+                     sec:authorize="isAuthenticated()">
+            </a>
+            <div style="margin-left: 10px;" th:text="${moment.author}"></div>
         </div>
-        <a class="btn" style="background-color: transparent; border: none; padding: 0;">
-
-            <img th:src="@{'/uploads/' + ${moment.authorProfileImg}}"
-                 alt="Profile Image"
-                 style="width: 35px; height: 35px; object-fit: cover; margin-bottom:10px; border-radius: 50%; overflow: hidden;"
-                 sec:authorize="isAuthenticated()">
-
-        </a>
         <div style="overflow: auto;">
             <textarea class="input-area form-control"
                       th:text="${moment.content}" name="content" maxlength="200" readonly></textarea>
@@ -307,49 +307,71 @@
                 'overflow': 'auto'
             });
 
-
             const textContainer = $('<div>').css('overflow', 'auto').append(
                 $('<textarea>').addClass('input-area form-control').attr({
                     'name': 'content',
                     'maxlength': '200',
                     'readonly': 'readonly'
-                }).text(moment.content)
+                }).text(moment.content),
+                $('<div>').addClass('button-container text-right').css({
+
+                    'align-items': 'center',
+                    'margin-top': '10px'
+                }).append(
+                    $('<button>').addClass('btn btn-primary').text('수정').click(updateForm),
+                    $('<button>').addClass('btn btn-primary').text('삭제').click(deleteForm)
+                )
             );
 
-      const imgListContainer = $('<div>').addClass('img-list-container').append(
-    moment.imageUrls ? moment.imageUrls.map(imageUrl =>
-        $('<img>').attr({
-            'src': imageUrl,
-            'alt': 'Moment Image'
-        }).css({
-            'width': '100px',
-            'height': '100px',
-            'margin-right': '10px',
-            'float': 'left'
-        })
-    ) : []
-);
+            function updateForm(){
 
-// 추가된 부분: 프로필 이미지
-const profileImageContainer = $('<a>').addClass('btn').css({
-    'background-color': 'transparent',
-    'border': 'none',
-    'padding': '0'
-}).append(
-    $('<img>').attr({
-        'src': '/uploads/' + moment.authorProfileImg,
-        'alt': 'Profile Image'
-    }).css({
-        'width': '35px',
-        'height': '35px',
-        'object-fit': 'cover',
-        'margin-bottom': '10px',
-        'border-radius': '50%',
-        'overflow': 'hidden'
-    }).attr('sec:authorize', 'isAuthenticated()')
-);
+            };
+              function deleteForm(){
 
-            // formContainer.append(imgContainer, textContainer, imgListContainer);
+            };
+
+            const imgListContainer = $('<div>').addClass('img-list-container').append(
+                moment.imageUrls ? moment.imageUrls.map(imageUrl =>
+                    $('<img>').attr({
+                        'src': imageUrl,
+                        'alt': 'Moment Image'
+                    }).css({
+                        'width': '100px',
+                        'height': '100px',
+                        'margin-right': '10px',
+                        'float': 'left'
+                    })
+                ) : []
+            );
+
+            // 추가된 부분: 프로필 이미지
+            const profileImageContainer = $('<div>').css({
+                'display': 'flex',
+                'align-items': 'center',
+                'margin-bottom':' 10px'
+            }).append(
+                $('<a>').attr({
+                    'th:href': '@{/user/userdetail(id=' + moment.author + ')}',
+                    'class': 'user-link',
+                    'style': 'background-color: transparent; border: none; padding: 0;'
+                }).append(
+                    $('<img>').attr({
+                        'src': '/uploads/' + moment.authorProfileImg,
+                        'alt': 'Profile Image'
+                    }).css({
+                        'width': '35px',
+                        'height': '35px',
+                        'object-fit': 'cover',
+                        'margin-right': '10px',
+                        'border-radius': '50%',
+                        'overflow': 'hidden'
+                    }).attr('sec:authorize', 'isAuthenticated()')
+                ).click(function () {
+                    window.location.href = '/user/userdetail?id=' + moment.author;
+                }),
+                $('<div>').text(moment.author)
+            );
+
             formContainer.append(profileImageContainer, textContainer, imgListContainer);
             momentHtml.append(formContainer);
             momentHtml.append($('<div>').css('clear', 'both'));

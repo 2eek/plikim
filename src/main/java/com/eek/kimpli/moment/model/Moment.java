@@ -25,7 +25,7 @@ public class Moment {
 
 
     private String author;
-
+    private String authorProfileImg;
 
     private LocalDateTime createdDate; // 등록일
 

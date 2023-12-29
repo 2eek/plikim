@@ -151,8 +151,10 @@
         </div>
         <!-- 추가된 수정 및 삭제 버튼 -->
         <div class="text-right">
-            <button class="btn btn-primary" onclick="updateForm()">수정</button>
-            <button class="btn btn-primary" onclick="deleteForm()">삭제</button>
+<button class="btn btn-primary" onclick="updateForm(this)" th:if="${moment.author eq #session.getAttribute('loggedInUserId')}">수정</button>
+<button class="btn btn-primary" onclick="updateForm(this)" th:if="${moment.author eq #session.getAttribute('loggedInUserId')}">삭제</button>
+
+
         </div>
     </div>
     <!-- 추가된 clearfix -->
@@ -325,14 +327,14 @@
             );
 
             // const loggedInUserId = "로그인한 사용자의 아이디 값"; // 실제로 사용하는 변수나 상수로 대체
-        var loggedInUserId = $('#loggedInUserId').val();
-    const isCurrentUser = loggedInUserId === moment.author;
+            var loggedInUserId = $('#loggedInUserId').val();
+            const isCurrentUser = loggedInUserId === moment.author;
 
-    if (isCurrentUser) {
-        textContainer.find('.button-container button').show();
-    } else {
-        textContainer.find('.button-container button').hide();
-    }
+            if (isCurrentUser) {
+                textContainer.find('.button-container button').show();
+            } else {
+                textContainer.find('.button-container button').hide();
+            }
 
             function updateForm() {
 

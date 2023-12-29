@@ -111,9 +111,7 @@
                style="border: 1px solid darkgray; padding: 5px; margin-bottom:0px; cursor: pointer; display: inline-block; background-color: #f0f0f0; border-radius: 5px; float: left">
             첨부 이미지
         </label>
-        <button class="btn btn-primary" onclick="submitForm()">입력</button>
-        <button class="btn btn-primary" onclick="updateForm()">수정</button>
-        <button class="btn btn-primary" onclick="deleteForm()">삭제</button>
+<button th:action="${#authorization.expression('isAuthenticated()')}" class="btn btn-primary" id='wri' >입력</button>
     </div>
 
     <!-- 이미지 미리보기 영역 -->
@@ -132,12 +130,7 @@
 <div class="moment" th:each="moment : ${moments}" style="overflow: auto;">
     <div class="form-container" style="border: 2px solid blue;">
         <div>
-            <a class="btn" style="background-color: transparent; border: none; padding: 0;">
-                <!--                <img th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"-->
-                <!--                     alt="Profile Image"-->
-                <!--                     style="width: 35px; height: 35px; object-fit: cover; margin-bottom:10px; border-radius: 50%; overflow: hidden;"-->
-                <!--                     sec:authorize="isAuthenticated()">-->
-            </a>
+            <a class="btn" style="background-color: transparent; border: none; padding: 0;"></a>
         </div>
         <div style="overflow: auto;">
             <textarea class="input-area form-control"
@@ -146,16 +139,39 @@
                 <img th:src="@{'/uploads/moment/' + ${momentImg.storedFileName}}" alt="Moment Image"
                      style="width: 100px; height: 100px; margin-right: 10px; float: left;">
             </div>
-
         </div>
-
+        <!-- 추가된 수정 및 삭제 버튼 -->
+        <div class="text-right">
+            <button class="btn btn-primary" onclick="updateForm()">수정</button>
+            <button class="btn btn-primary" onclick="deleteForm()">삭제</button>
+        </div>
     </div>
     <!-- 추가된 clearfix -->
     <div style="clear: both;"></div>
 </div>
+<!--<button class="btn btn-primary" onclick="updateForm()">수정</button>-->
+<!--        <button class="btn btn-primary" onclick="deleteForm()">삭제</button>-->
 
 
 <script th:inline="javascript">
+        document.getElementById('wri').addEventListener('click', function () {
+        // Check if the user is authenticated (logged in)
+  var loggedInUserId = $('#loggedInUserId').val();
+
+        if (!loggedInUserId) {
+
+              // If not authenticated, show an alert and navigate to the login page
+            alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+            location.href = "/member/loginForm"; // 로그인 페이지 URL에 맞게 수정하세요
+
+        } else {
+  submitForm();
+        }
+    });
+
+
+
+
     let selectedImages = [];
 
     function onChange(event) {

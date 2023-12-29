@@ -43,52 +43,54 @@
     #table-container table tr td:first-child {
         width: 130px;
     }
-body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-}
 
-.wrapper {
-    display: flex;
-}
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
 
-.sidebar {
-    background-color: #343A40;
-    margin-top: 100px;
-    color: white;
-    width: 200px;
-    padding: 20px;
-    height: 500px;
-}
+    .wrapper {
+        display: flex;
+    }
 
-.sidebar ul {
-    list-style-type: none;
-    padding: 0;
-}
+    .sidebar {
+        background-color: #343A40;
+        margin-top: 100px;
+        color: white;
+        width: 200px;
+        padding: 20px;
+        height: 500px;
+    }
 
-.sidebar a {
-    text-decoration: none;
-    color: white;
-    padding: 8px 16px;
-    display: block;
-}
+    .sidebar ul {
+        list-style-type: none;
+        padding: 0;
+    }
 
-.sidebar a:hover {
-    background-color: #555;
-}
+    .sidebar a {
+        text-decoration: none;
+        color: white;
+        padding: 8px 16px;
+        display: block;
+    }
 
-.main-content {
+    .sidebar a:hover {
+        background-color: #555;
+    }
 
-    flex-grow: 1;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.main{
-    align-items: center;
-}
+    .main-content {
+
+        flex-grow: 1;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .main {
+        align-items: center;
+    }
 
 
 </style>
@@ -101,90 +103,91 @@ body {
 </nav>
 
 
-
-
-
 <div id="sform">
-               <nav class="sidebar" style="float: left">
+    <nav class="sidebar" style="float: left">
         <!-- Sidebar content goes here -->
         <ul>
             <li><a href="#">Home</a></li>
             <li><a href="#">About</a></li>
-            <li><a href="#">Contact</a></li>
+            <li style="margin-bottom: 300px"><a href="#">Contact</a></li>
+            <li><a href="#">회원탈퇴</a></li>
         </ul>
     </nav>
     <div class="main-content">
         <!-- Main content goes here -->
         <div class="content-center">
 
-    <container style="float: left" >
-    <form   action="/user/update" enctype="multipart/form-data" method="post" style=" width: 700px">
-        <input type="hidden" name="userId" th:value="${userId}">
+            <container style="float: left">
+                <form action="/user/update" enctype="multipart/form-data" method="post" style=" width: 700px">
+                    <input type="hidden" name="userId" th:value="${userId}">
 
-        <!-- 파일 업로드 -->
-        <div style="margin-bottom: 20px; margin-top: 100px" >
-            <br>
-            <div id="preview" style="width: 200px;">
-                <img th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"
-                     alt="Profile Image" style="width: 200px; height: 200px; object-fit: cover;">
-            </div>
-            <div style="margin-top: 20px">
-                <label for="profileFile">프로필 이미지:</label>
-                <input type="file" name="profileFile" id="profileFile" onchange="previewImage(this)">
-            </div>
-            <br>
-        </div>
-
-        <!-- 회원 정보 테이블 -->
-        <div id="table-container" >
-            <table>
-                <tr>
-                    <td>아이디</td>
-                    <td><span th:text="${userId}"></span></td>
-                </tr>
-                <tr>
-                    <td>이메일</td>
-                    <td colspan="1">
-                        <input type="email" name="email" placeholder="이메일" id="email" th:value="${userEmail}"
-                               th:readonly="${userLoginType eq 'L2'}">
-                        <font id="spaceEmail" size="2"></font>
-                    </td>
-
-
-                </tr>
-                <tr>
-                    <td>휴대폰 번호</td>
-                    <td>
-                        <input type="text" name="phoneNumber" id="phonenumber" th:value="${userPhoneNumber}">
-                        <button type="button" id="sendCode" class="btn btn-default"
-                                style="border: 1px solid #ccc; padding: 5px 10px;">코드 발송
-                        </button>
-                        <div style="margin-top: 5px">
-                            <font id="spacePhonenum" size="2"></font>
+                    <!-- 파일 업로드 -->
+                    <div style="margin-bottom: 20px; margin-top: 100px">
+                        <br>
+                        <div id="preview" style="width: 200px;">
+                            <img th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"
+                                 alt="Profile Image" style="width: 200px; height: 200px; object-fit: cover;">
                         </div>
-
-                        <div id="codeCheck" class="mb-3" style="display: none; align-items: center;">
-                            <input type="text" class="form-control" name="smsCode" id="smsCode" placeholder="코드 입력하세요"
-                                   style="width:185px; margin-right: 3px">
-                            <button type="button" id="codeCheckButton" class="btn btn-default"
-                                    style="float: left; border: 1px solid #ccc; padding: 5px 10px;">코드 확인
-                            </button>
+                        <div style="margin-top: 20px">
+                            <label for="profileFile">프로필 이미지:</label>
+                            <input type="file" name="profileFile" id="profileFile" onchange="previewImage(this)">
                         </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>자기소개</td>
-                    <td><textarea name="selfIntroduction" th:text="${selfIntroduction}"></textarea></td>
-                </tr>
-            </table>
+                        <br>
+                    </div>
+
+                    <!-- 회원 정보 테이블 -->
+                    <div id="table-container">
+                        <table>
+                            <tr>
+                                <td>아이디</td>
+                                <td><span th:text="${userId}"></span></td>
+                            </tr>
+                            <tr>
+                                <td>이메일</td>
+                                <td colspan="1">
+                                    <input type="email" name="email" placeholder="이메일" id="email"
+                                           th:value="${userEmail}"
+                                           th:readonly="${userLoginType eq 'L2'}">
+                                    <font id="spaceEmail" size="2"></font>
+                                </td>
+
+
+                            </tr>
+                            <tr>
+                                <td>휴대폰 번호</td>
+                                <td>
+                                    <input type="text" name="phoneNumber" id="phonenumber"
+                                           th:value="${userPhoneNumber}">
+                                    <button type="button" id="sendCode" class="btn btn-default"
+                                            style="border: 1px solid #ccc; padding: 5px 10px;">코드 발송
+                                    </button>
+                                    <div style="margin-top: 5px">
+                                        <font id="spacePhonenum" size="2"></font>
+                                    </div>
+
+                                    <div id="codeCheck" class="mb-3" style="display: none; align-items: center;">
+                                        <input type="text" class="form-control" name="smsCode" id="smsCode"
+                                               placeholder="코드 입력하세요"
+                                               style="width:185px; margin-right: 3px">
+                                        <button type="button" id="codeCheckButton" class="btn btn-default"
+                                                style="float: left; border: 1px solid #ccc; padding: 5px 10px;">코드 확인
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>자기소개</td>
+                                <td><textarea name="selfIntroduction" th:text="${selfIntroduction}"></textarea></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="text-right">
+                        <input type="submit" value="저장" id="form-submit">
+                    </div>
+                </form>
+            </container>
         </div>
- <div class="text-right">
-        <input type="submit" value="저장" id="form-submit">
- </div>
-    </form>
-    </container>
-            </div>
-        </div>
+    </div>
 </div>
 
 

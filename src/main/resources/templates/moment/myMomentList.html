@@ -151,7 +151,7 @@
                 <div class="form-container" style="border: 2px solid blue;">
 
                     <div style="display: flex; align-items: center;">
-                        <a class="user-link" th:href="@{/templates/member/userdetail(id=${moment.author})}"
+                        <a class="user-link" th:href="@{/user/userdetail(id=${moment.author})}"
                            style="background-color: transparent; border: none; padding: 0; display: inline-block;">
                             <img th:src="@{'/uploads/' + ${moment.authorProfileImg}}"
                                  alt="Profile Image"

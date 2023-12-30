@@ -29,24 +29,24 @@ public class UserController {
 
 
     //가입한 회원 리스트 조회. 단순한 호출 GetMapping을 이용한다. URL에 매핑된 핸들러 필요하다
-    @GetMapping("/member/memberlist")
+    @GetMapping("/user/memberlist")
     public String saveForm() {
-        return "member/memberlist";
+        return "user/memberlist";
     }
 
     //회원가입폼 호춯
-    @GetMapping("/member/memberjoin")
+    @GetMapping("/user/memberjoin")
     public String joinForm() {
-        return "member/memberjoinform";
+        return "user/memberjoinform";
     }
 
-    @GetMapping("/member/loginForm")
+    @GetMapping("/user/loginForm")
     public String loginForm() {
-        return "member/login";
+        return "user/login";
     }
 
 
-    @GetMapping("/member/mypage")
+    @GetMapping("/user/mypage")
     public String showDashboard(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -65,7 +65,7 @@ public class UserController {
         model.addAttribute("userPhoneNumber", customUser.getPhoneNumber());
         model.addAttribute("userLoginType", customUser.getLoginType());
 
-        return "member/mypage";
+        return "user/mypage";
     }
 
     //페이징+검색
@@ -110,7 +110,7 @@ public class UserController {
         model.addAttribute("userSession", authentication.getPrincipal());
 //    System.out.println("유저디테일"+userdetail);
         System.out.println("프린시펄 " + authentication.getPrincipal());
-        return "member/userdetail"; // 사용자 정보가 있는 경우 상세 정보 페이지로 이동
+        return "user/userdetail"; // 사용자 정보가 있는 경우 상세 정보 페이지로 이동
     }
 
 
@@ -134,7 +134,7 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         // 현재 사용자의 세션 정보
         model.addAttribute("userSession", authentication.getPrincipal());
-        return "member/userdetail"; // 사용자 정보가 있는 경우 상세 정보 페이지로 이동
+        return "user/userdetail"; // 사용자 정보가 있는 경우 상세 정보 페이지로 이동
     }
 
 
@@ -252,7 +252,7 @@ public class UserController {
         System.out.println(user);
         model.addAttribute("email", user.getEmail());
         System.out.println(user.getEmail());
-        return "member/updatePassword";
+        return "user/updatePassword";
     }
 
     //비밀번호 찾기.변경할 비밀번호로 업데이트 시행하기

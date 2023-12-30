@@ -284,8 +284,16 @@ public class UserController {
 ///user/withdrawl
 
     @GetMapping("/user/withdrawForm")
-    public String withdrawl() {
+    public String withdrawForm() {
 
         return "user/withdrawForm"; // 사용자 정보가 있는 경우 상세 정보 페이지로 이동
+    }
+
+        @PostMapping("/user/withdraw")
+    public String withdraw(String phoneNumber ) {
+        System.out.println(phoneNumber);
+        userService.withdraw(phoneNumber);
+        //회원탈퇴되었습니다 메세지??
+        return "redirect:/";
     }
 }

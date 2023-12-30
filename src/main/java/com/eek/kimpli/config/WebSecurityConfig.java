@@ -37,13 +37,13 @@ public SessionRegistry sessionRegistry() {
                 .antMatchers("/check-login").authenticated() // "/check-login"은 인증된 사용자에게만 허용
 
                         //누구나 접근 가능
-                        .antMatchers("/", "/account/register", "/css/**", "/js/**","/api/**" ,"/img/**","/static/**","/member/memberjoin").permitAll()
+                        .antMatchers("/", "/account/register", "/css/**", "/js/**","/api/**" ,"/img/**","/static/**","/user/memberjoin").permitAll()
                         //로그인이 필요함. 인증 필요!
                         //.anyRequest().authenticated()
                 .anyRequest().permitAll()
                         .and()
                 .formLogin()
-                        .loginPage("/member/loginForm") //매핑uri
+                        .loginPage("/user/loginForm") //매핑uri
                         .permitAll()
                        .loginProcessingUrl("/login") // 스프링 시큐리티에서 처리하기위한 주소. /login post방식.
                         .usernameParameter("userId") // 이 부분을 추가
@@ -53,7 +53,7 @@ public SessionRegistry sessionRegistry() {
                 .sessionManagement()
                 .maximumSessions(1) // 최대 세션 수
                 .sessionRegistry(sessionRegistry())
-                .expiredUrl("/member/loginForm") // 세션이 만료된 경우 이동할 URL
+                .expiredUrl("/user/loginForm") // 세션이 만료된 경우 이동할 URL
                 .and()
                 .and()
               .logout()

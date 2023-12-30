@@ -1,5 +1,6 @@
 package com.eek.kimpli.comment.service;
 
+import com.eek.kimpli.board.model.Board;
 import com.eek.kimpli.comment.model.Comment;
 import com.eek.kimpli.comment.repository.CommentRepository;
 import com.eek.kimpli.replycomment.model.ReplyComment;
@@ -55,16 +56,20 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<ReplyComment> findByParentComment(Long commentId) {
         commentRepository.findReplyCommentsById(commentId);
-        System.out.println( "레파지토리test"+commentRepository.findReplyCommentsById(commentId));
+        System.out.println("레파지토리test" + commentRepository.findReplyCommentsById(commentId));
         return commentRepository.findReplyCommentsById(commentId);
     }
 
-        @Override
-    public  List<ReplyComment> getReplyWithCommentId(Long commentId) {
-          System.out.println("서비스 임플"+commentId);
-          List<ReplyComment> a =commentRepository.findReplyComments(commentId);
-                 System.out.println("서비스 임플 대댓글 리스트"+a);
+    @Override
+    public List<ReplyComment> getReplyWithCommentId(Long commentId) {
+        System.out.println("서비스 임플" + commentId);
+        List<ReplyComment> a = commentRepository.findReplyComments(commentId);
+        System.out.println("서비스 임플 대댓글 리스트" + a);
         return commentRepository.findReplyComments(commentId);
     }
 
+    @Override
+    public Page<Comment> getCommentsByCommentWriter(String commentWriter, Pageable pageable) {
+        return commentRepository.findByCommentWriter(commentWriter, pageable);
+    }
 }

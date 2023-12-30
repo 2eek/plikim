@@ -50,17 +50,6 @@
 
     }
 
-    /*.fixed-container {*/
-    /*    border-radius: 8px;*/
-    /*    width: 100%;*/
-    /*    height: 200px;*/
-    /*    position: fixed;*/
-    /*    top: 0;*/
-    /*    left: 0;*/
-    /*    background-color: #ffffff; !* 배경색을 원하는 색상으로 지정합니다. *!*/
-    /*    z-index: 999;*/
-    /*}*/
-
     table {
         border-collapse: collapse;
         width: 100%;
@@ -131,9 +120,9 @@
     <nav class="sidebar" style="float: left">
         <!-- Sidebar content goes here -->
         <ul>
-            <li><a href="/board/myBoardList">나의 게시글</a></li>
+             <li><a href="/board/myBoardList">나의 게시글</a></li>
             <li><a href="/moment/myMomentList">나의 모멘트</a></li>
-            <li style="margin-bottom: 400px"><a href="#">나의 댓글</a></li>
+            <li style="margin-bottom: 400px"><a href="/comment/myCommentList">나의 댓글</a></li>
 
             <li><a href="#">회원탈퇴</a></li>
         </ul>
@@ -162,7 +151,7 @@
                 <div class="form-container" style="border: 2px solid blue;">
 
                     <div style="display: flex; align-items: center;">
-                        <a class="user-link" th:href="@{/user/userdetail(id=${moment.author})}"
+                        <a class="user-link" th:href="@{/templates/member/userdetail(id=${moment.author})}"
                            style="background-color: transparent; border: none; padding: 0; display: inline-block;">
                             <img th:src="@{'/uploads/' + ${moment.authorProfileImg}}"
                                  alt="Profile Image"

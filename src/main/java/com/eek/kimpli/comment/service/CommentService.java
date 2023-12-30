@@ -1,5 +1,6 @@
 package com.eek.kimpli.comment.service;
 
+import com.eek.kimpli.board.model.Board;
 import com.eek.kimpli.comment.model.Comment;
 import com.eek.kimpli.replycomment.model.ReplyComment;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,10 @@ public interface CommentService {
 
     // 댓글과 대댓글을 함께 가져오는 메서드(댓글아이디에 해당하는 최신순 대댓글)
      List<ReplyComment> getReplyWithCommentId(Long commentId);
+
+     //댓글 작성자 이름을 이용해서 게시글의 리스트를 가져옴
+//    Page<Comment> findByCommentWriter(String commentWriter, Pageable pageable);
+    Page<Comment> getCommentsByCommentWriter(String commentWriter, Pageable pageable);
 
 
 }

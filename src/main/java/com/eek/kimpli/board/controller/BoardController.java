@@ -95,7 +95,7 @@ public class BoardController {
 
 
         @GetMapping("/myBoardList")
-        public String myList(Model model, @PageableDefault(size = 5) Pageable pageable,
+        public String myBoardList(Model model, @PageableDefault(size = 5) Pageable pageable,
        @RequestParam(required = false, defaultValue = "") String searchText) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -113,4 +113,5 @@ public class BoardController {
         model.addAttribute("userSession", authentication.getPrincipal());
         return "board/myBoardList";
     }
+
 }

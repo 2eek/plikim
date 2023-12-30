@@ -6,6 +6,7 @@ import com.eek.kimpli.moment.service.MomentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +32,17 @@ public String list(Model model) {
     return "moment/list";
 }
 
+    @GetMapping("/moment/myMomentList")
+public String myMomentlist(Model model) {
+           Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        userDetails.getUsername();
+    model.addAttribute("userSession", authentication.getPrincipal());
+        System.out.println("인증모멘트 뭐있나"+authentication.getPrincipal());
+    List<Moment> moments = momentService.findByAuthor(userDetails.getUsername());
+    model.addAttribute("moments", moments);
+    return "moment/myMomentList";
+}
 
 
 

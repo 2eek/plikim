@@ -7,6 +7,9 @@ import com.eek.kimpli.moment.validator.MomentValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -55,6 +58,17 @@ public class MomentController {
     @GetMapping("/result")
     public List<Moment> list(Model model) {
         List<Moment> moments = momentService.findAll();
+        model.addAttribute("moments", moments);
+        return moments;
+    }
+
+    @GetMapping("/myResult")
+    public List<Moment> myResult(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        userDetails.getUsername();
+        model.addAttribute("userSession", authentication.getPrincipal());
+        List<Moment> moments = momentService.findByAuthor(userDetails.getUsername());
         model.addAttribute("moments", moments);
         return moments;
     }

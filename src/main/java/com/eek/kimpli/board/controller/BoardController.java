@@ -12,15 +12,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -34,8 +32,8 @@ public class BoardController {
     // 페이징+검색
     @GetMapping("/list")
     public String list(Model model, @PageableDefault(size = 5) Pageable pageable,
-                       @RequestParam(required = false, defaultValue = "") String searchText) {
-                    pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("createdDate").descending());
+        @RequestParam(required = false, defaultValue = "") String searchText) {
+        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("createdDate").descending());
         Page<Board> boards = boardRepository.findByTitleContainingOrContentContainingOrAuthorContaining(searchText, searchText,searchText, pageable);
         int currentPage = boards.getPageable().getPageNumber() + 1; // 현재 페이지 번호 (0부터 시작)
         int startPage = Math.max(1, currentPage - 2); // 현재 페이지 주변에 2 페이지씩 보여주기
@@ -92,5 +90,27 @@ public class BoardController {
         System.out.println("아이디 값 있을 때:" + board);
 
         return "board/detail";
+    }
+
+
+
+        @GetMapping("/myBoardList")
+        public String myList(Model model, @PageableDefault(size = 5) Pageable pageable,
+       @RequestParam(required = false, defaultValue = "") String searchText) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        userDetails.getUsername();
+        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("createdDate").descending());
+        Page<Board> boards = boardService.findMyList(userDetails.getUsername(), pageable);
+        int currentPage = boards.getPageable().getPageNumber() + 1; // 현재 페이지 번호 (0부터 시작)
+        int startPage = Math.max(1, currentPage - 2); // 현재 페이지 주변에 2 페이지씩 보여주기
+        int endPage = Math.min(boards.getTotalPages(), startPage + 4);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
+        model.addAttribute("boards", boards);
+        System.out.println("게시물 리스트?"+boards);
+        // 현재 사용자의 세션 정보
+        model.addAttribute("userSession", authentication.getPrincipal());
+        return "board/myBoardList";
     }
 }

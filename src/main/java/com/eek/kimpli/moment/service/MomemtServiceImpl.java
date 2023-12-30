@@ -26,6 +26,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor //생성자 만들어줌
 public class MomemtServiceImpl implements MomentService {
+    @Override
+    public List<Moment> findByAuthor(String author) {
+        return momentRepository.findAllByAuthor (author);
+    }
 
     //    private final MomentValidator momentValidator;
     @Value("${external.upload.momentPath}")
@@ -125,10 +129,10 @@ public class MomemtServiceImpl implements MomentService {
 //        return moment != null ? moment.getMomentImg() : Collections.emptyList();
 //    }
 
-    @Override
-    public Moment findLatestMoment(){
-        return momentRepository.findFirstByOrderByCreatedDateDesc();
-    }
+//    @Override
+//    public Moment findLatestMoment(){
+//        return momentRepository.findFirstByOrderByCreatedDateDesc();
+//    }
 
 }
 

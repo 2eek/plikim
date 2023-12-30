@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<style>
+    /* 추가된 스타일 */
+
+        .user-table th, .user-table td {
+        font-size: 12px;
+    }
+
+    /* 추가된 스타일 */
+    .form-container {
+
+        margin-bottom: 10px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+
+    }
+
+    .input-area {
+        width: 100%;
+        height: 100px;
+        margin-bottom: 10px;
+    }
+
+    .image-upload {
+        margin-bottom: 10px;
+    }
+
+    .button-container {
+        text-align: right;
+    }
+
+    .button-container button {
+        margin-left: 10px;
+    }
+
+    .selected-images {
+        display: flex;
+    }
+
+    .selected-images img {
+        max-width: 100px;
+        max-height: 100px;
+        margin-right: 10px;
+    }
+
+    .moment {
+        position: relative;
+
+    }
+
+    /*.fixed-container {*/
+    /*    border-radius: 8px;*/
+    /*    width: 100%;*/
+    /*    height: 200px;*/
+    /*    position: fixed;*/
+    /*    top: 0;*/
+    /*    left: 0;*/
+    /*    background-color: #ffffff; !* 배경색을 원하는 색상으로 지정합니다. *!*/
+    /*    z-index: 999;*/
+    /*}*/
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    textarea {
+        width: 100%;
+        height: 100px;
+    }
+
+    #table-container table tr td:first-child {
+        width: 130px;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
+
+
+    .sidebar {
+        background-color: #343A40;
+        margin-top: 30px;
+        color: white;
+        width: 200px;
+        padding: 20px;
+        height: 610px;
+    }
+
+    .sidebar ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .sidebar a {
+        text-decoration: none;
+        color: white;
+        padding: 8px 16px;
+        display: block;
+    }
+
+    .sidebar a:hover {
+        background-color: #555;
+        color: white;
+    }
+
+    .main-content {
+
+        flex-grow: 1;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        /*align-items: center;*/
+    }
+
+</style>
+
+<head th:replace="fragments/common :: head('회원 수정')">
+</head>
+
+<body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('home')">
+</nav>
+
+
+<div id="sform">
+    <nav class="sidebar" style="float: left">
+        <!-- Sidebar content goes here -->
+        <ul>
+            <li><a href="/board/myBoardList">나의 게시글</a></li>
+            <li><a href="/moment/myMomentList">나의 모멘트</a></li>
+            <li style="margin-bottom: 400px"><a href="#">나의 댓글</a></li>
+
+            <li><a href="#">회원탈퇴</a></li>
+        </ul>
+    </nav>
+    <div class="main-content">
+        <!-- Main content goes here -->
+        <div class="content-center" style="width: 1000px;">
+
+            <main role="main" class="container">
+                <div class="starter-template">
+                    <h1>나의 모멘트</h1>
+                </div>
+            </main>
+<!--     -->
+
+
+
+            <div class="fixed-container "></div>
+            <div id="content"> <!-- 이 부분이 있는지 확인하세요. -->
+                <!-- content 내용 -->
+            </div>
+
+
+            <!--데이터 반환 폼-->
+            <div class="moment" th:each="moment : ${moments}" style="overflow: auto;">
+                <div class="form-container" style="border: 2px solid blue;">
+
+                    <div style="display: flex; align-items: center;">
+                        <a class="user-link" th:href="@{/user/userdetail(id=${moment.author})}"
+                           style="background-color: transparent; border: none; padding: 0; display: inline-block;">
+                            <img th:src="@{'/uploads/' + ${moment.authorProfileImg}}"
+                                 alt="Profile Image"
+                                 style="width: 35px; height: 35px; object-fit: cover; margin-bottom: 10px; border-radius: 50%; overflow: hidden; display: inline-block;">
+                        </a>
+                        <div style="margin-left: 10px;" th:text="${moment.author}"></div>
+                    </div>
+                    <div style="overflow: auto;">
+            <textarea class="input-area form-control"
+                      th:text="${moment.content}" name="content" maxlength="200" readonly></textarea>
+                        <div th:each="momentImg : ${moment.momentImg}">
+                            <img th:src="@{'/uploads/moment/' + ${momentImg.storedFileName}}" alt="Moment Image"
+                                 style="width: 100px; height: 100px; margin-right: 10px; float: left;">
+                        </div>
+                    </div>
+                    <!-- 추가된 수정 및 삭제 버튼 -->
+                    <div class="text-right">
+                        <button class="btn btn-primary" onclick="updateForm(this)"
+                                th:if="${#httpSession != null and moment.author eq #httpSession.getAttribute('loggedInUserId') ?: ''}">
+                            수정
+                        </button>
+                        <button class="btn btn-primary" onclick="updateForm(this)"
+                                th:if="${#httpSession != null and moment.author eq #httpSession.getAttribute('loggedInUserId') ?: ''}">
+                            삭제
+                        </button>
+                    </div>
+                </div>
+                <!-- 추가된 clearfix -->
+                <div style="clear: both;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+
+    <script th:inline="javascript">
+
+        document.getElementById('wri').addEventListener('click', function () {
+            // Check if the user is authenticated (logged in)
+            //UserInterceptor에 있음
+            var loggedInUserId = $('#loggedInUserId').val();
+
+            if (!loggedInUserId) {
+
+                // If not authenticated, show an alert and navigate to the login page
+                alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+                location.href = "/member/loginForm"; // 로그인 페이지 URL에 맞게 수정하세요
+
+            } else {
+                submitForm();
+            }
+        });
+
+
+        let selectedImages = [];
+
+        function onChange(event) {
+            previewImages(event.target.files);
+            event.target.value = '';
+        }
+
+        function previewImages(files) {
+            const previewContainer = document.getElementById('image-preview-container');
+
+            // 최대 3개까지만 미리보기 표시
+            for (let i = 0; i < Math.min(files.length, 3); i++) {
+                const file = files[i];
+
+                // 이미지가 3개를 넘어가면 alert 창 띄우고 추가 중단
+                if (selectedImages.length >= 3) {
+                    alert('최대 3개까지만 선택할 수 있습니다.');
+                    break;
+                }
+
+                // 선택된 이미지 배열에 추가
+                selectedImages.push(file);
+
+                // 미리보기 이미지 엘리먼트 생성 및 추가
+                const previewImg = createPreviewImage(file);
+                previewContainer.appendChild(previewImg);
+            }
+        }
+
+        function createPreviewImage(file) {
+            const previewImg = document.createElement('img');
+            previewImg.src = URL.createObjectURL(file);
+            previewImg.alt = 'Image Preview';
+            previewImg.style.width = '100px';  // 이미지 너비를 100px로 설정
+            previewImg.style.height = '100px'; // 이미지 높이를 100px로 설정
+
+            // 손가락 표시 및 이미지 이름 뜨게 설정
+            previewImg.style.cursor = 'pointer';
+            previewImg.title = file.name;
+
+            // 이미지 클릭 시 제거 이벤트 리스너 추가
+            previewImg.addEventListener('click', () => removePreviewImage(previewImg, file));
+
+            return previewImg;
+        }
+
+        function removePreviewImage(previewImg, file) {
+            const index = selectedImages.indexOf(file);
+            if (index !== -1) {
+                selectedImages.splice(index, 1);  // 배열에서 해당 파일 제거
+            }
+
+            previewImg.remove();  // 뷰에서 해당 이미지 제거
+        }
+
+        <!--   전송  -->
+        function submitForm() {
+            var formData = new FormData();
+
+            formData.append('content', $('#area-content').val());
+            for (var i = 0; i < selectedImages.length; i++) {
+                formData.append('momentImgs', selectedImages[i]);
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: '/moment/save',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    console.log('Save successful:', data);
+                    fetchMomentList(data);  // 수정된 부분
+                },
+                error: function (error) {
+                    console.error('Error saving data:', error.responseText);
+
+                    var validationErrors = JSON.parse(error.responseText);
+
+                    $('#error-message').text(validationErrors.content);
+
+                    if (validationErrors.content) {
+                        $('#area-content').addClass('is-invalid');
+                        $('#error-content').text(validationErrors.content);
+                    } else {
+                        $('#area-content').removeClass('is-invalid');
+                        $('#error-content').text('');
+                    }
+                }
+            });
+
+            function fetchMomentList(data) {
+                $.ajax({
+                    type: 'GET',
+                    url: '/moment/myResult',
+                    success: function (moments) {
+                        console.log("데이터", moments);
+                        createMomentHtml(data, moments);  // 수정된 부분
+                    },
+                    error: function (error) {
+                        console.error('Error fetching moment list:', error);
+                    }
+                });
+            }
+
+            function createMomentHtml(moment, moments) {
+                // 기존 목록을 지우고 새로운 목록을 추가하기 전에 기존 목록을 초기화합니다.
+                // selectedImages.length = 0;
+                selectedImages = [];
+                $('#image-preview-container').empty();
+                $('#area-content').val('');
+                $('.moment').empty();
+                // $('#content').empty();
+
+                // 각 moment 객체에 대한 HTML을 생성하고 #content에 추가합니다.
+                moments.forEach(function (momentItem) {
+                    $('#content').append(generateMomentHtml(momentItem));
+                });
+            }
+
+            function generateMomentHtml(moment) {
+                const momentHtml = $('<div>').addClass('moment').css('overflow', 'auto');
+
+                const formContainer = $('<div>').addClass('form-container').css({
+                    'border': '2px solid blue',
+                    'overflow': 'auto'
+                });
+
+                const textContainer = $('<div>').css('overflow', 'auto').append(
+                    $('<textarea>').addClass('input-area form-control').attr({
+                        'name': 'content',
+                        'maxlength': '200',
+                        'readonly': 'readonly'
+                    }).text(moment.content),
+                    $('<div>').addClass('button-container text-right').css({
+
+                        'align-items': 'center',
+                        'margin-top': '10px'
+                    }).append(
+                        $('<button>').addClass('btn btn-primary').text('수정').click(updateForm),
+                        $('<button>').addClass('btn btn-primary').text('삭제').click(deleteForm).css('margin-left', '4.5px')
+                    )
+                );
+
+                // const loggedInUserId = "로그인한 사용자의 아이디 값"; // 실제로 사용하는 변수나 상수로 대체
+                var loggedInUserId = $('#loggedInUserId').val();
+                const isCurrentUser = loggedInUserId === moment.author;
+
+                if (isCurrentUser) {
+                    textContainer.find('.button-container button').show();
+                } else {
+                    textContainer.find('.button-container button').hide();
+                }
+
+                function updateForm() {
+
+                };
+
+                function deleteForm() {
+
+                };
+
+                const imgListContainer = $('<div>').addClass('img-list-container').append(
+                    moment.imageUrls ? moment.imageUrls.map(imageUrl =>
+                        $('<img>').attr({
+                            'src': imageUrl,
+                            'alt': 'Moment Image'
+                        }).css({
+                            'width': '100px',
+                            'height': '100px',
+                            'margin-right': '10px',
+                            'float': 'left'
+                        })
+                    ) : []
+                );
+
+                // 추가된 부분: 프로필 이미지
+                const profileImageContainer = $('<div>').css({
+                    'display': 'flex',
+                    'align-items': 'center',
+                    'margin-bottom': ' 10px'
+                }).append(
+                    $('<a>').attr({
+                        'th:href': '@{/user/userdetail(id=' + moment.author + ')}',
+                        'class': 'user-link',
+                        'style': 'background-color: transparent; border: none; padding: 0;'
+                    }).append(
+                        $('<img>').attr({
+                            'src': '/uploads/' + moment.authorProfileImg,
+                            'alt': 'Profile Image'
+                        }).css({
+                            'width': '35px',
+                            'height': '35px',
+                            'object-fit': 'cover',
+                            'margin-right': '10px',
+                            'border-radius': '50%',
+                            'overflow': 'hidden'
+                        })
+                    ).click(function () {
+                        window.location.href = '/user/userdetail?id=' + moment.author;
+                    }),
+                    $('<div>').text(moment.author)
+                );
+
+                formContainer.append(profileImageContainer, textContainer, imgListContainer);
+                momentHtml.append(formContainer);
+                momentHtml.append($('<div>').css('clear', 'both'));
+
+                return momentHtml;
+            }
+        }
+    </script>
+
+
+</html>

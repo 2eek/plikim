@@ -11,7 +11,10 @@ public interface MomentService {
    String saveMoment(Moment moment, List<MultipartFile> momentImgs);
 
    List<Moment> findAll();
+
+   List<Moment> findByAuthor(String author);
+
 //   List<MomentImg> getImagesByMomentId(Long momentId);
-    Moment findLatestMoment();
+//    Moment findLatestMoment();
 
 }

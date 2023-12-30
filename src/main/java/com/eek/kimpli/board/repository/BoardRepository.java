@@ -25,5 +25,5 @@ Page<Board> findByTitleContainingOrContentContainingOrAuthorContaining(String ti
 
 //나의 게시글 찾기
     Page<Board> findByAuthor(String author,Pageable pageable);
-
+    Board getTitleById(long id);
 }

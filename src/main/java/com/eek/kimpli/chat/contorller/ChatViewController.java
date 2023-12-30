@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import reactor.core.publisher.Flux;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -68,6 +70,12 @@ public class ChatViewController {
 
         model.addAttribute("userSession", userName);
         model.addAttribute("chatList", chatRoomList);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy년 MM월 dd일 HH:mm");
+for (Chat chat : chatRoomList) {
+    LocalDateTime createdAt = chat.getCreatedAt();
+    String formattedDate = createdAt.format(formatter);
+    chat.setFormattedCreatedAt(formattedDate);
+}
         System.out.println("이름: " + userName);
 
         List<String> roomNumList = new ArrayList<>();
@@ -82,9 +90,9 @@ public class ChatViewController {
     }
 
     // 중복된 userName을 제거한 roomNum을 반환하는 메서드
-    private String removeUserName(String roomNum, String userName) {
-        return roomNum.replace(userName, "");
-    }
+//    private String removeUserName(String roomNum, String userName) {
+//        return roomNum.replace(userName, "");
+//    }
 
     @GetMapping("/chat")
     public String chat(Model model, @RequestParam(name = "userId") String userId) {

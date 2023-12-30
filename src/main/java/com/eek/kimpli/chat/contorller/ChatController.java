@@ -11,6 +11,7 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @CrossOrigin
 @RequiredArgsConstructor
@@ -27,6 +28,7 @@ public class ChatController {
 
     @PostMapping("/chat")
     public Mono<Chat> setMsg(@RequestBody Chat chat) {
+
         chat.setCreatedAt(LocalDateTime.now());
 
         try {

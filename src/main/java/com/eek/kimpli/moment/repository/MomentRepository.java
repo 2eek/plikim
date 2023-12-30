@@ -14,9 +14,8 @@ public interface MomentRepository extends JpaRepository<Moment, Long > {
     @Query("SELECT m FROM Moment m ORDER BY m.createdDate DESC")  // 여기에 정렬을 추가
     List<Moment> findAll();
 
-//   Moment findFirstByOrderByCreatedDateDesc();
 
-   List<Moment> findAllByAuthor(String Author);
+   List<Moment> findAllByAuthorOrderByCreatedDateDesc(String Author);
 
 
 }

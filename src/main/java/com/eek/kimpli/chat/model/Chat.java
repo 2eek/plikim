@@ -17,5 +17,16 @@ public class Chat {
     private String receiver;//받는 사람
     private String roomNum; //방 번호
     private LocalDateTime createdAt;
+    private String formattedCreatedAt; // 추가된 부분
+
+
+
+    public String getFormattedCreatedAt() {
+        return formattedCreatedAt;
+    }
+
+    public void setFormattedCreatedAt(String formattedCreatedAt) {
+        this.formattedCreatedAt = formattedCreatedAt;
+    }
 
 }

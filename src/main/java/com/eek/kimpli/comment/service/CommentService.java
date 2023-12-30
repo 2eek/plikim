@@ -23,7 +23,7 @@ public interface CommentService {
 
 
 
-    // 댓글과 대댓글을 함께 가져오는 메서드(댓글아이디에 해당하는 최신순 대댓글)!!!!
+    // 댓글과 대댓글을 함께 가져오는 메서드(댓글아이디에 해당하는 최신순 대댓글)
      List<ReplyComment> getReplyWithCommentId(Long commentId);
 
      //댓글 작성자 이름을 이용해서 게시글의 리스트를 가져옴

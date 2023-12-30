@@ -68,7 +68,7 @@
                 <td>
 
                     <!-- 링크는 그대로 두되, 클릭 이벤트에 대한 핸들링을 추가 -->
-                    <a th:href="@{/templates/member/userdetail(id=${user.userId})}" th:text="${user.userId}" class="user-link">
+                    <a th:href="@{/user/userdetail(id=${user.userId})}" th:text="${user.userId}" class="user-link">
                         아이디
                     </a>
                 </td>
@@ -139,7 +139,7 @@
                 </td>
 
                 <td>
-                    <a th:href="@{/templates/member/userdetail(id=${randomUser.userId})}" th:text="${randomUser.userId}"
+                    <a th:href="@{/user/userdetail(id=${randomUser.userId})}" th:text="${randomUser.userId}"
                        class="user-link">사용자 아이디</a>
                 </td>
 

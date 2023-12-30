@@ -1,5 +1,6 @@
 package com.eek.kimpli.comment.repository;
 
+import com.eek.kimpli.board.model.Board;
 import com.eek.kimpli.comment.model.Comment;
 import com.eek.kimpli.replycomment.model.ReplyComment;
 import org.springframework.data.domain.Page;
@@ -33,6 +34,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long > {
     @Query("UPDATE Comment c SET c.deleted = 1 WHERE c.id = :commentId")
     void softDeleteComment(@Param("commentId") Long commentId);
 
+Page<Comment> findByCommentWriter(String commentWriter, Pageable pageable);
 
 
 

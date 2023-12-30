@@ -4,6 +4,8 @@ import com.eek.kimpli.board.model.Board;
 import com.eek.kimpli.board.repository.BoardRepository;
 import com.eek.kimpli.board.validator.BoardValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import java.util.List;
 @Service
 public class BoardServiceImpl implements BoardService {
 
+
     private final BoardRepository boardRepository;
     private final BoardValidator boardValidator;
 
@@ -23,6 +26,11 @@ public class BoardServiceImpl implements BoardService {
     public BoardServiceImpl(BoardRepository boardRepository, BoardValidator boardValidator) {
         this.boardRepository = boardRepository;
         this.boardValidator = boardValidator;
+    }
+
+    @Override
+    public Page<Board> findMyList(String author,  Pageable pageable ) {
+        return boardRepository.findByAuthor(author , pageable );
     }
 
     @Override// 하나의 메서드로 게시글 작성, 업데이트 처리
@@ -78,6 +86,10 @@ public class BoardServiceImpl implements BoardService {
             throw e;
         }
     }
+
+
+
+
 }
-    // 다른 서비스 메서드를 필요에 따라 구현 가능
+
 

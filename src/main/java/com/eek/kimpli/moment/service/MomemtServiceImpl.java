@@ -28,7 +28,7 @@ import java.util.List;
 public class MomemtServiceImpl implements MomentService {
     @Override
     public List<Moment> findByAuthor(String author) {
-        return momentRepository.findAllByAuthor (author);
+        return momentRepository.findAllByAuthorOrderByCreatedDateDesc (author);
     }
 
     //    private final MomentValidator momentValidator;

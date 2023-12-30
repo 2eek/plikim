@@ -18,6 +18,10 @@ import java.util.List;
 @Service
 public class BoardServiceImpl implements BoardService {
 
+    @Override
+    public Board getBoardByBoardId(Long id) {
+    return boardRepository.getTitleById(id);
+    }
 
     private final BoardRepository boardRepository;
     private final BoardValidator boardValidator;

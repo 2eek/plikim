@@ -10,6 +10,8 @@ import java.util.Map;
 import com.eek.kimpli.sms.dto.MessageDTO;
 import com.eek.kimpli.sms.dto.SmsResponseDTO;
 import com.eek.kimpli.sms.service.SmsService;
+import com.eek.kimpli.user.model.User;
+import com.eek.kimpli.user.repository.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +30,7 @@ import javax.servlet.http.HttpSession;
 public class SmsController {
 
     private final SmsService smsService;
+    private final UserRepository userRepository;
 
 
     //주소로 POST 요청
@@ -50,9 +53,10 @@ public class SmsController {
         return smsMap;
     }
 
+    //아디찾기, 회원정보 업데이트,회원탈퇴
     @PostMapping("/compareCodes")
     @ResponseBody
-    public Map<String, String> compareCodes(@RequestParam String userInputNumber, @RequestParam String inputedPhonenumber, HttpSession session) {
+    public Map<String, String> compareCodes(@RequestParam String userInputNumber, @RequestParam String inputedPhonenumber, @RequestParam(required = false) String userId, HttpSession session) {
 
         Map<String, String> resultMap = new HashMap<>();
 
@@ -61,21 +65,24 @@ public class SmsController {
         // 세션에 있던 회원의 전화번호
         String userPhoneNum = (String) session.getAttribute("phoneNumber");
 
-        // 사용자가 입력한 코드와 서버에서 생성한 코드 비교
-        if (userInputNumber.equals(String.valueOf(serverGeneratedCode))) {
-            // 전화번호 비교
-            if (inputedPhonenumber.equals(userPhoneNum)) {
-                //result"라는 키에 "success"라는 값을 매핑
+        if (userId == null) {
+            // 사용자가 입력한 코드와 서버에서 생성한 코드 비교
+            if (userInputNumber.equals(String.valueOf(serverGeneratedCode)) && inputedPhonenumber.equals(userPhoneNum)) {
+                // 전화번호 비교
                 resultMap.put("result", "success");
             } else {
                 resultMap.put("result", "failure");
             }
         } else {
-            resultMap.put("result", "failure");
+            User userdetail = userRepository.findByUserId(userId);
+            if (userId != null && userInputNumber.equals(String.valueOf(serverGeneratedCode)) && userdetail.getPhoneNumber().equals(inputedPhonenumber)) {
+                resultMap.put("result", "success");
+            } else {
+                resultMap.put("result", "failure");
+            }
         }
 
         return resultMap;
     }
-
 
 }

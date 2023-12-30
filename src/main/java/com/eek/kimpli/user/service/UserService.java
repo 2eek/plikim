@@ -109,7 +109,7 @@ public class UserService {
     //회원 사진 업데이트
     public void updateMyInfo(User user, MultipartFile profileFile) throws IOException {
         User upUser = userRepository.findByUserId(user.getUserId());
-        if (!"L2".equals(upUser.getLoginType()))  {
+        if (!"L2".equals(upUser.getLoginType())) {
             //프로필 사진 있다면
             if (profileFile != null && !profileFile.isEmpty()) {
                 //업로드된 파일의 원본 파일 이름을 OriginalFilename로 설정
@@ -128,22 +128,22 @@ public class UserService {
 
                 //서버에 파일 저장
                 FileService.saveFile(profileFile.getBytes(), savePath);
-                   updateUserInfo(user);
+                updateUserInfo(user);
             } else {
 
-updateUserInfo(user);
+                updateUserInfo(user);
 
             }
-        }else{//카카오 계정일 때 이메일 업데이트 안됨. 로그인타입 필요해서 upUser사용
-                  user.setLoginType(upUser.getLoginType());
+        } else {//카카오 계정일 때 이메일 업데이트 안됨. 로그인타입 필요해서 upUser사용
+            user.setLoginType(upUser.getLoginType());
             if (profileFile != null && !profileFile.isEmpty()) {
                 //업로드된 파일의 원본 파일 이름을 OriginalFilename로 설정
 
                 //OriginProfileImg 필드에 이름 저장
-               user.setOriginProfileImg(profileFile.getOriginalFilename());
+                user.setOriginProfileImg(profileFile.getOriginalFilename());
                 //StoredFileName 필드에 저장되는 이름 저장(중복 피하기 위해 이름 생성) -> 이 이름으로 파일 불러온다.
                 user.setStoredFileName(System.currentTimeMillis() + "_" + profileFile.getOriginalFilename());
-               user.setFileAttached(1);
+                user.setFileAttached(1);
                 System.out.println("유저정보" + user);
                 //스프링프로퍼티 참조해서 저장경로 설정
                 String savePath = path + user.getStoredFileName();
@@ -156,10 +156,15 @@ updateUserInfo(user);
                 updateUserInfo(user);
             }
 
-                updateUserInfo(user);
+            updateUserInfo(user);
 
 
         }
+    }
+
+    //회원탈퇴. 소프트 딜리트
+    public int withdraw(String phoneNumber) {
+        return userRepository.withdraw(phoneNumber);
     }
 }
 

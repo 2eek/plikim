@@ -234,15 +234,15 @@ public class UserController {
 
 
     //휴대폰 번호로 아이디 찾기
-    @GetMapping("/findAccount")
+    @GetMapping("/user/findAccount")
     public String fintId() {
-        return "member/findAccount";
+        return "user/findAccount";
     }
 
     //이메일로 인증 받기
-    @GetMapping("/findPassword")
+    @GetMapping("/user/findPassword")
     public String findPassword() {
-        return "member/findPassword";
+        return "user/findPassword";
     }
 
     //비밀번호 찾기. 이메일 인증 후  비밀번호 업데이트 폼 호출
@@ -281,13 +281,19 @@ public class UserController {
             return 1; // 이미 존재하는 아이디
         }
     }
+///user/withdrawl
 
+    @GetMapping("/user/withdrawForm")
+    public String withdrawForm() {
 
-//    @GetMapping("/")
-//    public String userProfile(Model model, Principal principal) {
-//        String username = principal.getName();
-//        User user = userService.getUserById(username);
-//        model.addAttribute("user", user);
-//        return "fragments/common";
-//    }
+        return "user/withdrawForm"; // 사용자 정보가 있는 경우 상세 정보 페이지로 이동
+    }
+
+        @PostMapping("/user/withdraw")
+    public String withdraw(String phoneNumber ) {
+        System.out.println(phoneNumber);
+        userService.withdraw(phoneNumber);
+        //회원탈퇴되었습니다 메세지??
+        return "redirect:/";
+    }
 }

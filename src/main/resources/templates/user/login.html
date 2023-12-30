@@ -180,9 +180,9 @@ span {
              <div id="center">
 	             <div class="find">
 <div th:if="${param.error}" style="color: red; font-size: 13px;">아이디 비밀번호를 다시 입력하세요</div>
-	                <a th:href="@{/findAccount}"class="">아이디 찾기</a>
+	                <a th:href="@{/user/findAccount}"class="">아이디 찾기</a>
 	                <span>&nbsp;|&nbsp;</span>
-           			<a th:href="@{/findPassword}"class="property-sub">비밀번호 찾기</a>
+           			<a th:href="@{/user/findPassword}"class="property-sub">비밀번호 찾기</a>
            			<span>&nbsp;|&nbsp;</span>
            			<a th:href="@{/user/memberjoin}" class="property-sub">회원가입</a>
 	          	 </div>

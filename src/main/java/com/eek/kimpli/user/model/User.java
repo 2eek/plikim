@@ -44,6 +44,7 @@ public class User {
 
     @Column(columnDefinition = "DATETIME")
     private LocalDateTime deletedDate;
+    private Boolean deleted;
     private String loginType;
     private String accessToken;
     private String refreshToken;

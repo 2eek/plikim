@@ -55,6 +55,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
        "file_attached = COALESCE(:#{#user.fileAttached}, file_attached) " +
        "WHERE user_id = :#{#user.userId}", nativeQuery = true)
 int updateUserInfo(@Param("user") User user);
+
+
+
+//회원탈퇴. 소프트딜리트
+    @Modifying
+    @Transactional
+    @Query("UPDATE User u SET u.deletedDate = CURRENT_TIMESTAMP, u.deleted = true WHERE u.phoneNumber = :phoneNumber")
+    int withdraw(@Param("phoneNumber") String phoneNumber);
 }
 
 

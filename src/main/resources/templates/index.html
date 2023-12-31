@@ -162,18 +162,29 @@
     $(document).ready(function () {
         $('#userSearchButton').click(function (event) {
             var searchText = $('#userSearchText').val();
+        var loggedInUserId = $('#loggedInUserId').val();
+
+        if (!loggedInUserId) {
+
+            // If not authenticated, show an alert and navigate to the login page
+            alert("로그인이 필요합니다.");
+            // location.href = "/member/loginForm"; // 로그인 페이지 URL에 맞게 수정하세요
+         return false;
+        } else {
+
 
             // Check if the search input has a value
             if (searchText.trim() !== '') {
-                // If there is a value, allow the form action to proceed
+                //입력 값 있다
+
                 return true;
             } else {
-                // If there is no value, prevent the form from submitting
+            //입력 값 없다.
                 event.preventDefault();
                 $('#userSearchText').focus();
-                alert('Please enter a search term.');
+                alert('입력하세요');
                 return false;
-            }
+            }}
         });
     });
 </script>

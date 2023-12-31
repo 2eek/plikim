@@ -1,6 +1,8 @@
 package com.eek.kimpli.user.repository;
 
 import com.eek.kimpli.user.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,9 +18,10 @@ import java.util.Map;
 public interface UserRepository extends JpaRepository<User, Long> {
         // id로 유저 찾기
         User findByUserId(String userId);
+    User findByUserIdAndDeleted(String userId, int deleted);
 
         //랜덤으로 회원리스트 나열
-      @Query(value = "SELECT * FROM user ORDER BY RAND() LIMIT 3", nativeQuery = true)
+      @Query(value = "SELECT * FROM user WHERE deleted = 0 ORDER BY RAND() LIMIT 3 ", nativeQuery = true)
       List<User> findRandomUsers();
 
         // 이메일로 유저 찾기
@@ -33,6 +36,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // 카카오 로그인 정보 확인
 //    @Query(value = "SELECT * FROM user WHERE email = :email AND login_type = 'L2'", nativeQuery = true)
 //    HashMap<String, Object> findKakaoByEmail(String email);
+    //삭제안된 회원들 리스트 조회
+        @Query("SELECT u FROM User u WHERE u.deleted = 0")
+    Page<User> findUndeletedUser(Pageable pageable);
 
 
     //비밀번호 변경

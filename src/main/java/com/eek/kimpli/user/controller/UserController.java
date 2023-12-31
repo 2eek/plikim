@@ -39,13 +39,13 @@ public class UserController {
     public String joinForm() {
         return "user/memberjoinform";
     }
-
+    //로그인폼
     @GetMapping("/user/loginForm")
     public String loginForm() {
         return "user/login";
     }
 
-
+    //마이페이지
     @GetMapping("/user/mypage")
     public String showDashboard(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -54,7 +54,7 @@ public class UserController {
         System.out.println("Spring Security의 UserDetails 사용: " + userDetails);
 
         // Spring Security의 UserDetails 정보 활용
-        // 이때, UserDetails에는 사용자의 아이디, 패스워드, 권한 등의 기본 정보만 들어있을 것입니다.
+        // 이때, UserDetails에는 사용자의 아이디, 패스워드, 권한 등의 기본 정보만 들어있다
 
         // 여기서 사용자 모델(User 클래스)에 추가된 정보를 가져와서 모델에 추가
         User customUser = userService.getUserById(userDetails.getUsername());
@@ -76,10 +76,11 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("userSession", authentication.getPrincipal());
         System.out.println("프린시펄 일반로그인" + authentication.getPrincipal());
-// 정렬 조건: "createdDate" 필드를 기준으로 내림차순 정렬
+        // 정렬 조건: "createdDate" 필드를 기준으로 내림차순 정렬
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("createdDate").descending());
         // 페이징된 전체 회원 목록
-        Page<User> users = userRepository.findAll(pageable);
+        //  Page<User> users = userRepository.findAll(pageable);
+          Page<User> users = userRepository.findUndeletedUser(pageable);
         int currentPage = users.getPageable().getPageNumber() + 1;
         int startPage = Math.max(1, currentPage - 2);
         int endPage = Math.min(users.getTotalPages(), startPage + 4);
@@ -122,7 +123,7 @@ public class UserController {
             return "redirect:/";
         }
 
-        User userdetail = userRepository.findByUserId(userId);
+        User userdetail = userRepository.findByUserIdAndDeleted(userId,0);
 
         if (userdetail == null) {
             // 사용자 정보가 없을 경우 적절한 처리

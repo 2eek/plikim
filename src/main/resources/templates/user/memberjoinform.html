@@ -265,7 +265,7 @@ function checkEmail(callback) {
         dataType: 'json',
         success: function (result) {
             if (result==-1)  {
-         	$("#spaceEmail").html('이메일 형식이 아닙니다.!');
+         	$("#spaceEmail").html('이메일 형식이 아닙니다.');
  				$("#spaceEmail").attr('color', 'red');
 				 // $("#email").focus();
 						return false;
@@ -426,7 +426,7 @@ function joinform_check(event, callback) {
     // 아이디 중복 체크
     checkUserIdAvailability(function (result) {
         if (!result) {
-            // alert('아이디를 확인하세요.');
+            //
             validationResult = false;
         }
         // 이메일 형식 체크

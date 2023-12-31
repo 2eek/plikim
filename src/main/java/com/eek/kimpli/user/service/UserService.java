@@ -102,6 +102,11 @@ public class UserService {
         userRepository.updateUserInfo(user);
     }
 
+    public int phoneNumberUpdate(String phoneNumber,String userId){
+       return userRepository.updateUserPhoneNumber(phoneNumber,userId);
+
+    }
+
     public User getUserById(String userId) {
         // userRepository를 사용하여 userId를 기반으로 사용자 정보를 가져옴
         return userRepository.findByUserId(userId);

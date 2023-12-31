@@ -15,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,9 +54,7 @@ public class UserController {
     @GetMapping("/user/mypage")
     public String showDashboard(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        System.out.println("Spring Security의 UserDetails 사용: " + userDetails);
 
         // Spring Security의 UserDetails 정보 활용
         // 이때, UserDetails에는 사용자의 아이디, 패스워드, 권한 등의 기본 정보만 들어있다
@@ -79,7 +78,6 @@ public class UserController {
         // 로그인 계정
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         model.addAttribute("userSession", authentication.getPrincipal());
-        System.out.println("프린시펄 일반로그인" + authentication.getPrincipal());
         // 정렬 조건: "createdDate" 필드를 기준으로 내림차순 정렬
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("createdDate").descending());
         // 페이징된 전체 회원 목록
@@ -113,8 +111,6 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         // 현재 사용자의 세션 정보
         model.addAttribute("userSession", authentication.getPrincipal());
-//    System.out.println("유저디테일"+userdetail);
-        System.out.println("프린시펄 " + authentication.getPrincipal());
         return "user/userdetail"; // 사용자 정보가 있는 경우 상세 정보 페이지로 이동
     }
 
@@ -148,7 +144,6 @@ public class UserController {
     public String Join(@ModelAttribute("user") User user, Model model, @PageableDefault(size = 3) Pageable pageable) {
         Page<User> users = userRepository.findAll(pageable);
         // 아이디 중복 체크
-        System.out.println("중복값??회원가입" + user);
         int currentPage = users.getPageable().getPageNumber() + 1; // 현재 페이지 번호 (0부터 시작)
         int startPage = Math.max(1, currentPage - 2); // 현재 페이지 주변에 2 페이지씩 보여주기
         int endPage = Math.min(users.getTotalPages(), startPage + 4);
@@ -161,9 +156,7 @@ public class UserController {
 
     // 회원정보 수정+ 프로필 사진 등록
     @PostMapping("/user/update")
-    public String updateMyInfo(@RequestParam("profileFile") MultipartFile profileFile,
-                               User user) {
-        System.out.println("컨트롤러 유저" + user);
+    public String updateMyInfo(@RequestParam("profileFile") MultipartFile profileFile, User user) {
         // userId를 사용하여 현재 로그인 중인 사용자 정보를 가져오는 작업
 //        User loggedInUser = userService.getUserById(user.getUserId());
 
@@ -175,6 +168,14 @@ public class UserController {
         }
         return "redirect:/";
     }
+
+    @Transactional
+    @ResponseBody
+    @PostMapping("/phoneNumberUpdate")
+    public int phoneNumberUpdate(String phoneNumber, String userId) {
+        return userService.phoneNumberUpdate(phoneNumber, userId);
+    }
+
 
     //회원가입시 휴대폰 중복 검사
     @ResponseBody
@@ -195,12 +196,9 @@ public class UserController {
     @PostMapping("/emailAndIdCheck")
     public User checkEmailAndUserId(String email, String id) {
         User user = userService.checkEmailAndUserId(email, id);
-
         if (user != null) {
-            System.out.println("User found: " + user);
             return user;
         } else {
-//        System.out.println("컨트롤 널입니다" + user);
             return new User(); // 빈 User 객체 또는 다른 적절한 값을 반환
 
         }
@@ -213,18 +211,6 @@ public class UserController {
         int emailFormatResult = isValidEmailFormat(email);
 
         if (emailFormatResult == 0) { //이메일 형식이라면 0 반환됨
-//            User user = userService.checkEmail(email);
-//
-//            if (user != null) {
-//                //유저가 존재한다. -> null을 반환
-////                System.out.println("User found: " + user);
-//
-//                return 1;
-//            } else {
-//                // 사용자가 발견되지 않았을 경우 적절한 응답을 반환
-//                //null 반환한다.
-//                return 0; // 빈 User 객체 또는 다른 적절한 값을 반환
-//            }
             return 0;
         } else {
             // 이메일 형식 아니면 -1 반환 -> 서버로 null값 반환한다.
@@ -235,9 +221,9 @@ public class UserController {
     private int isValidEmailFormat(String email) {
 
         //빈 값 체크
-         if (email == null || email.isEmpty()) {
-        return -1;
-    }
+        if (email == null || email.isEmpty()) {
+            return -1;
+        }
         // 이메일 형식 검사(한글x 숫자 알파벳만 가능)
         String emailRegex = "^[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z0-9]+$";
         return email.matches(emailRegex) ? 0 : -1;
@@ -260,16 +246,13 @@ public class UserController {
     @PostMapping("/updatePasswordForm")
     public String updatePassword(User user, Model model) {
         //memberService.insertMemberInfo(memberVO);
-        System.out.println(user);
         model.addAttribute("email", user.getEmail());
-        System.out.println(user.getEmail());
         return "user/updatePassword";
     }
 
     //비밀번호 찾기.변경할 비밀번호로 업데이트 시행하기
     @PostMapping("/EditPassword")
     public String EditPassword(User user) {
-        System.out.println(user);
         userService.editPassword(user);
         /* return "member/login"; */
         return "redirect:/";
@@ -302,7 +285,6 @@ public class UserController {
 
     @PostMapping("/user/withdraw")
     public String withdraw(String phoneNumber) {
-        System.out.println(phoneNumber);
         userService.withdraw(phoneNumber);
         //회원탈퇴되었습니다 메세지??
         return "redirect:/";
@@ -312,10 +294,7 @@ public class UserController {
     @PostMapping("/currentPwCheck")
     @ResponseBody
     public int currentPwCheck(String currentPw, String userId) {
-        System.out.println("입력비번" + currentPw);
-        System.out.println("로그인 유저아이디" + userId);
         User user = userService.getUserById(userId);
-        System.out.println("user" + user);
         if (currentPw == null || currentPw.isEmpty()) {
             return 0;
         } else {

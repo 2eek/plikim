@@ -17,20 +17,23 @@ import java.util.Map;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
         // id로 유저 찾기
-        User findByUserId(String userId);
+    User findByUserId(String userId);
     User findByUserIdAndDeleted(String userId, int deleted);
 
         //랜덤으로 회원리스트 나열
       @Query(value = "SELECT * FROM user WHERE deleted = 0 ORDER BY RAND() LIMIT 3 ", nativeQuery = true)
       List<User> findRandomUsers();
 
-        // 이메일로 유저 찾기
 
-
-    // 휴대폰 번호로 사용자 찾기
+      //회원의 휴대폰 번호 변경
+     @Modifying
+    @Query("UPDATE User u SET u.phoneNumber = :newPhoneNumber WHERE u.userId = :userId")
+    int updateUserPhoneNumber(@Param("newPhoneNumber") String newPhoneNumber, @Param("userId") String userId);
+  // 휴대폰 번호로 사용자 찾기
     User findByPhoneNumberAndDeleted(String phoneNumber, int deleted);
-
+    //이메일로 비밀번호 찾기
     User findByEmailAndUserId(String email, String userId);
+    //이메일 유무 확인
     User findByEmail(String email);
 
     // 카카오 로그인 정보 확인

@@ -267,6 +267,7 @@ function checkEmail(callback) {
          	$("#spaceEmail").html('이메일 형식이 아닙니다.');
  				$("#spaceEmail").attr('color', 'red');
 				 // $("#email").focus();
+						return false;
              } else {
 				$("#spaceEmail").html('');
 
@@ -394,14 +395,19 @@ function confirmSmsCode(callback) {
 // checkPhoneNumber 함수 정의
 
 $('#submitButton').on('click', function (event) {
-
-
+	//이메일 유효성 체크
+    // checkEmail(function (result) {
+	// 	if(result == false){
+	// 		alert('이메일!!')
+	// 		event.preventDefault();
+	// 	}
+    // });
     // 코드 확인
-    var joinformResult = joinform_check();
-		if (!joinformResult) {
-			event.preventDefault(); // 이벤트의 기본 동작 중단
-			return false;
-		}
+joinform_check();
+		// if (!joinformResult) {
+		// 	event.preventDefault(); // 이벤트의 기본 동작 중단
+		// 	return false;
+		// }
 
     // confirmSmsCode 실행 후 result를 가져와서 내부에서 실행한다.
     // result는 confirmSmsCode 함수에서 비동기적으로 처리한 작업의 결과이다.
@@ -475,16 +481,6 @@ function checkPhoneNumber(callback) {
 
 	$(document).ready(function () {
 
-
-
-
-
-    //아이디 입력창에서 포커스 아웃 이벤트
-    $('#id').on('blur', function () {
-        checkUserIdAvailability(function (result) {
-        });
-    });
-
     // 아이디 입력 중 이벤트
     $('#id').on('input', function () {
         checkUserIdAvailability(function (result) {
@@ -528,9 +524,10 @@ function joinform_check(event) {
 
     // 이메일 형식 체크
     checkEmail(function (result) {
+
         if (!result) {
-           // alert('이메일을 확인하세요.');
             validationResult = false;
+			event.preventDefault();
         }
     });
 
@@ -547,6 +544,7 @@ function joinform_check(event) {
     }
 return validationResult;
 return event;
+
 }
 
 

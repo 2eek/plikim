@@ -77,6 +77,7 @@ public class SmsController {
             User userdetail = userRepository.findByUserId(userId);
             if (userId != null && userInputNumber.equals(String.valueOf(serverGeneratedCode)) && userdetail.getPhoneNumber().equals(inputedPhonenumber)) {
                 resultMap.put("result", "success");
+                resultMap.put("result", "success");
             } else {
                 resultMap.put("result", "failure");
             }

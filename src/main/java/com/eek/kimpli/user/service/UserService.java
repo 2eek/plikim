@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -29,9 +30,9 @@ public class UserService {
     @Transactional
     public void save(User user) throws DuplicateUserDataException {
         // 중복된 값 체크
-        if (isDuplicateUser(user.getUserId(), user.getPhoneNumber())) {
-            throw new DuplicateUserDataException("Duplicate user data");
-        }
+     if (!isDuplicateUser(user.getUserId(), user.getPhoneNumber()).isEmpty()) {
+    throw new DuplicateUserDataException("Duplicate user data");
+}
 
         // 비밀번호 암호화
         String encodedPassword = passwordEncoder.encode(user.getPassword());
@@ -45,20 +46,21 @@ public class UserService {
 
         // 가입일 설정
         user.setCreatedDate(LocalDateTime.now());
+        user.setDeleted(0);
 
         // 사용자 정보 저장
         userRepository.save(user);
     }
 
     //하나의 계정에 하나의 휴대폰 번호(휴대폰 번호 중복체크)
-    private boolean isDuplicateUser(String userId, String phoneNumber) {
-        return userRepository.existsByUserIdOrPhoneNumber(userId, phoneNumber);
+    private List<User[]> isDuplicateUser(String userId, String phoneNumber) {
+        System.out.println("중복결과"+userRepository.findDuplicateUsers(userId, phoneNumber));
+        return userRepository.findDuplicateUsers(userId, phoneNumber);
     }
 
     //사용중인 휴대전화인지 체크
     public User findByPhoneNumber(String phoneNumber) {
-        // findByPhoneNumber 메서드를 사용하여 사용자 찾기
-        return userRepository.findByPhoneNumber(phoneNumber);
+        return userRepository.findByPhoneNumberAndDeleted(phoneNumber, 0);
     }
 
 

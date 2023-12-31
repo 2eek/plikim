@@ -24,31 +24,31 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     final PasswordEncoder passwordEncoder;
 
 
-  @Bean
-public SessionRegistry sessionRegistry() {
-    return new SessionRegistryImpl();
-}
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                 .authorizeRequests()
+                .authorizeRequests()
                 .antMatchers("/check-login").authenticated() // "/check-login"은 인증된 사용자에게만 허용
 
-                        //누구나 접근 가능
-                        .antMatchers("/", "/account/register", "/css/**", "/js/**","/api/**" ,"/img/**","/static/**","/user/memberjoin").permitAll()
-                        //로그인이 필요함. 인증 필요!
-                        //.anyRequest().authenticated()
+                //누구나 접근 가능
+                .antMatchers("/", "/account/register", "/css/**", "/js/**", "/api/**", "/img/**", "/static/**", "/user/memberjoin").permitAll()
+                //로그인이 필요함. 인증 필요!
+                //.anyRequest().authenticated()
                 .anyRequest().permitAll()
-                        .and()
+                .and()
                 .formLogin()
-                        .loginPage("/user/loginForm") //매핑uri
-                        .permitAll()
-                       .loginProcessingUrl("/login") // 스프링 시큐리티에서 처리하기위한 주소. /login post방식.
-                        .usernameParameter("userId") // 이 부분을 추가
-                        .defaultSuccessUrl("/")
-                        .and()
+                .loginPage("/user/loginForm") //매핑uri
+                .permitAll()
+                .loginProcessingUrl("/login") // 스프링 시큐리티에서 처리하기위한 주소. /login post방식.
+                .usernameParameter("userId") // 이 부분을 추가
+                .defaultSuccessUrl("/")
+                .and()
 
                 .sessionManagement()
                 .maximumSessions(1) // 최대 세션 수
@@ -56,34 +56,31 @@ public SessionRegistry sessionRegistry() {
                 .expiredUrl("/user/loginForm") // 세션이 만료된 경우 이동할 URL
                 .and()
                 .and()
-              .logout()
-    .permitAll()
+                .logout()
+                .permitAll()
 //    .logoutSuccessHandler(logoutSuccessHandler())
-    .invalidateHttpSession(true);
+                .invalidateHttpSession(true);
 
 
     }
 
     //로그인 과정에서의 스프링 내부에서 인증수행한다.
-@Autowired
-public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-      //jdbc이용
-    auth.jdbcAuthentication()
-        .dataSource(dataSource)
-        .passwordEncoder(passwordEncoder)
-            //인증처리 (로그인처리)Authentication
-        .usersByUsernameQuery("select user_id, password, enabled "
-                + "from user "
-                + "where user_id = ?")
-            //인가처리 (사용자 권한) Authorization
-        .authoritiesByUsernameQuery("select u.user_id, r.name " +
-                "from user_role ur " +
-                "inner join user u on ur.user_index = u.user_index " +
-                "inner join role r on ur.role_index = r.index " +
-                "where u.user_id = ?");
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        //jdbc이용
+        auth.jdbcAuthentication()
+                .dataSource(dataSource)
+                .passwordEncoder(passwordEncoder)
+                //인증처리 (로그인처리)Authentication
+                .usersByUsernameQuery("select user_id, password, enabled from user where user_id = ? and deleted = 0")
+                //인가처리 (사용자 권한) Authorization
+                .authoritiesByUsernameQuery("select u.user_id, r.name " +
+                        "from user_role ur " +
+                        "inner join user u on ur.user_index = u.user_index " +
+                        "inner join role r on ur.role_index = r.index " +
+                        "where u.user_id = ?");
 
-}
-
+    }
 
 
 }

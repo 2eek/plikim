@@ -3,6 +3,7 @@ package com.eek.kimpli.user.controller;
 import com.eek.kimpli.user.model.User;
 import com.eek.kimpli.user.repository.UserRepository;
 import com.eek.kimpli.user.service.UserService;
+import io.netty.handler.codec.socksx.v5.Socks5PasswordAuthRequestDecoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,10 +13,12 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -26,7 +29,7 @@ public class UserController {
 
     final UserService userService;
     final UserRepository userRepository;
-
+    private final PasswordEncoder passwordEncoder;
 
     //가입한 회원 리스트 조회. 단순한 호출 GetMapping을 이용한다. URL에 매핑된 핸들러 필요하다
     @GetMapping("/user/memberlist")
@@ -39,6 +42,7 @@ public class UserController {
     public String joinForm() {
         return "user/memberjoinform";
     }
+
     //로그인폼
     @GetMapping("/user/loginForm")
     public String loginForm() {
@@ -80,7 +84,7 @@ public class UserController {
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("createdDate").descending());
         // 페이징된 전체 회원 목록
         //  Page<User> users = userRepository.findAll(pageable);
-          Page<User> users = userRepository.findUndeletedUser(pageable);
+        Page<User> users = userRepository.findUndeletedUser(pageable);
         int currentPage = users.getPageable().getPageNumber() + 1;
         int startPage = Math.max(1, currentPage - 2);
         int endPage = Math.min(users.getTotalPages(), startPage + 4);
@@ -123,7 +127,7 @@ public class UserController {
             return "redirect:/";
         }
 
-        User userdetail = userRepository.findByUserIdAndDeleted(userId,0);
+        User userdetail = userRepository.findByUserIdAndDeleted(userId, 0);
 
         if (userdetail == null) {
             // 사용자 정보가 없을 경우 적절한 처리
@@ -158,8 +162,8 @@ public class UserController {
     // 회원정보 수정+ 프로필 사진 등록
     @PostMapping("/user/update")
     public String updateMyInfo(@RequestParam("profileFile") MultipartFile profileFile,
-                              User user) {
-        System.out.println("컨트롤러 유저"+user);
+                               User user) {
+        System.out.println("컨트롤러 유저" + user);
         // userId를 사용하여 현재 로그인 중인 사용자 정보를 가져오는 작업
 //        User loggedInUser = userService.getUserById(user.getUserId());
 
@@ -172,7 +176,7 @@ public class UserController {
         return "redirect:/";
     }
 
-//회원가입시 휴대폰 중복 검사
+    //회원가입시 휴대폰 중복 검사
     @ResponseBody
     @PostMapping("/phoneNumberCheck")
     public User phoneNumberCheck(String phoneNumber) {
@@ -291,11 +295,30 @@ public class UserController {
         return "user/withdrawForm"; // 사용자 정보가 있는 경우 상세 정보 페이지로 이동
     }
 
-        @PostMapping("/user/withdraw")
-    public String withdraw(String phoneNumber ) {
+    @PostMapping("/user/withdraw")
+    public String withdraw(String phoneNumber) {
         System.out.println(phoneNumber);
         userService.withdraw(phoneNumber);
         //회원탈퇴되었습니다 메세지??
         return "redirect:/";
+    }
+
+    //비밀번호 업데이트용 현재 비밀번호 체크
+    @PostMapping("/currentPwCheck")
+    @ResponseBody
+    public int currentPwCheck(String currentPw, String userId) {
+        System.out.println("입력비번" + currentPw);
+        System.out.println("로그인 유저아이디" + userId);
+        User user = userService.getUserById(userId);
+        System.out.println("user" + user);
+        if (currentPw == null || currentPw.isEmpty()) {
+            return 0;
+        } else {
+            if (passwordEncoder.matches(currentPw, user.getPassword())) {
+                return 1; // 비번이 같다
+            } else {
+                return -1; // 비번이 다르다
+            }
+        }
     }
 }

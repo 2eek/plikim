@@ -75,10 +75,10 @@
         display: block;
     }
 
-   .sidebar a:hover {
-    background-color: #555;
-    color: white;
-}
+    .sidebar a:hover {
+        background-color: #555;
+        color: white;
+    }
 
     .main-content {
 
@@ -144,16 +144,43 @@
                                 <td>아이디</td>
                                 <td><span th:text="${userId}"></span></td>
                             </tr>
+
                             <tr>
-                                <td>이메일</td>
-                                <td colspan="1">
-                                    <input type="email" name="email" placeholder="이메일" id="email"
-                                           th:value="${userEmail}"
-                                           th:readonly="${userLoginType eq 'L2'}">
-                                    <font id="spaceEmail" size="2"></font>
+                                <td>비밀번호</td>
+                                <td>
+                                    <input type="password" name="password" placeholder="현재 비밀번호 입력하세요" class=""
+                                           id="currentPw" required>
+                                    <i class="fa-solid fa-eye-slash fa-xs" id="togglePassword"></i>
+                                    <font id="nowPw" size="2"></font>
+                                    <input type="submit" value="확인" id="currentPwCheckBtn" onclick="currentPwCheck()"
+                                           style="margin-left: 10px">
                                 </td>
+                            </tr>
+                            <tr id="tr1" style="display: none;">
+                                <td id="td1">비밀번호 변경</td>
+                                <td>
+                                    <input type="password" name="password" placeholder="비밀번호" class="" id="pw1"
+                                           required>
+                                    <i class="fa-solid fa-eye-slash fa-xs" id="togglePassword1"></i>
+                                    <font id="pw" size="2"></font>
+                                </td>
+                            </tr>
+                            <tr id="tr2" style="display: none;">
+                                <td id="td2">비밀번호 확인</td>
+                                <td>
+                                    <input type="password" name="" placeholder="비밀번호 확인" class="" id="pw2" required>
+                                    <i class="fa-solid fa-eye-slash fa-xs" id="togglePassword2"></i>
+                                    <font id="checkPw" size="2"></font> <br>
+                                </td>
+                            </tr>
 
-
+                            <td>이메일</td>
+                            <td colspan="1">
+                                <input type="email" name="email" placeholder="이메일" id="email"
+                                       th:value="${userEmail}"
+                                       th:readonly="${userLoginType eq 'L2'}">
+                                <font id="spaceEmail" size="2"></font>
+                            </td>
                             </tr>
                             <tr>
                                 <td>휴대폰 번호</td>
@@ -184,7 +211,7 @@
                         </table>
                     </div>
                     <div class="text-right">
-                        <input type="submit" value="저장" id="form-submit">
+                        <input type="submit" value="저장" id="form-submit">장
                     </div>
                 </form>
             </container>
@@ -194,6 +221,25 @@
 
 
 <script th:inline="javascript">
+
+    // 현재 비밀번호 입력이 완료된 후 실행되는 함수
+    function togglePasswordFields() {
+        var tr1 = document.getElementById("tr1");
+        var td1 = document.getElementById("td1");
+        var tr2 = document.getElementById("tr2");
+        var td2 = document.getElementById("td2");
+
+        // 현재 상태 확인
+        var isHidden = tr1.style.display === "none";
+
+        // 상태에 따라 토글
+        tr1.style.display = isHidden ? "table-row" : "none";
+        td1.style.display = isHidden ? "table-cell" : "none";
+        tr2.style.display = isHidden ? "table-row" : "none";
+        td2.style.display = isHidden ? "table-cell" : "none";
+    }
+
+
     var userPhoneNumber = /*[[${userPhoneNumber}]]*/ '';
     //제출시
     $("#form-submit").on("click", function (event) {
@@ -484,6 +530,100 @@
                 console.error("서버 요청 실패:", status, error);
                 alert("서버 요청 실패: " + status + " - " + error);
                 callback('b'); // 실패 시 콜백에 'b'를 전달
+            }
+        });
+    }
+
+    //비밀번호 변경, 유효성체크
+
+    $('#pw1').on('input', function () {
+        var pw = $("#pw1").val();
+        var num = pw.search(/[0-9]/g);
+        var eng = pw.search(/[a-z]/ig);
+        var spe = pw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
+
+        if (pw.length < 8 || pw.length > 20) {
+            $("#pw").html("8자리 ~ 20자리 이내로 입력해주세요.");
+            $("#pw").attr('color', 'red');
+            $("#pw1").focus();
+            return false;
+        } else if (pw.search(/\s/) != -1) {
+            $("#pw").html("비밀번호는 공백 없이 입력해주세요.");
+            $("#pw").attr('color', 'red');
+            $("#pw1").focus();
+        } else if (num < 0 || eng < 0 || spe < 0) {
+            $("#pw").html("영문,숫자, 특수문자를 혼합하여 입력해주세요.");
+            $("#pw").attr('color', 'red');
+            $("#pw1").focus();
+            return false;
+        } else {
+            $("#pw").html("조건을 충족합니다.");
+            $("#pw").attr('color', 'green');
+
+        }
+    });
+
+    $('#pw2').on('input', function () {
+        var number1 = $("#pw1").val();
+        var number2 = $("#pw2").val();
+
+        if (number1 !== '' && number2 !== '' && number1 == number2) {
+            $("#checkPw").html('번호가 같습니다.');
+            $("#checkPw").attr('color', 'green');
+            // $("#email").focus();
+
+        } else if (number1 !== '' && number2 !== '' && number1 != number2) {
+            $("#checkPw").html('번호가 다릅니다.');
+            $("#checkPw").attr('color', 'red');
+            $("#pw2").focus();
+            return false;
+
+        }
+    });
+
+    $(document).ready(function () {
+        $('#togglePassword1, #togglePassword2').on('click', function () {
+            var inputField = $(this).siblings('input');
+            inputField.toggleClass('active');
+
+            if (inputField.hasClass('active')) {
+                $(this).attr('class', 'fa-solid fa-eye fa-xs');
+                inputField.attr('type', 'text');
+            } else {
+                $(this).attr('class', 'fa-solid fa-eye-slash fa-xs');
+                inputField.attr('type', 'password');
+            }
+        });
+    });
+
+    function currentPwCheck(callback) {
+        var currentPw = $("#currentPw").val();
+        var loggedInUserId = $('#loggedInUserId').val();
+        $.ajax({
+            url: "/currentPwCheck",
+            type: "post",
+            data: {currentPw: currentPw, userId: loggedInUserId},
+            dataType: 'json',
+            success: function (result) {
+                if (result == 1) {
+                    togglePasswordFields()
+                    alert('변경할 비밀번호를 입력하세요.');
+                    return false;
+                } else if (result == 0) {
+                    alert('비밀번호를 입력하세요.');
+                    // $("#spaceEmail").html('');
+
+                } else if (result == -1) {
+                    alert('비밀번호가 다릅니다.');
+                }
+
+                // 비동기 작업이 완료된 후에 콜백 함수 호출
+                // if (typeof callback === 'function') {
+                //     callback(result !== -1);
+                // }
+            },
+            error: function () {
+                alert("서버요청실패!");
             }
         });
     }

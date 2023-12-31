@@ -164,6 +164,13 @@ public class UserService {
         }
     }
 
+    //현재 비밀번호와 회원 비밀번호 체크
+    public  void currentPwCheck(User user){
+
+    }
+
+
+
     //회원탈퇴. 소프트 딜리트
     public int withdraw(String phoneNumber) {
         return userRepository.withdraw(phoneNumber);

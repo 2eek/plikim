@@ -233,6 +233,11 @@ public class UserController {
     }
 
     private int isValidEmailFormat(String email) {
+
+        //빈 값 체크
+         if (email == null || email.isEmpty()) {
+        return -1;
+    }
         // 이메일 형식 검사(한글x 숫자 알파벳만 가능)
         String emailRegex = "^[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z0-9]+$";
         return email.matches(emailRegex) ? 0 : -1;

@@ -149,7 +149,7 @@
                                 <td>비밀번호</td>
                                 <td>
                                     <input type="password" name="password" placeholder="현재 비밀번호 입력하세요" class=""
-                                           id="currentPw" required>
+                                           id="currentPw" >
                                     <i class="fa-solid fa-eye-slash fa-xs" id="togglePassword"></i>
                                     <font id="nowPw" size="2"></font>
                                     <input type="submit" value="확인" id="currentPwCheckBtn" onclick="currentPwCheck()"
@@ -160,7 +160,7 @@
                                 <td id="td1">비밀번호 변경</td>
                                 <td>
                                     <input type="password" name="password" placeholder="비밀번호" class="" id="pw1"
-                                           required>
+                                           >
                                     <i class="fa-solid fa-eye-slash fa-xs" id="togglePassword1"></i>
                                     <font id="pw" size="2"></font>
                                 </td>
@@ -168,7 +168,7 @@
                             <tr id="tr2" style="display: none;">
                                 <td id="td2">비밀번호 확인</td>
                                 <td>
-                                    <input type="password" name="" placeholder="비밀번호 확인" class="" id="pw2" required>
+                                    <input type="password" placeholder="비밀번호 확인" id="pw2" >
                                     <i class="fa-solid fa-eye-slash fa-xs" id="togglePassword2"></i>
                                     <font id="checkPw" size="2"></font> <br>
                                 </td>
@@ -211,7 +211,7 @@
                         </table>
                     </div>
                     <div class="text-right">
-                        <input type="submit" value="저장" id="form-submit">장
+                        <input type="submit" value="저장" id="form-submit">
                     </div>
                 </form>
             </container>
@@ -243,6 +243,13 @@
     var userPhoneNumber = /*[[${userPhoneNumber}]]*/ '';
     //제출시
     $("#form-submit").on("click", function (event) {
+      checkEmail(function (result) {
+            if(result==false){
+                alert('이메일 적어라')
+            event.preventDefault();
+
+            }
+        });
 
         // 코드 확인 수행
         var userInputPhoneNumber = $("#phonenumber").val();
@@ -289,6 +296,10 @@
 
     $('#email').on('input', function () {
         checkEmail(function (result) {
+            if(result==false){
+                // alert('hi')
+                return false;
+            }
         });
     });
 
@@ -305,7 +316,7 @@
                 if (result == -1) {
                     $("#spaceEmail").html('이메일 형식이 아닙니다.');
                     $("#spaceEmail").attr('color', 'red');
-                    // $("#email").focus();
+                    callback(false);
                 } else {
                     $("#spaceEmail").html('');
 

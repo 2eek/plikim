@@ -46,7 +46,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 @Query("SELECT u.userId, u.phoneNumber FROM User u " +
        "WHERE u.userId = :userId OR " +
        "(u.phoneNumber = :phoneNumber AND u.phoneNumber IN (SELECT phoneNumber FROM User WHERE deleted = 0))")
-List<User[]> findDuplicateUsers(@Param("userId") String userId, @Param("phoneNumber") String phoneNumber);
+List<User> findDuplicateUsers(@Param("userId") String userId, @Param("phoneNumber") String phoneNumber);
 
      //회원정보 업데이트
 @Modifying

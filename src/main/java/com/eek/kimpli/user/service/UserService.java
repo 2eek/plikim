@@ -53,7 +53,7 @@ public class UserService {
     }
 
     //하나의 계정에 하나의 휴대폰 번호(휴대폰 번호 중복체크)
-    private List<User[]> isDuplicateUser(String userId, String phoneNumber) {
+    private List<User> isDuplicateUser(String userId, String phoneNumber) {
         System.out.println("중복결과"+userRepository.findDuplicateUsers(userId, phoneNumber));
         return userRepository.findDuplicateUsers(userId, phoneNumber);
     }

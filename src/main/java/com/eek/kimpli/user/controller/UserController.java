@@ -171,7 +171,7 @@ public class UserController {
         return "redirect:/";
     }
 
-
+//회원가입시 휴대폰 중복 검사
     @ResponseBody
     @PostMapping("/phoneNumberCheck")
     public User phoneNumberCheck(String phoneNumber) {
@@ -208,18 +208,19 @@ public class UserController {
         int emailFormatResult = isValidEmailFormat(email);
 
         if (emailFormatResult == 0) { //이메일 형식이라면 0 반환됨
-            User user = userService.checkEmail(email);
-
-            if (user != null) {
-                //유저가 존재한다. -> null을 반환
-                System.out.println("User found: " + user);
-
-                return 1;
-            } else {
-                // 사용자가 발견되지 않았을 경우 적절한 응답을 반환
-                //null 반환한다.
-                return 0; // 빈 User 객체 또는 다른 적절한 값을 반환
-            }
+//            User user = userService.checkEmail(email);
+//
+//            if (user != null) {
+//                //유저가 존재한다. -> null을 반환
+////                System.out.println("User found: " + user);
+//
+//                return 1;
+//            } else {
+//                // 사용자가 발견되지 않았을 경우 적절한 응답을 반환
+//                //null 반환한다.
+//                return 0; // 빈 User 객체 또는 다른 적절한 값을 반환
+//            }
+            return 0;
         } else {
             // 이메일 형식 아니면 -1 반환 -> 서버로 null값 반환한다.
             return -1;

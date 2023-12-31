@@ -25,8 +25,8 @@ public String handleDuplicateUserDataException(DuplicateUserDataException e, Mod
     // 폼 데이터를 유지합니다.
     attributes.addFlashAttribute("formData", model.asMap());
         System.out.println("asMap??"+model.asMap());
-    // history back을 사용합니다.
-    return "redirect:/member/memberjoin";
+
+    return "redirect:/user/memberjoin";
 }
 }
 

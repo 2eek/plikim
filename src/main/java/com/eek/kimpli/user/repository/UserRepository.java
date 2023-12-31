@@ -25,7 +25,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 
     // 휴대폰 번호로 사용자 찾기
-    User findByPhoneNumber(String phoneNumber);
+    User findByPhoneNumberAndDeleted(String phoneNumber, int deleted);
 
     User findByEmailAndUserId(String email, String userId);
     User findByEmail(String email);
@@ -43,8 +43,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 //회원가입시 유효성검사
 
-     boolean existsByUserIdOrPhoneNumber(String userId,String phoneNumber);
+@Query("SELECT u.userId, u.phoneNumber FROM User u " +
+       "WHERE u.userId = :userId OR " +
+       "(u.phoneNumber = :phoneNumber AND u.phoneNumber IN (SELECT phoneNumber FROM User WHERE deleted = 0))")
+List<User[]> findDuplicateUsers(@Param("userId") String userId, @Param("phoneNumber") String phoneNumber);
 
+     //회원정보 업데이트
 @Modifying
 @Transactional
 @Query(value = "UPDATE user " +
@@ -61,7 +65,7 @@ int updateUserInfo(@Param("user") User user);
 //회원탈퇴. 소프트딜리트
     @Modifying
     @Transactional
-    @Query("UPDATE User u SET u.deletedDate = CURRENT_TIMESTAMP, u.deleted = true WHERE u.phoneNumber = :phoneNumber")
+    @Query("UPDATE User u SET u.deletedDate = CURRENT_TIMESTAMP, u.deleted = 1 WHERE u.phoneNumber = :phoneNumber")
     int withdraw(@Param("phoneNumber") String phoneNumber);
 }
 

@@ -763,7 +763,7 @@ function showPasswordFields() {
             formData.append('userId', loggedInUserId);
 
             $.ajax({
-                url: "https://plikim.com/user/updateProfile",
+                url: "/user/updateProfile",
                 type: "post",
                 data: formData,
                 contentType: false,
@@ -771,10 +771,10 @@ function showPasswordFields() {
                 success: function (result) {
                     if (result == -1) {
                         alert('프로필 사진 변경 실패');
-                        callback(false);
+                        // callback(false);
                     } else {
                         alert('프로필 사진 변경 완료');
-                        callback(true);
+                        // callback(true);
                     }
                 },
                 error: function () {

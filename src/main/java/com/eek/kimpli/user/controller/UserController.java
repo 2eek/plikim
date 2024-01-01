@@ -167,17 +167,19 @@ public class UserController {
 
 
     //회원 프로필 사진 변경
-        @PostMapping("/user/updateProfile")
-    public String updateProfile(@RequestParam("profileFile") MultipartFile profileFile, String userId) {
-        try {
-            //프로필 사진 업데이트
-            System.out.println("아디 프사 확인"+userId+profileFile);
-            userService.updateProfile(userId, profileFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "redirect:/";
+ @PostMapping("/user/updateProfile")
+public int updateProfile(@RequestParam("profileFile") MultipartFile profileFile, String userId) {
+    try {
+        // 프로필 사진 업데이트
+        System.out.println("아디 프사 확인" + userId + profileFile);
+        return userService.updateProfile(userId, profileFile);
+    } catch (IOException e) {
+        // IOException 처리
+        e.printStackTrace(); // 또는 로깅 등으로 예외 처리
+        return -1; // 예외 발생 시 반환할 값
     }
+}
+
 
 
     @Transactional

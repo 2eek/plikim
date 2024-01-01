@@ -58,6 +58,11 @@ User findUndeletedUserOne(@Param("phoneNumber") String phoneNumber);
     @Query("UPDATE User u SET u.password = :newPassword WHERE u.email = :email")
     int updatePasswordByEmail(@Param("email") String email, @Param("newPassword") String newPassword);
 
+    //mypage 비밀번호 변경
+    @Modifying
+    @Transactional
+    @Query("UPDATE User u SET u.password = :newPassword WHERE u.userId = :Id")
+    int updatePasswordById(@Param("Id") String userId, @Param("newPassword") String newPassword);
 //회원가입시 유효성검사
 
 @Query("SELECT u.userId, u.phoneNumber FROM User u " +

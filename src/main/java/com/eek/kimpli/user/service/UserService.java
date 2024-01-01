@@ -72,6 +72,20 @@ public class UserService {
         return userRepository.updatePasswordByEmail(user.getEmail(), user.getPassword());
     }
 
+    //마이페이지 비밀번호 수정
+    public int updatePassword(String userId, String password) {
+        // 새로 변경된 비밀번호 암호화
+        User user = userRepository.findByUserId(userId);
+        //새로 입력한 비밀번호와 기존 비밀번호가 같다면
+        if (passwordEncoder.matches(password, user.getPassword())) {
+            return -1;
+        } else {
+            user.setPassword(passwordEncoder.encode(password));
+            // 비밀번호 업데이트 메서드 호출
+            return userRepository.updatePasswordById(user.getUserId(), user.getPassword());
+        }
+    }
+
 
     //회원가입시 아이디 중복체크
     public User checkId(String userId) {
@@ -119,10 +133,10 @@ public class UserService {
 
     //회원 사진 업데이트
     public void updateProfile(String id, MultipartFile profileFile) throws IOException {
-        System.out.println("?????"+id+profileFile);
+        System.out.println("?????" + id + profileFile);
         User user = userRepository.findByUserId(id);
-        System.out.println("서비스 유저"+user);
-        System.out.println("유저 정보?"+ user.getEmail());
+        System.out.println("서비스 유저" + user);
+        System.out.println("유저 정보?" + user.getEmail());
         if (profileFile != null && !profileFile.isEmpty()) {
             user.setOriginProfileImg(profileFile.getOriginalFilename());
             user.setStoredFileName(System.currentTimeMillis() + "_" + profileFile.getOriginalFilename());

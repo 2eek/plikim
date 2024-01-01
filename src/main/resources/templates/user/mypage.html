@@ -116,32 +116,34 @@
             <li><a href="/user/withdrawForm">회원탈퇴</a></li>
         </ul>
     </nav>
+
     <div class="main-content">
         <!-- Main content goes here -->
         <div class="content-center">
 
-            <container >
-                    <!--                    <input type="hidden" name="userId" th:value="${userId}">-->
+            <container>
+                <!--                    <input type="hidden" name="userId" th:value="${userId}">-->
 
-                    <!-- 파일 업로드 -->
-                    <div style="width: 700px;">
-                        <br>
-                        <div id="preview" style="width: 200px;">
-                            <img th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"
-                                 alt="Profile Image" style="width: 200px; height: 200px; object-fit: cover;">
-                        </div>
-                        <div style="margin-top: 20px">
-                            <label for="profileFile">프로필 이미지:</label>
-                            <input type="file" name="profileFile" id="profileFile" onchange="previewImage(this)" style=" width: 250px;">
-                            <button style="border: 1px solid #ccc; padding: 5px 10px; margin-left: 10px;"
-                                    class="btn btn-default" id="updateProfile"
-                                    onclick="updateProfile();"
-                            >변경
-                            </button>
-                        </div>
-
-                        <br>
+                <!-- 파일 업로드 -->
+                <div style="width: 700px;">
+                    <br>
+                    <div id="preview" style="width: 200px;">
+                        <img th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"
+                             alt="Profile Image" style="width: 200px; height: 200px; object-fit: cover;">
                     </div>
+                    <div style="margin-top: 20px">
+                        <label for="profileFile">프로필 이미지:</label>
+                        <input type="file" name="profileFile" id="profileFile" onchange="previewImage(this)"
+                               style=" width: 250px;">
+                        <button style="border: 1px solid #ccc; padding: 5px 10px; margin-left: 10px;"
+                                class="btn btn-default" id="updateProfile"
+                                onclick="updateProfile();"
+                        >변경
+                        </button>
+                    </div>
+
+                    <br>
+                </div>
 
 
                 <!-- 회원 정보 테이블 -->
@@ -155,7 +157,7 @@
                         <tr>
                             <td>비밀번호</td>
                             <td>
-                                <input type="password" name="password" placeholder="현재 비밀번호 입력하세요" class=""
+                                <input type="password" name="password" placeholder="현재 비밀번호 입력하세요" class="pw"
                                        id="currentPw">
                                 <i class="fa-solid fa-eye-slash fa-xs" id="togglePassword"></i>
                                 <font id="nowPw" size="2"></font>
@@ -169,7 +171,7 @@
                         <tr id="tr1" style="display: none;">
                             <td id="td1">비밀번호 변경</td>
                             <td>
-                                <input type="password" name="password" placeholder="비밀번호" class="" id="pw1"
+                                <input type="password" name="password" placeholder="비밀번호" class="pw" id="pw1"
                                 >
                                 <i class="fa-solid fa-eye-slash fa-xs" id="togglePassword1"></i>
                                 <font id="pw" size="2"></font>
@@ -178,11 +180,11 @@
                         <tr id="tr2" style="display: none;">
                             <td id="td2">비밀번호 확인</td>
                             <td>
-                                <input type="password" placeholder="비밀번호 확인" id="pw2">
+                                <input type="password" placeholder="비밀번호 확인" id="pw2" class="pw">
                                 <i class="fa-solid fa-eye-slash fa-xs" id="togglePassword2"></i>
                                 <button style="border: 1px solid #ccc; padding: 5px 10px; margin-left: 10px;"
                                         class="btn btn-default" id="PwCheckBtn"
-                                        onclick="event.preventDefault(); currentPwCheck()"
+                                        onclick="event.preventDefault(); updatePasswordProcess()"
                                 >변경
                                 </button>
                                 <font id="checkPw" size="2"></font> <br>
@@ -251,21 +253,18 @@
     var loggedInUserId = $('#loggedInUserId').val();
 
     // 현재 비밀번호 입력이 완료된 후 실행되는 함수
-    function togglePasswordFields() {
-        var tr1 = document.getElementById("tr1");
-        var td1 = document.getElementById("td1");
-        var tr2 = document.getElementById("tr2");
-        var td2 = document.getElementById("td2");
+function showPasswordFields() {
+    var tr1 = document.getElementById("tr1");
+    var td1 = document.getElementById("td1");
+    var tr2 = document.getElementById("tr2");
+    var td2 = document.getElementById("td2");
 
-        // 현재 상태 확인
-        var isHidden = tr1.style.display === "none";
-
-        // 상태에 따라 토글
-        tr1.style.display = isHidden ? "table-row" : "none";
-        td1.style.display = isHidden ? "table-cell" : "none";
-        tr2.style.display = isHidden ? "table-row" : "none";
-        td2.style.display = isHidden ? "table-cell" : "none";
-    }
+    // 항상 보이게 설정
+    tr1.style.display = "table-row";
+    td1.style.display = "table-cell";
+    tr2.style.display = "table-row";
+    td2.style.display = "table-cell";
+}
 
 
     var userPhoneNumber = /*[[${userPhoneNumber}]]*/ '';
@@ -541,49 +540,59 @@
     //비밀번호 변경, 유효성체크
 
     $('#pw1').on('input', function () {
+        validatePassword()
+    });
+
+    $('#pw2').on('input', function () {
+        checkPasswordMatch();
+    });
+
+    function validatePassword(callback) {
         var pw = $("#pw1").val();
         var num = pw.search(/[0-9]/g);
         var eng = pw.search(/[a-z]/ig);
         var spe = pw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
 
         if (pw.length < 8 || pw.length > 20) {
-            $("#pw").html("8자리 ~ 20자리 이내로 입력해주세요.");
-            $("#pw").attr('color', 'red');
-            $("#pw1").focus();
-            return false;
-        } else if (pw.search(/\s/) != -1) {
-            $("#pw").html("비밀번호는 공백 없이 입력해주세요.");
-            $("#pw").attr('color', 'red');
-            $("#pw1").focus();
+            showMessage("비밀번호는 8자리에서 20자리 이내로 입력해주세요.", 'red');
+            callback(false);
+        } else if (pw.search(/\s/) !== -1) {
+            showMessage("비밀번호는 공백 없이 입력해주세요.", 'red');
+            callback(false);
         } else if (num < 0 || eng < 0 || spe < 0) {
-            $("#pw").html("영문,숫자, 특수문자를 혼합하여 입력해주세요.");
-            $("#pw").attr('color', 'red');
-            $("#pw1").focus();
-            return false;
+            showMessage("영문, 숫자, 특수문자를 혼합하여 입력해주세요.", 'red');
+            callback(false);
         } else {
-            $("#pw").html("조건을 충족합니다.");
-            $("#pw").attr('color', 'green');
-
+            showMessage("조건을 충족합니다.", 'green');
+            callback(true);
         }
-    });
+    }
 
-    $('#pw2').on('input', function () {
+    function showMessage(message, color) {
+        $("#pw").html(message);
+        $("#pw").css('color', color);
+        $("#pw1").focus();
+    }
+
+    function checkPasswordMatch(callback) {
         var number1 = $("#pw1").val();
         var number2 = $("#pw2").val();
 
-        if (number1 !== '' && number2 !== '' && number1 == number2) {
-            $("#checkPw").html('번호가 같습니다.');
-            $("#checkPw").attr('color', 'green');
-            // $("#email").focus();
-
-        } else if (number1 !== '' && number2 !== '' && number1 != number2) {
-            $("#checkPw").html('번호가 다릅니다.');
-            $("#checkPw").attr('color', 'red');
+        if (number1 !== '' && number2 !== '' && number1 === number2) {
+            showPasswordMatchMessage('번호가 같습니다.', 'green');
+            callback(true);
+        } else if (number1 !== '' && number2 !== '' && number1 !== number2) {
+            showPasswordMatchMessage('번호가 다릅니다.', 'red');
             $("#pw2").focus();
-            return false;
-
+            callback(false);
         }
-    });
+    }
+
+    function showPasswordMatchMessage(message, color) {
+        $("#checkPw").html(message);
+        $("#checkPw").css('color', color);
+        // $("#email").focus();  //
+    }
 
     $(document).ready(function () {
         $('#togglePassword,#togglePassword1, #togglePassword2').on('click', function () {
@@ -610,7 +619,7 @@
             dataType: 'json',
             success: function (result) {
                 if (result == 1) {
-                    togglePasswordFields()
+                    showPasswordFields()
                     alert('변경할 비밀번호를 입력하세요.');
                     return false;
                 } else if (result == 0) {
@@ -744,39 +753,90 @@
 
     //프로필 사진 업데이트
 
-function updateProfile(callback) {
-    var fileInput = $('#profileFile')[0];
+    function updateProfile(callback) {
+        var fileInput = $('#profileFile')[0];
 
-    if (fileInput.files.length > 0) {
-        var formData = new FormData();
-        formData.append('profileFile', fileInput.files[0]);
-        formData.append('userId', loggedInUserId);
+        if (fileInput.files.length > 0) {
+            var formData = new FormData();
+            formData.append('profileFile', fileInput.files[0]);
+            formData.append('userId', loggedInUserId);
 
+            $.ajax({
+                url: "/user/updateProfile",
+                type: "post",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    if (result == -1) {
+                        alert('업데이트 실패.');
+                        callback(false);
+                    } else {
+                        alert('업데이트 성공.');
+                        callback(true);
+                    }
+                },
+                error: function () {
+                    alert("서버요청실패!");
+                }
+            });
+        } else {
+            // 파일이 선택되지 않았을 때의 처리
+            alert('파일을 선택하세요.');
+            callback(false);
+        }
+    }
+
+    //비밀번호 변경 프로세스
+    function updatePasswordProcess() {
+
+
+        validatePassword(function (isValidPassword) {
+            if (isValidPassword) {
+                checkPasswordMatch(function (isPasswordMatch) {
+                    if (isPasswordMatch) {
+                        updatePassword();
+                    }
+                });
+            }
+        });
+    }
+
+    function updatePassword() {
+        var newPassword = $("#pw1").val();
         $.ajax({
-            url: "/user/updateProfile",
+            url: "/updatePassword",
             type: "post",
-            data: formData,
-            contentType: false,
-            processData: false,
+            data: {password: newPassword, userId: loggedInUserId},
+            dataType: 'json',
             success: function (result) {
-                if (result == -1) {
-                    alert('업데이트 실패.');
-                    callback(false);
+                if (result == 1) {
+                    alert("업데이트 성공")
+                    $('#pw1').val('');
+                    $('#pw2').val('');
+                    $('#currentPw').val('');
+                    tr1.style.display = "none";
+                    td1.style.display = "none";
+                    tr2.style.display = "none";
+                    td2.style.display = "none";
+
+                } else if (result == 0) {
+                    //0 반환
+                    alert("업데이트 실패")
+                    $('.pw').val('');
+
                 } else {
-                    alert('업데이트 성공.');
-                    callback(true);
+                    alert('기존 비밀번호와 동일합니다.')
+                    $('#pw1').val('');
+                    $('#pw2').val('');
+
                 }
             },
             error: function () {
                 alert("서버요청실패!");
             }
         });
-    } else {
-        // 파일이 선택되지 않았을 때의 처리
-        alert('파일을 선택하세요.');
-        callback(false);
     }
-}
 
 
 </script>

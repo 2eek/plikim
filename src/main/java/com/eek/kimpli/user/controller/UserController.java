@@ -201,7 +201,7 @@ public class UserController {
     }
 
 
-    //회원가입시 휴대폰 중복 검사
+    //회원가입시 휴대폰 중복 검사 (where= deleted 0) 추가 필요
     @ResponseBody
     @PostMapping("/phoneNumberCheck")
     public User phoneNumberCheck(String phoneNumber) {
@@ -281,6 +281,17 @@ public class UserController {
         /* return "member/login"; */
         return "redirect:/";
     }
+
+    //Mypage 비밀번호 업데이트
+@PostMapping("/updatePassword")
+@ResponseBody
+public int updatePassword(String userId, String password) {
+
+
+    return userService.updatePassword(userId, password);
+
+
+}
 
     //회원 가입시 아이디 중복체크
     @PostMapping("/idCheck")

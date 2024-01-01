@@ -28,7 +28,7 @@ public class UserService {
 
     // 회원가입
     @Transactional
-    public void save(User user) throws DuplicateUserDataException {
+    public int save(User user) throws DuplicateUserDataException {
         // 중복된 값 체크
         if (!isDuplicateUser(user.getUserId(), user.getPhoneNumber()).isEmpty()) {
             throw new DuplicateUserDataException("Duplicate user data");
@@ -49,7 +49,12 @@ public class UserService {
         user.setDeleted(0);
 
         // 사용자 정보 저장
-        userRepository.save(user);
+           User result = userRepository.save(user);
+       if(result != null){
+           return 1;
+       }else{
+           return 0;
+       }
     }
 
     //하나의 계정에 하나의 휴대폰 번호(휴대폰 번호 중복체크)
@@ -158,8 +163,8 @@ public class UserService {
 
 
     //회원탈퇴. 소프트 딜리트
-    public int withdraw(String phoneNumber) {
-        return userRepository.withdraw(phoneNumber);
+    public int withdraw(String phoneNumber,String userId) {
+        return userRepository.withdraw(phoneNumber, userId);
     }
 }
 

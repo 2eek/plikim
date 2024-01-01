@@ -16,28 +16,32 @@ import java.util.Map;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-        // id로 유저 찾기
+    // id로 유저 찾기
     User findByUserId(String userId);
 
     User findByUserIdAndDeleted(String userId, int deleted);
 
-        //랜덤으로 회원리스트 나열
-      @Query(value = "SELECT * FROM user WHERE deleted = 0 ORDER BY RAND() LIMIT 3 ", nativeQuery = true)
-      List<User> findRandomUsers();
+    //랜덤으로 회원리스트 나열
+    @Query(value = "SELECT * FROM user WHERE deleted = 0 ORDER BY RAND() LIMIT 3 ", nativeQuery = true)
+    List<User> findRandomUsers();
 
 
-      //회원의 휴대폰 번호 변경
-     @Modifying
+    //회원의 휴대폰 번호 변경
+    @Modifying
     @Query("UPDATE User u SET u.phoneNumber = :newPhoneNumber WHERE u.userId = :userId")
     int updateUserPhoneNumber(@Param("newPhoneNumber") String newPhoneNumber, @Param("userId") String userId);
+
     //회원의 이메일 변경
-     @Modifying
+    @Modifying
     @Query("UPDATE User u SET u.email = :newEmail WHERE u.userId = :userId")
     int updateEmail(@Param("newEmail") String Email, @Param("userId") String Id);//Param의 키값으로 쿼리문에서 시행됨
-     // 휴대폰 번호로 사용자 찾기
+
+    // 휴대폰 번호로 사용자 찾기
     User findByPhoneNumberAndDeleted(String phoneNumber, int deleted);
+
     //이메일로 비밀번호 찾기
     User findByEmailAndUserId(String email, String userId);
+
     //이메일 유무 확인
     User findByEmail(String email);
 
@@ -45,11 +49,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 //    @Query(value = "SELECT * FROM user WHERE email = :email AND login_type = 'L2'", nativeQuery = true)
 //    HashMap<String, Object> findKakaoByEmail(String email);
     //삭제안된 회원들 리스트 조회
-        @Query("SELECT u FROM User u WHERE u.deleted = 0")
+    @Query("SELECT u FROM User u WHERE u.deleted = 0")
     Page<User> findUndeletedUser(Pageable pageable);
 
-        @Query("SELECT u FROM User u WHERE u.deleted = 0 AND u.phoneNumber = :phoneNumber")
-User findUndeletedUserOne(@Param("phoneNumber") String phoneNumber);
+    @Query("SELECT u FROM User u WHERE u.deleted = 0 AND u.phoneNumber = :phoneNumber")
+    User findUndeletedUserOne(@Param("phoneNumber") String phoneNumber);
 
 
     //비밀번호 변경
@@ -65,12 +69,12 @@ User findUndeletedUserOne(@Param("phoneNumber") String phoneNumber);
     int updatePasswordById(@Param("Id") String userId, @Param("newPassword") String newPassword);
 //회원가입시 유효성검사
 
-@Query("SELECT u.userId, u.phoneNumber FROM User u " +
-       "WHERE u.userId = :userId OR " +
-       "(u.phoneNumber = :phoneNumber AND u.phoneNumber IN (SELECT phoneNumber FROM User WHERE deleted = 0))")
-List<User> findDuplicateUsers(@Param("userId") String userId, @Param("phoneNumber") String phoneNumber);
+    @Query("SELECT u.userId, u.phoneNumber FROM User u " +
+            "WHERE u.userId = :userId OR " +
+            "(u.phoneNumber = :phoneNumber AND u.phoneNumber IN (SELECT phoneNumber FROM User WHERE deleted = 0))")
+    List<User> findDuplicateUsers(@Param("userId") String userId, @Param("phoneNumber") String phoneNumber);
 
-     //회원정보 업데이트
+    //회원정보 업데이트
 //@Modifying
 //@Transactional
 //@Query(value = "UPDATE user " +
@@ -83,22 +87,20 @@ List<User> findDuplicateUsers(@Param("userId") String userId, @Param("phoneNumbe
 //int updateUserInfo(@Param("user") User user);
 
     @Modifying
-@Transactional
-@Query(value = "UPDATE user " +
-           "SET origin_profile_img = COALESCE(:#{#user.originProfileImg}, origin_profile_img), " +
-       "stored_file_name = COALESCE(:#{#user.storedFileName}, stored_file_name), " +
-       "file_attached = COALESCE(:#{#user.fileAttached}, file_attached) " +
-       "WHERE user_id = :#{#user.userId}", nativeQuery = true)
-int updateUserProfile(@Param("user") User user);
+    @Transactional
+    @Query(value = "UPDATE user " +
+            "SET origin_profile_img = COALESCE(:#{#user.originProfileImg}, origin_profile_img), " +
+            "stored_file_name = COALESCE(:#{#user.storedFileName}, stored_file_name), " +
+            "file_attached = COALESCE(:#{#user.fileAttached}, file_attached) " +
+            "WHERE user_id = :#{#user.userId}", nativeQuery = true)
+    int updateUserProfile(@Param("user") User user);
 
 
-
-
-//회원탈퇴. 소프트딜리트
+    //회원탈퇴. 소프트딜리트
     @Modifying
     @Transactional
-    @Query("UPDATE User u SET u.deletedDate = CURRENT_TIMESTAMP, u.deleted = 1 WHERE  u.deleted =0 and u.phoneNumber = :phoneNumber")
-    int withdraw(@Param("phoneNumber") String phoneNumber);
+    @Query("UPDATE User u SET u.deletedDate = CURRENT_TIMESTAMP, u.deleted = 1 WHERE u.deleted = 0 AND u.userId = :userId AND u.phoneNumber = :phoneNumber")
+    int withdraw(@Param("phoneNumber") String phoneNumber, @Param("userId") String userId);
 }
 
 

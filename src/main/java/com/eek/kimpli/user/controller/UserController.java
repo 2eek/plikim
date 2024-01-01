@@ -141,17 +141,11 @@ public class UserController {
 
     //회원가입
     @PostMapping("/user/save")
-    public String Join(@ModelAttribute("user") User user, Model model, @PageableDefault(size = 3) Pageable pageable) {
-        Page<User> users = userRepository.findAll(pageable);
-        // 아이디 중복 체크
-        int currentPage = users.getPageable().getPageNumber() + 1; // 현재 페이지 번호 (0부터 시작)
-        int startPage = Math.max(1, currentPage - 2); // 현재 페이지 주변에 2 페이지씩 보여주기
-        int endPage = Math.min(users.getTotalPages(), startPage + 4);
-        model.addAttribute("startPage", startPage);
-        model.addAttribute("endPage", endPage);
-        model.addAttribute("user", users);
-        userService.save(user);
-        return "redirect:/";
+    @ResponseBody
+    public int Join(@ModelAttribute("user") User user, Model model, @PageableDefault(size = 3) Pageable pageable) {
+
+       return userService.save(user);
+
     }
 
     // 회원정보 수정+ 프로필 사진 등록
@@ -201,7 +195,7 @@ public class UserController {
     }
 
 
-    //회원가입시 휴대폰 중복 검사 (where= deleted 0) 추가 필요
+    //회원가입시 휴대폰 중복 검사 (where= deleted 0) 추가완료
     @ResponseBody
     @PostMapping("/phoneNumberCheck")
     public User phoneNumberCheck(String phoneNumber) {
@@ -329,10 +323,10 @@ public int updatePassword(String userId, String password) {
     }
 
     @PostMapping("/user/withdraw")
-    public String withdraw(String phoneNumber) {
-        userService.withdraw(phoneNumber);
-        //회원탈퇴되었습니다 메세지??
-        return "redirect:/";
+    @ResponseBody
+    public int withdraw(String phoneNumber, String userId) {
+        System.out.println("폰넘버, 유저아이디 "+ phoneNumber + userId);
+         return userService.withdraw(phoneNumber, userId);
     }
 
     //비밀번호 업데이트용 현재 비밀번호 체크

@@ -45,7 +45,7 @@
     }
 
 
-     .sidebar {
+    .sidebar {
         background-color: #343A40;
         margin-top: 30px;
         color: white;
@@ -113,40 +113,40 @@
                         <h1>회원 탈퇴</h1>
                     </div>
                 </main>
-                <form action="/user/withdraw" enctype="multipart/form-data" method="post" style=" width: 700px">
+                <!--                <form action="/user/withdraw" enctype="multipart/form-data" method="post" style=" width: 700px">-->
 
 
-                    <div id="table-container">
-                        <table>
-                            <tr>
-                                <td>휴대폰 번호</td>
-                                <td>
-                                    <input type="text" name="phoneNumber" id="phonenumber"
-                                    >
-                                    <button type="button" id="sendCode" class="btn btn-default"
-                                            style="border: 1px solid #ccc; padding: 5px 10px;">코드 발송
+                <div id="table-container">
+                    <table>
+                        <tr>
+                            <td>휴대폰 번호</td>
+                            <td>
+                                <input type="text" name="phoneNumber" id="phoneNumber"
+                                >
+                                <button type="button" id="sendCode" class="btn btn-default"
+                                        style="border: 1px solid #ccc; padding: 5px 10px;">코드 발송
+                                </button>
+                                <div style="margin-top: 5px">
+                                    <font id="spacePhonenum" size="2"></font>
+                                </div>
+
+                                <div id="codeCheck" class="mb-3" style="display: none; align-items: center;">
+                                    <input type="text" class="form-control" name="smsCode" id="smsCode"
+                                           placeholder="코드 입력하세요"
+                                           style="width:185px; margin-right: 3px">
+                                    <button type="button" id="codeCheckButton" class="btn btn-default"
+                                            style="float: left; border: 1px solid #ccc; padding: 5px 10px;">코드 확인
                                     </button>
-                                    <div style="margin-top: 5px">
-                                        <font id="spacePhonenum" size="2"></font>
-                                    </div>
+                                </div>
+                            </td>
+                        </tr>
 
-                                    <div id="codeCheck" class="mb-3" style="display: none; align-items: center;">
-                                        <input type="text" class="form-control" name="smsCode" id="smsCode"
-                                               placeholder="코드 입력하세요"
-                                               style="width:185px; margin-right: 3px">
-                                        <button type="button" id="codeCheckButton" class="btn btn-default"
-                                                style="float: left; border: 1px solid #ccc; padding: 5px 10px;">코드 확인
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-
-                        </table>
-                    </div>
-                    <div class="text-right">
-                        <input type="submit" value="회원탈퇴" id="form-submit">
-                    </div>
-                </form>
+                    </table>
+                </div>
+                <div class="text-right">
+                    <input type="submit" value="회원탈퇴" id="form-submit">
+                </div>
+                <!--                </form>-->
             </container>
         </div>
     </div>
@@ -161,14 +161,16 @@
         confirmSmsCode(function (result) {
             if (result) {
                 // alert('회원탈퇴 버튼 인증 성공')
-                 if (confirm('회원탈퇴 하시겠습니까?') == true){
-   //true는 확인버튼을 눌렀을 때 코드 작성
-   // console.log("완료되었습니다.");
-                     submitForm();
- }else{
-   // false는 취소버튼을 눌렀을 때, 취소됨
-   // console.log("취소되었습니다");
- }
+                if (confirm('회원탈퇴 하시겠습니까?') == true) {
+                    //true는 확인버튼을 눌렀을 때 코드 작성
+                    // console.log("완료되었습니다.");
+
+                    withdraw();
+
+                } else {
+                    // false는 취소버튼을 눌렀을 때, 취소됨
+                    // console.log("취소되었습니다");
+                }
                 return false;
 
             } else {
@@ -242,18 +244,18 @@
 
 // 코드발송 버튼, (발송 전 전화번호 유효성 검사, 코드 발송, 코드입력폼 활성화)
         $('#sendCode').on('click', function () {
-            let receiverId = document.getElementById("phonenumber").value;
+            let receiverId = document.getElementById("phoneNumber").value;
 
             // 숫자로만 구성되어 있는지 체크
             var reg = /^[0-9]{11}$/;
             if (!reg.test(receiverId)) {
                 // alert('숫자로 입력바랍니다.')
-                $("#phonenumber").val(userPhoneNumber);
+                $("#phoneNumber").val(userPhoneNumber);
 
-                $("#phonenumber").focus();
+                $("#phoneNumber").focus();
                 $("#spacePhonenum").html('전화번호를 다시 확인하세요');
                 $("#spacePhonenum").css('color', 'red');
-                $("#phonenumber").focus();
+                $("#phoneNumber").focus();
                 return false;
             }
             if (receiverId === "") {
@@ -271,7 +273,7 @@
         function sendSMS() {
             //문구 비우기
             $("#spacePhonenum").html('');
-            let phoneNumber = document.getElementById("phonenumber").value;
+            let phoneNumber = document.getElementById("phoneNumber").value;
 
             $.ajax({
                 url: "/sms/send",
@@ -303,7 +305,7 @@
     //서브밋시
     // 코드 비교 함수 '정의'( 서브밋 후 실행됨 그다음 회원의 휴대폰 번호도 체크한다. )
     function confirmSmsCode(callback) {
-        var phoneNumberValue = $("#phonenumber").val();
+        var phoneNumberValue = $("#phoneNumber").val();
         var userCodeValue = $("#smsCode").val();
         var loggedInUserId = $('#loggedInUserId').val();
         // phoneNumberValue와 userCodeValue가 모두 값이 있는 경우에만 AJAX 통신 수행
@@ -385,21 +387,21 @@
     //휴대폰 번호 유효성체크
     $(document).ready(function () {
         // 입력 필드에서 포커스 아웃 이벤트를 감지
-        $("#phonenumber").blur(function () {
+        $("#phoneNumber").blur(function () {
             phoneNumberValidate();
         });
     });
 
     function phoneNumberValidate() {
-        var phonenumber = $("#phonenumber").val();
+        var phoneNumber = $("#phoneNumber").val();
         var reg = /^[0-9]{11}$/;
 
-        if (!reg.test(phonenumber)) {
+        if (!reg.test(phoneNumber)) {
             // alert("전화번호는 숫자로만 입력해야 합니다.");
 
-            $("#phonenumber").val(userPhoneNumber);
+            $("#phoneNumber").val(userPhoneNumber);
 
-            $("#phonenumber").focus();
+            $("#phoneNumber").focus();
             $("#spacePhonenum").html("전화번호를 다시 확인하세요.");
             $("#spacePhonenum").css('color', 'red');
 
@@ -410,24 +412,24 @@
 
     // checkPhoneNumber 함수 수정
     function checkPhoneNumber(callback) {
-        var phonenumber = $("#phonenumber").val();
+        var phoneNumber = $("#phoneNumber").val();
         var reg = /^[0-9]{11}$/;
 
-        if (!reg.test(phonenumber)) {
+        if (!reg.test(phoneNumber)) {
             $("#spacePhonenum").html("전화번호를 다시 확인하세요.");
             $("#spacePhonenum").css('color', 'red');
             // alert("전화번호는 숫자로만 입력해야 합니다.");
-            $("#phonenumber").focus();
+            $("#phoneNumber").focus();
             callback('b'); // 실패 시 콜백에 'b'를 전달
             return;
         }
 
-        phonenumber = phonenumber.replace(/-/g, '');
+        phoneNumber = phoneNumber.replace(/-/g, '');
 
         $.ajax({
             url: "/phoneNumberCheck",
             type: "post",
-            data: {phoneNumber: phonenumber},
+            data: {phoneNumber: phoneNumber},
             dataType: 'json',
             success: function (result) {
                 if ($.isEmptyObject(result) || result.userId === null) {
@@ -435,9 +437,9 @@
                     // $("#spacePhonenum").css('color', 'green');
                     callback('a'); // 성공 시 콜백에 'a'를 전달
                 } else {
-                    $("#phonenumber").val(userPhoneNumber);
+                    $("#phoneNumber").val(userPhoneNumber);
 
-                    $("#phonenumber").focus();
+                    $("#phoneNumber").focus();
                     $("#codeCheck").css("display", "none");
                     document.getEleme미ntById("smsCode").value = '';
 
@@ -450,6 +452,40 @@
                 console.error("서버 요청 실패:", status, error);
                 alert("서버 요청 실패: " + status + " - " + error);
                 callback('b'); // 실패 시 콜백에 'b'를 전달
+            }
+        });
+    }
+
+
+    function withdraw() {
+        // 여기에 필요한 데이터 수집 및 설정
+
+        var loggedInUserId = $('#loggedInUserId').val();
+        var phoneNumber = $('#phoneNumber').val();
+
+        $.ajax({
+            type: "POST",
+            url: "/user/withdraw",
+            data: {phoneNumber: phoneNumber, userId: loggedInUserId},
+            dataType: 'json',
+
+            success: function (response) {
+
+                if (
+                    response == 1) {
+                    alert("계정이 성공적으로 탈퇴되었습니다.");
+                  window.location.href = "/logout";
+                } else {
+                    alert("탈퇴가 안됐습니다.");
+                }
+
+
+            },
+            error: function (error) {
+                // 탈퇴 실패 또는 오류가 발생한 경우의 동작
+                console.error("탈퇴 실패", error);
+                alert("계정 탈퇴에 실패했습니다. 다시 시도해주세요.");
+                // 추가적으로 필요한 동작 수행 가능
             }
         });
     }

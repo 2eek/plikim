@@ -38,6 +38,7 @@ public class SmsController {
     @PostMapping("/sms/send")
     @ResponseBody
     public HashMap<String, Object> sendSms(MessageDTO messageDto, HttpSession session) throws JsonProcessingException, RestClientException, URISyntaxException, InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException {
+        System.out.println("폰넘버?"+messageDto.getTo());
         //삭제 안된 회원의 번호만 찾기 가능
 //        User user=userService.findByPhoneNumber(messageDto.getTo());
 //        user.getUserId(); //아이디
@@ -55,7 +56,7 @@ public class SmsController {
         smsMap.put("num", num);
         smsMap.put("response", response);
 
-
+        System.out.println("결과 뭔데"+smsMap);
         return smsMap;
     }
 

@@ -97,7 +97,7 @@ public SmsResponseDTO sendSms(MessageDTO messageDto) throws JsonProcessingExcept
         headers.set("x-ncp-apigw-signature-v2", makeSignature(time));
         User user=userService.findByPhoneNumber(messageDto.getTo());
 
-     if (user != null && user.getDeleted() == 0) {
+     if (user == null || user.getDeleted() != 1) {
         List<MessageDTO> messages = new ArrayList<>();
         messages.add(messageDto); // MessageDTO로 수정
 

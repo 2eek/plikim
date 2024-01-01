@@ -129,11 +129,8 @@
                 <div style="width: 700px;">
                     <br>
                     <div id="preview" style="width: 200px;">
-<!--                        <img th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"-->
-<!--                             alt="Profile Image" style="width: 200px; height: 200px; object-fit: cover;">-->
-                        <img th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : 'https://plikim.com/uploads/' + commonUser.storedFileName}}"
-     alt="Profile Image" style="width: 200px; height: 200px; object-fit: cover;">
-
+                        <img th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"
+                             alt="Profile Image" style="width: 200px; height: 200px; object-fit: cover;">
                     </div>
                     <div style="margin-top: 20px">
                         <label for="profileFile">프로필 이미지:</label>
@@ -766,7 +763,7 @@ function showPasswordFields() {
             formData.append('userId', loggedInUserId);
 
             $.ajax({
-                url: "/user/updateProfile",
+                url: "https://plikim.com/user/updateProfile",
                 type: "post",
                 data: formData,
                 contentType: false,

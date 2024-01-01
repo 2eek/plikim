@@ -18,6 +18,7 @@ import java.util.Map;
 public interface UserRepository extends JpaRepository<User, Long> {
         // id로 유저 찾기
     User findByUserId(String userId);
+
     User findByUserIdAndDeleted(String userId, int deleted);
 
         //랜덤으로 회원리스트 나열
@@ -29,7 +30,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
      @Modifying
     @Query("UPDATE User u SET u.phoneNumber = :newPhoneNumber WHERE u.userId = :userId")
     int updateUserPhoneNumber(@Param("newPhoneNumber") String newPhoneNumber, @Param("userId") String userId);
-  // 휴대폰 번호로 사용자 찾기
+    //회원의 이메일 변경
+     @Modifying
+    @Query("UPDATE User u SET u.email = :newEmail WHERE u.userId = :userId")
+    int updateEmail(@Param("newEmail") String Email, @Param("userId") String Id);//Param의 키값으로 쿼리문에서 시행됨
+     // 휴대폰 번호로 사용자 찾기
     User findByPhoneNumberAndDeleted(String phoneNumber, int deleted);
     //이메일로 비밀번호 찾기
     User findByEmailAndUserId(String email, String userId);
@@ -42,6 +47,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     //삭제안된 회원들 리스트 조회
         @Query("SELECT u FROM User u WHERE u.deleted = 0")
     Page<User> findUndeletedUser(Pageable pageable);
+
+        @Query("SELECT u FROM User u WHERE u.deleted = 0 AND u.phoneNumber = :phoneNumber")
+User findUndeletedUserOne(@Param("phoneNumber") String phoneNumber);
 
 
     //비밀번호 변경

@@ -60,7 +60,7 @@
         color: white;
         width: 200px;
         padding: 20px;
-        height: 610px;
+        height: 700px;
     }
 
     .sidebar ul {
@@ -108,9 +108,10 @@
     <nav class="sidebar" style="float: left">
         <!-- Sidebar content goes here -->
         <ul>
+            <li><a href="/user/mypage">마이 페이지</a></li>
             <li><a href="/board/myBoardList">나의 게시글</a></li>
             <li><a href="/moment/myMomentList">나의 모멘트</a></li>
-            <li style="margin-bottom: 400px"><a href="/comment/myCommentList">나의 댓글</a></li>
+            <li style="margin-bottom: 450px"><a href="/comment/myCommentList">나의 댓글</a></li>
 
             <li><a href="/user/withdrawForm">회원탈퇴</a></li>
         </ul>
@@ -119,12 +120,11 @@
         <!-- Main content goes here -->
         <div class="content-center">
 
-            <container style="float: left">
-                <form action="/user/update" enctype="multipart/form-data" method="post" style=" width: 700px">
+            <container >
                     <!--                    <input type="hidden" name="userId" th:value="${userId}">-->
 
                     <!-- 파일 업로드 -->
-                    <div>
+                    <div style="width: 700px;">
                         <br>
                         <div id="preview" style="width: 200px;">
                             <img th:src="@{${#strings.isEmpty(commonUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + commonUser.storedFileName}}"
@@ -132,108 +132,115 @@
                         </div>
                         <div style="margin-top: 20px">
                             <label for="profileFile">프로필 이미지:</label>
-                            <input type="file" name="profileFile" id="profileFile" onchange="previewImage(this)">
+                            <input type="file" name="profileFile" id="profileFile" onchange="previewImage(this)" style=" width: 250px;">
+                            <button style="border: 1px solid #ccc; padding: 5px 10px; margin-left: 10px;"
+                                    class="btn btn-default" id="updateProfile"
+                                    onclick="updateProfile();"
+                            >변경
+                            </button>
                         </div>
+
                         <br>
                     </div>
 
-                    <!-- 회원 정보 테이블 -->
-                    <div id="table-container">
-                        <table>
-                            <tr>
-                                <td>아이디</td>
-                                <td><span th:text="${userId}"></span></td>
-                            </tr>
 
-                            <tr>
-                                <td>비밀번호</td>
-                                <td>
-                                    <input type="password" name="password" placeholder="현재 비밀번호 입력하세요" class=""
-                                           id="currentPw">
-                                    <i class="fa-solid fa-eye-slash fa-xs" id="togglePassword"></i>
-                                    <font id="nowPw" size="2"></font>
-                                    <button style="border: 1px solid #ccc; padding: 5px 10px; margin-left: 10px;"
-                                            class="btn btn-default" value="확인" id="currentPwCheckBtn"
-                                            onclick="event.preventDefault(); currentPwCheck()"
-                                    >확인
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr id="tr1" style="display: none;">
-                                <td id="td1">비밀번호 변경</td>
-                                <td>
-                                    <input type="password" name="password" placeholder="비밀번호" class="" id="pw1"
-                                    >
-                                    <i class="fa-solid fa-eye-slash fa-xs" id="togglePassword1"></i>
-                                    <font id="pw" size="2"></font>
-                                </td>
-                            </tr>
-                            <tr id="tr2" style="display: none;">
-                                <td id="td2">비밀번호 확인</td>
-                                <td>
-                                    <input type="password" placeholder="비밀번호 확인" id="pw2">
-                                    <i class="fa-solid fa-eye-slash fa-xs" id="togglePassword2"></i>
-                                    <button style="border: 1px solid #ccc; padding: 5px 10px; margin-left: 10px;"
-                                            class="btn btn-default" id="PwCheckBtn"
-                                            onclick="event.preventDefault(); currentPwCheck()"
-                                    >변경
-                                    </button>
-                                    <font id="checkPw" size="2"></font> <br>
+                <!-- 회원 정보 테이블 -->
+                <div id="table-container">
+                    <table>
+                        <tr>
+                            <td>아이디</td>
+                            <td><span th:text="${userId}"></span></td>
+                        </tr>
 
-                                </td>
-                            </tr>
-
-                            <td>이메일</td>
-                            <td colspan="1">
-                                <input type="email" name="email" placeholder="이메일" id="email"
-                                       th:value="${userEmail}"
-                                       th:readonly="${userLoginType eq 'L2'}">
-                                <font id="spaceEmail" size="2"></font>
-                                <button style="border: 1px solid #ccc; padding: 5px 10px; margin-left: 10px;margin-left: 30px;"
-                                        class="btn btn-default" id="emailEdit"
+                        <tr>
+                            <td>비밀번호</td>
+                            <td>
+                                <input type="password" name="password" placeholder="현재 비밀번호 입력하세요" class=""
+                                       id="currentPw">
+                                <i class="fa-solid fa-eye-slash fa-xs" id="togglePassword"></i>
+                                <font id="nowPw" size="2"></font>
+                                <button style="border: 1px solid #ccc; padding: 5px 10px; margin-left: 10px;"
+                                        class="btn btn-default" value="확인" id="currentPwCheckBtn"
+                                        onclick="event.preventDefault(); currentPwCheck()"
+                                >확인
+                                </button>
+                            </td>
+                        </tr>
+                        <tr id="tr1" style="display: none;">
+                            <td id="td1">비밀번호 변경</td>
+                            <td>
+                                <input type="password" name="password" placeholder="비밀번호" class="" id="pw1"
+                                >
+                                <i class="fa-solid fa-eye-slash fa-xs" id="togglePassword1"></i>
+                                <font id="pw" size="2"></font>
+                            </td>
+                        </tr>
+                        <tr id="tr2" style="display: none;">
+                            <td id="td2">비밀번호 확인</td>
+                            <td>
+                                <input type="password" placeholder="비밀번호 확인" id="pw2">
+                                <i class="fa-solid fa-eye-slash fa-xs" id="togglePassword2"></i>
+                                <button style="border: 1px solid #ccc; padding: 5px 10px; margin-left: 10px;"
+                                        class="btn btn-default" id="PwCheckBtn"
                                         onclick="event.preventDefault(); currentPwCheck()"
                                 >변경
                                 </button>
+                                <font id="checkPw" size="2"></font> <br>
+
                             </td>
-                            </tr>
-                            <tr>
-                                <td>휴대폰 번호</td>
-                                <td>
-                                    <input type="text" name="phoneNumber" id="phonenumber"
-                                           th:value="${userPhoneNumber}">
-                                    <button type="button" id="sendCode" class="btn btn-default"
-                                            style="border: 1px solid #ccc; padding: 5px 10px;">코드 발송
+                        </tr>
+
+                        <td>이메일</td>
+                        <td colspan="1">
+                            <input type="email" name="email" placeholder="이메일" id="email"
+                                   th:value="${userEmail}"
+                                   th:readonly="${userLoginType eq 'L2'}">
+                            <button style="border: 1px solid #ccc; padding: 5px 10px; margin-left: 10px;margin-left: 30px;"
+                                    class="btn btn-default" id="emailCheck"
+                            >변경
+                            </button>
+                            <!--                                onclick="event.preventDefault();"-->
+                            <font id="spaceEmail" size="2"></font>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td>휴대폰 번호</td>
+                            <td>
+                                <input type="text" name="phoneNumber" id="phonenumber"
+                                       th:value="${userPhoneNumber}">
+                                <button type="button" id="sendCode" class="btn btn-default"
+                                        style="border: 1px solid #ccc; padding: 5px 10px;">코드 발송
+                                </button>
+                                <div style="margin-top: 5px">
+                                    <font id="spacePhonenum" size="2"></font>
+                                </div>
+
+                                <div id="codeCheck" class="mb-3" style="display: none; align-items: center;">
+                                    <input type="text" class="form-control" name="smsCode" id="smsCode"
+                                           placeholder="코드 입력하세요"
+                                           style="width:185px; margin-right: 3px">
+                                    <button type="button" id="codeCheckButton" class="btn btn-default"
+                                            style="float: left; border: 1px solid #ccc; padding: 5px 10px;">번호 변경
                                     </button>
-                                    <div style="margin-top: 5px">
-                                        <font id="spacePhonenum" size="2"></font>
-                                    </div>
-
-                                    <div id="codeCheck" class="mb-3" style="display: none; align-items: center;">
-                                        <input type="text" class="form-control" name="smsCode" id="smsCode"
-                                               placeholder="코드 입력하세요"
-                                               style="width:185px; margin-right: 3px">
-                                        <button type="button" id="codeCheckButton" class="btn btn-default"
-                                                style="float: left; border: 1px solid #ccc; padding: 5px 10px;">번호 변경
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>자기소개</td>
-                                <td><textarea name="selfIntroduction" th:text="${selfIntroduction}"></textarea>
-                                    <div class="text-right">
-                                        <button type="button" id="Statement" class="btn btn-default"
-                                                style="border: 1px solid #ccc; padding: 5px 10px;">작성
-                                        </button>
-                                    </div>
-                                </td>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>자기소개</td>
+                            <td><textarea name="selfIntroduction" th:text="${selfIntroduction}"></textarea>
+                                <div class="text-right">
+                                    <button type="button" id="Statement" class="btn btn-default"
+                                            style="border: 1px solid #ccc; padding: 5px 10px;">작성
+                                    </button>
+                                </div>
+                            </td>
 
 
-                            </tr>
-                        </table>
-                    </div>
+                        </tr>
+                    </table>
+                </div>
 
-                </form>
+
             </container>
         </div>
     </div>
@@ -263,39 +270,39 @@
 
     var userPhoneNumber = /*[[${userPhoneNumber}]]*/ '';
     //제출시
-    $("#form-submit").on("click", function (event) {
-        checkEmail(function (result) {
-            if (result == false) {
-                alert('이메일 적어라')
-                event.preventDefault();
+    // $("#form-submit").on("click", function (event) {
+    //     checkEmail(function (result) {
+    //         if (result == false) {
 
-            }
-        });
-
-        // 코드 확인 수행
-        var userInputPhoneNumber = $("#phonenumber").val();
-        if (userInputPhoneNumber == userPhoneNumber) {
-
-            // $('#form-submit').submit();
-
-        } else {
-            confirmSmsCode(function (result) {
-
-                // 코드 확인 실패한 경우
-                if (result) {
-
-                    alert('코드 인증 완료')
-                    submitForm();
-                } else {
-                }
-
-            });
-            //휴대폰 번호 다름
-            event.preventDefault();
-            // event.preventDefault();
-
-        }
-    });
+    //             event.preventDefault();
+    //
+    //         }
+    //     });
+    //
+    //     // 코드 확인 수행
+    //     var userInputPhoneNumber = $("#phonenumber").val();
+    //     if (userInputPhoneNumber == userPhoneNumber) {
+    //
+    //         // $('#form-submit').submit();
+    //
+    //     } else {
+    //         confirmSmsCode(function (result) {
+    //
+    //             // 코드 확인 실패한 경우
+    //             if (result) {
+    //
+    //                 alert('코드 인증 완료')
+    //                 submitForm();
+    //             } else {
+    //             }
+    //
+    //         });
+    //         //휴대폰 번호 다름
+    //         event.preventDefault();
+    //         // event.preventDefault();
+    //
+    //     }
+    // });
 
     // 폼 제출 함수
     function submitForm() {
@@ -315,44 +322,6 @@
         }
     }
 
-    // $('#email').on('input', function () {
-    //     checkEmail(function (result) {
-    //         if(result==false){
-    //             // alert('hi')
-    //             return false;
-    //         }
-    //     });
-    // });
-
-    //ajax 유효성 검사
-    // function checkEmail(callback) {
-    //     var email = $("#email").val();
-    //
-    //     $.ajax({
-    //         url: "/emailCheck",
-    //         type: "post",
-    //         data: {email: email},
-    //         dataType: 'json',
-    //         success: function (result) {
-    //             if (result == -1) {
-    //                 $("#spaceEmail").html('이메일 형식이 아닙니다.');
-    //                 $("#spaceEmail").attr('color', 'red');
-    //                 callback(false);
-    //             } else {
-    //                 $("#spaceEmail").html('');
-    //
-    //             }
-    //
-    //             // 비동기 작업이 완료된 후에 콜백 함수 호출
-    //             if (typeof callback === 'function') {
-    //                 callback(result !== -1);
-    //             }
-    //         },
-    //         error: function () {
-    //             alert("서버요청실패!");
-    //         }
-    //     });
-    // }
 
     //HTML 문서의 모든 요소들이 브라우저에 로드되고 초기화된 후에 스크립트 코드를 실행하고자 할 때 사용됨. 돔형성 후
     $(document).ready(function () {
@@ -488,16 +457,7 @@
 
                         alert('코드가 인증되었습니다.')
                         //휴대폰 번호 업데이트
-                        phoneNumberUpdate();
-
-                        // (function (result){
-                        //     if(result) {
-                        //         alert('휴대폰 번호가 변경되었습니다.')
-                        //     }
-                        //
-                        // });
-                        // checkResult(true);
-
+                        updatePhoneNumber();
 
                     } else {
                         // alert('코드가 맞지 않습니다.');
@@ -672,14 +632,10 @@
         });
     }
 
-    function phoneNumberUpdate() {
+    function updatePhoneNumber() {
         var phonenumber = $("#phonenumber").val();
-        // console.log(phonenumber + loggedInUserId );
-        console.log('1' + loggedInUserId);
-        //    var loggedInUserId = $('#loggedInUserId').val();
-        //      var loggedInUserId = $('2'+'#loggedInUserId').val();
         $.ajax({
-            url: "/phoneNumberUpdate",
+            url: "/updatePhoneNumber",
             type: "post",
             data: {phoneNumber: phonenumber, userId: loggedInUserId},
             dataType: 'json',
@@ -693,7 +649,7 @@
 
                     // callback(true);
                 } else {
-                      alert("업데이트 실패")
+                    alert("업데이트 실패")
 
                 }
 
@@ -707,6 +663,122 @@
             }
         });
     }
+
+    function updateEmail() {
+        var email = $("#email").val();
+        $.ajax({
+            url: "/updateEmail",
+            type: "post",
+            data: {email: email, userId: loggedInUserId},
+            dataType: 'json',
+            success: function (result) {
+                if (result) {
+                    alert("업데이트 성공")
+                } else {
+                    alert("업데이트 실패")
+
+                }
+            },
+            error: function () {
+                alert("서버요청실패!");
+            }
+        });
+    }
+
+    $('#email').on('input', function (event) {
+        checkEmail(function (result) {
+            if (result) {
+                // updateEmail();
+            } else {
+                event.preventDefault();
+            }
+
+        });
+    });
+    $('#emailCheck').on('click', function (event) {
+        // alert('hi')
+        // event.preventDefault();
+        checkEmail(function (result) {
+            if (result) {
+                console.log('되나')
+                updateEmail();
+            } else {
+                console.log('false? 이메일')
+                event.preventDefault();
+            }
+
+        });
+    });
+
+    //이메일체크 콜백함수 정의
+    function checkEmail(callback) {
+        var email = $("#email").val();
+
+        $.ajax({
+            url: "/emailCheck",
+            type: "post",
+            data: {email: email},
+            dataType: 'json',
+            success: function (result) {
+                if (result == -1) {
+                    $("#spaceEmail").html('이메일 형식이 아닙니다.');
+                    $("#spaceEmail").attr('color', 'red');
+                    callback(false);
+                } else {
+                    callback(true);
+                    $("#spaceEmail").html('');
+
+                }
+
+                // 비동기 작업이 완료된 후에 콜백 함수 호출
+                // if (typeof callback === 'function') {
+                //     callback(result !== -1);
+                // }
+            },
+            error: function () {
+                alert("서버요청실패!");
+            }
+        });
+    }
+
+
+    //프로필 사진 업데이트
+
+function updateProfile(callback) {
+    var fileInput = $('#profileFile')[0];
+
+    if (fileInput.files.length > 0) {
+        var formData = new FormData();
+        formData.append('profileFile', fileInput.files[0]);
+        formData.append('userId', loggedInUserId);
+
+        $.ajax({
+            url: "/user/updateProfile",
+            type: "post",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (result) {
+                if (result == -1) {
+                    alert('업데이트 실패.');
+                    callback(false);
+                } else {
+                    alert('업데이트 성공.');
+                    callback(true);
+                }
+            },
+            error: function () {
+                alert("서버요청실패!");
+            }
+        });
+    } else {
+        // 파일이 선택되지 않았을 때의 처리
+        alert('파일을 선택하세요.');
+        callback(false);
+    }
+}
+
+
 </script>
 </body>
 

@@ -52,7 +52,7 @@ public class UserController {
 
     //마이페이지
     @GetMapping("/user/mypage")
-    public String showDashboard(Model model) {
+    public String showMyPage(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
@@ -157,6 +157,8 @@ public class UserController {
     // 회원정보 수정+ 프로필 사진 등록
     @PostMapping("/user/update")
     public String updateMyInfo(@RequestParam("profileFile") MultipartFile profileFile, User user) {
+        System.out.println("프사업데이트 유저?"+user);
+          System.out.println("프사업데이트 사진?"+profileFile);
         // userId를 사용하여 현재 로그인 중인 사용자 정보를 가져오는 작업
 //        User loggedInUser = userService.getUserById(user.getUserId());
 
@@ -169,11 +171,33 @@ public class UserController {
         return "redirect:/";
     }
 
+
+    //회원 프로필 사진 변경
+        @PostMapping("/user/updateProfile")
+    public String updateProfile(@RequestParam("profileFile") MultipartFile profileFile, String userId) {
+        try {
+            //프로필 사진 업데이트
+            System.out.println("아디 프사 확인"+userId+profileFile);
+            userService.updateProfile(userId, profileFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "redirect:/";
+    }
+
+
     @Transactional
     @ResponseBody
-    @PostMapping("/phoneNumberUpdate")
-    public int phoneNumberUpdate(String phoneNumber, String userId) {
-        return userService.phoneNumberUpdate(phoneNumber, userId);
+    @PostMapping("/updatePhoneNumber")
+    public int updatePhoneNumber(String phoneNumber, String userId) {
+        return userService.updatePhoneNumber(phoneNumber, userId);
+    }
+
+    @Transactional
+    @ResponseBody
+    @PostMapping("/updateEmail")
+    public int updateEmail(String email, String userId) {
+        return userService.updateEmail(email, userId);
     }
 
 

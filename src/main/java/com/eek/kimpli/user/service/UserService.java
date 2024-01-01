@@ -30,9 +30,9 @@ public class UserService {
     @Transactional
     public void save(User user) throws DuplicateUserDataException {
         // 중복된 값 체크
-     if (!isDuplicateUser(user.getUserId(), user.getPhoneNumber()).isEmpty()) {
-    throw new DuplicateUserDataException("Duplicate user data");
-}
+        if (!isDuplicateUser(user.getUserId(), user.getPhoneNumber()).isEmpty()) {
+            throw new DuplicateUserDataException("Duplicate user data");
+        }
 
         // 비밀번호 암호화
         String encodedPassword = passwordEncoder.encode(user.getPassword());
@@ -54,7 +54,7 @@ public class UserService {
 
     //하나의 계정에 하나의 휴대폰 번호(휴대폰 번호 중복체크)
     private List<User> isDuplicateUser(String userId, String phoneNumber) {
-        System.out.println("중복결과"+userRepository.findDuplicateUsers(userId, phoneNumber));
+        System.out.println("중복결과" + userRepository.findDuplicateUsers(userId, phoneNumber));
         return userRepository.findDuplicateUsers(userId, phoneNumber);
     }
 
@@ -90,7 +90,6 @@ public class UserService {
     //유효한 이메일인지 확인
     public User checkEmail(String email) {
         User result = userRepository.findByEmail(email);
-        System.out.println("유저유저유저 이메일과 아이디" + result);
         return result;
     }
 
@@ -102,8 +101,13 @@ public class UserService {
         userRepository.updateUserInfo(user);
     }
 
-    public int phoneNumberUpdate(String phoneNumber,String userId){
-       return userRepository.updateUserPhoneNumber(phoneNumber,userId);
+    public int updatePhoneNumber(String phoneNumber, String userId) {
+        return userRepository.updateUserPhoneNumber(phoneNumber, userId);
+
+    }
+
+    public int updateEmail(String email, String userId) {
+        return userRepository.updateEmail(email, userId);
 
     }
 
@@ -114,6 +118,28 @@ public class UserService {
 
 
     //회원 사진 업데이트
+    public void updateProfile(String id, MultipartFile profileFile) throws IOException {
+        System.out.println("?????"+id+profileFile);
+        User user = userRepository.findByUserId(id);
+        System.out.println("서비스 유저"+user);
+        System.out.println("유저 정보?"+ user.getEmail());
+        if (profileFile != null && !profileFile.isEmpty()) {
+            user.setOriginProfileImg(profileFile.getOriginalFilename());
+            user.setStoredFileName(System.currentTimeMillis() + "_" + profileFile.getOriginalFilename());
+            user.setFileAttached(1);
+            String savePath = path + user.getStoredFileName();
+            FileService.saveFile(profileFile.getBytes(), savePath);
+            updateUserInfo(user);
+        } else {
+            System.out.println("?!");
+        }
+
+    }
+
+    ;
+
+
+    //회원 업데이트
     public void updateMyInfo(User user, MultipartFile profileFile) throws IOException {
         User upUser = userRepository.findByUserId(user.getUserId());
         if (!"L2".equals(upUser.getLoginType())) {
@@ -170,10 +196,9 @@ public class UserService {
     }
 
     //현재 비밀번호와 회원 비밀번호 체크
-    public  void currentPwCheck(User user){
+    public void currentPwCheck(User user) {
 
     }
-
 
 
     //회원탈퇴. 소프트 딜리트

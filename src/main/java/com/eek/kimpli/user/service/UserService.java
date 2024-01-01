@@ -140,7 +140,7 @@ public class UserService {
 
 
     //회원 사진 업데이트
-    public void updateProfile(String id, MultipartFile profileFile) throws IOException {
+    public int updateProfile(String id, MultipartFile profileFile) throws IOException {
         System.out.println("?????" + id + profileFile);
         User user = userRepository.findByUserId(id);
         System.out.println("서비스 유저" + user);
@@ -152,8 +152,9 @@ public class UserService {
             String savePath = path + user.getStoredFileName();
             FileService.saveFile(profileFile.getBytes(), savePath);
             userRepository.updateUserProfile(user); //수정필요
+            return 1;
         } else {
-            System.out.println("?!");
+          return 0;
         }
 
     }

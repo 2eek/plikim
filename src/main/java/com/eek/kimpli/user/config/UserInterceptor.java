@@ -29,7 +29,7 @@ public class UserInterceptor implements HandlerInterceptor {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
             String userId = ((UserDetails) authentication.getPrincipal()).getUsername();
-            System.out.println("유저1 " + userId);
+//            System.out.println("유저1 " + userId);
 
             User user = userService.getUserById(userId);
             request.setAttribute("commonUser", user);

@@ -24,7 +24,7 @@ public String kakaoLogin(@RequestParam(value = "code", required = false) String 
     String access_Token = map.get("access_token");
     String refresh_Token = map.get("refresh_token");
 
-    User kakaoUser = ks.getUserInfo(access_Token, refresh_Token);
+    ks.getUserInfo(access_Token, refresh_Token);
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Object principal = authentication.getPrincipal();
@@ -33,9 +33,9 @@ public String kakaoLogin(@RequestParam(value = "code", required = false) String 
         // principal이 Map인 경우, Map에서 username을 추출
         String userName = ((Map<String, String>) principal).get("username");
         model.addAttribute("userSession", userName);
-        System.out.println("사용자 아이디: " + userName);
+
     } else {
-        System.out.println("UserDetails가 아닌 Principal입니다: " + principal);
+
     }
 
     return "redirect:/";

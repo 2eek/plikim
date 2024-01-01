@@ -158,7 +158,7 @@
                             <td>비밀번호</td>
                             <td>
                                 <input type="password" name="password" placeholder="현재 비밀번호 입력하세요" class="pw"
-                                       id="currentPw">
+                                       id="currentPw"  th:readonly="${userLoginType eq 'L2'}">
                                 <i class="fa-solid fa-eye-slash fa-xs" id="togglePassword"></i>
                                 <font id="nowPw" size="2"></font>
                                 <button style="border: 1px solid #ccc; padding: 5px 10px; margin-left: 10px;"
@@ -650,7 +650,7 @@ function showPasswordFields() {
             dataType: 'json',
             success: function (result) {
                 if (result) {
-                    alert("업데이트 성공")
+                    alert("휴대폰 번호 변경 완료")
 
                     $('#codeCheck').css('display', 'none');
 
@@ -658,7 +658,7 @@ function showPasswordFields() {
 
                     // callback(true);
                 } else {
-                    alert("업데이트 실패")
+                    alert("휴대폰 번호 변경 실")
 
                 }
 
@@ -682,9 +682,9 @@ function showPasswordFields() {
             dataType: 'json',
             success: function (result) {
                 if (result) {
-                    alert("업데이트 성공")
+                    alert("이메일 변경 완료")
                 } else {
-                    alert("업데이트 실패")
+                    alert("이메일 변경 실패")
 
                 }
             },
@@ -709,10 +709,10 @@ function showPasswordFields() {
         // event.preventDefault();
         checkEmail(function (result) {
             if (result) {
-                console.log('되나')
+
                 updateEmail();
             } else {
-                console.log('false? 이메일')
+
                 event.preventDefault();
             }
 
@@ -769,10 +769,10 @@ function showPasswordFields() {
                 processData: false,
                 success: function (result) {
                     if (result == -1) {
-                        alert('업데이트 실패.');
+                        alert('프로필 사진 변경 실패');
                         callback(false);
                     } else {
-                        alert('업데이트 성공.');
+                        alert('프로필 사진 변경 완료');
                         callback(true);
                     }
                 },
@@ -811,7 +811,7 @@ function showPasswordFields() {
             dataType: 'json',
             success: function (result) {
                 if (result == 1) {
-                    alert("업데이트 성공")
+                    alert("비밀번호 변경 완료")
                     $('#pw1').val('');
                     $('#pw2').val('');
                     $('#currentPw').val('');
@@ -822,7 +822,7 @@ function showPasswordFields() {
 
                 } else if (result == 0) {
                     //0 반환
-                    alert("업데이트 실패")
+                    alert("비밀번호 변경 실")
                     $('.pw').val('');
 
                 } else {

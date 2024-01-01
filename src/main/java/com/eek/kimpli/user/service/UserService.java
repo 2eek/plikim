@@ -111,18 +111,18 @@ public class UserService {
     }
 
     //회원마이페이지 업데이트
-    @Transactional
-    public void updateUserInfo(User user) {
-        System.out.println("업데이트 전 유저 정보" + user);
-        // 업데이트 로직 추가
-        userRepository.updateUserInfo(user);
-    }
+//    @Transactional
+//    public void updateUserInfo(User user) {
+//        System.out.println("업데이트 전 유저 정보" + user);
+//        // 업데이트 로직 추가
+//        userRepository.updateUserInfo(user);
+//    }
 
     public int updatePhoneNumber(String phoneNumber, String userId) {
         return userRepository.updateUserPhoneNumber(phoneNumber, userId);
 
     }
-
+//email업데이트
     public int updateEmail(String email, String userId) {
         return userRepository.updateEmail(email, userId);
 
@@ -146,76 +146,15 @@ public class UserService {
             user.setFileAttached(1);
             String savePath = path + user.getStoredFileName();
             FileService.saveFile(profileFile.getBytes(), savePath);
-            updateUserInfo(user);
+            userRepository.updateUserProfile(user); //수정필요
         } else {
             System.out.println("?!");
         }
 
     }
 
-    ;
 
 
-    //회원 업데이트
-    public void updateMyInfo(User user, MultipartFile profileFile) throws IOException {
-        User upUser = userRepository.findByUserId(user.getUserId());
-        if (!"L2".equals(upUser.getLoginType())) {
-            //프로필 사진 있다면
-            if (profileFile != null && !profileFile.isEmpty()) {
-                //업로드된 파일의 원본 파일 이름을 OriginalFilename로 설정
-
-                //OriginProfileImg 필드에 이름 저장
-                user.setOriginProfileImg(profileFile.getOriginalFilename());
-                //StoredFileName 필드에 저장되는 이름 저장(중복 피하기 위해 이름 생성) -> 이 이름으로 파일 불러온다.
-                user.setStoredFileName(System.currentTimeMillis() + "_" + profileFile.getOriginalFilename());
-                user.setFileAttached(1);
-                System.out.println("유저정보" + user);
-                //스프링프로퍼티 참조해서 저장경로 설정
-                String savePath = path + user.getStoredFileName();
-                System.out.println("저장경로+이름" + savePath);
-
-                // 회원의 정보 업데이트 DB에 데이터 넣음 (originProfileImg,storedFileName, fileAttached )
-
-                //서버에 파일 저장
-                FileService.saveFile(profileFile.getBytes(), savePath);
-                updateUserInfo(user);
-            } else {
-
-                updateUserInfo(user);
-
-            }
-        } else {//카카오 계정일 때 이메일 업데이트 안됨. 로그인타입 필요해서 upUser사용
-            user.setLoginType(upUser.getLoginType());
-            if (profileFile != null && !profileFile.isEmpty()) {
-                //업로드된 파일의 원본 파일 이름을 OriginalFilename로 설정
-
-                //OriginProfileImg 필드에 이름 저장
-                user.setOriginProfileImg(profileFile.getOriginalFilename());
-                //StoredFileName 필드에 저장되는 이름 저장(중복 피하기 위해 이름 생성) -> 이 이름으로 파일 불러온다.
-                user.setStoredFileName(System.currentTimeMillis() + "_" + profileFile.getOriginalFilename());
-                user.setFileAttached(1);
-                System.out.println("유저정보" + user);
-                //스프링프로퍼티 참조해서 저장경로 설정
-                String savePath = path + user.getStoredFileName();
-                System.out.println("저장경로+이름" + savePath);
-
-                // 회원의 정보 업데이트 DB에 데이터 넣음 (originProfileImg,storedFileName, fileAttached )
-
-                //서버에 파일 저장
-                FileService.saveFile(profileFile.getBytes(), savePath);
-                updateUserInfo(user);
-            }
-
-            updateUserInfo(user);
-
-
-        }
-    }
-
-    //현재 비밀번호와 회원 비밀번호 체크
-    public void currentPwCheck(User user) {
-
-    }
 
 
     //회원탈퇴. 소프트 딜리트

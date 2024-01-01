@@ -71,16 +71,26 @@ User findUndeletedUserOne(@Param("phoneNumber") String phoneNumber);
 List<User> findDuplicateUsers(@Param("userId") String userId, @Param("phoneNumber") String phoneNumber);
 
      //회원정보 업데이트
-@Modifying
+//@Modifying
+//@Transactional
+//@Query(value = "UPDATE user " +
+//       "SET phone_number = COALESCE(:#{#user.phoneNumber}, phone_number), " +
+//       "email = CASE WHEN :#{#user.loginType} = 'L2' THEN email ELSE COALESCE(:#{#user.email}, email) END, " +
+//       "origin_profile_img = COALESCE(:#{#user.originProfileImg}, origin_profile_img), " +
+//       "stored_file_name = COALESCE(:#{#user.storedFileName}, stored_file_name), " +
+//       "file_attached = COALESCE(:#{#user.fileAttached}, file_attached) " +
+//       "WHERE user_id = :#{#user.userId}", nativeQuery = true)
+//int updateUserInfo(@Param("user") User user);
+
+    @Modifying
 @Transactional
 @Query(value = "UPDATE user " +
-       "SET phone_number = COALESCE(:#{#user.phoneNumber}, phone_number), " +
-       "email = CASE WHEN :#{#user.loginType} = 'L2' THEN email ELSE COALESCE(:#{#user.email}, email) END, " +
-       "origin_profile_img = COALESCE(:#{#user.originProfileImg}, origin_profile_img), " +
+           "SET origin_profile_img = COALESCE(:#{#user.originProfileImg}, origin_profile_img), " +
        "stored_file_name = COALESCE(:#{#user.storedFileName}, stored_file_name), " +
        "file_attached = COALESCE(:#{#user.fileAttached}, file_attached) " +
        "WHERE user_id = :#{#user.userId}", nativeQuery = true)
-int updateUserInfo(@Param("user") User user);
+int updateUserProfile(@Param("user") User user);
+
 
 
 

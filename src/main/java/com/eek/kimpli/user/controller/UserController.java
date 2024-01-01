@@ -155,21 +155,21 @@ public class UserController {
     }
 
     // 회원정보 수정+ 프로필 사진 등록
-    @PostMapping("/user/update")
-    public String updateMyInfo(@RequestParam("profileFile") MultipartFile profileFile, User user) {
-        System.out.println("프사업데이트 유저?"+user);
-          System.out.println("프사업데이트 사진?"+profileFile);
-        // userId를 사용하여 현재 로그인 중인 사용자 정보를 가져오는 작업
-//        User loggedInUser = userService.getUserById(user.getUserId());
-
-        try {
-            //프로필 사진 업데이트
-            userService.updateMyInfo(user, profileFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "redirect:/";
-    }
+//    @PostMapping("/user/update")
+//    public String updateMyInfo(@RequestParam("profileFile") MultipartFile profileFile, User id) {
+//
+//          System.out.println("프사업데이트 사진?"+profileFile);
+//        // userId를 사용하여 현재 로그인 중인 사용자 정보를 가져오는 작업
+////        User loggedInUser = userService.getUserById(user.getUserId());
+//
+//        try {
+//            //프로필 사진 업데이트
+//            userService.updateProfile(id, profileFile);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return "redirect:/";
+//    }
 
 
     //회원 프로필 사진 변경

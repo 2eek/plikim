@@ -14,6 +14,8 @@ import javax.crypto.spec.SecretKeySpec;
 import com.eek.kimpli.sms.dto.MessageDTO;
 import com.eek.kimpli.sms.dto.SmsRequestDTO;
 import com.eek.kimpli.sms.dto.SmsResponseDTO;
+import com.eek.kimpli.user.model.User;
+import com.eek.kimpli.user.service.UserService;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -34,6 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Service
 public class SmsService {
+    private final UserService userService;
 
     @Value("${naver-cloud-sms.accessKey}")
     private String accessKey;
@@ -92,8 +95,9 @@ public SmsResponseDTO sendSms(MessageDTO messageDto) throws JsonProcessingExcept
         headers.set("x-ncp-apigw-timestamp", time.toString());
         headers.set("x-ncp-iam-access-key", accessKey);
         headers.set("x-ncp-apigw-signature-v2", makeSignature(time));
+        User user=userService.findByPhoneNumber(messageDto.getTo());
 
-    System.out.println("여기 전화번호 있을껄???? 서비스"+messageDto.getTo());
+     if (user != null && user.getDeleted() == 0) {
         List<MessageDTO> messages = new ArrayList<>();
         messages.add(messageDto); // MessageDTO로 수정
 
@@ -113,7 +117,11 @@ public SmsResponseDTO sendSms(MessageDTO messageDto) throws JsonProcessingExcept
         restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
         SmsResponseDTO response = restTemplate.postForObject(new URI("https://sens.apigw.ntruss.com/sms/v2/services/" + serviceId + "/messages"), httpBody, SmsResponseDTO.class);
 
-        return response;
+        return response;}
+     else {
+
+         return null;
+     }
     }
 
     public int getRandomNumber() {

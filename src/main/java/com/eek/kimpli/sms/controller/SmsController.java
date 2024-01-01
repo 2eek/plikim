@@ -12,6 +12,7 @@ import com.eek.kimpli.sms.dto.SmsResponseDTO;
 import com.eek.kimpli.sms.service.SmsService;
 import com.eek.kimpli.user.model.User;
 import com.eek.kimpli.user.repository.UserRepository;
+import com.eek.kimpli.user.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,17 +32,22 @@ public class SmsController {
 
     private final SmsService smsService;
     private final UserRepository userRepository;
-
+    private final UserService userService;
 
     //주소로 POST 요청
     @PostMapping("/sms/send")
     @ResponseBody
     public HashMap<String, Object> sendSms(MessageDTO messageDto, HttpSession session) throws JsonProcessingException, RestClientException, URISyntaxException, InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException {
-        System.out.println("회원번호??" + messageDto.getTo());
+        //삭제 안된 회원의 번호만 찾기 가능
+//        User user=userService.findByPhoneNumber(messageDto.getTo());
+//        user.getUserId(); //아이디
+//        messageDto.getTo(); //휴대폰번호
+
+
         HashMap<String, Object> smsMap = new HashMap<>();
         SmsResponseDTO response = smsService.sendSms(messageDto);
         String phoneNumber = messageDto.getTo();
-
+//난수
         int num = smsService.getRandomNumber();
         //서버로 넘어온 회원의 전화번호
         session.setAttribute("phoneNumber", phoneNumber);

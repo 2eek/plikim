@@ -65,12 +65,15 @@ public class UserService {
 
 
     //비밀번호 찾기 중 비밀번호 수정하기
-    public int editPassword(User user) {
-        // 새로 변경된 비밀번호 암호화
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+    public int editPassword(String userId, String password) {
+        User user =getUserById(userId);
+         if (passwordEncoder.matches(password, user.getPassword())) {
+            return -1;
+        } else{
+        String newPw = passwordEncoder.encode(password);
         // 비밀번호 업데이트 메서드 호출
-        return userRepository.updatePasswordByEmail(user.getEmail(), user.getPassword());
-    }
+        return userRepository.updatePasswordByEmail(userId,newPw);
+    }}
 
     //마이페이지 비밀번호 수정
     public int updatePassword(String userId, String password) {

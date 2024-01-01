@@ -55,8 +55,8 @@ User findUndeletedUserOne(@Param("phoneNumber") String phoneNumber);
     //비밀번호 변경
     @Modifying
     @Transactional
-    @Query("UPDATE User u SET u.password = :newPassword WHERE u.email = :email")
-    int updatePasswordByEmail(@Param("email") String email, @Param("newPassword") String newPassword);
+    @Query("UPDATE User u SET u.password = :newPassword WHERE u.userId = :userId")
+    int updatePasswordByEmail(@Param("userId") String userId, @Param("newPassword") String newPassword);
 
     //mypage 비밀번호 변경
     @Modifying
@@ -87,7 +87,7 @@ int updateUserInfo(@Param("user") User user);
 //회원탈퇴. 소프트딜리트
     @Modifying
     @Transactional
-    @Query("UPDATE User u SET u.deletedDate = CURRENT_TIMESTAMP, u.deleted = 1 WHERE u.phoneNumber = :phoneNumber")
+    @Query("UPDATE User u SET u.deletedDate = CURRENT_TIMESTAMP, u.deleted = 1 WHERE  u.deleted =0 and u.phoneNumber = :phoneNumber")
     int withdraw(@Param("phoneNumber") String phoneNumber);
 }
 

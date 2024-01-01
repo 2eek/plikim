@@ -38,7 +38,7 @@ public class UserController {
         return "user/memberlist";
     }
 
-    //회원가입폼 호춯
+    //회원가입폼 호출
     @GetMapping("/user/memberjoin")
     public String joinForm() {
         return "user/memberjoinform";
@@ -268,29 +268,39 @@ public class UserController {
 
     //비밀번호 찾기. 이메일 인증 후  비밀번호 업데이트 폼 호출
     @PostMapping("/updatePasswordForm")
-    public String updatePassword(User user, Model model) {
-        //memberService.insertMemberInfo(memberVO);
-        model.addAttribute("email", user.getEmail());
+    public String updatePassword(String userId,String email, Model model) {
+//        User user = new User();
+//        user.setUserId(userId);
+//        user.setEmail(email);
+       // memberService.insertMemberInfo(memberVO);
+    model.addAttribute("userId", userId);
+    model.addAttribute("email", email);
         return "user/updatePassword";
     }
 
-    //비밀번호 찾기.변경할 비밀번호로 업데이트 시행하기
-    @PostMapping("/EditPassword")
-    public String EditPassword(User user) {
-        userService.editPassword(user);
-        /* return "member/login"; */
-        return "redirect:/";
-    }
 
-    //Mypage 비밀번호 업데이트
+
+
+@PostMapping("/editPassword")
+public int EditPassword(String password, String userId ) {
+
+//    System.out.println("???패스워드 edit - userId: " + userId + ", email: " + email);
+//    int result = userService.editPassword(userId, password);
+//
+//    if (result == -1) {
+//        // result가 -1이면 alert을 띄우는 JavaScript 코드를 모델에 추가
+//        model.addAttribute("alertMessage", "비밀번호 변경에 실패했습니다.");
+//    }
+//
+//    return "redirect:/";
+      return userService.updatePassword(userId, password);
+}
+
+    //비밀번호찾기, myPage 비밀번호 업데이트
 @PostMapping("/updatePassword")
 @ResponseBody
 public int updatePassword(String userId, String password) {
-
-
     return userService.updatePassword(userId, password);
-
-
 }
 
     //회원 가입시 아이디 중복체크

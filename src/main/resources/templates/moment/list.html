@@ -251,11 +251,11 @@
             contentType: false,
             processData: false,
             success: function (data) {
-                console.log('Save successful:', data);
+                // console.log('Save successful:', data);
                 fetchMomentList(data);  // 수정된 부분
             },
             error: function (error) {
-                console.error('Error saving data:', error.responseText);
+                // console.error('Error saving data:', error.responseText);
 
                 var validationErrors = JSON.parse(error.responseText);
 
@@ -276,11 +276,11 @@
                 type: 'GET',
                 url: '/moment/result',
                 success: function (moments) {
-                    console.log("데이터", moments);
+                    // console.log("데이터", moments);
                     createMomentHtml(data, moments);  // 수정된 부분
                 },
                 error: function (error) {
-                    console.error('Error fetching moment list:', error);
+                    // console.error('Error fetching moment list:', error);
                 }
             });
         }

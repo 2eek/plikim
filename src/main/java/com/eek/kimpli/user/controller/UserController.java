@@ -144,7 +144,7 @@ public class UserController {
     @ResponseBody
     public int Join(@ModelAttribute("user") User user, Model model, @PageableDefault(size = 3) Pageable pageable) {
 
-       return userService.save(user);
+        return userService.save(user);
 
     }
 
@@ -167,19 +167,19 @@ public class UserController {
 
 
     //회원 프로필 사진 변경
- @PostMapping("/user/updateProfile")
-public int updateProfile(@RequestParam("profileFile") MultipartFile profileFile, String userId) {
-    try {
-        // 프로필 사진 업데이트
-        System.out.println("아디 프사 확인" + userId + profileFile);
-        return userService.updateProfile(userId, profileFile);
-    } catch (IOException e) {
-        // IOException 처리
-        e.printStackTrace(); // 또는 로깅 등으로 예외 처리
-        return -1; // 예외 발생 시 반환할 값
+    @ResponseBody
+    @PostMapping("/user/updateProfile")
+    public int updateProfile(@RequestParam("profileFile") MultipartFile profileFile, String userId) {
+        try {
+            // 프로필 사진 업데이트
+            System.out.println("아디 프사 확인" + userId + profileFile);
+            return userService.updateProfile(userId, profileFile);
+        } catch (IOException e) {
+            // IOException 처리
+            e.printStackTrace(); // 또는 로깅 등으로 예외 처리
+            return -1; // 예외 발생 시 반환할 값
+        }
     }
-}
-
 
 
     @Transactional
@@ -264,21 +264,19 @@ public int updateProfile(@RequestParam("profileFile") MultipartFile profileFile,
 
     //비밀번호 찾기. 이메일 인증 후  비밀번호 업데이트 폼 호출
     @PostMapping("/updatePasswordForm")
-    public String updatePassword(String userId,String email, Model model) {
+    public String updatePassword(String userId, String email, Model model) {
 //        User user = new User();
 //        user.setUserId(userId);
 //        user.setEmail(email);
-       // memberService.insertMemberInfo(memberVO);
-    model.addAttribute("userId", userId);
-    model.addAttribute("email", email);
+        // memberService.insertMemberInfo(memberVO);
+        model.addAttribute("userId", userId);
+        model.addAttribute("email", email);
         return "user/updatePassword";
     }
 
 
-
-
-@PostMapping("/editPassword")
-public int EditPassword(String password, String userId ) {
+    @PostMapping("/editPassword")
+    public int EditPassword(String password, String userId) {
 
 //    System.out.println("???패스워드 edit - userId: " + userId + ", email: " + email);
 //    int result = userService.editPassword(userId, password);
@@ -289,15 +287,15 @@ public int EditPassword(String password, String userId ) {
 //    }
 //
 //    return "redirect:/";
-      return userService.updatePassword(userId, password);
-}
+        return userService.updatePassword(userId, password);
+    }
 
     //비밀번호찾기, myPage 비밀번호 업데이트
-@PostMapping("/updatePassword")
-@ResponseBody
-public int updatePassword(String userId, String password) {
-    return userService.updatePassword(userId, password);
-}
+    @PostMapping("/updatePassword")
+    @ResponseBody
+    public int updatePassword(String userId, String password) {
+        return userService.updatePassword(userId, password);
+    }
 
     //회원 가입시 아이디 중복체크
     @PostMapping("/idCheck")
@@ -327,8 +325,8 @@ public int updatePassword(String userId, String password) {
     @PostMapping("/user/withdraw")
     @ResponseBody
     public int withdraw(String phoneNumber, String userId) {
-        System.out.println("폰넘버, 유저아이디 "+ phoneNumber + userId);
-         return userService.withdraw(phoneNumber, userId);
+        System.out.println("폰넘버, 유저아이디 " + phoneNumber + userId);
+        return userService.withdraw(phoneNumber, userId);
     }
 
     //비밀번호 업데이트용 현재 비밀번호 체크

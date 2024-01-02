@@ -71,57 +71,81 @@
     <div class="content" style=" width: 70%; margin: 0 auto;">
 
         <!-- Thymeleaf 코드 -->
-        <table>
-            <thead>
-            <tr>
-                <!--                    <th>방 이름</th>-->
-                <th>상대방</th>
-                <th>마지막 메시지</th>
-                <!--                    <th>상대방</th>-->
-                <th>시간</th>
-                <th>대화로 이동</th>
-            </tr>
-            </thead>
-            <tbody>
-            <!-- chatList에서 Chat 객체를 꺼내 테이블로 출력 -->
-            <tr th:each="chat, rowStat : ${chatList}">
-                <!-- 방 번호에서 현재 사용자 이름 제거 -->
-                <!--                    <td th:text="${chat.getRoomNum()}"></td>-->
-                <td th:text="${chat.getReceiver()}"></td>
-                <td th:text="${chat.getMsg()}"></td>
-                <!--                    <td th:text="${chat.getReceiver()}"></td>-->
-                <td th:text="${chat.formattedCreatedAt}"></td>
-<!--                <td th:text="${chat.getCreatedAt()}"></td>-->
-                <!-- 대화하기 버튼 생성 -->
-                <td>
-                    <div >
-                        <!-- 각 행에 대해 해당 행의 roomNum 값을 가져와서 버튼 생성 -->
-                        <button class="btn1 btn-dark user-id-button" id="readButton"
-                                th:attr="data-user-id=${roomNumList[rowStat.index]}">대화하기
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+       <table>
+                <thead>
+                    <tr>
+                        <th>상대방</th>
+                        <th>마지막 메시지</th>
+                        <th>시간</th>
+                        <th>안 읽은 메시지</th> <!-- 새로운 열 추가 -->
+                        <th>대화로 이동</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- chatList에서 Chat 객체를 꺼내 테이블로 출력 -->
+                    <tr th:each="chat, rowStat : ${chatList}">
+                        <td th:text="${chat.getReceiver()}"></td>
+                        <td th:text="${chat.getMsg()}"></td>
+                        <td th:text="${chat.formattedCreatedAt}"></td>
+                        <!-- 안 읽은 메시지 수를 표시하는 열 -->
+                        <td>
+                            <span th:text="${chat.unreadCount}"></span>
+                        </td>
+                        <td>
+                            <div>
+                                <!-- 각 행에 대해 해당 행의 roomNum 값을 가져와서 버튼 생성 -->
+                                <button class="btn1 btn-dark user-id-button" id="readButton"
+                                        th:attr="data-user-id=${roomNumList[rowStat.index]}">대화하기
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
+        </div>
     </div>
-</div>
 
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            var userButtons = document.querySelectorAll('.user-id-button');
+            var userSession = document.getElementById('loggedInUserId').value;
+            userButtons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    var recipient = $('#loggedInUserId').val();
+                    var url = '/chat?userId=' + recipient;
+                    location.href = url;
+                });
+            });
+            document.addEventListener('DOMContentLoaded', function () {
+                var userButtons = document.querySelectorAll('.user-id-button');
+                var userSession = document.getElementById('loggedInUserId').value;
+                userButtons.forEach(function (button) {
+                    button.addEventListener('click', function () {
+                        var roomNum = button.getAttribute('data-user-id');
 
-<script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', function () {
-        var userButtons = document.querySelectorAll('.user-id-button');
-        var userSession = document.getElementById('loggedInUserId').value;
-        userButtons.forEach(function (button) {
-            button.addEventListener('click', function () {
-                var recipient = $('#loggedInUserId').val();
-                var url = '/chat?userId=' + recipient;
-                location.href = url;
+                        // 서버에 안 읽은 메시지 수를 요청
+                        fetch('/api/chats/' + roomNum + '/unread-count')
+                            .then(response => response.json())
+                            .then(unreadCount => {
+                                // 응답 받은 안 읽은 메시지 수를 표시
+                                console.log('Unread count for room ' + roomNum + ': ' + unreadCount);
+
+                                // 이제 여기에 안 읽은 메시지 수를 어떻게 표시할지 추가적인 코드를 작성할 수 있습니다.
+                                // 예를 들어, 채팅방 목록 옆에 표시하거나 해당 채팅방의 버튼 옆에 표시하는 등의 방법이 있습니다.
+                                // 여기에서는 해당 행의 안 읽은 메시지 수를 업데이트합니다.
+                                var unreadSpan = button.closest('tr').querySelector('td:nth-child(4) span');
+                                unreadSpan.innerText = unreadCount;
+                            })
+                            .catch(error => console.error('Error fetching unread count:', error));
+
+                        // 채팅방으로 이동하는 나머지 코드...
+                    });
+                });
             });
         });
-    });
-</script>
+    </script>
 
 </body>
+
 </html>

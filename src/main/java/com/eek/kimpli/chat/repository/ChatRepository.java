@@ -43,5 +43,9 @@ public interface ChatRepository extends ReactiveMongoRepository <Chat, String> {
 	@Tailable
 	@Query("{ 'roomNum': ?0 }")
 	Flux<Chat> mFindByRoomNum(String roomNum);
+
+    //채팅방 안 읽은 채팅 갯수
+    int countByRoomNumAndRead(String roomNum, boolean read);
+
 }
 

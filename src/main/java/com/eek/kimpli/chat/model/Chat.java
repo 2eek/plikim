@@ -18,6 +18,8 @@ public class Chat {
     private String roomNum; //방 번호
     private LocalDateTime createdAt;
     private String formattedCreatedAt; // 추가된 부분
+    private int read; // 읽음 여부
+    private int unreadCount; //
 
 
 

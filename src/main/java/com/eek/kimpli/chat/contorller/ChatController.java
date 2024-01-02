@@ -2,9 +2,11 @@ package com.eek.kimpli.chat.contorller;
 
 import com.eek.kimpli.chat.model.Chat;
 import com.eek.kimpli.chat.repository.ChatRepository;
+import com.eek.kimpli.chat.service.ChatService;
 import com.eek.kimpli.encryptionUtils.AesUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -19,6 +21,7 @@ import java.time.format.DateTimeFormatter;
 public class ChatController {
 
     final ChatRepository chatRepository;
+    final ChatService chatService;
 
     @GetMapping(value = "/sender/{sender}/receiver/{receiver}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<Chat> getMsg(@PathVariable String sender, @PathVariable String receiver) {
@@ -57,4 +60,13 @@ public class ChatController {
                 })
                 .subscribeOn(Schedulers.boundedElastic());
     }
+
+
+    //안 읽은 채팅 갯수 카운트
+    @GetMapping("/{roomNum}/unread-count")
+    public ResponseEntity<Integer> getUnreadMessageCount(@PathVariable String roomNum) {
+        int unreadCount = chatService.getUnreadMessageCount(roomNum);
+        return ResponseEntity.ok(unreadCount);
+    }
+
 }

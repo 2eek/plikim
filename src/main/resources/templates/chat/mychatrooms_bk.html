@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--<head th:replace="fragments/common :: head('채팅')">-->
+<script src="https://kit.fontawesome.com/d58c3728d1.js"
+        crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+      integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous"/>
+<link href="css/starter-template.css" th:href="@{/css/starter-template.css}" rel="stylesheet">
+<!--    파라미터로 값을 받아온 후 타이틀을 동적으로 표시해줌.-->
+
+<script src="https://code.jquery.com/jquery-3.6.3.min.js"
+        integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+
+<script src="/js/onlineJs.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+        crossorigin="anonymous"
+></script>
+<script>
+
+    document.querySelector("#readButton").addEventListener("click", markAsRead);
+</script>
+
+<style>
+    /*.wrapper {*/
+    /*  display: flex;*/
+    /*  justify-content: center;*/
+    /*  align-items: center;*/
+    /*  min-height: 100dvh;*/
+    /*  background: navy;*/
+    /*}*/
+
+    /*.content {*/
+    /*  padding: 3rem;*/
+    /*  font-size: 2rem;*/
+    /*  border-radius: 1rem;*/
+    /*  background: coral;*/
+    /*}*/
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px; /* 테이블과 상단 간격 조절 */
+    }
+
+    th, td {
+        padding: 10px;
+        text-align: center;
+        border: 1px solid #ddd; /* 테두리 추가 */
+    }
+</style>
+</head>
+
+<body>
+<!-- 파라미터로 board -> nav가 활성화 됨 -->
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('chat')">
+</nav>
+
+<main role="main" class="container">
+    <div class="starter-template">
+        <h1>채팅 리스트</h1>
+    </div>
+</main>
+<!--<input type="hidden" id="loggedInUserId" name="loggedInUserId" th:value="${userSession}"/>-->
+<div class="wrapper">
+    <!-- Main content goes here -->
+    <div class="content" style=" width: 70%; margin: 0 auto;">
+
+        <!-- Thymeleaf 코드 -->
+       <table>
+                <thead>
+                    <tr>
+                        <th>상대방</th>
+                        <th>마지막 메시지</th>
+                        <th>시간</th>
+                        <th>안 읽은 메시지</th> <!-- 새로운 열 추가 -->
+                        <th>대화로 이동</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- chatList에서 Chat 객체를 꺼내 테이블로 출력 -->
+                    <tr th:each="chat, rowStat : ${chatList}">
+                        <td th:text="${chat.getReceiver()}"></td>
+                        <td th:text="${chat.getMsg()}"></td>
+                        <td th:text="${chat.formattedCreatedAt}"></td>
+                        <!-- 안 읽은 메시지 수를 표시하는 열 -->
+                        <td>
+                            <span th:text="${chat.unreadCount}"></span>
+                        </td>
+                        <td>
+                            <div>
+                                <!-- 각 행에 대해 해당 행의 roomNum 값을 가져와서 버튼 생성 -->
+                                <button class="btn1 btn-dark user-id-button" id="readButton"
+                                        th:attr="data-user-id=${roomNumList[rowStat.index]}">대화하기
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            var userButtons = document.querySelectorAll('.user-id-button');
+            var userSession = document.getElementById('loggedInUserId').value;
+            userButtons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    var recipient = $('#loggedInUserId').val();
+                    var url = '/chat?userId=' + recipient;
+                    location.href = url;
+                });
+            });
+            document.addEventListener('DOMContentLoaded', function () {
+                var userButtons = document.querySelectorAll('.user-id-button');
+                var userSession = document.getElementById('loggedInUserId').value;
+                userButtons.forEach(function (button) {
+                    button.addEventListener('click', function () {
+                        var roomNum = button.getAttribute('data-user-id');
+
+                        // 서버에 안 읽은 메시지 수를 요청
+                        fetch('/api/chats/' + roomNum + '/unread-count')
+                            .then(response => response.json())
+                            .then(unreadCount => {
+                                // 응답 받은 안 읽은 메시지 수를 표시
+                                console.log('Unread count for room ' + roomNum + ': ' + unreadCount);
+
+                                // 이제 여기에 안 읽은 메시지 수를 어떻게 표시할지 추가적인 코드를 작성할 수 있습니다.
+                                // 예를 들어, 채팅방 목록 옆에 표시하거나 해당 채팅방의 버튼 옆에 표시하는 등의 방법이 있습니다.
+                                // 여기에서는 해당 행의 안 읽은 메시지 수를 업데이트합니다.
+                                var unreadSpan = button.closest('tr').querySelector('td:nth-child(4) span');
+                                unreadSpan.innerText = unreadCount;
+                            })
+                            .catch(error => console.error('Error fetching unread count:', error));
+
+                        // 채팅방으로 이동하는 나머지 코드...
+                    });
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>

@@ -14,45 +14,131 @@ document.querySelector('#chat-outgoing-msg').focus();
 // 상대방 아이디 표시
     document.querySelector("#username").innerHTML = receiver;
 
-//
-//         // 채팅방에 들어갔을 때 서버에 통지
-// $.ajax({
-//     url: "/chat/roomEntered",
-//     type: "post",
-//     contentType: "application/json",  // Content-Type을 명시
-//     data: JSON.stringify({ userId: username, roomNum: roomNum, receiver:receiver }),
-//     dataType: 'json',
-//     success: function (result) {
-//             alert('방 입장? ')
-//         if ($.isEmptyObject(result) || result.userId === null) {
-//             // alert('방 입장? ')
-//             // 성공적으로 업데이트된 경우
-//         }
-//     },
-//     error: function (xhr, status, error) {
-//         console.log("채팅방 상태 업데이트 실패", status, error);
-//     }
-// });
+    // 채팅방에 들어갔을 때 서버에 통지
+$.ajax({
+    url: "/chat/roomEntered",
+    type: "post",
+    contentType: "application/json",  // Content-Type을 명시
+    data: JSON.stringify({ userId: username, roomNum: roomNum, receiver:receiver }),
+    dataType: 'json',
+    success: function (result) {
+            alert('방 입장? ')
+        if ($.isEmptyObject(result) || result.userId === null) {
+            // alert('방 입장? ')
+            // 성공적으로 업데이트된 경우
+        }
+    },
+    error: function (xhr, status, error) {
+        console.log("채팅방 상태 업데이트 실패", status, error);
+    }
+});
 
-    // 채팅방 상태를 확인하는 SSE (Server-Sent Events) 연결
 const stompClient = new StompJs.Client({
     brokerURL: 'wss://plikim.com/gs-guide-websocket'
     //brokerURL: 'ws://localhost:9090/gs-guide-websocket'
 });
+// 클라이언트 측 JavaScript 코드
 
-    stompClient.onmessage = function (event) {
-        // 서버로부터 채팅방 상태가 업데이트된 경우 실행되는 코드
-        const roomStatus = JSON.parse(event.data);
 
-        // 상태에 따른 조치를 취하도록 구현
-        console.log("Received room status update:", roomStatus);
+// 사용자 이름(userId)을 사용하여 개별 주제에 구독
+const userTopic = `/user/${userId}/topic/notification`;
 
-        // 예시: 상대방이 채팅방에 들어왔을 때 적절한 조치
-        if (roomStatus.userId === receiver && roomStatus.roomNum === roomNum) {
-            console.log("상대방이 채팅방에 들어왔습니다.");
-            // 여기에 상대방이 채팅방에 들어왔을 때 실행되어야 할 동작 추가
-        }
-    };
+stompClient.onmessage = function (event) {
+    const roomStatus = JSON.parse(event.data);
+
+    // 상대방이 채팅방에 들어왔을 때의 동작
+    if (roomStatus.userId === receiver && roomStatus.roomNum === roomNum) {
+        // 여기에 상대방이 채팅방에 들어왔을 때 실행되어야 할 동작 추가
+        // 예를 들어, 알림 표시, 화면 갱신 등의 동작을 추가할 수 있습니다.
+        showNotification("상대방이 채팅방에 들어왔습니다.");
+    }
+};
+
+// 사용자가 구독하고 있는 주제에 대해 구독
+stompClient.subscribe(userTopic, function (message) {
+    // 메시지를 받아서 처리하는 코드
+    console.log("Received message on topic:", userTopic, "Message:", message);
+});
+
+function showNotification(message) {
+    // 브라우저 Notification API를 사용하여 알림을 표시하는 코드
+    if (Notification.permission === "granted") {
+        new Notification(message);
+    } else if (Notification.permission !== "denied") {
+        Notification.requestPermission().then(permission => {
+            if (permission === "granted") {
+                new Notification(message);
+            }
+        });
+    }
+}
+
+// const roomStatusSubscription = stompClient.subscribe('/topic/roomStatus', function (message) {
+//     const roomStatus = JSON.parse(message.body);
+//
+//     // 상대방이 채팅방에 들어왔을 때 실행되어야 하는 코드를 작성합니다.
+//     if (roomStatus.userId === receiver && roomStatus.roomNum === roomNum) {
+//         // 여기에 상대방이 채팅방에 들어왔을 때 실행되어야 하는 코드를 추가합니다.
+//         showNotification("상대방이 채팅방에 들어왔습니다.");
+//     }
+// });
+
+// const socket = new WebSocket("ws://localhost:9090/gs-guide-websocket");
+
+stompClient.onmessage = function (event) {
+    const roomStatus = JSON.parse(event.data);
+
+    // 상대방이 채팅방에 들어왔을 때의 동작
+    if (roomStatus.userId === receiver && roomStatus.roomNum === roomNum) {
+        // 여기에 상대방이 채팅방에 들어왔을 때 실행되어야 할 동작 추가
+        // 예를 들어, 알림 표시, 화면 갱신 등의 동작을 추가할 수 있습니다.
+        showNotification("상대방이 채팅방에 들어왔습니다.");
+    }
+};
+
+
+
+
+
+
+stompClient.onmessage = function (event) {
+    const roomStatus = JSON.parse(event.data);
+
+    // 상대방이 채팅방에 들어왔을 때의 동작
+    if (roomStatus.userId === receiver && roomStatus.roomNum === roomNum) {
+        // 여기에 상대방이 채팅방에 들어왔을 때 실행되어야 할 동작 추가
+        // 예를 들어, 알림 표시, 화면 갱신 등의 동작을 추가할 수 있습니다.
+        showNotification("상대방이 채팅방에 들어왔습니다.");
+    }
+};
+
+function showNotification(message) {
+    // 브라우저 Notification API를 사용하여 알림을 표시하는 코드
+    if (Notification.permission === "granted") {
+        new Notification(message);
+    } else if (Notification.permission !== "denied") {
+        Notification.requestPermission().then(permission => {
+            if (permission === "granted") {
+                new Notification(message);
+            }
+        });
+    }
+}
+
+
+function showGreeting(message) {
+    const data = JSON.parse(message.trim());
+
+    // 중복을 방지하기 위해 이미 존재하는 사용자인지 확인
+    if ($("#greetings").find("td:contains('" + data.userId + "')").length === 0) {
+        // 존재하지 않으면 새로운 행 추가
+        const newRow = $("<tr><td>" + data.userId + " 입장했습니다. <span style='color: green;'>●</span></td></tr>");
+        $("#greetings").append(newRow);
+
+        // 여기에서 갱신된 채팅방 상태에 따른 화면 업데이트를 수행할 수 있습니다.
+    }
+}
+
 
 
 // SSE 연결하기. 객체 생성. 크로스 오리진 자바스크립트 요청은 서버쪽에서 봉쇄하고 있다. -> 서버에서 처리함
@@ -75,7 +161,7 @@ const stompClient = new StompJs.Client({
                     // updateNotificationBadge();
 
                     //2.상대방이 읽었으면 0으로 만듦
-                    //  updateRead();
+                    // updateRead();
                     //-> 업데이트의 결과물을 data로 받아야한다.read가 1-> 0 된 걸 화면에 뿌려줘야됨
                 }
 
@@ -90,24 +176,7 @@ const stompClient = new StompJs.Client({
 
 
     }
-// function updateRead() {
-//
-//     $.ajax({
-//         url: "/chat/updateRead",
-//         type: "post",
-//         data: {myId: username, roomNum: roomNum},
-//         dataType: 'json',
-//         success: function (result) {
-//             if ($.isEmptyObject(result) || result.userId === null) {
-//             }
-//
-//         },
-//         error: function (xhr, status, error) {
-//             console.log("목록 불러오기 실패", status, error);
-//         }
-//
-//     });
-// }
+
 
 
     function updateNotificationBadge() {
@@ -267,8 +336,4 @@ const stompClient = new StompJs.Client({
             addMessage();
         }
     });
-
 });
-
-
-

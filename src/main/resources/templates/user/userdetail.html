@@ -47,15 +47,17 @@
 </body>
 
 <script type="text/javascript">
-  document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
     var userButton = document.getElementById('user-id-button');
     var userId = userButton.getAttribute('data-user-id');
     userButton.addEventListener('click', function() {
-      var sender = document.getElementById('loggedInUserId').value;
-      var url = '/chat?userId=' + userId; // 상대방(디테일 정보의 주체) 사용자 ID를 쿼리 매개변수로 추가
-      location.href = url; // /chat로 이동
+        var sender = $('#loggedInUserId').val();
+        var roomNum = [sender, userId].sort().join('');
+
+        var url = '/chat?userId=' + userId + '&roomNum=' + roomNum; // userId와 roomNum을 함께 전달
+        window.location.replace(url); // 브라우저 히스토리를 변경하지 않고 새로운 페이지로 이동
     });
-  });
+});
 </script>
 
 

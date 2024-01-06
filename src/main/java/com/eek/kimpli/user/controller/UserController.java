@@ -28,8 +28,8 @@ import java.util.List;
 @Controller
 public class UserController {
 
-    final UserService userService;
-    final UserRepository userRepository;
+    private final UserService userService;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     //가입한 회원 리스트 조회. 단순한 호출 GetMapping을 이용한다. URL에 매핑된 핸들러 필요하다

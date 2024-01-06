@@ -103,6 +103,7 @@ function sendName() {
     // 사용자가 로그인한 경우에만 아이디를 서버로 전송 GreetingController
     if (loggedInUserId !== null && loggedInUserId !== undefined) {
         stompClient.publish({
+            //서버로 보냄
             destination: "/app/hello",
             body: JSON.stringify({'name': loggedInUserId})
         });

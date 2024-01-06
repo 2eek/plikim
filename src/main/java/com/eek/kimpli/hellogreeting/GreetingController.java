@@ -9,8 +9,8 @@ import org.springframework.web.util.HtmlUtils;
 public class GreetingController {
 
 
-@MessageMapping("/hello")
-@SendTo("/topic/greetings")
+@MessageMapping("/hello") //받아옴
+@SendTo("/topic/greetings") //클라이언트로 보냄
 public Greeting greeting(HelloMessage message) throws Exception {
     // 메시지가 null 또는 undefined인 경우 처리
     if (message == null || message.getName() == null || message.getName().trim().isEmpty()) {

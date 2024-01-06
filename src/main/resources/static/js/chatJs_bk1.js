@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var username = document.getElementById('loggedInUserId').value;
     var receiver = document.getElementById('userId').value;
 //화면 로드 후 포커스
-    document.querySelector('#chat-outgoing-msg').focus();
+document.querySelector('#chat-outgoing-msg').focus();
 
 //채팅 알림
     let notificationBadge = document.getElementById('notificationBadge');
@@ -11,69 +11,107 @@ document.addEventListener('DOMContentLoaded', function () {
 // 채팅방이름 만들기
     var roomNum = [username, receiver].sort().join('');
 
-    //방 나갈 때 정보 서버로 전송
-    function leaveChatRoom() {
-        const loggedInUserId = $("#loggedInUserId").val();
-        alert('loggedInUserId' + loggedInUserId)
-        console.log('roomNum' + roomNum)
-        stompClient.publish({
-            destination: "/app/leaveChatRoom",
-            body: JSON.stringify({'sender': receiver, 'receiver': loggedInUserId, 'roomNum': roomNum})
-        });
-    }
-
 // 상대방 아이디 표시
     document.querySelector("#username").innerHTML = receiver;
 
+
+//     const stompClientChat = new StompJs.Client({
+//     brokerURL: 'ws://localhost:9090/gs-guide-websocket'
+// });
+
     //onlinJs.js에서 소켓연결 하고 있으므로 자동 연결 가능.
-    stompClient.onConnect = (frame) => {
-        console.log('Connected chat : ' + frame);
-        sendName();
+stompClient.onConnect = (frame) => {
+    console.log('Connected chat : ' + frame);
+     sendName();
 
         stompClient.subscribe('/topic/chatEnter', (chatEnter) => {
-                console.log('==============방 입장 start==================');
-                const chatMessage = JSON.parse(chatEnter.body);
-                console.log('chatMessage', chatMessage);
-                console.log('Sender:', chatMessage.sender);
-                console.log('Receiver:', chatMessage.receiver);
-                console.log('RoomNum:', chatMessage.roomNum);
-                console.log('==============방 입장 end==================');
-            }
-        );
 
-        //서버에서 정보를 받아옴
-        stompClient.subscribe('/topic/leaveChatRoom', (leaveMessage) => {
-            console.log('==============방 퇴장 start==================');
-            const chatMessage = JSON.parse(leaveMessage.body);
-            console.log('chatMessage', chatMessage);
-            console.log('Sender:', chatMessage.sender);
-            console.log('Receiver:', chatMessage.receiver);
-            console.log('RoomNum:', chatMessage.roomNum);
-            console.log('==============방 퇴장 end==================');
+             const chatMessage = JSON.parse(chatEnter.body);
+    console.log('chatMessage', chatMessage);
+    console.log('Sender:', chatMessage.sender);
+    console.log('Receiver:', chatMessage.receiver);
+    console.log('RoomNum:', chatMessage.roomNum);
+    }
+    );
 
+
+//             stompClient.subscribe('/topic/greetings', (greeting) => {
+//         const status = JSON.parse(greeting.body).content;
+//         showGreeting(status);
+//         updateStatus(status);
+//     });
+// };
+
+    // 연결이 성공하면 사용자 정보를 서버로 전송
+    // sendName();
+
+    // 사용자 접속 이벤트를 구독
+    // stompClient.subscribe('/topic/userConnected', (username) => {
+    //     alert(username + '님이 채팅에 참여했습니다.');
+    // });
+    //
+    // // 사용자 퇴장 이벤트를 구독
+    // stompClient.subscribe('/topic/userDisconnected', (username) => {
+    //     alert(username + '님이 채팅에서 나갔습니다.');
+    // });
+};
+
+
+
+// stompClient.onConnect = (frame) => {
+//     console.log('Connected: ' + frame);
+//     // 연결이 성공하면 메시지를 보냄
+//     sendName();
+//     //로그아웃 상황
+//     stompClient.subscribe('/topic/userLogout', (username) => {
+//         const dataUsername = username.body;
+//         // alert('이까지 와야됨' + dataUsername);
+//         removeUserRow(dataUsername);
+//      // 연결 종료 후 2초 뒤에 다시 연결
+//     disconnect();
+//     setTimeout(() => {
+//         connect();
+//     }, 1000);
+//     });
+//
+//              // connect();
+//     //로그인 상황
+    // 웹 소켓을 통해 '/topic/greetings' 토픽을 구독
+//     stompClient.subscribe('/topic/greetings', (greeting) => {
+//         const status = JSON.parse(greeting.body).content;
+//         showGreeting(status);
+//         updateStatus(status);
+//     });
+// };
+
+
+
+
+
+
+
+
+
+
+function sendName() {
+
+    const loggedInUserId = $("#loggedInUserId").val();
+    // 사용자가 로그인한 경우에만 아이디를 서버로 전송 GreetingController
+    if (loggedInUserId !== null && loggedInUserId !== undefined) {
+        stompClient.publish({
+            destination: "/app/chatEnter",
+            body: JSON.stringify({'sender': loggedInUserId,'receiver':receiver, 'roomNum':roomNum})
         });
 
-    };
 
-    function sendName() {
-
-        const loggedInUserId = $("#loggedInUserId").val();
-        // 사용자가 로그인한 경우에만 아이디를 서버로 전송 GreetingController
-        if (loggedInUserId !== null && loggedInUserId !== undefined) {
-            stompClient.publish({
-                destination: "/app/chatEnter",
-                body: JSON.stringify({'sender': loggedInUserId, 'receiver': receiver, 'roomNum': roomNum})
-            });
-
-
-        }
     }
+}
 
 
 // SSE 연결하기. 객체 생성. 크로스 오리진 자바스크립트 요청은 서버쪽에서 봉쇄하고 있다. -> 서버에서 처리함
-    // const eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`);
-    const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}`);
-    // const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}/${receiver}`);
+  // const eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`);
+ const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}`);
+ // const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}/${receiver}`);
 
     eventSource.onmessage = (event) => {
         //console.log(1,event);
@@ -82,19 +120,19 @@ document.addEventListener('DOMContentLoaded', function () {
         const data = JSON.parse(event.data);
         // console.log(2,data);
 
-        // 상대방이 보낸 메시지만 처리
-        //내가 대화에 참여중인데 '상대방이 채팅을 보내고 있는 경우'
-        if (data.sender !== username) {
+             // 상대방이 보낸 메시지만 처리
+            //내가 대화에 참여중인데 '상대방이 채팅을 보내고 있는 경우'
+                if (data.sender !== username) {
 
-            // unreadCount++; // 새로운 메시지 도착 시 카운트 증가
-            // updateNotificationBadge();
+                    // unreadCount++; // 새로운 메시지 도착 시 카운트 증가
+                    // updateNotificationBadge();
 
-            //2.상대방이 읽었으면 0으로 만듦
-            //  updateRead();
-            //-> 업데이트의 결과물을 data로 받아야한다.read가 1-> 0 된 걸 화면에 뿌려줘야됨
-        }
+                    //2.상대방이 읽었으면 0으로 만듦
+                    //  updateRead();
+                    //-> 업데이트의 결과물을 data로 받아야한다.read가 1-> 0 된 걸 화면에 뿌려줘야됨
+                }
 
-        //3.데이터를 보여줌
+                //3.데이터를 보여줌
         if (data.sender === username) { // 로그인한 유저가 보낸 메시지
             // 파란박스(오른쪽)
             initMyMessage(data);
@@ -105,6 +143,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     }
+// function updateRead() {
+//
+//     $.ajax({
+//         url: "/chat/updateRead",
+//         type: "post",
+//         data: {myId: username, roomNum: roomNum},
+//         dataType: 'json',
+//         success: function (result) {
+//             if ($.isEmptyObject(result) || result.userId === null) {
+//             }
+//
+//         },
+//         error: function (xhr, status, error) {
+//             console.log("목록 불러오기 실패", status, error);
+//         }
+//
+//     });
+// }
+
 
     function updateNotificationBadge() {
         notificationBadge.innerText = unreadCount;
@@ -117,13 +174,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 // 파란박스 만들기. 보내는 대화박스
-    function readValueBoxSend(data) {
+        function readValueBoxSend(data){
 
-        return `<div class="readValue" style="float: left;margin-left: 0;padding-left: 315px; font-size:10px" >${data.read}</div>`;
+               return `<div class="readValue" style="float: left;margin-left: 0;padding-left: 315px; font-size:10px" >${data.read}</div>`;
 
 
-    }
-
+}
     function getSendMsgBox(data) {
 //new Date()
         let md = data.createdAt.substring(5, 10)
@@ -137,12 +193,12 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 // 회색박스 만들기. 받는 대화박스
-//     function readValueBoxReceive(data){
-//
-//                return `<div class="readValue" style="float: left;margin-left: 0;padding-left: 315px; font-size:10px" >${data.read}</div>`;
-//
-//
-// }
+    function readValueBoxReceive(data){
+
+               return `<div class="readValue" style="float: left;margin-left: 0;padding-left: 315px; font-size:10px" >${data.read}</div>`;
+
+
+}
 
     function getReceiveMsgBox(data) {
 
@@ -150,7 +206,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let tm = data.createdAt.substring(11, 16)
         convertTime = tm + " | " + md
 
-        return `<div class="received_withd_msg" style="float: left; margin-top: 0;"">
+        return `<div class="received_withd_msg" style="float: left; margin-top: 0px;"">
 
 	<p>${data.msg}</p>
 	<span class="time_date"> ${convertTime} / <b>${data.sender}</b> </span>
@@ -166,7 +222,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let sendBox = document.createElement("div");
         sendBox.className = "outgoing_msg";
 
-        sendBox.innerHTML = `${getSendMsgBox(data)} ${readValueBoxSend(data)} `;
+    sendBox.innerHTML = `${getSendMsgBox(data)} ${readValueBoxSend(data)} `;
         chatBox.append(sendBox);
 
         document.documentElement.scrollTop = document.body.scrollHeight;
@@ -185,8 +241,8 @@ document.addEventListener('DOMContentLoaded', function () {
         let profileImageElement = document.querySelector(".profile_name img");
         let clonedImageElement = profileImageElement.cloneNode(true);
         let newDivElement = document.createElement("div");
-        newDivElement.style.float = "left";
-        newDivElement.style.marginRight = "8px";
+            newDivElement.style.float = "left";
+            newDivElement.style.marginRight = "8px";
 
 
         let messageBox = document.createElement("div");
@@ -216,7 +272,7 @@ document.addEventListener('DOMContentLoaded', function () {
 //db에 채팅이 들어감
     async function addMessage() {
         let msgInput = document.querySelector("#chat-outgoing-msg");
-        // if()
+
         let chat = {
             sender: username,
             receiver: receiver,
@@ -225,8 +281,8 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         try {
-            // const response = await fetch("https://plikim.com/chat", {
-            const response = await fetch("http://localhost:9090/chat", {
+           // const response = await fetch("https://plikim.com/chat", {
+                const response = await fetch( "http://localhost:9090/chat", {
                 method: "post",
                 body: JSON.stringify(chat),
                 headers: {
@@ -265,12 +321,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    //화면을 나가기 전에 메서드 동작
-    window.addEventListener('beforeunload', () => {
-        leaveChatRoom();
-        alert('나가나')
-    });
-
-
 });
+
+
 

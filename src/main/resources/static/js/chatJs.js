@@ -287,7 +287,7 @@ window.addEventListener('beforeunload', function (e) {
             dataType: 'json',
             success: function (chatEnterRecord) {
                 if(chatEnterRecord.state){
-                  document.querySelector('.readValue').textContent = '';
+                  // document.querySelector('.readValue').textContent = '';
 
                 }
                 // console.log('입장기록1')

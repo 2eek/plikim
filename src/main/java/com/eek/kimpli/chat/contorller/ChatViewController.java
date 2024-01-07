@@ -1,13 +1,17 @@
 package com.eek.kimpli.chat.contorller;
 
-import com.eek.kimpli.encryptionUtils.AesUtil;
+
 import com.eek.kimpli.chat.model.Chat;
 import com.eek.kimpli.chat.repository.ChatRepository;
+import com.eek.kimpli.chat.service.ChatUpdater;
+import com.eek.kimpli.encryptionUtils.AesUtil;
 import com.eek.kimpli.user.model.User;
 import com.eek.kimpli.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +29,10 @@ public class ChatViewController {
 
     private final ChatRepository chatRepository;
     private final UserService userService;
+    private final ChatUpdater chatUpdater;
+
+    @Value("${spring.data.mongodb.uri}")
+      private String uri;
 
     @GetMapping("/mychatrooms")
     public String chatRoomList(Model model) {
@@ -71,13 +79,13 @@ public class ChatViewController {
         model.addAttribute("userSession", userName);
         model.addAttribute("chatList", chatRoomList);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy년 MM월 dd일 HH:mm");
-for (Chat chat : chatRoomList) {
-    LocalDateTime createdAt = chat.getCreatedAt();
-    String formattedDate = createdAt.format(formatter);
-    chat.setFormattedCreatedAt(formattedDate);
-}
+        for (Chat chat : chatRoomList) {
+            LocalDateTime createdAt = chat.getCreatedAt();
+            String formattedDate = createdAt.format(formatter);
+            chat.setFormattedCreatedAt(formattedDate);
+        }
         System.out.println("이름: " + userName);
-
+//Chat 객체의 리스트를 순회하면서 각 Chat 객체에서 roomNum 값을 가져와서 roomNumList라는 List<String>에 추가
         List<String> roomNumList = new ArrayList<>();
         for (Chat chat : chatRoomList) {
             String roomNum = chat.getRoomNum();
@@ -85,6 +93,7 @@ for (Chat chat : chatRoomList) {
             roomNumList.add(roomNum);
         }
         model.addAttribute("roomNumList", roomNumList);
+        System.out.println("리스트에 뭐있나" + roomNumList);
 
         return "chat/mychatrooms";
     }
@@ -95,14 +104,24 @@ for (Chat chat : chatRoomList) {
 //    }
 
     @GetMapping("/chat")
-    public String chat(Model model, @RequestParam(name = "userId") String userId) {
-        model.addAttribute("userId", userId); // userId를 모델에 추가' 대화 상대방.
-        User userById = userService.getUserById(userId);
-        model.addAttribute("userinfo", userById); // userId를 모델에 추가' 대화 상대방.
-        //로그인한 계정
+    public String chat(Model model,
+                       @RequestParam(name = "userId") String userId,
+                       @RequestParam(name = "roomNum", required = false) String roomNum) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        userDetails.getUsername();
+        System.out.println("나의 아이디 " + userDetails.getUsername());
+        System.out.println("방번호" + roomNum);
+        String username = userDetails.getUsername();
+        ChatUpdater chatUpdater = new ChatUpdater();
+        chatUpdater.markRead(username, roomNum, uri);
+        model.addAttribute("userId", userId);
+        User userById = userService.getUserById(userId);
+        model.addAttribute("userinfo", userById);
+
         model.addAttribute("userSession", authentication.getPrincipal());
-        System.out.println("채팅 시 로그인한 계정" + authentication.getPrincipal());
+        model.addAttribute("roomNum", roomNum); // roomNum을 모델에 추가
+        System.out.println("채팅 시 로그인한 계정: " + authentication.getPrincipal());
         return "chat/chat";
     }
 }

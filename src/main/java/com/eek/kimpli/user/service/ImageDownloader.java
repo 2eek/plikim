@@ -17,10 +17,7 @@ public class ImageDownloader {
  @Value("${external.upload.path}")
 private String savePath;
 
-//    private static String generateFileName(String imageUrl) {
-//        // 파일명을 UUID를 이용하여 랜덤하게 생성
-//        return UUID.randomUUID().toString() + ".jpg";
-//    }
+
 
   public String imgServerSave(String imageUrl) {
 

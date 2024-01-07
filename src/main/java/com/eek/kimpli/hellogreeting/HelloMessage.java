@@ -2,7 +2,21 @@ package com.eek.kimpli.hellogreeting;
 
 public class HelloMessage {
 
-  private String name;
+   private String name;
+   private String roomNum;
+
+  public String getRoomNum() {
+    return roomNum;
+  }
+
+  public void setRoomNum(String roomNum) {
+    this.roomNum = roomNum;
+  }
+
+  public HelloMessage(String name, String roomNum) {
+    this.name = name;
+    this.roomNum = roomNum;
+  }
 
   public HelloMessage() {
   }

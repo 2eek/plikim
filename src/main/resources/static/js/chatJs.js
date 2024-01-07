@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
     var username = document.getElementById('loggedInUserId').value;
     var receiver = document.getElementById('userId').value;
-
+//화면 로드 후 포커스
+    document.querySelector('#chat-outgoing-msg').focus();
 
 //채팅 알림
     let notificationBadge = document.getElementById('notificationBadge');
@@ -10,28 +11,90 @@ document.addEventListener('DOMContentLoaded', function () {
 // 채팅방이름 만들기
     var roomNum = [username, receiver].sort().join('');
 
+    //방 나갈 때 정보 서버로 전송
+    function leaveChatRoom() {
+        const loggedInUserId = $("#loggedInUserId").val();
+        // alert('loggedInUserId' + loggedInUserId)
+        // console.log('roomNum' + roomNum)
+        stompClient.publish({
+            destination: "/app/leaveChatRoom",
+            body: JSON.stringify({'sender': receiver, 'receiver': loggedInUserId, 'roomNum': roomNum})
+        });
+    }
+
 // 상대방 아이디 표시
     document.querySelector("#username").innerHTML = receiver;
 
+    //onlinJs.js에서 소켓연결 하고 있으므로 자동 연결 가능.
+    stompClient.onConnect = (frame) => {
+        // console.log('Connected chat : ' + frame);
+        sendName();
+
+        stompClient.subscribe('/topic/chatEnter', (chatEnter) => {
+                userEnter();
+                // console.log('==============방 입장 start==================');
+                // const chatMessage = JSON.parse(chatEnter.body);
+                // console.log('chatMessage', chatMessage);
+                // console.log('Sender:', chatMessage.sender);
+                // console.log('Receiver:', chatMessage.receiver);
+                // console.log('RoomNum:', chatMessage.roomNum);
+                // console.log('==============방 입장 end==================');
+            }
+        );
+
+        //서버에서 정보를 받아옴
+        stompClient.subscribe('/topic/leaveChatRoom', (leaveMessage) => {
+            userLeave();
+            // console.log('==============방 퇴장 start==================');
+            // const chatMessage = JSON.parse(leaveMessage.body);
+            // console.log('chatMessage', chatMessage);
+            // console.log('Sender:', chatMessage.sender);
+            // console.log('Receiver:', chatMessage.receiver);
+            // console.log('RoomNum:', chatMessage.roomNum);
+            // console.log('==============방 퇴장 end==================');
+
+        });
+
+    };
+
+    function sendName() {
+
+        const loggedInUserId = $("#loggedInUserId").val();
+        // 사용자가 로그인한 경우에만 아이디를 서버로 전송 GreetingController
+        if (loggedInUserId !== null && loggedInUserId !== undefined) {
+            stompClient.publish({
+                destination: "/app/chatEnter",
+                body: JSON.stringify({'sender': loggedInUserId, 'receiver': receiver, 'roomNum': roomNum})
+            });
+
+
+        }
+    }
+
+
 // SSE 연결하기. 객체 생성. 크로스 오리진 자바스크립트 요청은 서버쪽에서 봉쇄하고 있다. -> 서버에서 처리함
     const eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`);
-// const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}`);
+    // const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}`);
+    // const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}/${receiver}`);
 
     eventSource.onmessage = (event) => {
         //console.log(1,event);
+
+        //1.데이터를 가져옴
         const data = JSON.parse(event.data);
-        //console.log(2,data);
+
+        if (data.sender !== username) {
+
+        }
+        //3.데이터를 보여줌
         if (data.sender === username) { // 로그인한 유저가 보낸 메시지
             // 파란박스(오른쪽)
             initMyMessage(data);
         } else {
-            // 회색박스(왼쪽)
+            // 회색박스(왼쪽) 상대방이 보내는 메세지 처리
             initYourMessage(data);
         }
-        if (data.sender !== username) { // 상대방이 보낸 메시지만 처리
-            unreadCount++; // 새로운 메시지 도착 시 카운트 증가
-            updateNotificationBadge();
-        }
+
     }
 
     function updateNotificationBadge() {
@@ -45,33 +108,40 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 // 파란박스 만들기. 보내는 대화박스
+    function readValueBoxSend(data) {
+
+        return `<div class="readValue" style="float: left;margin-left: 0;padding-left: 315px; font-size:10px" >${data.read}</div>`;
+
+
+    }
+
     function getSendMsgBox(data) {
 //new Date()
         let md = data.createdAt.substring(5, 10)
         let tm = data.createdAt.substring(11, 16)
         convertTime = tm + " | " + md
 
-        return `<div class="sent_msg">
+        return `<div class="sent_msg" >
 	<p>${data.msg}</p>
 	<span class="time_date" style="float:right"> ${convertTime} / <b>${data.sender}</b> </span>
 </div>`;
     }
 
-// 회색박스 만들기
+
     function getReceiveMsgBox(data) {
 
         let md = data.createdAt.substring(5, 10)
         let tm = data.createdAt.substring(11, 16)
         convertTime = tm + " | " + md
 
-        return `<div class="received_withd_msg" style="float: left; margin-top: 0px;"">
+        return `<div class="received_withd_msg" style="float: left; margin-top: 0;"">
 
 	<p>${data.msg}</p>
 	<span class="time_date"> ${convertTime} / <b>${data.sender}</b> </span>
 </div>`;
     }
 
-// 최초 초기화될 때 1번방 3건이 있으면 3건을 다 가져와요
+// 최초 초기화될 때 1번방 3건이 있으면 3건을 다 가져옴
 // addMessage() 함수 호출시 DB에 insert 되고, 그 데이터가 자동으로 흘러들어온다(SSE)
 // 파란박스 초기화하기
     function initMyMessage(data) {
@@ -80,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let sendBox = document.createElement("div");
         sendBox.className = "outgoing_msg";
 
-        sendBox.innerHTML = getSendMsgBox(data);
+        sendBox.innerHTML = `${getSendMsgBox(data)} ${readValueBoxSend(data)} `;
         chatBox.append(sendBox);
 
         document.documentElement.scrollTop = document.body.scrollHeight;
@@ -99,8 +169,8 @@ document.addEventListener('DOMContentLoaded', function () {
         let profileImageElement = document.querySelector(".profile_name img");
         let clonedImageElement = profileImageElement.cloneNode(true);
         let newDivElement = document.createElement("div");
-            newDivElement.style.float = "left";
-            newDivElement.style.marginRight = "8px";
+        newDivElement.style.float = "left";
+        newDivElement.style.marginRight = "8px";
 
 
         let messageBox = document.createElement("div");
@@ -127,10 +197,11 @@ document.addEventListener('DOMContentLoaded', function () {
         document.documentElement.scrollTop = document.body.scrollHeight;
     }
 
-
+//db에 채팅내용이 들어감
     async function addMessage() {
         let msgInput = document.querySelector("#chat-outgoing-msg");
 
+        //chat객체에 담아서 서버로 전달
         let chat = {
             sender: username,
             receiver: receiver,
@@ -138,9 +209,23 @@ document.addEventListener('DOMContentLoaded', function () {
             roomNum: roomNum.toString() // roomNum을 문자열로 변환
         };
 
+                userEnter(function (checkResult) {
+                    //상대방이 채팅방에 있는 경우
+            if (checkResult === true) {
+                // readValue
+
+                // alert('코드가 인증되었습니다.')
+                // //휴대폰 번호 업데이트
+                // updatePhoneNumber();
+
+            } else {
+                // alert('코드가 맞지 않습니다.');
+            }
+        });
+
         try {
-            const response = await fetch("https://plikim.com/chat", {
-                // const response = await fetch( "http://localhost:9090/chat", {
+             const response = await fetch("https://plikim.com/chat", {
+           // const response = await fetch("http://localhost:9090/chat", {
                 method: "post",
                 body: JSON.stringify(chat),
                 headers: {
@@ -151,17 +236,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (response.ok) {
                 // fetch 요청이 성공하면 추가 작업 수행
+                //인풋창 초기화
                 msgInput.value = "";
             } else {
                 // 요청이 실패한 경우에 대한 처리
-                console.error("Fetch 요청 실패");
+                // console.error("Fetch 요청 실패");
             }
         } catch (error) {
             // 오류 처리
-            console.error("오류 발생: " + error);
+            // console.error("오류 발생: " + error);
             //새로고침
             location.reload();
         }
+
+
     }
 
 
@@ -177,4 +265,79 @@ document.addEventListener('DOMContentLoaded', function () {
             addMessage();
         }
     });
+
+    //화면을 나가기 전에 메서드 동작
+    // $(window).on("beforeunload", function(e) {
+    //         leaveChatRoom();
+    // });
+window.addEventListener('beforeunload', function (e) {
+            leaveChatRoom();
+    });
+
+    function userEnter() {
+        $.ajax({
+            type: "post",
+            url: "/chat/userEnter",
+            contentType: "application/json",
+            data: JSON.stringify({
+                receiver: receiver,
+                sender: username,
+                roomNum: roomNum
+            }),
+            dataType: 'json',
+            success: function (chatEnterRecord) {
+                if(chatEnterRecord.state){
+                  document.querySelector('.readValue').textContent = '';
+
+                }
+                // console.log('입장기록1')
+                // console.log(response.roomNum)
+
+    // console.log('입장기록start');
+    //         console.log('chatEnterRecord:', chatEnterRecord);
+    //         console.log('RoomNum:', chatEnterRecord.roomNum);
+    //   console.log('입장기록end');
+
+            },
+            error: function (xhr, status, error) {
+                // console.log("에러 발생", status, error);
+            }
+        });
+
+    }
+
+
+      function userLeave() {
+        $.ajax({
+            type: "post",
+            url: "/chat/userLeave",
+            contentType: "application/json",
+            data: JSON.stringify({
+                receiver: receiver,
+                sender: username,
+                roomNum: roomNum
+            }),
+            dataType: 'json',
+            success: function (chatEnterRecord) {
+                if(chatEnterRecord.state){
+                    // callback(true)
+                }
+                // console.log('퇴장기록1')
+                // console.log(response.roomNum)
+    //
+    // console.log('퇴장기록start');
+    //         console.log('chatEnterRecord:', chatEnterRecord);
+    //         console.log('RoomNum:', chatEnterRecord.roomNum);
+    //   console.log('퇴장기록end');
+
+            },
+            error: function (xhr, status, error) {
+                // console.log("에러 발생", status, error);
+            }
+        });
+
+    }
+
+
 });
+

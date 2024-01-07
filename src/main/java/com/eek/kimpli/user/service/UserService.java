@@ -3,7 +3,6 @@ package com.eek.kimpli.user.service;
 import com.eek.kimpli.user.controller.DuplicateUserDataException;
 import com.eek.kimpli.user.model.Role;
 import com.eek.kimpli.user.model.User;
-import com.eek.kimpli.user.repository.UserFileRepository;
 import com.eek.kimpli.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +23,6 @@ public class UserService {
     private String path;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final UserFileRepository userFileRepository;
 
     // 회원가입
     @Transactional
@@ -115,13 +113,7 @@ public class UserService {
         return result;
     }
 
-    //회원마이페이지 업데이트
-//    @Transactional
-//    public void updateUserInfo(User user) {
-//        System.out.println("업데이트 전 유저 정보" + user);
-//        // 업데이트 로직 추가
-//        userRepository.updateUserInfo(user);
-//    }
+
 
     public int updatePhoneNumber(String phoneNumber, String userId) {
         return userRepository.updateUserPhoneNumber(phoneNumber, userId);

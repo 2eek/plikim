@@ -1,5 +1,7 @@
 package com.eek.kimpli.config;
 
+import com.eek.kimpli.hellogreeting.WebSocketConfig;
+import com.eek.kimpli.hellogreeting.YourService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +24,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     final DataSource dataSource;
     final PasswordEncoder passwordEncoder;
+    final YourService yourService;
 
 
     @Bean
@@ -49,7 +52,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("userId") // 이 부분을 추가
                 .defaultSuccessUrl("/")
                 .and()
-
                 .sessionManagement()
                 .maximumSessions(1) // 최대 세션 수
                 .sessionRegistry(sessionRegistry())
@@ -58,13 +60,28 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .permitAll()
-//    .logoutSuccessHandler(logoutSuccessHandler())
+                .logoutSuccessHandler((request, response, authentication) -> {
+                    if (authentication != null) {
+                        // 현재 로그인한 사용자의 이름 가져오기
+                        String loggedInUsername = authentication.getName();
+
+                        // 웹 소켓 이벤트 발송
+                        yourService.handleUserLogout(loggedInUsername);
+                        System.out.println("로그아웃회원아이디????"+loggedInUsername);
+
+                        // ... 기타 로그아웃 관련 로직 ...
+                    } else {
+                        // 사용자가 로그인되어 있지 않은 상태에서 로그아웃을 시도한 경우
+                        // ... 로그아웃 핸들러에 필요한 추가 로직 ...
+                    }
+
+                    // "/"로 강제 리다이렉트
+                    response.sendRedirect("/");
+                })
                 .invalidateHttpSession(true);
-
-
     }
 
-    //로그인 과정에서의 스프링 내부에서 인증수행한다.
+
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         //jdbc이용

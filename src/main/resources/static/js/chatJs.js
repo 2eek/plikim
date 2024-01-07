@@ -219,7 +219,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // updatePhoneNumber();
 
             } else {
-                // alert('코드가 맞지 않습니다.');
+                // alert('코드가 맞지 않습니다. ');
             }
         });
 

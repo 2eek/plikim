@@ -4,8 +4,6 @@ import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 
 @Data
@@ -25,7 +23,5 @@ public class Chat {
         this.read = 1;
     }
 
-//    @ManyToOne
-//    @JoinColumn(name = "roomNum", referencedColumnName = "roomNum")
-//    private ChatRoom chatRoom;
+
 }

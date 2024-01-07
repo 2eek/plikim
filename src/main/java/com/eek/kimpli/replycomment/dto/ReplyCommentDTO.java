@@ -18,7 +18,5 @@ public class ReplyCommentDTO {
     }
 
     // 디폴트 생성자
-    public ReplyCommentDTO() {
-        // 디폴트 생성자는 비워둘 수도 있습니다.
-    }
+
 }

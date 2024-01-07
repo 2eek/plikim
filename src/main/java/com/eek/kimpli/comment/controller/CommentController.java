@@ -34,8 +34,6 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-//       @Autowired
-//    private CommentConverter commentConverter;
 
 
 

@@ -38,8 +38,8 @@ $(document).on('click', 'a.user-link', function (e) {
 });
 
 const stompClient = new StompJs.Client({
-    //  brokerURL: 'wss://plikim.com/gs-guide-websocket'
-    brokerURL: 'ws://localhost:9090/gs-guide-websocket'
+     brokerURL: 'wss://plikim.com/gs-guide-websocket'
+    //brokerURL: 'ws://localhost:9090/gs-guide-websocket'
 });
 
 // 웹 소켓을 통해 '/topic/greetings' 토픽을 구독

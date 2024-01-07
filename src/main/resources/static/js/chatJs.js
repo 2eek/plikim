@@ -14,8 +14,8 @@ document.addEventListener('DOMContentLoaded', function () {
     //방 나갈 때 정보 서버로 전송
     function leaveChatRoom() {
         const loggedInUserId = $("#loggedInUserId").val();
-        alert('loggedInUserId' + loggedInUserId)
-        console.log('roomNum' + roomNum)
+        // alert('loggedInUserId' + loggedInUserId)
+        // console.log('roomNum' + roomNum)
         stompClient.publish({
             destination: "/app/leaveChatRoom",
             body: JSON.stringify({'sender': receiver, 'receiver': loggedInUserId, 'roomNum': roomNum})
@@ -27,31 +27,31 @@ document.addEventListener('DOMContentLoaded', function () {
 
     //onlinJs.js에서 소켓연결 하고 있으므로 자동 연결 가능.
     stompClient.onConnect = (frame) => {
-        console.log('Connected chat : ' + frame);
+        // console.log('Connected chat : ' + frame);
         sendName();
 
         stompClient.subscribe('/topic/chatEnter', (chatEnter) => {
                 userEnter();
-                console.log('==============방 입장 start==================');
-                const chatMessage = JSON.parse(chatEnter.body);
-                console.log('chatMessage', chatMessage);
-                console.log('Sender:', chatMessage.sender);
-                console.log('Receiver:', chatMessage.receiver);
-                console.log('RoomNum:', chatMessage.roomNum);
-                console.log('==============방 입장 end==================');
+                // console.log('==============방 입장 start==================');
+                // const chatMessage = JSON.parse(chatEnter.body);
+                // console.log('chatMessage', chatMessage);
+                // console.log('Sender:', chatMessage.sender);
+                // console.log('Receiver:', chatMessage.receiver);
+                // console.log('RoomNum:', chatMessage.roomNum);
+                // console.log('==============방 입장 end==================');
             }
         );
 
         //서버에서 정보를 받아옴
         stompClient.subscribe('/topic/leaveChatRoom', (leaveMessage) => {
             userLeave();
-            console.log('==============방 퇴장 start==================');
-            const chatMessage = JSON.parse(leaveMessage.body);
-            console.log('chatMessage', chatMessage);
-            console.log('Sender:', chatMessage.sender);
-            console.log('Receiver:', chatMessage.receiver);
-            console.log('RoomNum:', chatMessage.roomNum);
-            console.log('==============방 퇴장 end==================');
+            // console.log('==============방 퇴장 start==================');
+            // const chatMessage = JSON.parse(leaveMessage.body);
+            // console.log('chatMessage', chatMessage);
+            // console.log('Sender:', chatMessage.sender);
+            // console.log('Receiver:', chatMessage.receiver);
+            // console.log('RoomNum:', chatMessage.roomNum);
+            // console.log('==============방 퇴장 end==================');
 
         });
 
@@ -73,8 +73,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 // SSE 연결하기. 객체 생성. 크로스 오리진 자바스크립트 요청은 서버쪽에서 봉쇄하고 있다. -> 서버에서 처리함
-    // const eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`);
-    const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}`);
+    const eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`);
+    // const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}`);
     // const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}/${receiver}`);
 
     eventSource.onmessage = (event) => {
@@ -240,11 +240,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 msgInput.value = "";
             } else {
                 // 요청이 실패한 경우에 대한 처리
-                console.error("Fetch 요청 실패");
+                // console.error("Fetch 요청 실패");
             }
         } catch (error) {
             // 오류 처리
-            console.error("오류 발생: " + error);
+            // console.error("오류 발생: " + error);
             //새로고침
             location.reload();
         }
@@ -290,17 +290,17 @@ window.addEventListener('beforeunload', function (e) {
                   document.querySelector('.readValue').textContent = '';
 
                 }
-                console.log('입장기록1')
+                // console.log('입장기록1')
                 // console.log(response.roomNum)
 
-    console.log('입장기록start');
-            console.log('chatEnterRecord:', chatEnterRecord);
-            console.log('RoomNum:', chatEnterRecord.roomNum);
-      console.log('입장기록end');
+    // console.log('입장기록start');
+    //         console.log('chatEnterRecord:', chatEnterRecord);
+    //         console.log('RoomNum:', chatEnterRecord.roomNum);
+    //   console.log('입장기록end');
 
             },
             error: function (xhr, status, error) {
-                console.log("에러 발생", status, error);
+                // console.log("에러 발생", status, error);
             }
         });
 
@@ -322,17 +322,17 @@ window.addEventListener('beforeunload', function (e) {
                 if(chatEnterRecord.state){
                     // callback(true)
                 }
-                console.log('퇴장기록1')
+                // console.log('퇴장기록1')
                 // console.log(response.roomNum)
-
-    console.log('퇴장기록start');
-            console.log('chatEnterRecord:', chatEnterRecord);
-            console.log('RoomNum:', chatEnterRecord.roomNum);
-      console.log('퇴장기록end');
+    //
+    // console.log('퇴장기록start');
+    //         console.log('chatEnterRecord:', chatEnterRecord);
+    //         console.log('RoomNum:', chatEnterRecord.roomNum);
+    //   console.log('퇴장기록end');
 
             },
             error: function (xhr, status, error) {
-                console.log("에러 발생", status, error);
+                // console.log("에러 발생", status, error);
             }
         });
 

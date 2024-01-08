@@ -44,7 +44,7 @@ const stompClient = new StompJs.Client({
 
 // 웹 소켓을 통해 '/topic/greetings' 토픽을 구독
 stompClient.onConnect = (frame) => {
-    console.log('Connected: ' + frame);
+     console.log('Connected: ' + frame);
     // 연결이 성공하면 메시지를 보냄
     sendName();
     //로그아웃 상황

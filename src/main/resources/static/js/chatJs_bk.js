@@ -28,16 +28,14 @@ document.addEventListener('DOMContentLoaded', function () {
     stompClientChat.onConnect = (frame) => {
         console.log('Connected chat: ' + frame);
         console.log('hi')
+
         //소켓 연결 되면 메서드 실행한다
         sendData();
 
-//상대방의 state가 true라면 나의 readValue를 빈 값으로 처리하기 여기서 받음.
-        stompClientChat.subscribe('/topic/userEnterCheck', (message) => {
-            alert('test')
 
-    // 여기에서 받은 데이터를 처리하는 로직을 구현
-    // message.body에 실제 데이터가 들어있을 것입니다.
-    var chatEnterRecord = JSON.parse(message.body);
+//상대방의 state가 true라면 나의 readValue를 빈 값으로 처리하기 여기서 받음.
+        stompClientChat.subscribe('/topic/userEnterCheck', (chatEnterRecord) => {
+
             connect();
             console.log('chatEnterRecord' + chatEnterRecord)
             $('.readValue').text('');
@@ -61,8 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
         stompClientChat.publish({
             //서버로 보냄
             destination: "/app/userEnterCheck",
-body: JSON.stringify({'sender': username, 'receiver': receiver, 'roomNum': roomNum})
-
+            body: JSON.stringify({'name': username, 'roomNum': roomNum, 'receiver': receiver})
         });
     }
 
@@ -335,9 +332,8 @@ body: JSON.stringify({'sender': username, 'receiver': receiver, 'roomNum': roomN
         disconnectChat();
     });
 
-    //화면 나가면 소켓 끊음
+});
+
 function disconnectChat() {
     stompClientChat.deactivate(); // 수정된 부분
 }
-});
-

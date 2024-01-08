@@ -41,82 +41,88 @@ public class ChatController {
                 .subscribeOn(Schedulers.boundedElastic());
     }
 
-  @PostMapping("/chat")
-    public Mono<Chat> setMsg(@RequestBody Chat chat) {
-
+//        @PostMapping("/chat")
+//    public Mono<Chat> setMsg(@RequestBody Chat chat) {
+//        chat.setCreatedAt(LocalDateTime.now());
+//
+//        try {
+//            // Message encryption
+//            String encryptedMessage = AesUtil.aesCBCEncode(chat.getMsg());
+//            chat.setMsg(encryptedMessage);
+//
+//            return chatRepository.save(chat);
+//        } catch (Exception e) {
+//            return Mono.error(e); // 예외 발생 시 Mono.error로 감싸서 반환
+//        }
+//    }
+    @PostMapping("/chat")
+public Mono<Chat> setMsg(@RequestBody Chat chat) {
+    try {
+        // 메세지 암호화해서 저장
+        String encryptedMessage = AesUtil.aesCBCEncode(chat.getMsg());
+        chat.setMsg(encryptedMessage);
+        // 현재 시간 지정
         chat.setCreatedAt(LocalDateTime.now());
+        ChatEnterRecord chatEnterRecord = new ChatEnterRecord();
+        // 조회 시 상대방이 sender, 내가 receiver, 방 이름
+        chatEnterRecord.setSender(chat.getReceiver());
+        chatEnterRecord.setReceiver(chat.getSender());
+        chatEnterRecord.setRoomNum(chat.getRoomNum());
 
-        try {
-            // Message encryption
-            String encryptedMessage = AesUtil.aesCBCEncode(chat.getMsg());
-            chat.setMsg(encryptedMessage);
-
-            return chatRepository.save(chat);
-        } catch (Exception e) {
-            return Mono.error(e); // 예외 발생 시 Mono.error로 감싸서 반환
-        }
+        return chatEnterRecordRepository
+                .findFirstBySenderAndReceiverAndRoomNumOrderByLastTimeDesc(
+                        chatEnterRecord.getSender(),
+                        chatEnterRecord.getReceiver(),
+                        chatEnterRecord.getRoomNum()
+                )
+                .hasElement()
+                .flatMap(hasElement -> {
+                    if (hasElement) {
+                        return chatEnterRecordRepository
+                                .findFirstBySenderAndReceiverAndRoomNumOrderByLastTimeDesc(
+                                        chatEnterRecord.getSender(),
+                                        chatEnterRecord.getReceiver(),
+                                        chatEnterRecord.getRoomNum()
+                                )
+                                .map(record -> {
+                                    if (record.isState()) {
+                                        System.out.println("getState() is true");
+                                        chat.setRead(0);
+                                    } else {
+                                        System.out.println("getState() is false");
+                                        // 상대방이 채팅방에 한 번도 안들어 온 경우
+                                        chat.setRead(1);
+                                    }
+                                    return chat;
+                                })
+                                .flatMap(chatRepository::save);
+                    } else {
+                        System.out.println("hasElement is false");
+                        // element가 없는 경우(채팅 기록이 없는 경우)
+                        return chatRepository.save(chat);
+                    }
+                })
+                .onErrorResume(EmptyResultDataAccessException.class, e -> {
+                    // 결과가 없는 경우 처리
+                    e.printStackTrace();
+                    return Mono.empty(); // 또는 다르게 처리하십시오.
+                })
+                .onErrorResume(Exception.class, e -> {
+                    // 다른 예외 처리
+                    e.printStackTrace();
+                    return Mono.error(e);
+                })
+                .doOnError(e -> {
+                    // 처리되지 않은 예외에 대한 추가 로깅
+                    e.printStackTrace();
+                });
+    } catch (Exception e) {
+        // 암호화 관련 예외 처리
+        e.printStackTrace();
+        return Mono.error(e);
     }
-//@PostMapping("/chat")
-//public Mono<Chat> setMsg(@RequestBody Chat chat) {
-//    chat.setCreatedAt(LocalDateTime.now());
-//    ChatEnterRecord chatEnterRecord = new ChatEnterRecord();
-//    chatEnterRecord.setSender(chat.getReceiver());
-//    chatEnterRecord.setReceiver(chat.getSender());
-//    chatEnterRecord.setRoomNum(chat.getRoomNum());
-//    System.out.println("chat = " + chat);
-//
-//    return chatEnterRecordRepository
-//            .findFirstBySenderAndReceiverAndRoomNumOrderByLastTimeDesc(
-//                    chatEnterRecord.getSender(),
-//                    chatEnterRecord.getReceiver(),
-//                    chatEnterRecord.getRoomNum()
-//            )
-//            .flatMap(result -> {
-//                System.out.println("Received ChatEnterRecord: " + result);
-//
-//                try {
-//                    // result가 null이면 false로 간주하여 1로 설정
-////                    boolean isStateTrue = result != null && result.isState();
-//                    String encryptedMessage = AesUtil.aesCBCEncode(chat.getMsg());
-//                    chat.setMsg(encryptedMessage);
-//                    // isStateTrue가 true이면 chat.setRead(0), 아니면 chat.setRead(1)
-////                    chat.setRead(isStateTrue ? 0 : 1);
-//                    chat.setRead(0);
-//
-//                    return chatRepository.save(chat);
-//                } catch (Exception e) {
-//                    // 복호화 실패 시 에러 처리
-//                    return Mono.error(new RuntimeException("Error encrypting/decrypting message", e));
-//                }
-//            })
-//            .doOnNext(savedChat -> {
-//                // 결과가 없을 때의 처리
-//                if (savedChat.getRead() == 1) {
-//                    System.out.println("Result not found");
-//                }
-//            })
-//            .doOnError(throwable -> {
-//                System.out.println("에러다@@@");
-//                // 에러 처리
-//                throwable.printStackTrace();
-//            });
-//}
+}
 
-
-
-        private void sendNotificationToClient (String userId, String message){
-            // 여기에서 WebSocket을 이용하여 클라이언트에게 메시지를 전송하는 코드를 작성합니다.
-            messagingTemplate.convertAndSendToUser(userId, "/topic/notification", message);
-        }
-
-        public static String getRemainingWord (String input, String wordToRemove){
-            if (input.contains(wordToRemove)) {
-                return input.replace(wordToRemove, "").trim();
-            } else {
-                // wordToRemove가 input에 없을 경우 예외 처리 또는 특별한 값을 반환할 수 있습니다.
-                return input;
-            }
-        }
 
         @GetMapping(value = "/chat/roomNum/{roomNum}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
         public Flux<Chat> findByRoomNum (@PathVariable String roomNum){

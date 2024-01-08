@@ -8,6 +8,7 @@ import com.eek.kimpli.chat.service.ChatUpdater;
 import com.eek.kimpli.encryptionUtils.AesUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
@@ -40,50 +41,68 @@ public class ChatController {
                 .subscribeOn(Schedulers.boundedElastic());
     }
 
+  @PostMapping("/chat")
+    public Mono<Chat> setMsg(@RequestBody Chat chat) {
 
-@PostMapping("/chat")
-public Mono<Chat> setMsg(@RequestBody Chat chat) {
-    chat.setCreatedAt(LocalDateTime.now());
-    ChatEnterRecord chatEnterRecord = new ChatEnterRecord();
-    chatEnterRecord.setSender(chat.getReceiver());
-    chatEnterRecord.setReceiver(chat.getSender());
-    chatEnterRecord.setRoomNum(chat.getRoomNum());
+        chat.setCreatedAt(LocalDateTime.now());
 
-    return chatEnterRecordRepository
-            .findFirstBySenderAndReceiverAndRoomNumOrderByLastTimeDesc(
-                    chatEnterRecord.getSender(),
-                    chatEnterRecord.getReceiver(),
-                    chatEnterRecord.getRoomNum()
-            )
-            .flatMap(result -> {
-                // 비동기 결과 처리
-                // chatEnterRecord에 대한 작업 수행
-                System.out.println("Received ChatEnterRecord: " + result);
+        try {
+            // Message encryption
+            String encryptedMessage = AesUtil.aesCBCEncode(chat.getMsg());
+            chat.setMsg(encryptedMessage);
 
-                try {
-                    if (result.isState()) {
-                        // ChatEnterRecord의 state가 true인 경우에만 복호화 및 저장
-                        String encryptedMessage = AesUtil.aesCBCEncode(chat.getMsg());
-                        chat.setMsg(encryptedMessage);
-                        chat.setRead(0);
-                        return chatRepository.save(chat);
-                    } else {
-                        // ChatEnterRecord의 state가 false인 경우에만 복호화 및 저장
-                        String encryptedMessage = AesUtil.aesCBCEncode(chat.getMsg());
-                        chat.setMsg(encryptedMessage);
-                        chat.setRead(1);
-                        return chatRepository.save(chat);
-                    }
-                } catch (Exception e) {
-                    // 복호화 실패 시 에러 처리
-                    return Mono.error(new RuntimeException("Error encrypting/decrypting message", e));
-                }
-            })
-            .doOnError(throwable -> {
-                // 에러 처리
-                throwable.printStackTrace();
-            });
-}
+            return chatRepository.save(chat);
+        } catch (Exception e) {
+            return Mono.error(e); // 예외 발생 시 Mono.error로 감싸서 반환
+        }
+    }
+//@PostMapping("/chat")
+//public Mono<Chat> setMsg(@RequestBody Chat chat) {
+//    chat.setCreatedAt(LocalDateTime.now());
+//    ChatEnterRecord chatEnterRecord = new ChatEnterRecord();
+//    chatEnterRecord.setSender(chat.getReceiver());
+//    chatEnterRecord.setReceiver(chat.getSender());
+//    chatEnterRecord.setRoomNum(chat.getRoomNum());
+//    System.out.println("chat = " + chat);
+//
+//    return chatEnterRecordRepository
+//            .findFirstBySenderAndReceiverAndRoomNumOrderByLastTimeDesc(
+//                    chatEnterRecord.getSender(),
+//                    chatEnterRecord.getReceiver(),
+//                    chatEnterRecord.getRoomNum()
+//            )
+//            .flatMap(result -> {
+//                System.out.println("Received ChatEnterRecord: " + result);
+//
+//                try {
+//                    // result가 null이면 false로 간주하여 1로 설정
+////                    boolean isStateTrue = result != null && result.isState();
+//                    String encryptedMessage = AesUtil.aesCBCEncode(chat.getMsg());
+//                    chat.setMsg(encryptedMessage);
+//                    // isStateTrue가 true이면 chat.setRead(0), 아니면 chat.setRead(1)
+////                    chat.setRead(isStateTrue ? 0 : 1);
+//                    chat.setRead(0);
+//
+//                    return chatRepository.save(chat);
+//                } catch (Exception e) {
+//                    // 복호화 실패 시 에러 처리
+//                    return Mono.error(new RuntimeException("Error encrypting/decrypting message", e));
+//                }
+//            })
+//            .doOnNext(savedChat -> {
+//                // 결과가 없을 때의 처리
+//                if (savedChat.getRead() == 1) {
+//                    System.out.println("Result not found");
+//                }
+//            })
+//            .doOnError(throwable -> {
+//                System.out.println("에러다@@@");
+//                // 에러 처리
+//                throwable.printStackTrace();
+//            });
+//}
+
+
 
         private void sendNotificationToClient (String userId, String message){
             // 여기에서 WebSocket을 이용하여 클라이언트에게 메시지를 전송하는 코드를 작성합니다.

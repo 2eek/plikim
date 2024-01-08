@@ -39,17 +39,17 @@ public class ChatViewController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName(); // 기본적으로는 authentication에서 가져오기
 
-        if (userName == null || userName.isEmpty()) {
-            Object principal = authentication.getPrincipal();
-            if (principal instanceof Map) {
-                // principal이 Map인 경우, Map에서 username을 추출하여 userName으로 사용
-                userName = ((Map<String, String>) principal).get("username");
-                model.addAttribute("userSession", userName);
-                System.out.println("사용자 아이디: " + userName);
-            } else {
-                System.out.println("UserDetails가 아닌 Principal입니다: " + principal);
-            }
-        }
+//        if (userName == null || userName.isEmpty()) {
+//            Object principal = authentication.getPrincipal();
+//            if (principal instanceof Map) {
+//                // principal이 Map인 경우, Map에서 username을 추출하여 userName으로 사용
+//                userName = ((Map<String, String>) principal).get("username");
+//                model.addAttribute("userSession", userName);
+//                System.out.println("사용자 아이디: " + userName);
+//            } else {
+//                System.out.println("UserDetails가 아닌 Principal입니다: " + principal);
+//            }
+//        }
 
         final String finalUserName = userName; // final 또는 effectively final로 선언
 
@@ -89,6 +89,8 @@ public class ChatViewController {
         List<String> roomNumList = new ArrayList<>();
         for (Chat chat : chatRoomList) {
             String roomNum = chat.getRoomNum();
+            String replacedReceiver = chat.getRoomNum().replaceFirst(userName, "").trim();
+            chat.setReceiver(replacedReceiver);
             System.out.println("roomNum: " + roomNum);
             roomNumList.add(roomNum);
         }

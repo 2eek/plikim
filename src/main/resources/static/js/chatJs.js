@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     //onlinJs.js에서 소켓연결 하고 있으므로 자동 연결 가능.
     stompClient.onConnect = (frame) => {
-        // console.log('Connected chat : ' + frame);
+        console.log('Connected chat : ' + frame);
         sendName();
 
         stompClient.subscribe('/topic/chatEnter', (chatEnter) => {
@@ -73,8 +73,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 // SSE 연결하기. 객체 생성. 크로스 오리진 자바스크립트 요청은 서버쪽에서 봉쇄하고 있다. -> 서버에서 처리함
-    const eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`);
-    // const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}`);
+    //const eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`);
+    const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}`);
     // const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}/${receiver}`);
 
     eventSource.onmessage = (event) => {
@@ -224,8 +224,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         try {
-             const response = await fetch("https://plikim.com/chat", {
-           // const response = await fetch("http://localhost:9090/chat", {
+            // const response = await fetch("https://plikim.com/chat", {
+            const response = await fetch("http://localhost:9090/chat", {
                 method: "post",
                 body: JSON.stringify(chat),
                 headers: {
@@ -270,9 +270,16 @@ document.addEventListener('DOMContentLoaded', function () {
     // $(window).on("beforeunload", function(e) {
     //         leaveChatRoom();
     // });
-window.addEventListener('beforeunload', function (e) {
+  //   window.addEventListener("pagehide", function(e) {
+  //        leaveChatRoom();
+  // });
+    window.addEventListener('beforeunload', function (e) {
             leaveChatRoom();
     });
+
+// window.addEventListener('pagehide', function (e) {
+//           alert('hi')
+//     });
 
     function userEnter() {
         $.ajax({

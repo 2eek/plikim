@@ -74,7 +74,7 @@
         <table>
             <thead>
             <tr>
-                <!--                    <th>방 이름</th>-->
+                                    <th>방 이름</th>
                 <th>상대방</th>
                 <th>마지막 메시지</th>
                 <!--                    <th>상대방</th>-->
@@ -85,6 +85,7 @@
             <tbody>
             <!-- chatList에서 Chat 객체를 꺼내 테이블로 출력 -->
    <tr th:each="chat, rowStat : ${chatList}">
+           <td th:text="${chat.getRoomNum()}"></td>
     <td th:text="${chat.getReceiver()}"></td>
     <td th:text="${chat.getMsg()}"></td>
     <td th:text="${chat.formattedCreatedAt}"></td>

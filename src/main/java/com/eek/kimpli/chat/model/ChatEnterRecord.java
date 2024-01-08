@@ -11,6 +11,13 @@ import java.time.LocalDateTime;
 
 @Document(collection = "chatEnterRecord")
 public class ChatEnterRecord {
+        @Id
+    private String id; // 이 부분을 수정
+    private String sender;
+    private String receiver;
+    private String roomNum;
+    private LocalDateTime lastTime;
+    private boolean state;
     public String getId() {
         return id;
     }
@@ -58,14 +65,11 @@ public class ChatEnterRecord {
     public void setState(boolean state) {
         this.state = state;
     }
+//        public void getState(boolean state) {
+//        this.state = state;
+//    }
 
-    @Id
-    private String id; // 이 부분을 수정
-    private String sender;
-    private String receiver;
-    private String roomNum;
-    private LocalDateTime lastTime;
-    private boolean state;
+
 }
 
 

@@ -39,28 +39,4 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         // 주제를 구독하는 클라이언트들에게 메시지가 전달됨.
         messagingTemplate.convertAndSend("/topic/userLogout", username);
     }
-
-//  @EventListener
-//public void handleWebSocketConnectListener(SessionConnectedEvent event) {
-//    StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
-//    Principal userPrincipal = accessor.getUser();
-//
-//    if (userPrincipal != null) {
-//        String username = userPrincipal.getName(); // 사용자 아이디 가져오기
-//        messagingTemplate.convertAndSend("/topic/userConnected", username);
-//    }
-//}
-//
-//    @EventListener
-//    public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
-//        // 사용자 퇴장 이벤트
-//            StompHeaderAccessor accessor = StompHeaderAccessor.wrap(event.getMessage());
-//    Principal userPrincipal = accessor.getUser();
-//        String username = userPrincipal.getName();
-//        messagingTemplate.convertAndSend("/topic/userDisconnected", username);
-//    }
-
-
-
-
 }

@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 //상대방의 state가 true라면 나의 readValue를 빈 값으로 처리하기 여기서 받음.
         stompClientChat.subscribe('/topic/userEnterCheck', (message) => {
-            alert('test')
+            // alert('test')
 
     // 여기에서 받은 데이터를 처리하는 로직을 구현
     // message.body에 실제 데이터가 들어있을 것입니다.

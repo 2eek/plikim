@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
 //웹소켓 이용해서 상대방의 채팅방 입장시 read value class 빈값 처리
     const stompClientChat = new StompJs.Client({
         brokerURL: 'wss://plikim.com/gs-guide-websocket'
-        //brokerURL: 'ws://localhost:9090/gs-guide-websocket'
+      //  brokerURL: 'ws://localhost:9090/gs-guide-websocket'
     });
 
     stompClientChat.onConnect = (frame) => {
@@ -38,7 +38,10 @@ document.addEventListener('DOMContentLoaded', function () {
             // message.body에 실제 데이터가 들어있을 것
             var chatEnterRecord = JSON.parse(message.body);
             connect();
+            if(chatEnterRecord.state == true ){
+                //채팅방 입장시 화면에 보이는 1-> '' 처리
             $('.readValue').text('');
+            }
 
 
         });
@@ -70,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // SSE 연결하기. 객체 생성. 크로스 오리진 자바스크립트 요청은 서버쪽에서 봉쇄하고 있다. -> 서버에서 처리함
    const eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`);
-   // const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}`);
+  //const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}`);
 
 
     eventSource.onmessage = (event) => {
@@ -210,7 +213,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
             if (response.ok) {
-//                console.log("리스폰스" + response.ok)
+               console.log("리스폰스" + response.ok)
                 //인풋창 초기화
                 msgInput.value = "";
 
@@ -224,7 +227,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (responseData.read === 0) {
 
                     //read클래스 빈 값을 만듦
-                    $('.readValue').text('');
+                 //   $('.readValue').text('');
 
 
                 }

@@ -23,20 +23,6 @@ public class ChatEnterController {
 
 
     private final ChatEnterRecordRepository chatEnterRecordRepository;
-////채팅방 퇴장시
-//    //websocket연결 구독
-//    @MessageMapping("/leaveChatRoom")
-//    @SendTo("/topic/leaveChatRoom")
-//    public Chat leaveChatRoom(Chat message) {
-//        System.out.println("message = " + message);
-//        System.out.println("방 나감? ");
-//        Chat escapedMessage = new Chat();
-//        escapedMessage.setSender(HtmlUtils.htmlEscape(message.getSender()));
-//        escapedMessage.setReceiver(HtmlUtils.htmlEscape(message.getReceiver()));
-//        escapedMessage.setRoomNum(HtmlUtils.htmlEscape(message.getRoomNum()));
-//        // 채팅방에서 사용자 제거 또는 처리 로직 추가
-//        return escapedMessage;
-//    }
 
     @PostMapping("/chat/userLeave")
     public ResponseEntity<ChatEnterRecord> userLeave(@RequestBody ChatEnterRecord chatLeaveRecord) {

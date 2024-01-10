@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
         //1.데이터를 가져옴
         const data = JSON.parse(event.data);
 
-        if (data.sender !== username) {ff
+        if (data.sender !== username) {
 
         }
         //3.데이터를 보여줌

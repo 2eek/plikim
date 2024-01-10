@@ -26,8 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     stompClientChat.onConnect = (frame) => {
-        console.log('Connected chat: ' + frame);
-        console.log('hi')
+        // console.log('Connected chat: ' + frame);
         //소켓 연결 되면 메서드 실행한다
         sendData();
 
@@ -35,11 +34,10 @@ document.addEventListener('DOMContentLoaded', function () {
         stompClientChat.subscribe('/topic/userEnterCheck', (message) => {
             // alert('test')
 
-    // 여기에서 받은 데이터를 처리하는 로직을 구현
-    // message.body에 실제 데이터가 들어있을 것입니다.
-    var chatEnterRecord = JSON.parse(message.body);
+            // 여기에서 받은 데이터를 처리하는 로직을 구현
+            // message.body에 실제 데이터가 들어있을 것
+            var chatEnterRecord = JSON.parse(message.body);
             connect();
-            console.log('chatEnterRecord' + chatEnterRecord)
             $('.readValue').text('');
 
 
@@ -57,11 +55,10 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     function sendData() {
-        // console.log('yo')
         stompClientChat.publish({
             //서버로 보냄
             destination: "/app/userEnterCheck",
-body: JSON.stringify({'sender': username, 'receiver': receiver, 'roomNum': roomNum})
+            body: JSON.stringify({'sender': username, 'receiver': receiver, 'roomNum': roomNum})
 
         });
     }
@@ -72,12 +69,11 @@ body: JSON.stringify({'sender': username, 'receiver': receiver, 'roomNum': roomN
 
 
 // SSE 연결하기. 객체 생성. 크로스 오리진 자바스크립트 요청은 서버쪽에서 봉쇄하고 있다. -> 서버에서 처리함
-     //const eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`);
-    const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}`);
+    const eventSource = new EventSource(`https://plikim.com/chat/roomNum/${roomNum}`);
+   // const eventSource = new EventSource(`http://localhost:9090/chat/roomNum/${roomNum}`);
 
 
     eventSource.onmessage = (event) => {
-        //console.log(1,event);
 
         //1.데이터를 가져옴
         const data = JSON.parse(event.data);
@@ -205,7 +201,7 @@ body: JSON.stringify({'sender': username, 'receiver': receiver, 'roomNum': roomN
             roomNum: roomNum.toString() // roomNum을 문자열로 변환
         };
         try {
-           // const response = await fetch("https://plikim.com/chat", {
+            // const response = await fetch("https://plikim.com/chat", {
             const response = await fetch("http://localhost:9090/chat", {
                 method: "post",
                 body: JSON.stringify(chat),
@@ -214,22 +210,18 @@ body: JSON.stringify({'sender': username, 'receiver': receiver, 'roomNum': roomN
                 }
             });
             if (response.ok) {
-                console.log("ok빼면" + response)
-                console.log("리스폰스" + response.ok)
-                // // fetch 요청이 성공하면 추가 작업 수행
-                // //인풋창 초기화
+//                console.log("리스폰스" + response.ok)
+                //인풋창 초기화
                 msgInput.value = "";
 
 
-                // // 서버 응답에서 JSON 데이터 추출
+                // 서버 응답에서 JSON 데이터 추출
                 const responseData = await response.json();
-                //
-                // // responseData를 이용하여 화면에 필요한 처리를 수행
-                console.log("서버 응답 데이터:", responseData);
-                // console.log("리드?:", responseData.read);
+
+                // console.log("서버 응답 데이터:", responseData);
+
 
                 if (responseData.read === 0) {
-                    console.log(responseData.read)
 
                     //read클래스 빈 값을 만듦
                     $('.readValue').text('');
@@ -282,13 +274,7 @@ body: JSON.stringify({'sender': username, 'receiver': receiver, 'roomNum': roomN
 
 
                 }
-                // console.log('입장기록1')
-                // console.log(response.roomNum)
 
-                // console.log('입장기록start');
-                //         console.log('chatEnterRecord:', chatEnterRecord);
-                //         console.log('RoomNum:', chatEnterRecord.roomNum);
-                //   console.log('입장기록end');
 
             },
             error: function (xhr, status, error) {
@@ -314,13 +300,7 @@ body: JSON.stringify({'sender': username, 'receiver': receiver, 'roomNum': roomN
                 if (chatEnterRecord.state) {
                     // callback(true)
                 }
-                // console.log('퇴장기록1')
-                // console.log(response.roomNum)
-                //
-                // console.log('퇴장기록start');
-                //         console.log('chatEnterRecord:', chatEnterRecord);
-                //         console.log('RoomNum:', chatEnterRecord.roomNum);
-                //   console.log('퇴장기록end');
+
 
             },
             error: function (xhr, status, error) {
@@ -336,8 +316,8 @@ body: JSON.stringify({'sender': username, 'receiver': receiver, 'roomNum': roomN
     });
 
     //화면 나가면 소켓 끊음
-function disconnectChat() {
-    stompClientChat.deactivate(); // 수정된 부분
-}
+    function disconnectChat() {
+        stompClientChat.deactivate(); // 수정된 부분
+    }
 });
 

@@ -22,7 +22,7 @@
 <!-- 사용자에게 역할 할당 (가입자는 기본적으로 'ROLE_USER' 역할을 가지게 됨) -->
 <update id="assignUserRole" parameterType="java.util.HashMap">
     insert into user_role (user_index, role_index)
-    select u.index, r.index
+    select u.user_index, r.index
     from user u
     join role r on r.name = 'ROLE_USER'
     where u.user_id = #{id}

@@ -26,6 +26,5 @@ public interface ChatRepository extends ReactiveMongoRepository <Chat, String> {
     Flux<Chat> mFindByRoomNum(String roomNum);
 
 //상대방 채팅방에 존재하는지 유무
-        Mono<Boolean> existsByReceiver(String receiver);
 
 }

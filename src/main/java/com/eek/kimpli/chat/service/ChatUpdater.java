@@ -55,33 +55,33 @@ public  int markRead(String userId, String roomNum, String uri) {
 return 1;
 }
 
-public void markReadOne(Chat chat, String uri) {
-    // MongoDB 연결 설정
-    ConnectionString connectionString = new ConnectionString(uri);
-    MongoClientSettings settings = MongoClientSettings.builder()
-            .applyConnectionString(connectionString)
-            .build();
-
-    // MongoDB 클라이언트 생성
-    try (MongoClient mongoClient = MongoClients.create(settings)) {
-        // MongoDB 데이터베이스 및 컬렉션 설정
-        MongoDatabase database = mongoClient.getDatabase("chatdb"); // 실제 데이터베이스 이름으로 대체
-        MongoCollection<Document> collection = database.getCollection("chat"); // 실제 컬렉션 이름으로 대체
-
-        // 업데이트할 문서를 찾기 위한 쿼리 생성
-        Document query = new Document("_id", new ObjectId(chat.getId())); // chat 객체의 ID 필드를 사용하여 업데이트할 문서를 찾음
-
-        // 업데이트할 내용을 설정한 문서 생성
-        Document update = new Document("$set", new Document("read", 0));
-
-        // 단일 문서 업데이트 수행
-        UpdateResult updateResult = collection.updateOne(query, update);
-
-        // 업데이트 결과 확인
-        System.out.println("업데이트된 문서 수: " + updateResult.getModifiedCount());
-    } catch (MongoException e) {
-        // MongoDB 연결이나 업데이트 중에 발생하는 예외 처리
-        e.printStackTrace();
-    }
-}
+//public void markReadOne(Chat chat, String uri) {
+//    // MongoDB 연결 설정
+//    ConnectionString connectionString = new ConnectionString(uri);
+//    MongoClientSettings settings = MongoClientSettings.builder()
+//            .applyConnectionString(connectionString)
+//            .build();
+//
+//    // MongoDB 클라이언트 생성
+//    try (MongoClient mongoClient = MongoClients.create(settings)) {
+//        // MongoDB 데이터베이스 및 컬렉션 설정
+//        MongoDatabase database = mongoClient.getDatabase("chatdb"); // 실제 데이터베이스 이름으로 대체
+//        MongoCollection<Document> collection = database.getCollection("chat"); // 실제 컬렉션 이름으로 대체
+//
+//        // 업데이트할 문서를 찾기 위한 쿼리 생성
+//        Document query = new Document("_id", new ObjectId(chat.getId())); // chat 객체의 ID 필드를 사용하여 업데이트할 문서를 찾음
+//
+//        // 업데이트할 내용을 설정한 문서 생성
+//        Document update = new Document("$set", new Document("read", 0));
+//
+//        // 단일 문서 업데이트 수행
+//        UpdateResult updateResult = collection.updateOne(query, update);
+//
+//        // 업데이트 결과 확인
+//        System.out.println("업데이트된 문서 수: " + updateResult.getModifiedCount());
+//    } catch (MongoException e) {
+//        // MongoDB 연결이나 업데이트 중에 발생하는 예외 처리
+//        e.printStackTrace();
+//    }
+//}
 }

@@ -129,19 +129,14 @@ public class ChatController {
     public Flux<Chat> findByRoomNum(@PathVariable String roomNum) {
 
         System.out.println("test");
-//
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String userId = ((UserDetails) authentication.getPrincipal()).getUsername();
 
-        // chatUpdater.markRead를 Mono.defer 내에 래핑하여 동기화
         return Mono.defer(() -> {
 
                     return Mono.just(0); // Mono.just(0)을 반환하여 값을 전달하지 않음
                 }).thenMany(chatRepository.mFindByRoomNum(roomNum)
                         .flatMap(chat -> {
                             try {
-//                                      ChatUpdater chatUpdater = new ChatUpdater();
-//                                      chatUpdater.markRead(userId, roomNum, uri);
+
                                 String decryptedMessage = AesUtil.aesCBCDecode(chat.getMsg());
                                 chat.setMsg(decryptedMessage);
 

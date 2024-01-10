@@ -128,8 +128,6 @@ public class ChatController {
     @GetMapping(value = "/chat/roomNum/{roomNum}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<Chat> findByRoomNum(@PathVariable String roomNum) {
 
-        System.out.println("test");
-
         return Mono.defer(() -> {
 
                     return Mono.just(0); // Mono.just(0)을 반환하여 값을 전달하지 않음

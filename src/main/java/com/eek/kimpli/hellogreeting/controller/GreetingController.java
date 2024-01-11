@@ -1,5 +1,7 @@
-package com.eek.kimpli.hellogreeting;
+package com.eek.kimpli.hellogreeting.controller;
 
+import com.eek.kimpli.hellogreeting.model.Greeting;
+import com.eek.kimpli.hellogreeting.model.HelloMessage;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;

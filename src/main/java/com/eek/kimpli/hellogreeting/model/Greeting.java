@@ -1,4 +1,4 @@
-package com.eek.kimpli.hellogreeting;
+package com.eek.kimpli.hellogreeting.model;
 
 public class Greeting {
 

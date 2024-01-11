@@ -47,12 +47,10 @@ public class CommentController {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
             String userId = userDetails.getUsername(); // 또는 다른 방식으로 userId를 가져와야 할 수 있습니다.
-            System.out.println(userId);
-            // 이제 userId를 이용하여 저장 로직을 수행합니다.
+
             comment.setCommentWriter(userId);
 
             String result = commentService.saveOrUpdateComment(comment);
-            System.out.println("댓글 저장 결과: " + result);
             return result;
         } else {
             // 로그인되지 않은 경우에 대한 처리
@@ -77,13 +75,12 @@ public class CommentController {
     }
 
 //대댓글Ajax저장
-//JSON 데이터를 처리합니다. @RequestBody 어노테이션을 통해 HTTP 요청 본문에 있는 JSON 데이터를 ReplyComment 객체로 변환합니다. 또한, URL 쿼리 매개변수인 commentId를 받아옴
+//JSON 데이터를 처리. @RequestBody 어노테이션을 통해 HTTP 요청 본문에 있는 JSON 데이터를 ReplyComment 객체로 변환합니다. 또한, URL 쿼리 매개변수인 commentId를 받아옴
 @PostMapping("/replySave")
 public ResponseEntity<String> saveReplyComment(
     @RequestBody ReplyComment replyComment,
     @RequestParam Long commentId
 ) {
-    System.out.println("여기오나??");
 
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -102,8 +99,8 @@ public ResponseEntity<String> saveReplyComment(
 @GetMapping("/getReplyComments/{commentId}")
 public ResponseEntity<List<ReplyComment>> getgetReplyCommentsWithCommentId(@PathVariable Long commentId) {
     List<ReplyComment> commentWithReplies = commentService.getReplyWithCommentId(commentId);
-    System.out.println("컨트롤러"+commentId);
-    System.out.println("대댓글 리스트"+commentWithReplies);
+//    System.out.println("컨트롤러"+commentId);
+//    System.out.println("대댓글 리스트"+commentWithReplies);
     if (commentWithReplies != null && !commentWithReplies.isEmpty()) {
             System.out.println("대댓글 리스트!!!"+commentWithReplies);
 

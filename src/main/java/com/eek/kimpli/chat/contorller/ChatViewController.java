@@ -1,8 +1,7 @@
 package com.eek.kimpli.chat.contorller;
 
-
 import com.eek.kimpli.chat.model.Chat;
-import com.eek.kimpli.chat.repository.ChatRepository;
+import com.eek.kimpli.chat.service.ChatService;
 import com.eek.kimpli.chat.service.ChatUpdater;
 import com.eek.kimpli.encryptionUtils.AesUtil;
 import com.eek.kimpli.user.model.User;
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import reactor.core.publisher.Flux;
+
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -26,8 +25,7 @@ import java.util.stream.Collectors;
 @Controller
 @RequiredArgsConstructor
 public class ChatViewController {
-
-    private final ChatRepository chatRepository;
+private final ChatService chatService;
     private final UserService userService;
     private final ChatUpdater chatUpdater;
 
@@ -37,19 +35,13 @@ public class ChatViewController {
     @GetMapping("/mychatrooms")
     public String chatRoomList(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName(); // 기본적으로는 authentication에서 가져오기
-
-
-        final String finalUserName = userName; // final 또는 effectively final로 선언
-
-        Flux<Chat> chatRoomFlux = chatRepository.findAll();
-        List<Chat> chatRoomList = chatRoomFlux.collectList().block();
+        final String userName = authentication.getName(); // final 또는 effectively final로 선언
+            List<Chat> chatRoomList= chatService.getAllChats();
 
         if (chatRoomList != null) {
             Set<String> uniqueRoomNums = new HashSet<>();
-
             chatRoomList = chatRoomList.stream()
-                    .filter(chat -> chat.getRoomNum() != null && chat.getRoomNum().contains(finalUserName))
+                    .filter(chat -> chat.getRoomNum() != null && chat.getRoomNum().contains(userName))
                     .sorted(Comparator.comparing(Chat::getCreatedAt).reversed())
                     .filter(chat -> uniqueRoomNums.add(chat.getRoomNum()))
                     .map(chat -> {
@@ -64,7 +56,6 @@ public class ChatViewController {
                     })
                     .collect(Collectors.toList());
         }
-
         model.addAttribute("userSession", userName);
         model.addAttribute("chatList", chatRoomList);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy년 MM월 dd일 HH:mm");
@@ -73,26 +64,16 @@ public class ChatViewController {
             String formattedDate = createdAt.format(formatter);
             chat.setFormattedCreatedAt(formattedDate);
         }
-        System.out.println("이름: " + userName);
-//Chat 객체의 리스트를 순회하면서 각 Chat 객체에서 roomNum 값을 가져와서 roomNumList라는 List<String>에 추가
         List<String> roomNumList = new ArrayList<>();
         for (Chat chat : chatRoomList) {
             String roomNum = chat.getRoomNum();
             String replacedReceiver = chat.getRoomNum().replaceFirst(userName, "").trim();
             chat.setReceiver(replacedReceiver);
-            System.out.println("roomNum: " + roomNum);
             roomNumList.add(roomNum);
         }
         model.addAttribute("roomNumList", roomNumList);
-        System.out.println("리스트에 뭐있나" + roomNumList);
-
         return "chat/mychatrooms";
     }
-
-    // 중복된 userName을 제거한 roomNum을 반환하는 메서드
-//    private String removeUserName(String roomNum, String userName) {
-//        return roomNum.replace(userName, "");
-//    }
 
     @GetMapping("/chat")
     public String chat(Model model,
@@ -100,19 +81,13 @@ public class ChatViewController {
                        @RequestParam(name = "roomNum", required = false) String roomNum) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        userDetails.getUsername();
-        System.out.println("나의 아이디 " + userDetails.getUsername());
-        System.out.println("방번호" + roomNum);
         String username = userDetails.getUsername();
         ChatUpdater chatUpdater = new ChatUpdater();
         chatUpdater.markRead(username, roomNum, uri);
         model.addAttribute("userId", userId);
         User userById = userService.getUserById(userId);
         model.addAttribute("userinfo", userById);
-
-        model.addAttribute("userSession", authentication.getPrincipal());
         model.addAttribute("roomNum", roomNum); // roomNum을 모델에 추가
-        System.out.println("채팅 시 로그인한 계정: " + authentication.getPrincipal());
         return "chat/chat";
     }
 }

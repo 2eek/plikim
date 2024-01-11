@@ -1,7 +1,6 @@
 package com.eek.kimpli.config;
 
-import com.eek.kimpli.hellogreeting.WebSocketConfig;
-import com.eek.kimpli.hellogreeting.YourService;
+import com.eek.kimpli.hellogreeting.service.YourService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

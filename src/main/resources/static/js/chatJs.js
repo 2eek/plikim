@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
-    var username = document.getElementById('loggedInUserId').value;
+                var username= $('#loggedInUserId').val();
+
+    // var username = document.getElementById('loggedInUserId').value;
     var receiver = document.getElementById('userId').value;
 //화면 로드 후 포커스
     document.querySelector('#chat-outgoing-msg').focus();
@@ -22,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
 //웹소켓 이용해서 상대방의 채팅방 입장시 read value class 빈값 처리
     const stompClientChat = new StompJs.Client({
         brokerURL: 'wss://plikim.com/gs-guide-websocket'
-      //  brokerURL: 'ws://localhost:9090/gs-guide-websocket'
+      // brokerURL: 'ws://localhost:9090/gs-guide-websocket'
     });
 
     stompClientChat.onConnect = (frame) => {
@@ -205,7 +207,7 @@ document.addEventListener('DOMContentLoaded', function () {
         };
         try {
              const response = await fetch("https://plikim.com/chat", {
-            //const response = await fetch("http://localhost:9090/chat", {
+           // const response = await fetch("http://localhost:9090/chat", {
                 method: "post",
                 body: JSON.stringify(chat),
                 headers: {
@@ -213,7 +215,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
             if (response.ok) {
-               console.log("리스폰스" + response.ok)
+               // console.log("리스폰스" + response.ok)
                 //인풋창 초기화
                 msgInput.value = "";
 

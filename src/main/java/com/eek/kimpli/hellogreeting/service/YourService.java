@@ -1,5 +1,6 @@
-package com.eek.kimpli.hellogreeting;
+package com.eek.kimpli.hellogreeting.service;
 
+import com.eek.kimpli.hellogreeting.config.WebSocketConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

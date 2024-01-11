@@ -1,4 +1,4 @@
-package com.eek.kimpli.hellogreeting;
+package com.eek.kimpli.chat.contorller;
 
 import com.eek.kimpli.chat.model.Chat;
 import com.eek.kimpli.chat.model.ChatEnterRecord;
@@ -26,10 +26,8 @@ public class ChatEnterController {
 
     @PostMapping("/chat/userLeave")
     public ResponseEntity<ChatEnterRecord> userLeave(@RequestBody ChatEnterRecord chatLeaveRecord) {
-        System.out.println("chatLeaveRecord1 = " + chatLeaveRecord);
         chatLeaveRecord.setLastTime(LocalDateTime.now());
         chatLeaveRecord.setState(false);
-        System.out.println("chatEnterRecord2 = " + chatLeaveRecord);
 
         Mono<ChatEnterRecord> result = chatEnterRecordRepository.save(chatLeaveRecord);
 
@@ -41,7 +39,7 @@ public class ChatEnterController {
     @MessageMapping("/userEnterCheck") // 클라이언트에서 메시지를 보낼 때 사용하는 주소
     @SendTo("/topic/userEnterCheck") // 클라이언트로 메시지를 보낼 때 사용하는 주소
     public Mono<ChatEnterRecord> chatEnter(@Payload ChatEnterRecord message) {
-        System.out.println("Received message: " + message);
+//        System.out.println("Received message: " + message);
 
         // 채팅 입장 기록 생성 또는 기존 기록 조회
         return chatEnterRecordRepository
@@ -52,7 +50,7 @@ public class ChatEnterController {
             )
             .flatMap(existingRecord -> {
                 // 기존 기록이 있는 경우
-                System.out.println("Existing record: " + existingRecord);
+//                System.out.println("Existing record: " + existingRecord);
                 return Mono.just(existingRecord);
             })
             .switchIfEmpty(Mono.defer(() -> {
@@ -62,7 +60,7 @@ public class ChatEnterController {
                 newRecord.setReceiver(message.getSender());
                 newRecord.setRoomNum(message.getRoomNum());
 
-                System.out.println("Created new record: " + newRecord);
+//                System.out.println("Created new record: " + newRecord);
 
                 return chatEnterRecordRepository.save(newRecord);
             }));
@@ -71,10 +69,8 @@ public class ChatEnterController {
 
     @PostMapping("/chat/userEnter")
     public ResponseEntity<ChatEnterRecord> userEnter(@RequestBody ChatEnterRecord chatEnterRecord) {
-        System.out.println("chatEnterRecord1 = " + chatEnterRecord);
         chatEnterRecord.setLastTime(LocalDateTime.now());
         chatEnterRecord.setState(true);
-        System.out.println("chatEnterRecord2 = " + chatEnterRecord);
 
         Mono<ChatEnterRecord> result = chatEnterRecordRepository.save(chatEnterRecord);
 

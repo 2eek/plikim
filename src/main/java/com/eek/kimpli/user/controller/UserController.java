@@ -148,31 +148,13 @@ public class UserController {
 
     }
 
-    // 회원정보 수정+ 프로필 사진 등록
-//    @PostMapping("/user/update")
-//    public String updateMyInfo(@RequestParam("profileFile") MultipartFile profileFile, User id) {
-//
-//          System.out.println("프사업데이트 사진?"+profileFile);
-//        // userId를 사용하여 현재 로그인 중인 사용자 정보를 가져오는 작업
-////        User loggedInUser = userService.getUserById(user.getUserId());
-//
-//        try {
-//            //프로필 사진 업데이트
-//            userService.updateProfile(id, profileFile);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return "redirect:/";
-//    }
-
-
     //회원 프로필 사진 변경
     @ResponseBody
     @PostMapping("/user/updateProfile")
     public int updateProfile(@RequestParam("profileFile") MultipartFile profileFile, String userId) {
         try {
             // 프로필 사진 업데이트
-            System.out.println("아디 프사 확인" + userId + profileFile);
+//            System.out.println("아디 프사 확인" + userId + profileFile);
             return userService.updateProfile(userId, profileFile);
         } catch (IOException e) {
             // IOException 처리
@@ -265,10 +247,6 @@ public class UserController {
     //비밀번호 찾기. 이메일 인증 후  비밀번호 업데이트 폼 호출
     @PostMapping("/updatePasswordForm")
     public String updatePassword(String userId, String email, Model model) {
-//        User user = new User();
-//        user.setUserId(userId);
-//        user.setEmail(email);
-        // memberService.insertMemberInfo(memberVO);
         model.addAttribute("userId", userId);
         model.addAttribute("email", email);
         return "user/updatePassword";
@@ -277,16 +255,6 @@ public class UserController {
 
     @PostMapping("/editPassword")
     public int EditPassword(String password, String userId) {
-
-//    System.out.println("???패스워드 edit - userId: " + userId + ", email: " + email);
-//    int result = userService.editPassword(userId, password);
-//
-//    if (result == -1) {
-//        // result가 -1이면 alert을 띄우는 JavaScript 코드를 모델에 추가
-//        model.addAttribute("alertMessage", "비밀번호 변경에 실패했습니다.");
-//    }
-//
-//    return "redirect:/";
         return userService.updatePassword(userId, password);
     }
 
@@ -314,7 +282,6 @@ public class UserController {
             return 1; // 이미 존재하는 아이디
         }
     }
-///user/withdrawl
 
     @GetMapping("/user/withdrawForm")
     public String withdrawForm() {

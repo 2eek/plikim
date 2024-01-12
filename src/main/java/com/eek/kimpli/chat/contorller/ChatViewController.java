@@ -79,11 +79,8 @@ private final ChatService chatService;
     public String chat(Model model,
                        @RequestParam(name = "userId") String userId,
                        @RequestParam(name = "roomNum", required = false) String roomNum) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String username = userDetails.getUsername();
         ChatUpdater chatUpdater = new ChatUpdater();
-        chatUpdater.markRead(username, roomNum, uri);
+        chatUpdater.markRead(userId, roomNum, uri);
         model.addAttribute("userId", userId);
         User userById = userService.getUserById(userId);
         model.addAttribute("userinfo", userById);

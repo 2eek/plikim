@@ -19,7 +19,6 @@ public interface ChatService {
 
 // ChatViewController
 
-
      List<Chat> getAllChats();
 
     List<Chat> getChatRoomsByUserName(String userName);
@@ -28,6 +27,5 @@ public interface ChatService {
 
     void markChatAsRead(String username, String roomNum);
 
-    // 다른 필요한 메서드들을 추가할 수 있습니다.
 
 }

@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', function () {
         };
         try {
              const response = await fetch("https://plikim.com/chat", {
-           //const response = await fetch("http://localhost:9090/chat", {
+          // const response = await fetch("http://localhost:9090/chat", {
                 method: "post",
                 body: JSON.stringify(chat),
                 headers: {

@@ -79,8 +79,12 @@ private final ChatService chatService;
     public String chat(Model model,
                        @RequestParam(name = "userId") String userId,
                        @RequestParam(name = "roomNum", required = false) String roomNum) {
+                       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                       //나의 아이디
+        final String userName = authentication.getName(); // final 또는 effectively final로 선언
         ChatUpdater chatUpdater = new ChatUpdater();
-        chatUpdater.markRead(userId, roomNum, uri);
+        chatUpdater.markRead(userName, roomNum, uri);
+        //userId: 상대방의 아이디
         model.addAttribute("userId", userId);
         User userById = userService.getUserById(userId);
         model.addAttribute("userinfo", userById);

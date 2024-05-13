@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<style>
+    .user-table {
+        float: left;
+        width: 100px; /* 너비를 100px로 설정 */
+        margin-right: 20px;
+    }
+
+    .user-table th, .user-table td {
+        font-size: 12px;
+    }
+
+    .user-row {
+        cursor: pointer;
+    }
+</style>
+
+
+<head th:replace="fragments/common :: head('plikim')">
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('')">
+</nav>
+
+<main role="main" class="container">
+    <div class="starter-template">
+        <h1>회원리스트</h1>
+    </div>
+</main>
+
+
+<div class="container-fluid" style="width: 150px; float: right;">
+    <div class="col-md-6" style=" justify-content: end;">
+        <!— 우측 사이드바 —>
+        <table id="conversation" class="table table-striped" style="width: 150px;">
+            <thead>
+            <tr>
+                <th>로그인 회원</th>
+            </tr>
+            </thead>
+            <tbody th:if="${#authorization.expression('isAuthenticated()')}" id="greetings">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<main role="main" class="container">
+    <div class="starter-template" style="padding-top: 0; padding-bottom: 0;">
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th scope="col">사진</th>
+                <th scope="col">아이디</th>
+                <th scope="col">자기소개</th>
+                <th scope="col">상태</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${user}" th:id="'user-row-' + ${user.userId}" class="user-row">
+                <!--                 <img th:src="@{'/path/to/images/' + ${user.originProfileImg}}" alt="프로필 이미지" />-->
+                <td>
+                    <img th:src="@{${#strings.isEmpty(user.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + user.storedFileName}}"
+                         alt="Profile Image" style="width: 100px; height: 100px;">
+                </td>
+                <td>
+
+                    <!-- 링크는 그대로 두되, 클릭 이벤트에 대한 핸들링을 추가 -->
+                    <a th:href="@{/user/userdetail(id=${user.userId})}" th:text="${user.userId}" class="user-link">
+                        아이디
+                    </a>
+                </td>
+                <td>자기소개</td>
+                <td>
+    <span th:if="${#authorization.expression('isAuthenticated()')}" th:class="'status-' + ${user.userId}"
+          style="color: gray;">오프라인</span>
+                    <span th:unless="${#authorization.expression('isAuthenticated()')}">-</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <nav aria-label="Page navigation example" style="text-align: center;">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${user.pageable.pageNumber == 0} ? 'disabled'"
+                    style="margin-left:350px ">
+                    <a class="page-link text-dark"
+                       th:classappend="${user.pageable.pageNumber == 0} ? 'text-primary' : 'text-dark'" href="#"
+                       th:href="@{/(page=${user.pageable.pageNumber - 1},  searchText=${param.searchText})}"
+                       tabindex="-1"
+                       aria-disabled="true">Previous</a>
+                </li>
+                <li th:each="i : ${#numbers.sequence(startPage, endPage)}">
+                    <a th:if="${i <= user.totalPages}" class="page-link" href="#"
+                       th:href="@{/(page=${i - 1}, searchText=${param.searchText})}" th:text="${i}"
+                       th:classappend="${i == user.pageable.pageNumber + 1} ? 'text-primary' : 'text-dark'"></a>
+                </li>
+                <li class="page-item" th:classappend="${user.pageable.pageNumber == user.totalPages - 1} ? 'disabled'">
+                    <a class="page-link text-dark"
+                       th:classappend="${user.pageable.pageNumber == user.totalPages - 1} ? 'text-primary' : 'text-dark'"
+                       href="#" th:href="@{/(page=${user.pageable.pageNumber + 1}, searchText=${param.searchText})}">Next</a>
+                </li>
+                <!--회원 검색-->
+                <div style="margin-left:100px ">
+                    <form class="d-flex" role="search" method="GET" th:classappend="${menu} == 'mypage'? 'active' "
+                          th:action="${#authorization.expression('isAuthenticated()') ? '/user/searchbyname' : '/user/loginForm'}">
+                        <input id="userSearchText" name="userId" th:value="${param.searchText}"
+                               class="form-control me-2" type="text" placeholder="회원 검색" style="margin-left: 7px;"
+                               aria-label="Search">
+                        <button id="userSearchButton" class="btn btn-outline-success" style="margin-left:3px;"
+                                type="submit">Search
+                        </button>
+                    </form>
+                </div>
+            </ul>
+        </nav>
+    </div>
+    <br>
+    <br>
+
+    <div class="starter-template" style="padding-top: 0; padding-bottom: 0;">
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th scope="col">사진</th>
+                <th scope="col">아이디</th>
+                <th scope="col">자기소개</th>
+                <th scope="col">상태</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="randomUser : ${randomUser}" th:id="'user-row-' + ${randomUser.userId}" class="user-row"
+                th:if="${randomUser != null}">
+                <td>
+                    <img th:src="@{${#strings.isEmpty(randomUser.storedFileName) ? '/uploads/basicProfile.jpg' : '/uploads/' + randomUser.storedFileName}}"
+                         alt="Profile Image" style="width: 100px; height: 100px;">
+                </td>
+
+                <td>
+                    <a th:href="@{/user/userdetail(id=${randomUser.userId})}" th:text="${randomUser.userId}"
+                       class="user-link">사용자 아이디</a>
+                </td>
+
+
+                <td>자기소개</td>
+                <td>
+    <span th:if="${#authorization.expression('isAuthenticated()')}" th:class="'status-' + ${randomUser.userId}"
+          style="color: gray;">오프라인</span>
+                    <span th:unless="${#authorization.expression('isAuthenticated()')}">-</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+</main>
+
+
+<script>
+    $(document).ready(function () {
+        $('#userSearchButton').click(function (event) {
+            var searchText = $('#userSearchText').val();
+        var loggedInUserId = $('#loggedInUserId').val();
+
+        if (!loggedInUserId) {
+
+            // If not authenticated, show an alert and navigate to the login page
+            alert("로그인이 필요합니다.");
+            // location.href = "/member/loginForm"; // 로그인 페이지 URL에 맞게 수정하세요
+         return false;
+        } else {
+
+
+            // Check if the search input has a value
+            if (searchText.trim() !== '') {
+                //입력 값 있다
+
+                return true;
+            } else {
+            //입력 값 없다.
+                event.preventDefault();
+                $('#userSearchText').focus();
+                alert('입력하세요');
+                return false;
+            }}
+        });
+    });
+</script>
+
+</body>
+</html>

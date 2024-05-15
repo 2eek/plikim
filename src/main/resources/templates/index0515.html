@@ -1,218 +1,218 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>음성 통화 기능</title>
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-    <style>
-        #map {
-            height: 1000px;
-        }
-    </style>
-</head>
-<body>
-<!-- 지도를 표시할 div -->
-<div id="map"></div>
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>음성 통화 기능</title>-->
+<!--    &lt;!&ndash; Leaflet CSS &ndash;&gt;-->
+<!--    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>-->
+<!--    <style>-->
+<!--        #map {-->
+<!--            height: 1000px;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--&lt;!&ndash; 지도를 표시할 div &ndash;&gt;-->
+<!--<div id="map"></div>-->
 
-<!-- Leaflet JS 및 WebRTC 사용을 위한 스크립트 -->
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script>
-    var userId = generateUserId();
+<!--&lt;!&ndash; Leaflet JS 및 WebRTC 사용을 위한 스크립트 &ndash;&gt;-->
+<!--<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>-->
+<!--<script>-->
+<!--    var userId = generateUserId();-->
 
-    function generateUserId() {
-        return 'user_' + Math.random().toString(36).substr(2, 9);
-    }
+<!--    function generateUserId() {-->
+<!--        return 'user_' + Math.random().toString(36).substr(2, 9);-->
+<!--    }-->
 
-    console.log("당신의 ID는 " + userId + "입니다.");
+<!--    console.log("당신의 ID는 " + userId + "입니다.");-->
 
-    var map = L.map('map').setView([0, 0], 10);
+<!--    var map = L.map('map').setView([0, 0], 10);-->
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-    }).addTo(map);
+<!--    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {-->
+<!--        maxZoom: 19,-->
+<!--    }).addTo(map);-->
 
-    var userMarker;
+<!--    var userMarker;-->
 
-    function updateUserLocation(lat, lng) {
-        if (userMarker) {
-            map.removeLayer(userMarker);
-        }
-        userMarker = L.marker([lat, lng]).addTo(map);
-        map.setView([lat, lng], 10);
-    }
+<!--    function updateUserLocation(lat, lng) {-->
+<!--        if (userMarker) {-->
+<!--            map.removeLayer(userMarker);-->
+<!--        }-->
+<!--        userMarker = L.marker([lat, lng]).addTo(map);-->
+<!--        map.setView([lat, lng], 10);-->
+<!--    }-->
 
-    function getUserLocation() {
-        navigator.geolocation.getCurrentPosition(function (position) {
-            var lat = position.coords.latitude,
-                lng = position.coords.longitude;
-            updateUserLocation(lat, lng);
-            createMarker(lat, lng);
-        });
-    }
+<!--    function getUserLocation() {-->
+<!--        navigator.geolocation.getCurrentPosition(function (position) {-->
+<!--            var lat = position.coords.latitude,-->
+<!--                lng = position.coords.longitude;-->
+<!--            updateUserLocation(lat, lng);-->
+<!--            createMarker(lat, lng);-->
+<!--        });-->
+<!--    }-->
 
-    getUserLocation();
-    setInterval(getUserLocation, 5000);
+<!--    getUserLocation();-->
+<!--    setInterval(getUserLocation, 5000);-->
 
-    var locateButton = L.control({position: 'topleft'});
-    locateButton.onAdd = function (map) {
-        var div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
-        div.innerHTML = '<button onclick="goToMyLocation()">내 위치로 이동</button>';
-        return div;
-    };
-    locateButton.addTo(map);
+<!--    var locateButton = L.control({position: 'topleft'});-->
+<!--    locateButton.onAdd = function (map) {-->
+<!--        var div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');-->
+<!--        div.innerHTML = '<button onclick="goToMyLocation()">내 위치로 이동</button>';-->
+<!--        return div;-->
+<!--    };-->
+<!--    locateButton.addTo(map);-->
 
-    function goToMyLocation() {
-        navigator.geolocation.getCurrentPosition(function (position) {
-            var lat = position.coords.latitude,
-                lng = position.coords.longitude;
-            map.setView([lat, lng], 15);
-        });
-    }
+<!--    function goToMyLocation() {-->
+<!--        navigator.geolocation.getCurrentPosition(function (position) {-->
+<!--            var lat = position.coords.latitude,-->
+<!--                lng = position.coords.longitude;-->
+<!--            map.setView([lat, lng], 15);-->
+<!--        });-->
+<!--    }-->
 
-    var markers = [];
-    var nextMarkerId = 1;
+<!--    var markers = [];-->
+<!--    var nextMarkerId = 1;-->
 
-    function createMarker(lat, lng) {
-        var marker = L.marker([lat, lng]).addTo(map);
-        marker.id = nextMarkerId++;
-        markers.push(marker);
+<!--    function createMarker(lat, lng) {-->
+<!--        var marker = L.marker([lat, lng]).addTo(map);-->
+<!--        marker.id = nextMarkerId++;-->
+<!--        markers.push(marker);-->
 
-        marker.on('click', function (e) {
-            startVoiceCall(marker.id);
-        });
-    }
+<!--        marker.on('click', function (e) {-->
+<!--            startVoiceCall(marker.id);-->
+<!--        });-->
+<!--    }-->
 
-    // var socket = new WebSocket('ws://localhost:9090/voice');
-        var socket = new WebSocket('wss://plikim.com/voice');
+<!--    // var socket = new WebSocket('ws://localhost:9090/voice');-->
+<!--        var socket = new WebSocket('wss://plikim.com/voice');-->
 
 
-    socket.onmessage = function (event) {
-        var message = JSON.parse(event.data);
+<!--    socket.onmessage = function (event) {-->
+<!--        var message = JSON.parse(event.data);-->
 
-        if (message.type === 'offer') {
-            handleOffer(message.offer);
-        } else if (message.type === 'answer') {
-            handleAnswer(message.answer);
-        } else if (message.type === 'iceCandidate') {
-            handleIceCandidate(message.candidate);
-        }
-    };
+<!--        if (message.type === 'offer') {-->
+<!--            handleOffer(message.offer);-->
+<!--        } else if (message.type === 'answer') {-->
+<!--            handleAnswer(message.answer);-->
+<!--        } else if (message.type === 'iceCandidate') {-->
+<!--            handleIceCandidate(message.candidate);-->
+<!--        }-->
+<!--    };-->
 
-    function sendOffer(offer) {
-        var offerData = JSON.stringify({ type: 'offer', offer: offer });
-        socket.send(offerData);
-    }
+<!--    function sendOffer(offer) {-->
+<!--        var offerData = JSON.stringify({ type: 'offer', offer: offer });-->
+<!--        socket.send(offerData);-->
+<!--    }-->
 
-    function sendAnswer(answer) {
-        var answerData = JSON.stringify({ type: 'answer', answer: answer });
-        socket.send(answerData);
-    }
+<!--    function sendAnswer(answer) {-->
+<!--        var answerData = JSON.stringify({ type: 'answer', answer: answer });-->
+<!--        socket.send(answerData);-->
+<!--    }-->
 
-    function sendIceCandidate(candidate) {
-        var candidateData = JSON.stringify({ type: 'iceCandidate', candidate: candidate });
-        socket.send(candidateData);
-    }
+<!--    function sendIceCandidate(candidate) {-->
+<!--        var candidateData = JSON.stringify({ type: 'iceCandidate', candidate: candidate });-->
+<!--        socket.send(candidateData);-->
+<!--    }-->
 
-    var peerConnection;
+<!--    var peerConnection;-->
 
-    function startVoiceCall(markerId) {
-        console.log("마커 ID " + markerId + "와 음성 통화를 시작합니다.");
+<!--    function startVoiceCall(markerId) {-->
+<!--        console.log("마커 ID " + markerId + "와 음성 통화를 시작합니다.");-->
 
-        navigator.mediaDevices.getUserMedia({ audio: true })
-            .then(function (stream) {
-                console.log("음성 통화 시작");
+<!--        navigator.mediaDevices.getUserMedia({ audio: true })-->
+<!--            .then(function (stream) {-->
+<!--                console.log("음성 통화 시작");-->
 
-                var audioTracks = stream.getAudioTracks();
-                if (audioTracks.length > 0) {
-                    console.log('Using audio device: ' + audioTracks[0].label);
-                }
+<!--                var audioTracks = stream.getAudioTracks();-->
+<!--                if (audioTracks.length > 0) {-->
+<!--                    console.log('Using audio device: ' + audioTracks[0].label);-->
+<!--                }-->
 
-                peerConnection = new RTCPeerConnection();
+<!--                peerConnection = new RTCPeerConnection();-->
 
-                stream.getTracks().forEach(function (track) {
-                    peerConnection.addTrack(track, stream);
-                });
+<!--                stream.getTracks().forEach(function (track) {-->
+<!--                    peerConnection.addTrack(track, stream);-->
+<!--                });-->
 
-                peerConnection.onicecandidate = function (event) {
-                    if (event.candidate) {
-                        sendIceCandidate(event.candidate);
-                    }
-                };
+<!--                peerConnection.onicecandidate = function (event) {-->
+<!--                    if (event.candidate) {-->
+<!--                        sendIceCandidate(event.candidate);-->
+<!--                    }-->
+<!--                };-->
 
-                peerConnection.ontrack = function (event) {
-                    var audioElement = document.createElement('audio');
-                    audioElement.srcObject = event.streams[0];
-                    audioElement.play();
-                };
+<!--                peerConnection.ontrack = function (event) {-->
+<!--                    var audioElement = document.createElement('audio');-->
+<!--                    audioElement.srcObject = event.streams[0];-->
+<!--                    audioElement.play();-->
+<!--                };-->
 
-                peerConnection.createOffer()
-                    .then(function (offer) {
-                        return peerConnection.setLocalDescription(offer);
-                    })
-                    .then(function () {
-                        sendOffer(peerConnection.localDescription);
-                    })
-                    .catch(function (error) {
-                        console.error('Error creating offer:', error);
-                    });
-            })
-            .catch(function (error) {
-                console.error('Error accessing microphone:', error);
-            });
-    }
+<!--                peerConnection.createOffer()-->
+<!--                    .then(function (offer) {-->
+<!--                        return peerConnection.setLocalDescription(offer);-->
+<!--                    })-->
+<!--                    .then(function () {-->
+<!--                        sendOffer(peerConnection.localDescription);-->
+<!--                    })-->
+<!--                    .catch(function (error) {-->
+<!--                        console.error('Error creating offer:', error);-->
+<!--                    });-->
+<!--            })-->
+<!--            .catch(function (error) {-->
+<!--                console.error('Error accessing microphone:', error);-->
+<!--            });-->
+<!--    }-->
 
-    function handleOffer(offer) {
-        peerConnection = new RTCPeerConnection();
+<!--    function handleOffer(offer) {-->
+<!--        peerConnection = new RTCPeerConnection();-->
 
-        peerConnection.onicecandidate = function (event) {
-            if (event.candidate) {
-                sendIceCandidate(event.candidate);
-            }
-        };
+<!--        peerConnection.onicecandidate = function (event) {-->
+<!--            if (event.candidate) {-->
+<!--                sendIceCandidate(event.candidate);-->
+<!--            }-->
+<!--        };-->
 
-        peerConnection.ontrack = function (event) {
-            var audioElement = document.createElement('audio');
-            audioElement.srcObject = event.streams[0];
-            audioElement.play();
-        };
+<!--        peerConnection.ontrack = function (event) {-->
+<!--            var audioElement = document.createElement('audio');-->
+<!--            audioElement.srcObject = event.streams[0];-->
+<!--            audioElement.play();-->
+<!--        };-->
 
-        peerConnection.setRemoteDescription(new RTCSessionDescription(offer))
-            .then(function () {
-                return navigator.mediaDevices.getUserMedia({ audio: true });
-            })
-            .then(function (stream) {
-                stream.getTracks().forEach(function (track) {
-                    peerConnection.addTrack(track, stream);
-                });
+<!--        peerConnection.setRemoteDescription(new RTCSessionDescription(offer))-->
+<!--            .then(function () {-->
+<!--                return navigator.mediaDevices.getUserMedia({ audio: true });-->
+<!--            })-->
+<!--            .then(function (stream) {-->
+<!--                stream.getTracks().forEach(function (track) {-->
+<!--                    peerConnection.addTrack(track, stream);-->
+<!--                });-->
 
-                return peerConnection.createAnswer();
-            })
-            .then(function (answer) {
-                return peerConnection.setLocalDescription(answer);
-            })
-            .then(function () {
-                sendAnswer(peerConnection.localDescription);
-            })
-            .catch(function (error) {
-                console.error('Error handling offer:', error);
-            });
-    }
+<!--                return peerConnection.createAnswer();-->
+<!--            })-->
+<!--            .then(function (answer) {-->
+<!--                return peerConnection.setLocalDescription(answer);-->
+<!--            })-->
+<!--            .then(function () {-->
+<!--                sendAnswer(peerConnection.localDescription);-->
+<!--            })-->
+<!--            .catch(function (error) {-->
+<!--                console.error('Error handling offer:', error);-->
+<!--            });-->
+<!--    }-->
 
-    function handleAnswer(answer) {
-        peerConnection.setRemoteDescription(new RTCSessionDescription(answer))
-            .catch(function (error) {
-                console.error('Error setting remote description:', error);
-            });
-    }
+<!--    function handleAnswer(answer) {-->
+<!--        peerConnection.setRemoteDescription(new RTCSessionDescription(answer))-->
+<!--            .catch(function (error) {-->
+<!--                console.error('Error setting remote description:', error);-->
+<!--            });-->
+<!--    }-->
 
-    function handleIceCandidate(candidate) {
-        peerConnection.addIceCandidate(new RTCIceCandidate(candidate))
-            .catch(function (error) {
-                console.error('Error adding ICE candidate:', error);
-            });
-    }
-</script>
-</body>
-</html>
+<!--    function handleIceCandidate(candidate) {-->
+<!--        peerConnection.addIceCandidate(new RTCIceCandidate(candidate))-->
+<!--            .catch(function (error) {-->
+<!--                console.error('Error adding ICE candidate:', error);-->
+<!--            });-->
+<!--    }-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->

@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Import;
 
 @SpringBootApplication
 public class KimpliApplication {
-
+//test
 	public static void main(String[] args) {
 		SpringApplication.run(KimpliApplication.class, args);
 
